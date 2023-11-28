@@ -16,10 +16,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.R
+
 import com.epaymark.big9.adapter.PhonePadAdapter2
 import com.epaymark.big9.data.model.ReceiptModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentLoginPinBinding
+
 import com.epaymark.big9.ui.activity.RegActivity
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.utils.helpers.Constants

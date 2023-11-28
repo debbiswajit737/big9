@@ -14,14 +14,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.epaymark.big9.R
 
 import com.epaymark.big9.adapter.PhonePadAdapter
 import com.epaymark.big9.data.viewMovel.AuthViewModel
+import com.epaymark.big9.databinding.ActivityAuthBinding
 
 import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
-import com.epaymark.epay.R
-import com.epaymark.epay.databinding.ActivityAuthBinding
+
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

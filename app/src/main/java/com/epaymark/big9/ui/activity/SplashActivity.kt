@@ -8,10 +8,11 @@ import android.os.Looper
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
+import com.epaymark.big9.R
+import com.epaymark.big9.databinding.ActivitySplashBinding
 
 import com.epaymark.big9.utils.helpers.SharedPreff
-import com.epaymark.epay.R
-import com.epaymark.epay.databinding.ActivitySplashBinding
+
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

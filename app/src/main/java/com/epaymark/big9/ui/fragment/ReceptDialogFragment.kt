@@ -16,9 +16,11 @@ import androidx.core.net.toFile
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.epaymark.big9.R
+
 import com.epaymark.big9.adapter.ReceiptAdapter
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentReceptDialogBinding
+
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseCenterSheetFragment
 import com.epaymark.big9.utils.*
@@ -139,7 +141,7 @@ class ReceptDialogFragment : BaseCenterSheetFragment() {
         val stream = FileOutputStream("$cachePath/image.png") // overwrites this image every time
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
         stream.close()
-        return FileProvider.getUriForFile(context, "com.epaymark.epay.fileprovider", cachePath)
+        return FileProvider.getUriForFile(context, context.packageName+".fileprovider", cachePath)
     }
 
 

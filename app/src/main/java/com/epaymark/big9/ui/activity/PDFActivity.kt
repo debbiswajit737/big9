@@ -10,8 +10,9 @@ import android.os.Bundle
 import android.os.Environment
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.epaymark.epay.R
-import com.epaymark.epay.databinding.ActivityPdfactivityBinding
+import com.epaymark.big9.R
+import com.epaymark.big9.databinding.ActivityPdfactivityBinding
+
 
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.pdf.PdfDocument

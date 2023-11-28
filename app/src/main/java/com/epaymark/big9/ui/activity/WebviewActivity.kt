@@ -8,8 +8,8 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.databinding.DataBindingUtil
-import com.epaymark.epay.R
-import com.epaymark.epay.databinding.ActivityWebviewBinding
+import com.epaymark.big9.R
+import com.epaymark.big9.databinding.ActivityWebviewBinding
 
 
 class WebviewActivity : AppCompatActivity() {

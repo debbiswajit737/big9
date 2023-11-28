@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.epaymark.epay.R
+import com.epaymark.big9.R
+import com.epaymark.big9.databinding.FragmentFirstBinding
 
-import com.epaymark.epay.databinding.FragmentFirstBinding
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.

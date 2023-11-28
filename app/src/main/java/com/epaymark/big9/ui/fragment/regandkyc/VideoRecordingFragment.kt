@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import com.epaymark.big9.R
 import com.epaymark.big9.databinding.FragmentVideoRecordingBinding
 
+
 class VideoRecordingFragment : Fragment() {
     private lateinit var surfaceView: SurfaceView
     private var camera: Camera? = null

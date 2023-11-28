@@ -3,11 +3,12 @@ package com.epaymark.big9.ui.popup
 import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
+import com.epaymark.big9.databinding.PopupBalenceBinding
+import com.epaymark.big9.databinding.PopupDebitAlertBinding
+import com.epaymark.big9.databinding.PopupDthUserDetailsBinding
 
 import com.epaymark.big9.utils.`interface`.CallBack
-import com.epaymark.epay.databinding.PopupBalenceBinding
-import com.epaymark.epay.databinding.PopupDebitAlertBinding
-import com.epaymark.epay.databinding.PopupDthUserDetailsBinding
+
 
 
 object CustomPopup {

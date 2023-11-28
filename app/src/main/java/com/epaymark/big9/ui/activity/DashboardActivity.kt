@@ -8,8 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.epaymark.big9.R
 
 import com.epaymark.big9.data.viewMovel.MyViewModel
+import com.epaymark.big9.databinding.ActivityDashboardBinding
 
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetrofitHelper.handleApiError
@@ -21,8 +23,7 @@ import com.epaymark.big9.utils.helpers.RequestBodyHelper
 import com.epaymark.big9.utils.helpers.ScreenshotUtils.Companion.takeScreenshot
 import com.epaymark.big9.utils.helpers.SharedPreff
 import com.epaymark.big9.utils.helpers.helper.decryptData
-import com.epaymark.epay.R
-import com.epaymark.epay.databinding.ActivityDashboardBinding
+
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

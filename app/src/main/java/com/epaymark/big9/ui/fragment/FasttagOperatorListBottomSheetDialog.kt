@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.epaymark.big9.R
+
 import com.epaymark.big9.adapter.FastTagBankListAdapter
 import com.epaymark.big9.data.model.FastTagBankListModel
 import com.epaymark.big9.data.viewMovel.MyViewModel

@@ -16,8 +16,10 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.epaymark.big9.R
+
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentQrcodeBinding
+
 import com.epaymark.big9.ui.base.BaseFragment
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector

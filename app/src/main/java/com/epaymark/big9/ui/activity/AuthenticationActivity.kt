@@ -7,11 +7,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.epaymark.big9.R
 
 import com.epaymark.big9.data.viewMovel.AuthViewModel
+import com.epaymark.big9.databinding.ActivityAuthenticationBinding
 
-import com.epaymark.epay.R
-import com.epaymark.epay.databinding.ActivityAuthenticationBinding
+
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

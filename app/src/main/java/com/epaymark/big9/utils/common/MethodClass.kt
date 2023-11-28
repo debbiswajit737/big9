@@ -12,10 +12,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
+import com.epaymark.big9.R
 
 import com.epaymark.big9.ui.activity.RegActivity
 import com.epaymark.big9.utils.helpers.SharedPreff
-import com.epaymark.epay.R
+
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.ResponseBody

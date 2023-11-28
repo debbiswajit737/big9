@@ -2,7 +2,8 @@ package com.epaymark.big9.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.epaymark.epay.R
+import com.epaymark.big9.R
+
 
 import dagger.hilt.android.AndroidEntryPoint
 

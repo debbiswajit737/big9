@@ -5,7 +5,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
-import com.epaymark.epay.R
+import com.epaymark.big9.R
 
 
 class LoadingPopup(private val activity: Activity?) {

@@ -9,10 +9,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
+
 import com.epaymark.big9.adapter.BankModeListAdapter
 import com.epaymark.big9.data.model.BankModeListModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentPaymentModeBinding
+
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.utils.`interface`.CallBack
 

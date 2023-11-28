@@ -30,10 +30,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.window.layout.WindowMetricsCalculator
 import com.epaymark.big9.R
+
 import com.epaymark.big9.adapter.StateListAdapter
 import com.epaymark.big9.data.model.StateCityModel
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentRegBinding
+
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
 import com.epaymark.big9.utils.*

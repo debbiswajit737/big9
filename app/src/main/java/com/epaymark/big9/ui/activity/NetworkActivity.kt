@@ -5,11 +5,12 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.epaymark.big9.R
+import com.epaymark.big9.databinding.ActivityNetworkBinding
 
 import com.epaymark.big9.utils.helpers.NoNetworkReceiver
 import com.epaymark.big9.utils.interfaces.NetworkCallBack
-import com.epaymark.epay.R
-import com.epaymark.epay.databinding.ActivityNetworkBinding
+
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -17,7 +17,7 @@ import com.epaymark.big9.utils.helpers.Constants
 import kotlinx.coroutines.launch
 
 class CongratulationFragment : Fragment() {
-    lateinit var binding:FragmentCongratulationBinding
+    lateinit var binding: FragmentCongratulationBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

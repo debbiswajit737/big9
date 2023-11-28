@@ -42,7 +42,7 @@ class SharedPreff @Inject constructor(@ApplicationContext private val context: C
                 context.getSharedPreferences(EPAY_SHAREDFREFFRENCE, Context.MODE_PRIVATE)
             val editor = settings?.edit()
 
-                editor?.putBoolean(ISLogin, true)
+            editor?.putBoolean(ISLogin, true)
 
             editor?.apply()
         }

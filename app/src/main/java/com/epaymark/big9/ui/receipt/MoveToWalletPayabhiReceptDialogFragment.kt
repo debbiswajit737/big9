@@ -7,14 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import com.epaymark.big9.R
 
 import com.epaymark.big9.data.viewMovel.MyViewModel
+import com.epaymark.big9.databinding.FragmentMoveBankToWalletPayabhiReceptDialogBinding
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseCenterSheetFragment
 import com.epaymark.big9.utils.`interface`.CallBack
-import com.epaymark.epay.R
-import com.epaymark.epay.databinding.FragmentMoveBankToWalletPayabhiReceptDialogBinding
-
 
 class MoveToWalletPayabhiReceptDialogFragment(val callBack: CallBack) : BaseCenterSheetFragment() {
     lateinit var binding: FragmentMoveBankToWalletPayabhiReceptDialogBinding

@@ -11,10 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.epaymark.big9.R
 
 import com.epaymark.big9.data.viewMovel.AuthViewModel
-import com.epaymark.epay.R
-import com.epaymark.epay.databinding.ActivityRegBinding
+import com.epaymark.big9.databinding.ActivityRegBinding
+
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -62,8 +63,9 @@ class RegActivity : AppCompatActivity() {
 
 
         if (intent.getBooleanExtra("isAlreadyLogin",false)){
-            setSecondAnimation()
+
             binding.navHostFragment.visibility = View.VISIBLE
+            setSecondAnimation()
         }
         if (intent.getBooleanExtra("isForgotPin",false)){
             setSecondAnimation()
