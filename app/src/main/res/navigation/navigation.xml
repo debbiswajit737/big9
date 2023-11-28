@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/loginPinfragment">
+    <!--homeFragment2-->
+    <fragment
+        android:id="@+id/dashBoardFragment"
+        android:name="com.epaymark.big9.ui.fragment.DashBoardFragment"
+        android:label="fragment_dash_board"
+        tools:layout="@layout/fragment_dash_board" />
+    <fragment
+        android:id="@+id/homeFragment2"
+        android:name="com.epaymark.big9.ui.fragment.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment2_to_mobileRechargeFragment"
+            app:destination="@id/mobileRechargeFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_DTHRechargeFragment"
+            app:destination="@id/DTHRechargeFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_billPayFragment"
+            app:destination="@id/billPayFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_electricRechargeFragment"
+            app:destination="@id/electricRechargeFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_reportFragment"
+            app:destination="@id/reportFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_QRCodeFragment"
+            app:destination="@id/QRCodeFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_userDetailsFragment"
+            app:destination="@id/userDetailsFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_supportFragment"
+            app:destination="@id/supportFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_certificateFragment"
+            app:destination="@id/certificateFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_termsAndConditionFragment"
+            app:destination="@id/termsAndConditionFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_epotlyFragment"
+            app:destination="@id/epotlyFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_cashWithdrawFragment"
+            app:destination="@id/cashWithdrawFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_paymentRequestFragment"
+            app:destination="@id/paymentRequestFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_moveToWalletFragment"
+            app:destination="@id/moveToWalletFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_moveToBankFragment"
+            app:destination="@id/moveToBankFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_moneyTranspherFragment"
+            app:destination="@id/moneyTranspherFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_creditCardPaymentFragment"
+            app:destination="@id/creditCardPaymentFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_miniStatementFragment"
+            app:destination="@id/miniStatementFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_fastTagFragment"
+            app:destination="@id/fastTagFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_balenceAEPSFragment"
+            app:destination="@id/balenceAEPSFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_miniStatementFormFragment"
+            app:destination="@id/miniStatementFormFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mobileRechargeFragment"
+        android:name="com.epaymark.big9.ui.fragment.MobileRechargeFragment"
+        android:label="MobileRechargeFragment" >
+        <action
+            android:id="@+id/action_mobileRechargeFragment_to_operatorFragment"
+            app:destination="@id/operatorFragment" />
+        <action
+            android:id="@+id/action_mobileRechargeFragment_to_browserPlainFragment"
+            app:destination="@id/browserPlainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/operatorFragment"
+        android:name="com.epaymark.big9.ui.fragment.OperatorFragment"
+        android:label="OperatorFragment" />
+    <fragment
+        android:id="@+id/browserPlainFragment"
+        android:name="com.epaymark.big9.ui.fragment.BrowserPlainFragment"
+        android:label="BrowserPlainFragment" />
+    <fragment
+        android:id="@+id/DTHRechargeFragment"
+        android:name="com.epaymark.big9.ui.fragment.DTHRechargeFragment"
+        android:label="DTHRechargeFragment" >
+        <action
+            android:id="@+id/action_DTHRechargeFragment_to_operatorFragment"
+            app:destination="@id/operatorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/billPayFragment"
+        android:name="com.epaymark.big9.ui.fragment.billpay.BillPayFragment"
+        android:label="BillPayFragment" />
+    <fragment
+        android:id="@+id/electricRechargeFragment"
+        android:name="com.epaymark.big9.ui.fragment.ElectricRechargeFragment"
+        android:label="ElectricRechargeFragment" >
+        <action
+            android:id="@+id/action_electricRechargeFragment_to_utilityBillPaymentFragment"
+            app:destination="@id/utilityBillPaymentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/utilityBillPaymentFragment"
+        android:name="com.epaymark.big9.ui.fragment.UtilityBillPaymentFragment"
+        android:label="UtilityBillPaymentFragment" >
+        <action
+            android:id="@+id/action_utilityBillPaymentFragment_to_electricPriceListFragment"
+            app:destination="@id/electricPriceListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/electricPriceListFragment"
+        android:name="com.epaymark.big9.ui.fragment.ElectricPriceListFragment"
+        android:label="ElectricPriceListFragment" />
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.epaymark.big9.ui.fragment.ReportFragment"
+        android:label="ReportFragment" >
+        <action
+            android:id="@+id/action_reportFragment_to_reportDetailsFragment"
+            app:destination="@id/reportDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportDetailsFragment"
+        android:name="com.epaymark.big9.ui.fragment.ReportDetailsFragment"
+        android:label="ReportDetailsFragment" />
+    <fragment
+        android:id="@+id/QRCodeFragment"
+        android:name="com.epaymark.big9.ui.fragment.QRCodeFragment"
+        android:label="QRCodeFragment" />
+    <fragment
+        android:id="@+id/userDetailsFragment"
+        android:name="com.epaymark.big9.ui.fragment.UserDetailsFragment"
+        android:label="UserDetailsFragment" />
+    <fragment
+        android:id="@+id/supportFragment"
+        android:name="com.epaymark.big9.ui.fragment.SupportFragment"
+        android:label="SupportFragment" />
+    <fragment
+        android:id="@+id/certificateFragment"
+        android:name="com.epaymark.big9.ui.fragment.CertificateFragment"
+        android:label="CertificateFragment" />
+    <fragment
+        android:id="@+id/termsAndConditionFragment"
+        android:name="com.epaymark.big9.ui.fragment.TermsAndConditionFragment"
+        android:label="TermsAndConditionFragment" />
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.epaymark.big9.ui.fragment.ChangePasswordFragment"
+        android:label="ChangePasswordFragment" />
+    <fragment
+        android:id="@+id/epotlyFragment"
+        android:name="com.epaymark.big9.ui.fragment.EpotlyFragment"
+        android:label="EpotlyFragment" />
+    <fragment
+        android:id="@+id/cashWithdrawFragment"
+        android:name="com.epaymark.big9.ui.fragment.CashWithdrawFragment"
+        android:label="CashWithdrawFragment" />
+    <fragment
+        android:id="@+id/paymentRequestFragment"
+        android:name="com.epaymark.big9.ui.fragment.paymentRequest.PaymentRequestFragment"
+        android:label="PaymentRequestFragment" >
+        <action
+            android:id="@+id/action_paymentRequestFragment_to_paymentRequestModeFragment"
+            app:destination="@id/paymentRequestModeFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/paymentRequestModeFragment"
+        android:name="com.epaymark.big9.ui.fragment.paymentRequest.PaymentRequestModeFragment"
+        android:label="PaymentRequestModeFragment" >
+        <action
+            android:id="@+id/action_paymentRequestModeFragment_to_paymentRequestImformationFragment"
+            app:destination="@id/paymentRequestImformationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentRequestImformationFragment"
+        android:name="com.epaymark.big9.ui.fragment.paymentRequest.PaymentRequestImformationFragment"
+        android:label="PaymentRequestImformationFragment" >
+        <action
+            android:id="@+id/action_paymentRequestImformationFragment_to_cameraFragment2"
+            app:destination="@id/cameraFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraFragment2"
+        android:name="com.epaymark.big9.ui.fragment.regandkyc.CameraFragment"
+        android:label="CameraFragment" />
+    <fragment
+        android:id="@+id/moveToWalletFragment"
+        android:name="com.epaymark.big9.ui.fragment.MoveToWalletFragment"
+        android:label="MoveToWalletFragment" />
+    <fragment
+        android:id="@+id/moveToBankFragment"
+        android:name="com.epaymark.big9.ui.fragment.MoveToBankFragment"
+        android:label="MoveToBankFragment" >
+        <action
+            android:id="@+id/action_moveToBankFragment_to_addBankFragment"
+            app:destination="@id/addBankFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/moneyTranspherFragment"
+        android:name="com.epaymark.big9.ui.fragment.MoneyTranspherFragment"
+        android:label="MoneyTranspherFragment" >
+
+        <action
+            android:id="@+id/action_moneyTranspherFragment_to_beneficiaryFragment"
+            app:destination="@id/beneficiaryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/creditCardPaymentFragment"
+        android:name="com.epaymark.big9.ui.fragment.CreditCardPaymentFragment"
+        android:label="CreditCardPaymentFragment" >
+        <action
+            android:id="@+id/action_creditCardPaymentFragment_to_transactionOtpFragment"
+            app:destination="@id/transactionOtpFragment"
+
+
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/main_nav_graph"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/transactionOtpFragment"
+        android:name="com.epaymark.big9.ui.fragment.TransactionOtpFragment"
+        android:label="TransactionOtpFragment" />
+    <fragment
+        android:id="@+id/addBeneficiaryFragment"
+        android:name="com.epaymark.big9.ui.fragment.AddBeneficiaryFragment"
+        android:label="AddBeneficiaryFragment" />
+    <fragment
+        android:id="@+id/beneficiaryFragment"
+        android:name="com.epaymark.big9.ui.fragment.BeneficiaryFragment"
+        android:label="BeneficiaryFragment" >
+        <action
+            android:id="@+id/action_beneficiaryFragment_to_addBeneficiaryFragment"
+            app:destination="@id/addBeneficiaryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/miniStatementFragment"
+        android:name="com.epaymark.big9.ui.fragment.MiniStatementFragment"
+        android:label="MiniStatementFragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.epaymark.big9.ui.fragment.SearchFragment"
+        android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/fastTagFragment"
+        android:name="com.epaymark.big9.ui.fragment.FastTagFragment"
+        android:label="FastTagFragment" />
+    <fragment
+        android:id="@+id/loginPinfragment"
+        android:name="com.epaymark.big9.ui.fragment.LoginPinfragment"
+        android:label="LoginPinfragment" >
+        <action
+            android:id="@+id/action_loginPinfragment_to_homeFragment2"
+            app:destination="@id/homeFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/addBankFragment"
+        android:name="com.epaymark.big9.ui.fragment.AddBankFragment"
+        android:label="AddBankFragment" >
+        <action
+            android:id="@+id/action_addBankFragment_to_cameraFragment2"
+            app:destination="@id/cameraFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/balenceAEPSFragment"
+        android:name="com.epaymark.big9.ui.fragment.BalenceAEPSFragment"
+        android:label="BalenceAEPSFragment" />
+    <fragment
+        android:id="@+id/miniStatementFormFragment"
+        android:name="com.epaymark.big9.ui.fragment.MiniStatementFormFragment"
+        android:label="MiniStatementFormFragment" >
+        <action
+            android:id="@+id/action_miniStatementFormFragment_to_miniStatementFragment"
+            app:destination="@id/miniStatementFragment" />
+    </fragment>
+</navigation>
