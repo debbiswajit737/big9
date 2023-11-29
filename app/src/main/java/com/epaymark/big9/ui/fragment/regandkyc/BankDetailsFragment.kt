@@ -1,6 +1,7 @@
 package com.epaymark.big9.ui.fragment.regandkyc
 
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -62,7 +63,7 @@ class BankDetailsFragment : BaseFragment() {
 
                 val gson = Gson()
                 val json = gson.toJson(bankDetails)
-
+                json.toString().testDataFile()
                 findNavController().navigate(R.id.action_bankDetailsFragment_to_docuploadFragment)
              }
             }
@@ -101,11 +102,13 @@ class BankDetailsFragment : BaseFragment() {
     }
 
     fun setObserver() {
-        authViewModel?.filePath?.observe(viewLifecycleOwner){
-        authViewModel?.cancleCheck?.value = it.getFileNameFromUri()
-        authViewModel.cancleCheckBase64.value=it.uriToBase64(binding.root.context.contentResolver)
-        //authViewModel.pancardImage3.value=it.getFileNameFromUri()
-         //Log.d("TAG_file", "true setObserver: "+it.uriToBase64(binding.root.context.contentResolver))
+        authViewModel?.cancleCheck?.observe(viewLifecycleOwner){
+            it?.let {uti->
+                //authViewModel?.cancleCheck?.value = uti
+                authViewModel.cancleCheckBase64.value= Uri.parse(uti).uriToBase64(binding.root.context.contentResolver)
+                //authViewModel.pancardImage3.value=it.getFileNameFromUri()
+                //Log.d("TAG_file", "true setObserver: "+it.uriToBase64(binding.root.context.contentResolver))
+            }
         }
     }
 
