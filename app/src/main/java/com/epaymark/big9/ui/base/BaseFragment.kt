@@ -26,6 +26,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.epaymark.big9.R
 import com.epaymark.big9.utils.helpers.Constants.INPUT_FILTER_MAX_VALUE
 import com.epaymark.big9.utils.helpers.Constants.INPUT_FILTER_POINTER_LENGTH
 import com.epaymark.big9.utils.helpers.DecimalDigitsInputFilter
@@ -158,6 +159,7 @@ open class BaseFragment: Fragment(){
 
         val datePickerDialog = DatePickerDialog(
             this.context,
+            R.style.MyDatePickerDialogTheme,
             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                 val selectedDate = "$year-${month + 1}-$dayOfMonth" // +1 because months are zero-based
                 callBack.getValue(selectedDate)

@@ -62,7 +62,11 @@ class LoginPinfragment : BaseFragment() {
                 }
 
             }
+            tvForgotPassword.setOnClickListener{
+                findNavController().navigate(R.id.action_loginPinfragment_to_forgotPasswordOtpFragment)
+            }
         }
+
 
     }
 

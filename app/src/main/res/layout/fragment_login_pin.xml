@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_medium"
             android:text="Test User"
-            android:textColor="@color/white"
+            android:textColor="@color/black2"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintBottom_toTopOf="@+id/td_resend_otp"
             app:layout_constraintEnd_toEndOf="@+id/profile_image"
@@ -72,7 +72,7 @@
             android:longClickable="false"
 
             android:text="9858525555"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintBottom_toTopOf="@+id/tv_unblock"
             app:layout_constraintEnd_toEndOf="@+id/tv_dont_receve_otp_msg"
@@ -84,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Unlock Using PIN"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="@dimen/_8ssp"
             app:layout_constraintBottom_toTopOf="@+id/nestedScrollView4"
             app:layout_constraintEnd_toEndOf="@+id/td_resend_otp"
@@ -139,14 +139,14 @@
                     app:viewType="none" />
 
                 <TextView
-                    android:id="@+id/textView22"
+                    android:id="@+id/tv_forgot_password"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="@dimen/_5sdp"
                     android:text="Forgot PIN?"
 
                     android:layout_marginHorizontal="@dimen/_5sdp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/logo_second_color"
                     android:textSize="@dimen/_8ssp"
                     app:layout_constraintEnd_toEndOf="@+id/firstPinView"
                     app:layout_constraintTop_toBottomOf="@+id/firstPinView" />
@@ -156,7 +156,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingBottom="@dimen/_10sdp"
-                    app:layout_constraintTop_toBottomOf="@+id/textView22">
+                    app:layout_constraintTop_toBottomOf="@+id/tv_forgot_password">
 
 
                     <androidx.recyclerview.widget.RecyclerView

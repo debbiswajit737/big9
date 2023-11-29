@@ -95,9 +95,8 @@ class RegFragment : BaseFragment() {
                         //tvDob.text = s
                         viewModel?.dateOfBirth?.value=s
                         viewModel?.dateOfBirthErrorVisible?.value =
-                            viewModel?.dateOfBirth?.value?.isNotEmpty() != true
+                        viewModel?.dateOfBirth?.value?.isNotEmpty() != true
                     }
-
                 })
             }
             btnNext.setOnClickListener {

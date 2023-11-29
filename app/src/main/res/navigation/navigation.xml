@@ -281,6 +281,9 @@
         <action
             android:id="@+id/action_loginPinfragment_to_homeFragment2"
             app:destination="@id/homeFragment2" />
+        <action
+            android:id="@+id/action_loginPinfragment_to_forgotPasswordOtpFragment"
+            app:destination="@id/forgotPasswordOtpFragment" />
     </fragment>
     <fragment
         android:id="@+id/addBankFragment"
@@ -301,5 +304,10 @@
         <action
             android:id="@+id/action_miniStatementFormFragment_to_miniStatementFragment"
             app:destination="@id/miniStatementFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/forgotPasswordOtpFragment"
+        android:name="com.epaymark.big9.ui.fragment.ForgotPasswordOtpFragment"
+        android:label="ForgotPasswordOtpFragment" >
     </fragment>
 </navigation>

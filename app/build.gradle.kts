@@ -4,8 +4,8 @@ plugins {
 
     id ("kotlin-kapt")
     id ("com.google.dagger.hilt.android")
-    /*id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")*/
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 
@@ -15,7 +15,6 @@ android {
     compileSdk = 34
 
     defaultConfig {
-
         applicationId = "com.epaymark.big9"
         minSdk = 24
         targetSdk = 33
@@ -57,7 +56,6 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.compose.ui:ui-graphics-android:1.5.4")
 
-
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -80,9 +78,9 @@ dependencies {
     val paging_version = "3.2.1"
     implementation ("androidx.paging:paging-runtime-ktx:$paging_version")
 
-    /*implementation ("com.google.firebase:firebase-bom:30.0.0")
-    implementation ("com.google.firebase:firebase-crashlytics")
-    implementation ("com.google.firebase:firebase-messaging:23.1.0")*/
+    /* implementation ("com.google.firebase:firebase-bom:30.0.0")
+     implementation ("com.google.firebase:firebase-crashlytics")
+     implementation ("com.google.firebase:firebase-messaging:23.1.0")*/
 
     //ssd and ssp unit for dimensions
     implementation ("com.intuit.sdp:sdp-android:1.1.0")
@@ -126,11 +124,11 @@ dependencies {
 
     implementation ("de.hdodenhof:circleimageview:3.1.0")
 
-    /*implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
 
 
     implementation("com.google.firebase:firebase-crashlytics")
-    implementation ("com.google.firebase:firebase-crashlytics-ktx")*/
+    implementation ("com.google.firebase:firebase-crashlytics-ktx")
     //implementation("com.google.android.gms:play-services-analytics")
 
     /*implementation("com.google.android.gms:play-services-analytics:32.4.0")
