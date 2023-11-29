@@ -128,7 +128,7 @@ class RegFragment : BaseFragment() {
 
                     val gson = Gson()
                     val json = gson.toJson(regModel)
-                    json.toString().testDataFile()
+                    //json.toString().testDataFile()
 
                    findNavController().navigate(R.id.action_regFragment_to_kycDetailsFragment)
                 }
