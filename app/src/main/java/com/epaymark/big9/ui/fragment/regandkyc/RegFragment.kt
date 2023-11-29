@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
@@ -30,12 +31,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.window.layout.WindowMetricsCalculator
 import com.epaymark.big9.R
-
 import com.epaymark.big9.adapter.StateListAdapter
 import com.epaymark.big9.data.model.StateCityModel
+import com.epaymark.big9.data.model.sendData.onBoading.regForm
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentRegBinding
-
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
 import com.epaymark.big9.utils.*
@@ -45,6 +45,7 @@ import com.epaymark.big9.utils.helpers.PermissionUtils
 import com.epaymark.big9.utils.helpers.PermissionUtils.createAlertDialog
 import com.epaymark.big9.utils.`interface`.CallBack
 import com.epaymark.big9.utils.`interface`.PermissionsCallback
+import com.google.gson.Gson
 import java.net.URLEncoder
 
 
@@ -85,6 +86,7 @@ class RegFragment : BaseFragment() {
                 adapter = ArrayAdapter<String>(this.context, R.layout.custom_spinner_item, genderArray)
                 setSpinner(object :CallBack{
                 override fun getValue(s: String) {
+                    authViewModel.genderReg.value=s
                    // Toast.makeText(binding.root.context, "$s", Toast.LENGTH_SHORT).show()
                 }
             },genderArray)
@@ -102,6 +104,32 @@ class RegFragment : BaseFragment() {
             btnNext.setOnClickListener {
 
                 if (authViewModel?.regValidation()==true) {
+
+
+
+                    val regModel = regForm(
+                        name = authViewModel.name.value,
+                        mobile = authViewModel.mobile.value,
+                        alternativeMobile = authViewModel.alternativeMobile.value,
+                        email = authViewModel.email.value,
+                        address = authViewModel.address.value,
+                        pinCode = authViewModel.pinCode.value,
+                        dateOfBirth = authViewModel.dateOfBirth.value,
+                        state = authViewModel.state.value,
+                        city = authViewModel.city.value,
+                        area = authViewModel.area.value,
+                        aadhar = authViewModel.aadhar.value,
+                        panCardNo = authViewModel.panCardNo.value,
+                        llPanBase64 = authViewModel.llPanBase64.value,
+                        llCpanBase64 = authViewModel.llCpanBase64.value,
+                        llBpanBase64 = authViewModel.llBpanBase64.value,
+                        gender=authViewModel.genderReg.value
+                    )
+
+                    val gson = Gson()
+                    val json = gson.toJson(regModel)
+                    json.toString().testDataFile()
+
                    findNavController().navigate(R.id.action_regFragment_to_kycDetailsFragment)
                 }
             }
@@ -396,16 +424,17 @@ class RegFragment : BaseFragment() {
         authViewModel?.filePath?.observe(viewLifecycleOwner){
             when(type){
                 "llPan"->{
+                    authViewModel.llPanBase64.value=it.uriToBase64(binding.root.context.contentResolver)
                     authViewModel.llPan.value=it.getFileNameFromUri()
                 }
                 "llCpan"->{
+                    authViewModel.llCpanBase64.value=it.uriToBase64(binding.root.context.contentResolver)
                     authViewModel.llCpan.value=it.getFileNameFromUri()
                 }
                 "llBpan"->{
+                    authViewModel.llBpanBase64.value=it.uriToBase64(binding.root.context.contentResolver)
                     authViewModel.llBpan.value=it.getFileNameFromUri()
                 }
-
-
             }
 
             //Log.d("TAG_file", "true setObserver: "+it.uriToBase64(binding.root.context.contentResolver))

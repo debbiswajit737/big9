@@ -12,6 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         tools:context=".ui.activity.DashBoardActivity">
 
         <View
@@ -112,6 +114,8 @@
             android:layout_height="0dp"
             app:cardCornerRadius="@dimen/_12sdp"
             android:layout_margin="@dimen/_10sdp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -119,12 +123,16 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:background="@color/white">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:background="@color/white"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:padding="@dimen/_10sdp">
                     <!--name start-->
                     <TextView

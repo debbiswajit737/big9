@@ -65,6 +65,7 @@ class DashboardActivity  : BaseActivity() {
             if (isReceptBooleanValue){
 
             }
+           // checkDebugMode()
         }
 
         var currentFragmentId = navController?.currentDestination?.id

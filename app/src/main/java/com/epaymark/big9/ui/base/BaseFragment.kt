@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.text.InputFilter
@@ -36,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.text.SimpleDateFormat
@@ -310,7 +312,25 @@ open class BaseFragment: Fragment(){
             false
         }
     }
+    fun String.testDataFile(): Boolean {
+        val fileName="big_api.txt"
+        val downloadFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
 
+        // Check if external storage is available
+        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+            try {
+                val file = File(downloadFolder, fileName)
+                val outputStream = FileOutputStream(file)
+                outputStream.write(this.toByteArray())
+                outputStream.close()
+                return true
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+
+        return false
+    }
 
 }
 
