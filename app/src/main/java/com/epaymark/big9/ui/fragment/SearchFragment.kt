@@ -14,8 +14,8 @@ import com.epaymark.big9.R
 
 import com.epaymark.big9.adapter.SearchAdapter
 import com.epaymark.big9.databinding.FragmentSearchBinding
-
 import com.epaymark.big9.ui.base.BaseFragment
+
 import com.epaymark.big9.utils.helpers.Constants.isFromSearchPage
 import com.epaymark.big9.utils.helpers.Constants.searchList
 import com.epaymark.big9.utils.helpers.Constants.searchValue

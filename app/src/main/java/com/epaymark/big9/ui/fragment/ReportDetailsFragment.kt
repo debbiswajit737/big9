@@ -14,8 +14,8 @@ import com.epaymark.big9.adapter.ReportDetailsAdapter
 import com.epaymark.big9.data.model.Reportdetails
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentReportDetailsBinding
-
 import com.epaymark.big9.ui.base.BaseFragment
+
 import org.json.JSONObject
 
 class ReportDetailsFragment : BaseFragment() {

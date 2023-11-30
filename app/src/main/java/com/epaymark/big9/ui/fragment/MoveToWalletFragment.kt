@@ -16,8 +16,8 @@ import com.epaymark.big9.R
 
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMoveToWalletBinding
-
 import com.epaymark.big9.ui.base.BaseFragment
+
 import com.epaymark.big9.ui.receipt.MoveToWalletPayabhiReceptDialogFragment
 import com.epaymark.big9.ui.receipt.MoveToWalletReceptDialogFragment
 import com.epaymark.big9.utils.`interface`.CallBack

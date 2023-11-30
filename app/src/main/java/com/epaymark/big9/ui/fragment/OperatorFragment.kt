@@ -15,9 +15,9 @@ import com.epaymark.big9.adapter.OperatorAdapter
 import com.epaymark.big9.data.model.OperatorModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.OperatorFragmentLayoutBinding
-
-
 import com.epaymark.big9.ui.base.BaseFragment
+
+
 import com.epaymark.big9.utils.helpers.Constants.isDthOperator
 import com.epaymark.big9.utils.`interface`.CallBack4
 

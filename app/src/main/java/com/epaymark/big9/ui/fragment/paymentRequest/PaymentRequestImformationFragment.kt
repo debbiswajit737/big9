@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
@@ -22,14 +21,12 @@ import com.epaymark.big9.databinding.FragmentPaymentRequestImformationBinding
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
 import com.epaymark.big9.ui.popup.SuccessPopupFragment
-import com.epaymark.big9.ui.receipt.EPotlyReceptDialogFragment
 import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.isGallary
 import com.epaymark.big9.utils.helpers.Constants.isIsPaySlip
 import com.epaymark.big9.utils.helpers.Constants.isVideo
 import com.epaymark.big9.utils.`interface`.CallBack
 import com.epaymark.big9.utils.`interface`.CallBack4
-import java.util.Objects
 
 class PaymentRequestImformationFragment : BaseFragment() {
     lateinit var binding: FragmentPaymentRequestImformationBinding

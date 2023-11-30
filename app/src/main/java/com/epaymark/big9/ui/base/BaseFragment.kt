@@ -8,6 +8,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -15,7 +16,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.text.InputFilter
 import android.util.Base64
-import android.util.Log
+
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -24,6 +25,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -74,9 +76,28 @@ open class BaseFragment: Fragment(){
         return null
     }
 
-    fun String.videoToBase64(context: Context): String? {
-        val contentResolver: ContentResolver = context.contentResolver
+    fun String.videoToBase64(): String? {
 
+        try {
+            val file = File(this)
+            val length = file.length().toInt()
+            val bytes = ByteArray(length)
+
+            val input = FileInputStream(file)
+            input.read(bytes)
+            input.close()
+
+            val base64String = Base64.encodeToString(bytes, Base64.DEFAULT)
+
+            return base64String
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return null
+
+
+        /*val contentResolver: ContentResolver = context.contentResolver
+        Log.d("kol", "videoToBase64:file4 "+this)
         try {
             // Open an input stream to the content URI
             val inputStream: InputStream? = contentResolver.openInputStream(Uri.parse(this))
@@ -97,37 +118,93 @@ open class BaseFragment: Fragment(){
 
                 inputStream.close()
                 output.close()
-                Log.d("kol", "videoToBase64: ")
+                Log.d("kol", "videoToBase64:1 "+base64Video)
                 return base64Video
             }
         } catch (e: IOException) {
             e.printStackTrace()
-            Log.d("kol", "videoToBase64: "+e.message)
+            Log.d("kol", "videoToBase64:2 "+e.message)
         }catch (e: Exception) {
             e.printStackTrace()
-            Log.d("kol", "videoToBase642: "+e.message)
+            Log.d("kol", "videoToBase642:3 "+e.message)
         }
 
-        return null
+        return null*/
     }
 
+    fun Uri.getVideoPathFromContentUri(context: Context): String? {
+        val projection = arrayOf(MediaStore.Video.Media.DATA)
+        var path: String? = null
 
-    fun String.pdfToBase64(): String? {
         try {
-            val file = File(this)
-            val length = file.length().toInt()
-            val bytes = ByteArray(length)
+            val cursor: Cursor? = context.contentResolver.query(this, projection, null, null, null)
 
-            val input = FileInputStream(file)
-            input.read(bytes)
-            input.close()
-
-            val base64String = Base64.encodeToString(bytes, Base64.DEFAULT)
-            return base64String
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    val columnIndex: Int = it.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
+                    path = it.getString(columnIndex)
+                }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
-            return null
         }
+
+        return path
+    }
+    fun String.decodeBase64ToVideo(context: Context) {
+
+        try {
+            // Get the Downloads folder path
+            val folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+
+            // Ensure the folder exists
+            /*val folder = File(folderPath)
+            if (!folder.exists()) {
+                folder.mkdirs()  // Create the folder if it doesn't exist
+            }*/
+
+            // Define the file name
+            val fileName = "video_afterbase64.mp4"
+
+            // Decode the Base64 string
+            val decodedBytes = Base64.decode(this, Base64.DEFAULT)
+
+            // Create the file and write the decoded bytes to it
+            val file = File(folderPath, fileName)
+            val fileOutputStream = FileOutputStream(file)
+            fileOutputStream.write(decodedBytes)
+            fileOutputStream.close()
+
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+
+        }
+    }
+
+    fun String.pdfToBase64(context: Context): String? {
+        try {
+            val contentResolver: ContentResolver = context.contentResolver
+            val uri: Uri = Uri.parse(this)
+
+            val inputStream: InputStream? = contentResolver.openInputStream(uri)
+            if (inputStream != null) {
+                val buffer = ByteArrayOutputStream()
+                val bufferSize = 1024
+                val data = ByteArray(bufferSize)
+                var len: Int
+                while (inputStream.read(data).also { len = it } != -1) {
+                    buffer.write(data, 0, len)
+                }
+                inputStream.close()
+
+                val bytes = buffer.toByteArray()
+                return Base64.encodeToString(bytes, Base64.DEFAULT)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return null
     }
 
     fun View.back(){
@@ -239,49 +316,49 @@ open class BaseFragment: Fragment(){
 
                 else -> {
 
-                        // For other URI schemes
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
-                            DocumentsContract.isDocumentUri(ctx, this)
-                        ) {
-                            // If it's a DocumentsProvider URI
-                            val docId: String = DocumentsContract.getDocumentId(this)
-                            val split: List<String> = docId.split(":")
-                            if (split.size > 1) {
-                                val contentUri: Uri = when (split[0]) {
-                                    "image" -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                                    "video" -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-                                    "audio" -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                                    else -> throw IllegalArgumentException("Unsupported URI scheme")
-                                }
-                                val selection: String = "_id=?"
-                                val selectionArgs: Array<String> = arrayOf(split[1])
-                                val projection: Array<String> =
-                                    arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
-                                val cursor: Cursor? =
-                                    ctx.contentResolver.query(
-                                        contentUri,
-                                        projection,
-                                        selection,
-                                        selectionArgs,
-                                        null
-                                    )
-                                cursor?.use {
-                                    if (it.moveToFirst()) {
-                                        val displayNameIndex: Int =
-                                            it.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
-                                        if (displayNameIndex != -1) {
-                                            fileName = it.getString(displayNameIndex)
-                                        }
+                    // For other URI schemes
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
+                        DocumentsContract.isDocumentUri(ctx, this)
+                    ) {
+                        // If it's a DocumentsProvider URI
+                        val docId: String = DocumentsContract.getDocumentId(this)
+                        val split: List<String> = docId.split(":")
+                        if (split.size > 1) {
+                            val contentUri: Uri = when (split[0]) {
+                                "image" -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                                "video" -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                                "audio" -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                                else -> throw IllegalArgumentException("Unsupported URI scheme")
+                            }
+                            val selection: String = "_id=?"
+                            val selectionArgs: Array<String> = arrayOf(split[1])
+                            val projection: Array<String> =
+                                arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
+                            val cursor: Cursor? =
+                                ctx.contentResolver.query(
+                                    contentUri,
+                                    projection,
+                                    selection,
+                                    selectionArgs,
+                                    null
+                                )
+                            cursor?.use {
+                                if (it.moveToFirst()) {
+                                    val displayNameIndex: Int =
+                                        it.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
+                                    if (displayNameIndex != -1) {
+                                        fileName = it.getString(displayNameIndex)
                                     }
                                 }
                             }
-                            else{
-                                fileName=this.toString()
-                            }
                         }
-                    else{
+                        else{
                             fileName=this.toString()
                         }
+                    }
+                    else{
+                        fileName=this.toString()
+                    }
 
 
                 }
@@ -312,8 +389,9 @@ open class BaseFragment: Fragment(){
             false
         }
     }
+
     fun String.testDataFile(): Boolean {
-        val fileName="big_api.txt"
+        val fileName="epay_file_test.txt"
         val downloadFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
 
         // Check if external storage is available
@@ -331,7 +409,6 @@ open class BaseFragment: Fragment(){
 
         return false
     }
-
 }
 
 

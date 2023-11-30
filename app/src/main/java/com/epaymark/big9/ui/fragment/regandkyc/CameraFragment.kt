@@ -42,8 +42,8 @@ import com.epaymark.big9.R
 
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentCameraBinding
-
 import com.epaymark.big9.ui.base.BaseFragment
+
 import com.epaymark.big9.utils.helpers.Constants.contentValues
 import com.epaymark.big9.utils.helpers.Constants.isBackCamera
 import com.epaymark.big9.utils.helpers.Constants.isGallary

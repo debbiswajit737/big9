@@ -14,8 +14,8 @@ import com.epaymark.big9.adapter.BankListAdapter
 import com.epaymark.big9.data.model.BankListModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentPaymentRequestBinding
-
 import com.epaymark.big9.ui.base.BaseFragment
+
 import com.epaymark.big9.utils.`interface`.CallBack4
 
 class PaymentRequestFragment : BaseFragment() {

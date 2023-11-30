@@ -1,4 +1,4 @@
-package com.epaymark.big9.data.model.sendData.onBoading
+package com.epaymark.big9.data.model.onBoading
 
 data class BankDetails(
     val beneficiaryName: String?,

@@ -23,10 +23,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
-
+import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentDocuploadBinding
-
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
@@ -37,6 +36,7 @@ import com.epaymark.big9.utils.helpers.Constants.isPdf
 import com.epaymark.big9.utils.helpers.Constants.isVideo
 import com.epaymark.big9.utils.helpers.SharedPreff
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import javax.inject.Inject
@@ -73,8 +73,11 @@ class DocuploadFragment : BaseFragment() {
             loader?.let {
                 it.show()
                 Handler(Looper.getMainLooper()).postDelayed({
+                    authViewModel.videokycBase64.value=authViewModel.videoFilePath.value?.getVideoPathFromContentUri(binding.root.context)?.videoToBase64()
                     authViewModel.videokyc.value=authViewModel.videoFilePath.value?.getFileNameFromUri()
                     it.dismiss()
+                    //authViewModel.videokycBase64.value.toString().testDataFile()
+                    //authViewModel?.videokycBase64?.value?.decodeBase64ToVideo(binding.root.context)
                     isVideo=false
                 },15000)
             }
@@ -236,25 +239,63 @@ class DocuploadFragment : BaseFragment() {
                 }
 
                 btnNext.setOnClickListener {
-
+                    authViewModel.apply {
                     try {
-                            binding.tvPancardVideoKycImage.setText(authViewModel.filePath.toString())
-                            authViewModel.videoFile.value?.file=
-                                authViewModel.filePath.value?.toString()?.videoToBase64(binding.root.context)
-                                    .toString()
+                        binding.tvPancardVideoKycImage.setText(authViewModel.filePath.toString())
+                        /*videoFile.value?.file =
+                            filePath.value?.toString()
+                                ?.videoToBase64(binding.root.context)
+                                .toString()*/
+                        authViewModel.videokycBase64.value=filePath.value?.getVideoPathFromContentUri(binding.root.context)?.
+                            videoToBase64()
+                            .toString()
 
-                            authViewModel.videoFilePath.value?.let {uri->
-                                //Log.d("TAG_videofilebbbbb", "onViewClick: "+uriToBase64(binding.tvPancardVideoKycImage.context,uri))
-                            }
-                        if (authViewModel.docValidation()){
+
+                        if (docValidation()) {
                             sharedPreff?.setLoginData()
-                        startActivity(Intent(requireActivity(),DashboardActivity::class.java))
-                        //Toast.makeText(binding.root.context, "Ok", Toast.LENGTH_SHORT).show()
+
+                            val json = Gson().toJson(DocumentUploadModel(
+                                panPathBase64= panPathBase64.value,
+                                cpanPathBase64=cpanPathBase64.value,
+                                paadharBase64=paadharBase64.value,
+                                partnerAadharBackBase64=PartnerAadharBackBase64.value,
+                                llGstBase64=llGstBase64.value,
+                                llCertificateOfIncorporationBase64=llCertificateOfIncorporationBase64.value,
+                                llBoardResolutionBase64=llBoardResolutionBase64.value,
+                                llTradeBase64=llTradeBase64 . value,
+                                llUserSelfiBase64=llUserSelfiBase64.value,
+                                llCselfiBase64=llCselfiBase64 . value,
+                                videokycBase64=videokycBase64.value,
+                            ))
+                            json.toString().testDataFile()
+                            /*val regModel = DocumentUploadModel(
+                                panPathBase64= panPathBase64.value,
+                                cpanPathBase64=cpanPathBase64.value,
+                                paadharBase64=paadharBase64.value,
+                                partnerAadharBackBase64=PartnerAadharBackBase64.value,
+                                llGstBase64=llGstBase64.value,
+                                llCertificateOfIncorporationBase64=llCertificateOfIncorporationBase64.value,
+                                llBoardResolutionBase64=llBoardResolutionBase64.value,
+                                llTradeBase64=llTradeBase64 . value,
+                                llUserSelfiBase64=llUserSelfiBase64.value,
+                                llCselfiBase64=llCselfiBase64 . value,
+                                videokycBase64=videokycBase64.value,
+                            )*/
+                            /*cpanPathBase64
+                            llCselfiBase64
+                            llUserSelfiBase64
+                            paadharBase64
+                            panPathBase64
+                            partnerAadharBackBase64
+                             */
+
+                            startActivity(Intent(requireActivity(), DashboardActivity::class.java))
+                            //Toast.makeText(binding.root.context, "Ok", Toast.LENGTH_SHORT).show()
                         }
-                    }catch (e:Exception){
+                    } catch (e: Exception) {
                         Toast.makeText(binding.root.context, e.message, Toast.LENGTH_SHORT).show()
                     }
-
+                }
                 }
             }
         }
@@ -318,44 +359,59 @@ class DocuploadFragment : BaseFragment() {
     }
 
     fun setObserver() {
-        authViewModel.filePath.observe(viewLifecycleOwner){
-            when(type){
-                "pan"->{
-                    authViewModel.panPath.value=it?.getFileNameFromUri()
-                }
-                "cpan"->{
-                    authViewModel.cpanPath.value=it?.getFileNameFromUri()
-                }
-                "paadhar"->{
-                    authViewModel.paadhar.value=it?.getFileNameFromUri()
-                }
-                "PartnerAadharBack"->{
-                    authViewModel.PartnerAadharBack.value=it?.getFileNameFromUri()
-                }
-                "llGst"->{
-                authViewModel.llGst.value=it?.getFileNameFromUri()
-                }
-                "llCertificateOfIncorporation"->{
-                authViewModel.llCertificateOfIncorporation.value=it?.getFileNameFromUri()
-                }
-                "llBoardResolution"->{
-                authViewModel.llBoardResolution.value=it?.getFileNameFromUri()
-                }
-                "llTrade"->{
-                authViewModel.llTrade.value=it?.getFileNameFromUri()
-                }
-                "llUserSelfi"->{
-                authViewModel.llUserSelfi.value=it?.getFileNameFromUri()
-                }
-                "llCselfi"->{
-                authViewModel.llCselfi.value=it?.getFileNameFromUri()
-                }
+
+        authViewModel.apply {
+            authViewModel.filePath.observe(viewLifecycleOwner){
+
+                when(type){
+                    "pan"->{
+                        panPathBase64.value=it?.uriToBase64(binding.root.context.contentResolver)
+                        panPath.value=it?.getFileNameFromUri()
+                    }
+                    "cpan"->{
+                        cpanPathBase64.value=it?.uriToBase64(binding.root.context.contentResolver)
+                        cpanPath.value=it?.getFileNameFromUri()
+                    }
+                    "paadhar"->{
+                        paadharBase64.value=it?.uriToBase64(binding.root.context.contentResolver)
+                        paadhar.value=it?.getFileNameFromUri()
+                    }
+                    "PartnerAadharBack"->{
+                        PartnerAadharBackBase64.value=it?.uriToBase64(binding.root.context.contentResolver)
+                        PartnerAadharBack.value=it?.getFileNameFromUri()
+                    }
+                    "llGst"->{
+                        llGstBase64.value=it?.toString()?.pdfToBase64(binding.root.context)
+                        llGst.value=it?.getFileNameFromUri()
+                    }
+                    "llCertificateOfIncorporation"->{
+                        llCertificateOfIncorporationBase64.value=it?.toString()?.pdfToBase64(binding.root.context)
+                        llCertificateOfIncorporation.value=it?.getFileNameFromUri()
+                    }
+                    "llBoardResolution"->{
+                        llBoardResolutionBase64.value=it?.toString()?.pdfToBase64(binding.root.context)
+                        llBoardResolution.value=it?.getFileNameFromUri()
+                    }
+                    "llTrade"->{
+                        llTradeBase64.value=it?.toString()?.pdfToBase64(binding.root.context)
+                        llTrade.value=it?.getFileNameFromUri()
+                    }
+                    "llUserSelfi"->{
+                        llUserSelfiBase64.value=it?.uriToBase64(binding.root.context.contentResolver)
+                        llUserSelfi.value=it?.getFileNameFromUri()
+                    }
+                    "llCselfi"->{
+                        llCselfiBase64.value=it?.uriToBase64(binding.root.context.contentResolver)
+                        llCselfi.value=it?.getFileNameFromUri()
+                    }
 
 
+                }
+
+                //Log.d("TAG_file", "true setObserver: "+it.uriToBase64(binding.root.context.contentResolver))
             }
-
-            //Log.d("TAG_file", "true setObserver: "+it.uriToBase64(binding.root.context.contentResolver))
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

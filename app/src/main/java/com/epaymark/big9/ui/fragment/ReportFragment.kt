@@ -16,8 +16,8 @@ import com.epaymark.big9.data.model.ReportModel
 import com.epaymark.big9.data.model.ReportPropertyModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentReportBinding
-
 import com.epaymark.big9.ui.base.BaseFragment
+
 import com.epaymark.big9.utils.`interface`.CallBack
 
 class ReportFragment : BaseFragment() {

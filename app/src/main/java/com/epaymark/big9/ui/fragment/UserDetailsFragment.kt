@@ -15,8 +15,8 @@ import com.epaymark.big9.adapter.UserDetailsAdapter
 import com.epaymark.big9.data.model.UserDetails
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentUserDetailsBinding
-
 import com.epaymark.big9.ui.base.BaseFragment
+
 import com.epaymark.big9.utils.*
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException

@@ -12,7 +12,6 @@ import com.epaymark.big9.R
 
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMoneyTranspherBinding
-
 import com.epaymark.big9.ui.base.BaseFragment
 
 class MoneyTranspherFragment : BaseFragment() {

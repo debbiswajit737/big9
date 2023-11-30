@@ -13,10 +13,11 @@ import com.epaymark.big9.R
 import com.epaymark.big9.databinding.FragmentCongratulationBinding
 import com.epaymark.big9.ui.activity.AuthenticationActivity
 import com.epaymark.big9.ui.activity.DashboardActivity
+import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.utils.helpers.Constants
 import kotlinx.coroutines.launch
 
-class CongratulationFragment : Fragment() {
+class CongratulationFragment : BaseFragment() {
     lateinit var binding: FragmentCongratulationBinding
 
     override fun onCreateView(

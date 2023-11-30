@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
@@ -33,7 +32,8 @@ import androidx.window.layout.WindowMetricsCalculator
 import com.epaymark.big9.R
 import com.epaymark.big9.adapter.StateListAdapter
 import com.epaymark.big9.data.model.StateCityModel
-import com.epaymark.big9.data.model.sendData.onBoading.regForm
+import com.epaymark.big9.data.model.onBoading.regForm
+
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentRegBinding
 import com.epaymark.big9.ui.base.BaseFragment

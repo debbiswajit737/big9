@@ -70,6 +70,25 @@ class AuthViewModel @Inject constructor(private val repository: DeliveryOptionsR
     val llCselfi = MutableLiveData<String>()
     val videokyc = MutableLiveData<String>()
 
+
+
+
+    val panPathBase64 = MutableLiveData<String>()
+    val cpanPathBase64 = MutableLiveData<String>()
+    val paadharBase64 = MutableLiveData<String>()
+    val PartnerAadharBackBase64 = MutableLiveData<String>()
+    val llGstBase64 = MutableLiveData<String>()
+    val llCertificateOfIncorporationBase64 = MutableLiveData<String>()
+    val llBoardResolutionBase64 = MutableLiveData<String>()
+    val llTradeBase64 = MutableLiveData<String>()
+    val llUserSelfiBase64 = MutableLiveData<String>()
+    val llCselfiBase64 = MutableLiveData<String>()
+    val videokycBase64 = MutableLiveData<String>()
+
+
+
+
+
     val llPan = MutableLiveData<String>()
     val llCpan = MutableLiveData<String>()
     val llBpan = MutableLiveData<String>()

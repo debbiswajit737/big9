@@ -3,14 +3,12 @@ package com.epaymark.big9.ui.fragment
 
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels

@@ -14,8 +14,8 @@ import com.epaymark.big9.adapter.AccountDetailsAdapter
 import com.epaymark.big9.data.model.AccountDetailsModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMoveToBankBinding
-
 import com.epaymark.big9.ui.base.BaseFragment
+
 import com.epaymark.big9.ui.receipt.MoveToBankReceptDialogFragment
 import com.epaymark.big9.utils.`interface`.CallBack
 import java.util.Objects

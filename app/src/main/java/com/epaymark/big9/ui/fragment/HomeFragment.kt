@@ -36,9 +36,9 @@ import com.epaymark.big9.adapter.UtilityAdapter
 import com.epaymark.big9.data.model.ListIcon
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentHomeBinding
-
-
 import com.epaymark.big9.ui.base.BaseFragment
+
+
 import com.epaymark.big9.ui.popup.CustomPopup.showBalencePopup
 import com.epaymark.big9.utils.common.MethodClass.userLogout
 import com.epaymark.big9.utils.helpers.Constants.isCashWithdraw

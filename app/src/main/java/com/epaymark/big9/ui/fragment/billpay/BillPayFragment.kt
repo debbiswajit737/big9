@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.epaymark.big9.R
 import com.epaymark.big9.databinding.BillpayFragmentBinding
-
-
 import com.epaymark.big9.ui.base.BaseFragment
 
 class BillPayFragment : BaseFragment() {
