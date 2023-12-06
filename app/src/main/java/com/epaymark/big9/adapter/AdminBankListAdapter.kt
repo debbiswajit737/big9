@@ -4,9 +4,10 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.epaymark.big9.data.model.AdminBankListModel
 import com.epaymark.big9.databinding.AdminBankListLayoutBinding
-import com.epaymark.big9.utils.`interface`.CallBack4
+import com.epaymark.big9.data.model.AdminBankListModel
+
+import com.epaymark.epay.utils.`interface`.CallBack4
 import java.util.*
 import kotlin.collections.ArrayList
 

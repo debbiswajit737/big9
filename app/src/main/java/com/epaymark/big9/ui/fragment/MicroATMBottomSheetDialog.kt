@@ -14,9 +14,9 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.MatmBottomsheetLayoutBinding
 
 import com.epaymark.big9.ui.base.BaseBottomSheetFragment
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.epay.utils.`interface`.CallBack
 
-class MicroATMBottomSheetDialog(val callBack: CallBack) :BaseBottomSheetFragment() {
+class MicroATMBottomSheetDialog(val callBack: CallBack) : BaseBottomSheetFragment() {
     lateinit var binding: MatmBottomsheetLayoutBinding
     private val myViewModel: MyViewModel by activityViewModels()
 

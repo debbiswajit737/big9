@@ -1,4 +1,4 @@
-package com.epaymark.big9.data.bindingAdapter
+package com.epaymark.epay.data.bindingAdapter
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.ViewModel
 import com.epaymark.big9.R
+
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 

@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.epaymark.big9.R
-import com.epaymark.big9.ui.base.BaseFragment
 
+import com.epaymark.big9.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

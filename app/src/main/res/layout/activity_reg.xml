@@ -4,11 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-
-
         <variable
             name="viewModel"
-            type="com.epaymark.big9.data.viewMovel.AuthViewModel" />
+            type="com.epaymark.epay.data.viewMovel.AuthViewModel" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -91,7 +89,7 @@
             android:textSize="15sp"
             android:fontFamily="@font/montserrat_medium_500"
             app:layout_constraintTop_toBottomOf="@+id/img_logo"
-            android:text="Welcome to Big9"
+            android:text="Welcome to epay"
             android:textColor="@color/gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

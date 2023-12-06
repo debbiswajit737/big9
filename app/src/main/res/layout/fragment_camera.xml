@@ -2,7 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
 
+        <variable
+            name="viewModel"
+            type="com.epaymark.big9.data.viewMovel.AuthViewModel" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,6 +25,111 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
+        <LinearLayout
+            android:id="@+id/ll_user_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:layout_marginTop="150dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Name is"
+                android:textColor="@color/g3"
+                android:fontFamily="@font/montserrat_medium_500"
+                android:textSize="@dimen/_16ssp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:shadowColor="@color/gray"
+                android:shadowDx="2.0"
+                android:shadowDy="2.0"
+                android:shadowRadius="3.0"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.videoKycUserName}"
+                android:textColor="@color/g3"
+                android:fontFamily="@font/montserrat_medium_500"
+                android:textSize="@dimen/_18ssp"
+                android:layout_gravity="center_horizontal"
+
+                android:shadowColor="@color/g5"
+                android:shadowDx="2.0"
+                android:shadowDy="2.0"
+                android:shadowRadius="3.0"
+
+                />
+
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aadharcard Number is"
+                android:textColor="@color/g3"
+                android:fontFamily="@font/montserrat_medium_500"
+                android:textSize="@dimen/_16ssp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:shadowColor="@color/gray"
+                android:shadowDx="2.0"
+                android:shadowDy="2.0"
+                android:shadowRadius="3.0"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.videoKycUserAadharCard}"
+                android:textColor="@color/g3"
+                android:fontFamily="@font/montserrat_medium_500"
+                android:textSize="@dimen/_18ssp"
+                android:layout_gravity="center_horizontal"
+
+                android:shadowColor="@color/g5"
+                android:shadowDx="2.0"
+                android:shadowDy="2.0"
+                android:shadowRadius="3.0"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pancard Number is"
+                android:textColor="@color/g3"
+                android:fontFamily="@font/montserrat_medium_500"
+                android:textSize="@dimen/_16ssp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:shadowColor="@color/gray"
+                android:shadowDx="2.0"
+                android:shadowDy="2.0"
+                android:shadowRadius="3.0"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.videoKycUserPancard}"
+                android:textColor="@color/g3"
+                android:fontFamily="@font/montserrat_medium_500"
+                android:textSize="@dimen/_18ssp"
+                android:layout_gravity="center_horizontal"
+
+                android:shadowColor="@color/g5"
+                android:shadowDx="2.0"
+                android:shadowDy="2.0"
+                android:shadowRadius="3.0"
+
+                />
+        </LinearLayout>
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCaptureImg"
             android:layout_width="match_parent"

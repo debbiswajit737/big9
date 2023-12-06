@@ -17,11 +17,13 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.epaymark.big9.R
+
 import com.epaymark.big9.data.model.ContactModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentCertificateBinding
+
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.big9.utils.common.MethodClass
+import com.epaymark.epay.utils.common.MethodClass
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfWriter

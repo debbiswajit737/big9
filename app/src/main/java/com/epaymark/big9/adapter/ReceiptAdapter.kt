@@ -3,8 +3,9 @@ package com.epaymark.big9.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.epaymark.big9.data.model.ReceiptModel
 import com.epaymark.big9.databinding.ReceiptLayoutBinding
+import com.epaymark.big9.data.model.ReceiptModel
+
 
 
 class ReceiptAdapter(private val items: ArrayList<ReceiptModel>) : RecyclerView.Adapter<ReceiptAdapter.MyViewHolder>() {

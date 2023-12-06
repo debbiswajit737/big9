@@ -2,17 +2,27 @@ package com.epaymark.big9.data.viewMovel
 
 import android.net.Uri
 import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.FileModel
+import com.epaymark.big9.data.model.login.LoginResponse
+import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
+import com.epaymark.big9.data.model.onBoading.RegForm
+import com.epaymark.big9.data.model.otp.OtpResponse
+import com.epaymark.big9.data.model.sample.Test
+import com.epaymark.big9.network.ResponseState
 
-import com.epaymark.big9.repository.DeliveryOptionsRepository
-import com.epaymark.big9.utils.helpers.helper.validate
+import com.epaymark.big9.repository.AuthRepositoryRepository
+import com.epaymark.epay.utils.helpers.helper.validate
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(private val repository: DeliveryOptionsRepository) : ViewModel() {
+class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRepository) : ViewModel() {
     var lastView: View?=null
     var filePath: MutableLiveData<Uri> = MutableLiveData()
     var videoFilePath: MutableLiveData<Uri> = MutableLiveData()
@@ -22,11 +32,16 @@ class AuthViewModel @Inject constructor(private val repository: DeliveryOptionsR
     //var otp = MutableLiveData(Editable)
     val otp: MutableLiveData<String> = MutableLiveData("")
 
+    //Video kyc user details
+    val videoKycUserName = MutableLiveData<String>("User Name")
+    val videoKycUserPancard = MutableLiveData<String>("ABCDE1234A")
+    val videoKycUserAadharCard = MutableLiveData<String>("1234567879012")
 
     val videoFile = MutableLiveData<FileModel>()
 
 
     // Fields
+
     val name = MutableLiveData<String>()
     val mobile = MutableLiveData<String>()
     val email = MutableLiveData<String>()
@@ -46,12 +61,12 @@ class AuthViewModel @Inject constructor(private val repository: DeliveryOptionsR
     val businessType = MutableLiveData<String>()
     val businessCategory = MutableLiveData<String>()
     val businessName = MutableLiveData<String>()
+    val businessAddress = MutableLiveData<String>()
     val partnerNameName = MutableLiveData<String>("")
     val partnerPanCardNumber = MutableLiveData<String>("")
     val companyPanCardNumber = MutableLiveData<String>("")
     val kycGSTNumber = MutableLiveData<String>("")
     val kycAadharNumber = MutableLiveData<String>("")
-    val businessAddress = MutableLiveData<String>()
     val beneficiaryName = MutableLiveData<String>()
     val accountNumber = MutableLiveData<String>()
     val confirmAccountNumber = MutableLiveData<String>()
@@ -69,8 +84,6 @@ class AuthViewModel @Inject constructor(private val repository: DeliveryOptionsR
     val llUserSelfi = MutableLiveData<String>()
     val llCselfi = MutableLiveData<String>()
     val videokyc = MutableLiveData<String>()
-
-
 
 
     val panPathBase64 = MutableLiveData<String>()
@@ -92,14 +105,13 @@ class AuthViewModel @Inject constructor(private val repository: DeliveryOptionsR
     val llPan = MutableLiveData<String>()
     val llCpan = MutableLiveData<String>()
     val llBpan = MutableLiveData<String>()
+
+
     val genderReg = MutableLiveData<String>()
 
     val llPanBase64 = MutableLiveData<String>()
     val llCpanBase64 = MutableLiveData<String>()
     val llBpanBase64 = MutableLiveData<String>()
-
-
-
 
 
     val pancardImage3 = MutableLiveData<String>()
@@ -633,4 +645,45 @@ class AuthViewModel @Inject constructor(private val repository: DeliveryOptionsR
         businessAddressErrorVisible.value = false
 
     }
+
+
+
+    //form reg validation
+    val formResponseLiveData: LiveData<ResponseState<BaseResponse<Test>>>
+        get() = repository.formResponseLiveData
+    fun formRegistration(requestBody: RegForm) {
+        viewModelScope.launch {
+            repository.formReg(requestBody)
+        }
+    }
+
+   //Doc upload
+    val document: LiveData<ResponseState<BaseResponse<Test>>>
+    get() = repository.docUploadResponseLiveData
+    fun documentRegistration(requestBody: DocumentUploadModel) {
+        viewModelScope.launch {
+            repository.docUpload(requestBody)
+        }
+    }
+
+
+
+    val authLogin: LiveData<ResponseState<BaseResponse<LoginResponse>>>
+        get() = repository.loginResponseLiveData
+    fun authLoginRegistration(loginModel: String) {
+        viewModelScope.launch {
+            repository.userLogin(loginModel)
+        }
+    }
+
+    val otpResponse: LiveData<ResponseState<OtpResponse>>
+        get() = repository.otpResponseLiveData
+    fun sendOtp(token: String, data: String) {
+        viewModelScope.launch {
+            repository.otp(token,data)
+        }
+    }
+
+
+
 }

@@ -15,9 +15,9 @@ import com.epaymark.big9.data.model.ReportModel
 import com.epaymark.big9.data.model.ReportPropertyModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMiniStatementBinding
-import com.epaymark.big9.ui.base.BaseFragment
 
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.ui.base.BaseFragment
+import com.epaymark.epay.utils.`interface`.CallBack
 
 class MiniStatementFragment : BaseFragment() {
     lateinit var binding: FragmentMiniStatementBinding
@@ -104,19 +104,43 @@ class MiniStatementFragment : BaseFragment() {
                         getString(R.string.payment)->{
                             ReportPropertyModel("Transaction id")
                         }
-                        getString(R.string.transactions)->{ReportPropertyModel("Transaction id","")}
-                        getString(R.string.dmt)->{ReportPropertyModel("Transaction id")}
-                        getString(R.string.load_Requests)->{ReportPropertyModel("Transaction id")}
-                        getString(R.string.wallet_ledger)->{ReportPropertyModel("Transaction id")}
-                        getString(R.string.cashout_ledger)->{ReportPropertyModel("Transaction id")}
-                        getString(R.string.aeps)->{ReportPropertyModel("Transaction id")}
-                        getString(R.string.micro_atm)->{ReportPropertyModel("Transaction id")}
-                        getString(R.string.commissions)->{ReportPropertyModel("Transaction id")}
-                        getString(R.string.bank_settle)->{ReportPropertyModel("Transaction id")}
-                        getString(R.string.wallet_settle)->{ReportPropertyModel("Transaction id")}
-                        getString(R.string.complaints)->{ReportPropertyModel("Transaction id")}
+                        getString(R.string.transactions)->{
+                            ReportPropertyModel("Transaction id","")
+                        }
+                        getString(R.string.dmt)->{
+                            ReportPropertyModel("Transaction id")
+                        }
+                        getString(R.string.load_Requests)->{
+                            ReportPropertyModel("Transaction id")
+                        }
+                        getString(R.string.wallet_ledger)->{
+                            ReportPropertyModel("Transaction id")
+                        }
+                        getString(R.string.cashout_ledger)->{
+                            ReportPropertyModel("Transaction id")
+                        }
+                        getString(R.string.aeps)->{
+                            ReportPropertyModel("Transaction id")
+                        }
+                        getString(R.string.micro_atm)->{
+                            ReportPropertyModel("Transaction id")
+                        }
+                        getString(R.string.commissions)->{
+                            ReportPropertyModel("Transaction id")
+                        }
+                        getString(R.string.bank_settle)->{
+                            ReportPropertyModel("Transaction id")
+                        }
+                        getString(R.string.wallet_settle)->{
+                            ReportPropertyModel("Transaction id")
+                        }
+                        getString(R.string.complaints)->{
+                            ReportPropertyModel("Transaction id")
+                        }
 
-                        else -> {ReportPropertyModel("Transaction id")}
+                        else -> {
+                            ReportPropertyModel("Transaction id")
+                        }
                     }
                     if (reportList.size>0){
                         binding.tvNoDataFound.visibility=View.GONE

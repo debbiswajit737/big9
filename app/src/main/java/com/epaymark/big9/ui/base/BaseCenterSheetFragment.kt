@@ -27,7 +27,7 @@ open class BaseCenterSheetFragment: DialogFragment() {
         this.setOnClickListener{
             //(activity as? DashboardActivity)?.navigate()
 
-            findNavController().popBackStack(com.epaymark.big9.R.id.homeFragment2,false)
+            findNavController().popBackStack(R.id.homeFragment2,false)
         }
     }
     fun View.takeScreenshot(): Bitmap {

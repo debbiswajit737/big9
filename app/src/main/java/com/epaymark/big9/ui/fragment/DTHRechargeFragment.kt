@@ -9,12 +9,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
+
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentDthRechargeBinding
+
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.big9.ui.receipt.DthReceptDialogFragment
-import com.epaymark.big9.utils.helpers.Constants.isDthOperator
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.epay.ui.receipt.DthReceptDialogFragment
+import com.epaymark.epay.utils.helpers.Constants.isDthOperator
+import com.epaymark.epay.utils.`interface`.CallBack
 import java.util.Objects
 
 class DTHRechargeFragment : BaseFragment() {

@@ -16,7 +16,6 @@ import com.epaymark.big9.R
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.ActivityRegBinding
 
-
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -59,15 +58,13 @@ class RegActivity : AppCompatActivity() {
         val navHostFragment: NavHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-
-
-
         if (intent.getBooleanExtra("isAlreadyLogin",false)){
 
             binding.navHostFragment.visibility = View.VISIBLE
-            //setSecondAnimation()
+           // setSecondAnimation()
         }
-        if (intent.getBooleanExtra("isForgotPin",false)){
+        if (intent.getBooleanExtra("isForgotPin",false))
+        {
             setSecondAnimation()
             binding.navHostFragment.visibility = View.VISIBLE
             bundle.putBoolean("isForgotPin",true)
@@ -87,9 +84,6 @@ class RegActivity : AppCompatActivity() {
             setAnimation(R.raw.bg_login)
 
             playAnimation()
-
-
-
             addAnimatorUpdateListener { animation ->
                 var duration:Float=animation.animatedFraction
                 if (duration>0.5f){
@@ -140,7 +134,6 @@ class RegActivity : AppCompatActivity() {
         binding.animationViewHeader.apply {
             setAnimation(R.raw.login_header_bg)
             playAnimation()
-
             addAnimatorListener(
                 object : Animator.AnimatorListener {
                     override fun onAnimationStart(animation: Animator) {
@@ -166,9 +159,6 @@ class RegActivity : AppCompatActivity() {
 //                                duration = 2000
 //                                start()
 //                            }
-
-
-
                         }
                     }
 

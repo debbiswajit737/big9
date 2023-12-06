@@ -26,7 +26,8 @@ sealed class ResponseState<T>(
             return when(throwable){
                 is HttpException -> {
                     Log.d(TAG, "GenericApiResponse: Error: ${throwable.code()}: ${throwable.message()}")
-                    Error(false, throwable.message(), throwable.code())
+                    Error(false, "Invalid", throwable.code())
+                    //Error(false, throwable.message(), throwable.code())
                 }
                 is IOException -> {
                     //network error
@@ -36,7 +37,8 @@ sealed class ResponseState<T>(
                 else -> {
                     //other exceptions
                     Log.d(TAG, "GenericApiResponse: other Error")
-                    Error(false, throwable.message, null)
+                    //Error(false, throwable.message, null)
+                    Error(false, "Invalid", null)
                 }
             }
         }
@@ -65,11 +67,11 @@ sealed class ResponseState<T>(
                 //Error
                 val errorObj =
                     JSONObject(response.errorBody()?.charStream()?.readText()?:"{}")
-                val responseObj = errorObj.optJSONObject("response")
-                val responseStatus = responseObj?.optJSONObject("status")
-                val errorMessage = responseStatus?.optString("msg")
+                val description = errorObj.optJSONObject("Description")
+                //val responseStatus = responseObj?.optJSONObject("status")
+                //val errorMessage = responseStatus?.optString("msg")
                 val errorCode = response.code()
-                Error(false,errorMessage,errorCode)
+                Error(false,"Invalid",errorCode)
             }
         }
     }

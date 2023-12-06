@@ -12,7 +12,7 @@ import com.epaymark.big9.R
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.ActivityAuthenticationBinding
 
-
+import com.epaymark.epay.utils.helpers.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,6 +25,20 @@ class AuthenticationActivity : AppCompatActivity() {
         //setContentView(R.layout.activity_authentication)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_authentication)
         authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+
+
+        intent?.let {intentData->
+            val isReceptBooleanValue=intentData.getBooleanExtra(Constants.isRecept,false)
+            val isAfterRegVal=intentData.getBooleanExtra(Constants.isAfterReg,false)
+            if (isReceptBooleanValue){
+
+            }
+            if (isAfterRegVal){
+                navController?.navigate(R.id.homeFragment2)
+            }
+
+        }
+
 
 
 

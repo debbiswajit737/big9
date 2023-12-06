@@ -1,7 +1,6 @@
 package com.epaymark.big9.ui.fragment
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +13,9 @@ import com.epaymark.big9.adapter.ReportDetailsAdapter
 import com.epaymark.big9.data.model.Reportdetails
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentReportDetailsBinding
-import com.epaymark.big9.ui.base.BaseFragment
 
+import com.epaymark.big9.ui.activity.DashboardActivity
+import com.epaymark.big9.ui.base.BaseFragment
 import org.json.JSONObject
 
 class ReportDetailsFragment : BaseFragment() {
@@ -87,12 +87,13 @@ class ReportDetailsFragment : BaseFragment() {
             }*/
             //Share data
             binding.imgBtnShare.setOnClickListener{
-                val sendIntent = Intent().apply {
+                shareImage()
+                /*val sendIntent = Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(Intent.EXTRA_TEXT, jsonObject.toString())
                     type = "text/plain"
                 }
-                startActivity(Intent.createChooser(sendIntent, "Share using"))
+                startActivity(Intent.createChooser(sendIntent, "Share using"))*/
             }
         } catch (e: Exception) {
             // Handle any potential JSON parsing exceptions here
@@ -105,7 +106,14 @@ class ReportDetailsFragment : BaseFragment() {
         }
 
     }
-
+    private fun shareImage() {
+        activity?.let {
+            binding.apply {
+                var screenshotBitmap =cardView2.takeScreenshot2()
+                (activity as? DashboardActivity)?.shareImage(screenshotBitmap)
+            }
+        }
+    }
     fun setObserver() {
         binding.apply {
 

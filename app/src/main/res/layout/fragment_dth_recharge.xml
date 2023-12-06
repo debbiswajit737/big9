@@ -92,7 +92,7 @@
                             android:textSize="@dimen/text_size" />
 
                         <EditText
-                            android:id="@+id/et_old_pin"
+                            android:id="@+id/et_institutetype"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/edit_text_height"
                             android:layout_marginTop="@dimen/edit_text_margin_top"

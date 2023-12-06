@@ -1,4 +1,4 @@
-package com.epaymark.big9.ui.popup
+package com.epaymark.epay.ui.popup
 
 
 import android.os.Bundle
@@ -9,14 +9,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.epaymark.big9.R
-
+import com.epaymark.epay.R
 import com.epaymark.big9.data.viewMovel.MyViewModel
-import com.epaymark.big9.databinding.FragmentSuccessPopupBinding
-
+import com.epaymark.epay.databinding.FragmentSuccessPopupBinding
 import com.epaymark.big9.ui.base.PopUpFragment
-import com.epaymark.big9.utils.`interface`.CallBack4
-
+import com.epaymark.epay.utils.`interface`.CallBack4
 
 
 class SuccessPopupFragment(val callBack4:  CallBack4) : PopUpFragment() {

@@ -12,13 +12,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
-import com.epaymark.big9.data.model.onBoading.KycDetails
 
+import com.epaymark.big9.data.model.onBoading.KycDetails
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.KycDetailsFragmentBinding
-import com.epaymark.big9.ui.base.BaseFragment
 
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.ui.base.BaseFragment
+import com.epaymark.epay.utils.`interface`.CallBack
 import com.google.gson.Gson
 
 class KycDetailsFragment : BaseFragment() {
@@ -59,9 +59,12 @@ class KycDetailsFragment : BaseFragment() {
 
                     val gson = Gson()
                     val json = gson.toJson(regModel)
-                    json.toString().testDataFile()
+                    //json.toString().testDataFile()
                     findNavController().navigate(R.id.action_kycDetailsFragment_to_bankDetailsFragment)
                 }
+
+
+
 
             }
         }

@@ -10,11 +10,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
+
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentAddBeneficiaryBinding
+
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.big9.ui.popup.CustomPopup.showDebitPopup
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.epay.ui.popup.CustomPopup.showDebitPopup
+import com.epaymark.epay.utils.`interface`.CallBack
 
 class AddBeneficiaryFragment : BaseFragment() {
     lateinit var binding: FragmentAddBeneficiaryBinding

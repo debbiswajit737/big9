@@ -30,14 +30,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/epay_logo"
-            app:layout_constraintBottom_toTopOf="@+id/profile_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_switch_acc" />
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
             android:layout_width="62dp"
@@ -54,7 +46,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_medium"
             android:text="Test User"
-            android:textColor="@color/black2"
+            android:textColor="@color/white"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintBottom_toTopOf="@+id/td_resend_otp"
             app:layout_constraintEnd_toEndOf="@+id/profile_image"
@@ -72,7 +64,7 @@
             android:longClickable="false"
 
             android:text="9858525555"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintBottom_toTopOf="@+id/tv_unblock"
             app:layout_constraintEnd_toEndOf="@+id/tv_dont_receve_otp_msg"
@@ -84,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Unlock Using PIN"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="@dimen/_8ssp"
             app:layout_constraintBottom_toTopOf="@+id/nestedScrollView4"
             app:layout_constraintEnd_toEndOf="@+id/td_resend_otp"
@@ -146,7 +138,7 @@
                     android:text="Forgot PIN?"
 
                     android:layout_marginHorizontal="@dimen/_5sdp"
-                    android:textColor="@color/logo_second_color"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_8ssp"
                     app:layout_constraintEnd_toEndOf="@+id/firstPinView"
                     app:layout_constraintTop_toBottomOf="@+id/firstPinView" />

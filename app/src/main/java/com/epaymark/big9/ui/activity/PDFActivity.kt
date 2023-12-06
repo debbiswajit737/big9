@@ -13,7 +13,6 @@ import androidx.databinding.DataBindingUtil
 import com.epaymark.big9.R
 import com.epaymark.big9.databinding.ActivityPdfactivityBinding
 
-
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.pdf.PdfDocument
 

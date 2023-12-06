@@ -6,12 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epaymark.big9.R
+
 import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.network.ResponseState
 
 import com.epaymark.big9.repository.DeliveryOptionsRepository
-import com.epaymark.big9.utils.helpers.helper.validate
+import com.epaymark.epay.utils.helpers.helper.validate
 import com.google.gson.JsonObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -26,6 +27,8 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
 
 
 
+
+    val from_page_message = MutableLiveData<String>()
     val popup_message = MutableLiveData<String>("Success!")
     val receiveStatus = MutableLiveData<String>("")
     val receiveReceptMessahe = MutableLiveData<String>("")
@@ -45,6 +48,7 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
 
     val tPin = MutableLiveData<String>("")
     val state = MutableLiveData<String>()
+
     val billerAddress = MutableLiveData<String>()
 
     val userName = MutableLiveData<String>()
@@ -70,6 +74,7 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
     val subId = MutableLiveData<String>()
     val dthOperator = MutableLiveData<String>()
     val selectrdOperator = MutableLiveData<String>()
+    val selectrdBroadbandOperator = MutableLiveData<String>()
     val dthAmt = MutableLiveData<String>()
 
     val consumerId = MutableLiveData<String>()
@@ -119,6 +124,26 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
     val balence_enquary_aadhar_number = MutableLiveData<String>()
     val balence_enquary_customer_number = MutableLiveData<String>()
 
+    val selectBank = MutableLiveData<String>()
+    val loanAccountNumber = MutableLiveData<String>()
+
+    val selectOperator = MutableLiveData<String>()
+    val selectImage = MutableLiveData<Int>()
+
+    val operatorSubId = MutableLiveData<String>()
+    val operatordthAmt = MutableLiveData<String>()
+
+    val instituteName = MutableLiveData<String>()
+    val selectInstitute = MutableLiveData<String>()
+    val educationAmt = MutableLiveData<String>()
+    val loanAmount = MutableLiveData<String>()
+    val education_bank_name = MutableLiveData<String>()
+    val education_bank_ifsc = MutableLiveData<String>()
+
+
+    val gasbookingNumber = MutableLiveData<String>()
+    val gasBiller = MutableLiveData<String>()
+    val gasBookingAmt = MutableLiveData<String>()
 
 
 
@@ -176,6 +201,27 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
 
     val balence_enquary_aadhar_numberError = MutableLiveData<String>()
     val balence_enquary_customer_numberError = MutableLiveData<String>()
+
+    val selectBankError = MutableLiveData<String>()
+    val loanAccountNumberError = MutableLiveData<String>()
+    val loanAmountError = MutableLiveData<String>()
+
+
+
+    val selectOperatorError = MutableLiveData<String>()
+    val operatorSubIdError = MutableLiveData<String>()
+    val operatordthAmtError = MutableLiveData<String>()
+
+    val instituteNameError = MutableLiveData<String>()
+    val selectInstituteError = MutableLiveData<String>()
+    val education_bank_nameError = MutableLiveData<String>()
+    val educationAmtError = MutableLiveData<String>()
+
+
+
+    val gasbookingNumberError = MutableLiveData<String>()
+    val gasBillerError = MutableLiveData<String>()
+    val gasBookingAmtError = MutableLiveData<String>()
 
 
     val mobileErrorVisible = MutableLiveData<Boolean>()
@@ -235,7 +281,23 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
     val balence_enquary_aadhar_numberErrorVisible = MutableLiveData<Boolean>()
     val balence_enquary_customer_numberErrorVisible = MutableLiveData<Boolean>()
 
+    val selectBankErrorVisible = MutableLiveData<Boolean>()
+    val loanAccountNumberErrorVisible = MutableLiveData<Boolean>()
+    val loanAmountErrorVisible = MutableLiveData<Boolean>()
 
+    val selectOperatorErrorVisible = MutableLiveData<Boolean>()
+    val operatorSubIdErrorVisible = MutableLiveData<Boolean>()
+    val operatordthAmtErrorVisible = MutableLiveData<Boolean>()
+
+    val instituteNameErrorVisible = MutableLiveData<Boolean>()
+    val education_bank_nameErrorVisible = MutableLiveData<Boolean>()
+    val selectInstituteErrorVisible = MutableLiveData<Boolean>()
+    val educationAmtErrorVisible = MutableLiveData<Boolean>()
+
+
+    val gasbookingNumberErrorVisible = MutableLiveData<Boolean>()
+    val gasBillerErrorVisible = MutableLiveData<Boolean>()
+    val gasBookingAmtErrorVisible = MutableLiveData<Boolean>()
 
     fun regValidation(): Boolean {
 
@@ -449,7 +511,7 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
             epotly_mobileErrorVisible.value = true
             isValid = false
         } else {
-            if (mobile.value?.trim()?.validate("mobile") == false) {
+            if (epotly_mobile.value?.trim()?.validate("mobile") == false) {
                 epotly_mobileError.value = "Mobile number is not valid"
                 epotly_mobileErrorVisible.value = true
                 isValid = false
@@ -628,7 +690,7 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
             mobileSendMoneyErrorVisible.value = true
             isValid = false
         } else {
-            if (mobile.value?.trim()?.validate("mobile") == false) {
+            if (mobileSendMoney.value?.trim()?.validate("mobile") == false) {
                 mobileSendMoneyError.value = "Mobile number is not valid"
                 mobileSendMoneyErrorVisible.value = true
                 isValid = false
@@ -658,25 +720,14 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
 
 
     fun mobileNumberValidation(): Boolean {
-
         invisibleErrorTexts()
-
         var isValid = true
-
-
         if (mobileSendMoney.value?.trim().isNullOrBlank()) {
-
             isValid = false
         }
-
-
         else {
-
             isValid = mobile.value?.trim()?.length == 10
         }
-
-
-
         return isValid
     }
 
@@ -687,8 +738,6 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
         invisibleErrorTexts()
 
         var isValid = true
-
-
         if (credit_card.value?.trim().isNullOrBlank()) {
             credit_cardError.value = "Please enter Credit card number"
             credit_cardErrorVisible.value = true
@@ -989,6 +1038,157 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
          }
          return isValid
     }
+
+    fun loanValidation(): Boolean {
+        invisibleErrorTexts()
+
+        var isValid = true
+        if (selectBank.value?.trim().isNullOrBlank()) {
+            selectBankError.value = "Please select bank"
+            selectBankErrorVisible.value = true
+            isValid = false
+        } else {
+            selectBankError.value = ""
+            selectBankErrorVisible.value = false
+        }
+
+        if (loanAccountNumber.value?.trim().isNullOrBlank()) {
+            loanAccountNumberError.value = "Please enter loan account number"
+            loanAccountNumberErrorVisible.value = true
+            isValid = false
+        } else {
+            loanAccountNumberError.value = ""
+            loanAccountNumberErrorVisible.value = false
+        }
+
+        if (loanAmount.value?.trim().isNullOrBlank()) {
+            loanAmountError.value = "Please enter a loan amount."
+            loanAmountErrorVisible.value = true
+            isValid = false
+        } else {
+            loanAmountError.value = ""
+            loanAmountErrorVisible.value = false
+        }
+
+
+
+        return isValid
+    }
+
+    fun operatorValidation(): Boolean {
+
+        invisibleErrorTexts()
+
+        var isValid = true
+        if (operatorSubId.value?.trim().isNullOrBlank()) {
+            operatorSubIdError.value = "This field is required"
+            operatorSubIdErrorVisible.value = true
+            isValid = false
+        } else {
+            operatorSubIdError.value = ""
+            operatorSubIdErrorVisible.value = false
+        }
+
+        if (selectOperator.value?.trim().isNullOrBlank()) {
+            selectOperatorError.value = "Please select an operator"
+            selectOperatorErrorVisible.value = true
+            isValid = false
+        } else {
+            selectOperatorError.value = ""
+            selectOperatorErrorVisible.value = false
+        }
+
+        if (operatordthAmt.value?.trim().isNullOrBlank()) {
+            operatordthAmtError.value = "Please enter a valid amount."
+            operatordthAmtErrorVisible.value = true
+            isValid = false
+        } else {
+            operatordthAmtError.value = ""
+            operatordthAmtErrorVisible.value = false
+        }
+
+
+
+        return isValid
+    }
+
+    fun educationValidation(): Boolean {
+
+        invisibleErrorTexts()
+
+        var isValid = true
+        if (instituteName.value?.trim().isNullOrBlank()) {
+            instituteNameError.value = "This field is required"
+            instituteNameErrorVisible.value = true
+            isValid = false
+        } else {
+            instituteNameError.value = ""
+            instituteNameErrorVisible.value = false
+        }
+
+        if (selectInstitute.value?.trim().isNullOrBlank()) {
+            selectInstituteError.value = "Please select institute type"
+            selectInstituteErrorVisible.value = true
+            isValid = false
+        } else {
+            selectInstituteError.value = ""
+            selectInstituteErrorVisible.value = false
+        }
+
+        if (education_bank_name.value?.trim().isNullOrBlank()) {
+            education_bank_nameError.value = "Select Bank"
+            education_bank_nameErrorVisible.value = true
+            isValid = false
+        } else {
+            education_bank_nameError.value = ""
+            education_bank_nameErrorVisible.value = false
+        }
+        if (educationAmt.value?.trim().isNullOrBlank()) {
+            educationAmtError.value = "Enter Amount"
+            educationAmtErrorVisible.value = true
+            isValid = false
+        } else {
+            educationAmtError.value = ""
+            educationAmtErrorVisible.value = false
+        }
+        return isValid
+    }
+
+    fun bookACylinderValidation(): Boolean {
+
+        invisibleErrorTexts()
+
+        var isValid = true
+        if (gasbookingNumber.value?.trim().isNullOrBlank()) {
+            gasbookingNumberError.value = "This field is required"
+            gasbookingNumberErrorVisible.value = true
+            isValid = false
+        } else {
+            gasbookingNumberError.value = ""
+            gasbookingNumberErrorVisible.value = false
+        }
+
+        if (gasBiller.value?.trim().isNullOrBlank()) {
+            gasBillerError.value = "Please select institute type"
+            gasBillerErrorVisible.value = true
+            isValid = false
+        } else {
+            gasBillerError.value = ""
+            gasBillerErrorVisible.value = false
+        }
+
+
+        if (gasBookingAmt.value?.trim().isNullOrBlank()) {
+            gasBookingAmtError.value = "Enter Amount"
+            gasBookingAmtErrorVisible.value = true
+            isValid = false
+        } else {
+            gasBookingAmtError.value = ""
+            gasBookingAmtErrorVisible.value = false
+        }
+        return isValid
+    }
+
 
 
 

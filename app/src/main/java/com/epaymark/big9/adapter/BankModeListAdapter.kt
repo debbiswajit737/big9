@@ -3,9 +3,10 @@ package com.epaymark.big9.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.epaymark.big9.data.model.BankModeListModel
 import com.epaymark.big9.databinding.BankListLayoutBinding
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.data.model.BankModeListModel
+
+import com.epaymark.epay.utils.`interface`.CallBack
 
 
 class BankModeListAdapter(private val items: List<BankModeListModel>, val callback: CallBack) : RecyclerView.Adapter<BankModeListAdapter.MyViewHolder>() {

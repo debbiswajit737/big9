@@ -14,13 +14,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
+
 import com.epaymark.big9.adapter.PhonePadAdapter3
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentOtpForgotPasswordBinding
+
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
-
-
+import com.epaymark.epay.utils.`interface`.KeyPadOnClickListner
 import java.util.concurrent.TimeUnit
 
 class ForgotPasswordOtpFragment : BaseFragment() {
@@ -121,7 +121,7 @@ class ForgotPasswordOtpFragment : BaseFragment() {
                 val firstPart = "Resend OTP"
                 spannableString.append(firstPart)
                 spannableString.setSpan(
-                    ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.black)),
+                    ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.border_focus)),
                     spannableString.length - firstPart.length,
                     spannableString.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -143,7 +143,7 @@ class ForgotPasswordOtpFragment : BaseFragment() {
         val firstPart = "Resend OTP after "
         spannableString.append(firstPart)
         spannableString.setSpan(
-            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.black)),
+            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.border_focus)),
             spannableString.length - firstPart.length,
             spannableString.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -153,7 +153,7 @@ class ForgotPasswordOtpFragment : BaseFragment() {
         val secondPart = "$secondsRemaining"
         spannableString.append(secondPart)
         spannableString.setSpan(
-            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.logo_second_color)),
+            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.white)),
             spannableString.length - secondPart.length,
             spannableString.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

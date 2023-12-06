@@ -14,10 +14,12 @@ import com.epaymark.big9.adapter.AccountDetailsAdapter
 import com.epaymark.big9.data.model.AccountDetailsModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMoveToBankBinding
-import com.epaymark.big9.ui.base.BaseFragment
 
-import com.epaymark.big9.ui.receipt.MoveToBankReceptDialogFragment
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.ui.base.BaseFragment
+import com.epaymark.epay.ui.popup.SuccessPopupFragment
+import com.epaymark.epay.ui.receipt.MoveToBankReceptDialogFragment
+import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.epay.utils.`interface`.CallBack4
 import java.util.Objects
 
 
@@ -75,14 +77,31 @@ class MoveToBankFragment : BaseFragment() {
 
                                             val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
                                                 override fun getValue(s: String) {
-                                                    val dialogFragment = MoveToBankReceptDialogFragment(object: CallBack {
-                                                        override fun getValue(s: String) {
-                                                            if (Objects.equals(s,"back")) {
-                                                                findNavController().popBackStack()
-                                                            }
+
+                                                    val successPopupFragment = SuccessPopupFragment(object :
+                                                        CallBack4 {
+                                                        override fun getValue4(
+                                                            s1: String,
+                                                            s2: String,
+                                                            s3: String,
+                                                            s4: String
+                                                        ) {
+                                                            val dialogFragment = MoveToBankReceptDialogFragment(object: CallBack {
+                                                                override fun getValue(s: String) {
+                                                                    if (Objects.equals(s,"back")) {
+                                                                        findNavController().popBackStack()
+                                                                    }
+                                                                }
+                                                            })
+                                                            dialogFragment.show(childFragmentManager, dialogFragment.tag)
                                                         }
+
                                                     })
-                                                    dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                                                    successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
+
+
+
+
                                                 }
                                             })
                                             activity?.let {act->

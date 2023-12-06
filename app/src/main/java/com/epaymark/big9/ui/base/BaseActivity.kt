@@ -1,16 +1,13 @@
 package com.epaymark.big9.ui.base
 
-import android.app.Activity
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.epaymark.big9.BuildConfig
 import com.epaymark.big9.ui.activity.NetworkActivity
-import com.epaymark.big9.utils.helpers.NoNetworkReceiver
-import com.epaymark.big9.utils.interfaces.NetworkCallBack
+import com.epaymark.epay.utils.helpers.NoNetworkReceiver
+import com.epaymark.epay.utils.interfaces.NetworkCallBack
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -57,12 +54,4 @@ open class BaseActivity: AppCompatActivity()/*, NetworkConnectionListener */{
          if (!MethodClass.check_networkconnection(this))
              startActivity(Intent(this, NetworkActivity::class.java))
      }*/
-    fun Activity.checkDebugMode(){
-        if (BuildConfig.DEBUG) {
-            Toast.makeText(this, "Debug Mode", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "Relese Mode", Toast.LENGTH_SHORT).show()
-        }
-    }
-
 }

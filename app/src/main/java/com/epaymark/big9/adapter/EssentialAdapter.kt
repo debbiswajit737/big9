@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.data.model.ListIcon
-import com.epaymark.big9.databinding.RechargeLayoutBinding
-import com.epaymark.big9.utils.`interface`.CallBack
+
+import com.epaymark.epay.utils.`interface`.CallBack
 
 
 class EssentialAdapter(private val items: List<ListIcon>, val circleShape: Int, val listner: CallBack) : RecyclerView.Adapter<EssentialAdapter.MyViewHolder>() {

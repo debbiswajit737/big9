@@ -227,7 +227,6 @@
                             android:inputType="numberDecimal"
                             android:longClickable="false"
                             android:maxLength="10"
-                            android:drawableTint="@color/logo_color"
                             android:padding="@dimen/_5sdp"
                             android:drawablePadding="@dimen/_5sdp"
                             android:drawableStart="@drawable/indian_rupee_symbol"

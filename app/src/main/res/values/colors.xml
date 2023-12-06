@@ -17,7 +17,7 @@
     <color name="gray2">#e7ebee</color>
     <color name="gray3">#e8ecef</color>
     <color name="gray4">#d4d7db</color>
-    <color name="title_header">#00B1F6</color>
+    <color name="title_header">#F006405A</color>
     <color name="title_header2">#182b6a</color>
     <color name="title_container">#5203A9F4</color>
     <color name="yellow">#f5cf8a</color>
@@ -25,7 +25,7 @@
     <color name="border_focus">#c2dbff</color>
     <color name="title_color">#0e0e0f</color>
     <color name="brown">#4a0405</color>
-    <color name="logo_color">#00B1F6</color>
-    <color name="logo_second_color">#FD5B5B</color>
-    <color name="logo_second_color_opacity">#6B00B1F6</color>
+    <color name="logo_color">#060658</color>
+    <color name="logo_second_color">#b77b1b</color>
+    <color name="logo_second_color_opacity">#9CB77B1B</color>
 </resources>

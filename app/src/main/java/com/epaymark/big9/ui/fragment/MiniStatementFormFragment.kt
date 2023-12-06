@@ -18,11 +18,11 @@ import com.epaymark.big9.data.model.AdminBankListModel
 import com.epaymark.big9.data.model.UserDetails
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMinistatementFormBinding
-import com.epaymark.big9.ui.base.BaseFragment
 
-import com.epaymark.big9.ui.receipt.MiniStatementReceptDialogFragment
-import com.epaymark.big9.utils.`interface`.CallBack
-import com.epaymark.big9.utils.`interface`.CallBack4
+import com.epaymark.big9.ui.base.BaseFragment
+import com.epaymark.epay.ui.receipt.MiniStatementReceptDialogFragment
+import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.epay.utils.`interface`.CallBack4
 import java.util.Objects
 
 class MiniStatementFormFragment : BaseFragment() {
@@ -30,7 +30,7 @@ class MiniStatementFormFragment : BaseFragment() {
     private val viewModel: MyViewModel by activityViewModels()
     var userDetailsList = ArrayList<UserDetails>()
     var bankList = ArrayList<AdminBankListModel>()
-    var adminBankListAdapter:AdminBankListAdapter?=null
+    var adminBankListAdapter: AdminBankListAdapter?=null
     var selectedBank:String=""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,9 +56,9 @@ class MiniStatementFormFragment : BaseFragment() {
                 if (viewModel?.balenceValidation() == true){
                     if (selectedBank.isNotEmpty()) {
                         activity?.let { act ->
-                            val aadharAuthBottomSheetDialog =
+                            /*val aadharAuthBottomSheetDialog =
                                 AadharAuthBottomSheetDialog(object : CallBack {
-                                    override fun getValue(s: String) {
+                                    override fun getValue(s: String) {*/
                                         //findNavController().navigate(R.id.action_miniStatementFormFragment_to_miniStatementFragment)
                                         val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
                                             override fun getValue(s: String) {
@@ -75,12 +75,12 @@ class MiniStatementFormFragment : BaseFragment() {
                                         activity?.let {act->
                                             tpinBottomSheetDialog.show(act.supportFragmentManager, tpinBottomSheetDialog.tag)
                                         }
-                                    }
+                                  /*  }
                                 })
                             aadharAuthBottomSheetDialog.show(
                                 act.supportFragmentManager,
                                 aadharAuthBottomSheetDialog.tag
-                            )
+                            )*/
                         }
                     }
                     else{

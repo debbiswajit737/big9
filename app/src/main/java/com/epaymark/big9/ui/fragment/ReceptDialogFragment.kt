@@ -23,8 +23,8 @@ import com.epaymark.big9.databinding.FragmentReceptDialogBinding
 
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseCenterSheetFragment
-import com.epaymark.big9.utils.*
-import com.epaymark.big9.utils.helpers.Constants.recycleViewReceiptList
+import com.epaymark.epay.utils.*
+import com.epaymark.epay.utils.helpers.Constants.recycleViewReceiptList
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
@@ -141,7 +141,7 @@ class ReceptDialogFragment : BaseCenterSheetFragment() {
         val stream = FileOutputStream("$cachePath/image.png") // overwrites this image every time
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
         stream.close()
-        return FileProvider.getUriForFile(context, context.packageName+".fileprovider", cachePath)
+        return FileProvider.getUriForFile(context, "com.epaymark.epay.fileprovider", cachePath)
     }
 
 

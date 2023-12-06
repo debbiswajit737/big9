@@ -1,6 +1,6 @@
 package com.epaymark.big9.data.model.onBoading
 
-data class regForm(
+data class RegForm(
     val name: String?,
     val mobile: String?,
     val alternativeMobile: String?,

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
@@ -18,15 +19,14 @@ import com.epaymark.big9.R
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentPaymentRequestImformationBinding
+
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
-import com.epaymark.big9.ui.popup.SuccessPopupFragment
-import com.epaymark.big9.utils.helpers.Constants
-import com.epaymark.big9.utils.helpers.Constants.isGallary
-import com.epaymark.big9.utils.helpers.Constants.isIsPaySlip
-import com.epaymark.big9.utils.helpers.Constants.isVideo
-import com.epaymark.big9.utils.`interface`.CallBack
-import com.epaymark.big9.utils.`interface`.CallBack4
+import com.epaymark.epay.utils.helpers.Constants
+import com.epaymark.epay.utils.helpers.Constants.isGallary
+import com.epaymark.epay.utils.helpers.Constants.isIsPaySlip
+import com.epaymark.epay.utils.helpers.Constants.isVideo
+import com.epaymark.epay.utils.`interface`.CallBack
 
 class PaymentRequestImformationFragment : BaseFragment() {
     lateinit var binding: FragmentPaymentRequestImformationBinding
@@ -92,20 +92,7 @@ class PaymentRequestImformationFragment : BaseFragment() {
             }
             btnSubmit.setOnClickListener{
                 if (viewModel?.PaymentrequestValidation() == true){
-                    val successPopupFragment = SuccessPopupFragment(object :
-                        CallBack4 {
-                        override fun getValue4(
-                            s1: String,
-                            s2: String,
-                            s3: String,
-                            s4: String
-                        ) {
-                            findNavController().navigate(R.id.action_paymentRequestImformationFragment_to_homeFragment2)
-                          }
-
-                    })
-                    successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
-
+                    Toast.makeText(requireActivity(), "Ok", Toast.LENGTH_SHORT).show()
                 }
             }
         }

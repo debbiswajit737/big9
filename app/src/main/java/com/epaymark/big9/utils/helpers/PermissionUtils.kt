@@ -1,4 +1,4 @@
-package com.epaymark.big9.utils.helpers
+package com.epaymark.epay.utils.helpers
 
 import android.Manifest
 import android.app.AlertDialog
@@ -10,7 +10,7 @@ import android.os.Build
 import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import com.epaymark.big9.utils.`interface`.PermissionsCallback
+import com.epaymark.epay.utils.`interface`.PermissionsCallback
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken

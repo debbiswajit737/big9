@@ -4,9 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.epaymark.big9.data.model.OperatorModel
 import com.epaymark.big9.databinding.OperatorListBinding
-import com.epaymark.big9.utils.`interface`.CallBack4
+import com.epaymark.big9.data.model.OperatorModel
+
+import com.epaymark.epay.utils.`interface`.CallBack4
 
 class OperatorAdapter(private val operatorList: ArrayList<OperatorModel>, val listner: CallBack4) : RecyclerView.Adapter<OperatorAdapter.MyViewHolder>() {
 

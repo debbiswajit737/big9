@@ -1,4 +1,21 @@
-package com.epaymark.big9.utils.helpers
+package com.epaymark.epay.utils.helpers
+
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.os.Environment
+import androidx.core.content.ContextCompat
+import com.epaymark.epay.R
+import com.itextpdf.io.image.ImageDataFactory
+import com.itextpdf.kernel.pdf.PdfDocument
+import com.itextpdf.kernel.pdf.PdfWriter
+import com.itextpdf.layout.Document
+import com.itextpdf.layout.element.Image
+import com.itextpdf.layout.element.Paragraph
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class PdfGenerator {
 

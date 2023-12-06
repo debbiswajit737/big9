@@ -3,8 +3,9 @@ package com.epaymark.big9.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.epaymark.big9.data.model.UserDetails
 import com.epaymark.big9.databinding.ReportDetailsLayoutBinding
+import com.epaymark.big9.data.model.UserDetails
+
 
 
 class UserDetailsAdapter(private val items: List<UserDetails>) : RecyclerView.Adapter<UserDetailsAdapter.MyViewHolder>() {

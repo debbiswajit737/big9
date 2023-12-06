@@ -4,12 +4,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.epay.utils.`interface`.CallBack
 import android.widget.Filter
 import android.widget.Filterable
 import com.bumptech.glide.Glide
-import com.epaymark.big9.data.model.ElectricModel
 import com.epaymark.big9.databinding.ListElectricBillerBinding
+import com.epaymark.big9.data.model.ElectricModel
+
 
 class BillerListAdapter(private var items: List<ElectricModel>, private val callBack: CallBack) :
     RecyclerView.Adapter<BillerListAdapter.MyViewHolder>(), Filterable {

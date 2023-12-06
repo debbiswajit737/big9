@@ -9,22 +9,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.R
+
 import com.epaymark.big9.adapter.PhonePadAdapter
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentOtpMobileBinding
+
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 import com.epaymark.big9.ui.activity.AuthenticationActivity
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.activity.RegActivity
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.big9.utils.*
-import com.epaymark.big9.utils.helpers.Constants
-import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
+import com.epaymark.epay.ui.popup.LoadingPopup
+import com.epaymark.epay.utils.common.MethodClass
+import com.epaymark.epay.utils.common.MethodClass.getCurrentTimestamp
+import com.epaymark.epay.utils.common.MethodClass.getLocalIPAddress
+import com.epaymark.epay.utils.helpers.Constants
+import com.epaymark.epay.utils.`interface`.KeyPadOnClickListner
+import com.google.android.gms.location.FusedLocationProviderClient
+
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 
@@ -33,6 +44,9 @@ class OtpMobileFragment : BaseFragment() {
     var keyPad = ArrayList<Int>()
     private val authViewModel: AuthViewModel by activityViewModels()
     var isForgotPinPage=false
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    var loadingPopup: LoadingPopup? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,11 +60,56 @@ class OtpMobileFragment : BaseFragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        init()
         setKeyPad(binding.recyclePhonePad2)
         onViewClick()
+        observer()
         isForgotPinPage= arguments?.getBoolean("isForgotPin") == true
     }
 
+    private fun observer() {
+        authViewModel?.otpResponse?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loadingPopup?.show()
+                }
+
+                is ResponseState.Success -> {
+                    Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+                    if (it.data?.step==1){
+                       // if(authViewModel.otp.value=="123456"){
+                                    //binding.lottieTickAnim.visibility=View.VISIBLE
+                                    binding.lottieConfettiAnim.visibility=View.VISIBLE
+                                    if (!isForgotPinPage) {
+                                        it.data?.step?.let {
+                                            setdata2(it)
+                                        }
+
+                                    }
+                                    else{
+                                        activity?.let {act->
+                                            val intent = Intent(act, DashboardActivity::class.java)
+                                            startActivity(intent)
+                                            act.finish()
+                                        }
+                                    }
+                                    //findNavController().navigate(R.id.action_otpFragment_to_congratulationFragment)
+                                    // Toast.makeText(requireContext(), "match", Toast.LENGTH_SHORT).show()
+                              //  }
+                    }
+                }
+
+                is ResponseState.Error -> {
+                    //   loadingPopup?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
+    }
+
+    fun init(){
+       activity?.let {  mFusedLocationClient = LocationServices.getFusedLocationProviderClient(it)}
+    }
     private fun onViewClick() {
 
 
@@ -77,10 +136,34 @@ class OtpMobileFragment : BaseFragment() {
                     authViewModel.otp.value?.apply {
                         if (item<=9 ) {
                             if (this.length!=6) {
-
-                                // binding.firstPinView.text=this
                                 authViewModel.otp.value = "${this}${item}"
-                                if(authViewModel.otp.value=="123456"){
+                                val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                                loginResponse?.let {loginData->
+                                    loginResponse
+
+                                    val data = mapOf(
+                                        "otp" to authViewModel.otp.value,
+                                        "userid" to loginData.userid,
+
+                                        "deviceid" to MethodClass.deviceUid(binding.root.context),
+                                        "ipaddress" to getLocalIPAddress(),
+                                        "location" to "123",
+                                        "referenceid" to "123",
+                                         "Timestamp" to getCurrentTimestamp()
+                                    )
+                                    /*"referenceid" to loginData.,*/
+                                    val gson= Gson()
+                                    var jsonString = gson.toJson(data)
+
+                                    if (this.length==5) {
+                                        loginData.AuthToken?.let {
+                                        authViewModel?.sendOtp(it,jsonString.encrypt()) }
+                                    }
+
+                                }
+                                // binding.firstPinView.text=this
+
+                                /*if(authViewModel.otp.value=="123456"){
                                     //binding.lottieTickAnim.visibility=View.VISIBLE
                                     binding.lottieConfettiAnim.visibility=View.VISIBLE
                                     if (!isForgotPinPage) {
@@ -95,7 +178,7 @@ class OtpMobileFragment : BaseFragment() {
                                     }
                                     //findNavController().navigate(R.id.action_otpFragment_to_congratulationFragment)
                                     // Toast.makeText(requireContext(), "match", Toast.LENGTH_SHORT).show()
-                                }
+                                }*/
 
                                 //binding.firstPinView.setText(authViewModel.otp.value)
                             }
@@ -119,7 +202,7 @@ class OtpMobileFragment : BaseFragment() {
         }
     }
 
-    private fun setdata2() {
+    private fun setdata2(step: Int) {
         //binding.lottieTickAnim.setAnimationFromUrl(Constants.LOTTIE_TICK_LINK)
         //binding.lottieTickAnim.playAnimation()
         binding.lottieConfettiAnim.setAnimationFromUrl(Constants.LOTTIE_CONFETTIE_LINK)
@@ -132,7 +215,9 @@ class OtpMobileFragment : BaseFragment() {
                     lifecycleScope.launch {
                         //delay(500L)
                         (activity as? RegActivity)?.let {
-                            startActivity(Intent(requireActivity(), AuthenticationActivity::class.java))
+                            val intent=Intent(requireActivity(), AuthenticationActivity::class.java)
+                            intent.putExtra("stape",step.toString())
+                            startActivity(intent)
                             it.finish()
                         }
                     }
@@ -142,6 +227,9 @@ class OtpMobileFragment : BaseFragment() {
                 override fun onAnimationRepeat(animation: Animator) {}
             })
     }
+
+
+
     }
 
 

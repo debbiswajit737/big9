@@ -21,7 +21,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/montserrat_medium_500"
             android:text="Hi! User"
-            android:textColor="@color/logo_color"
+            android:textColor="@color/pink1"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

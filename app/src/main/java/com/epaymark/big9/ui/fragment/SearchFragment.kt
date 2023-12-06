@@ -9,21 +9,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
 
 import com.epaymark.big9.adapter.SearchAdapter
+import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentSearchBinding
-import com.epaymark.big9.ui.base.BaseFragment
 
-import com.epaymark.big9.utils.helpers.Constants.isFromSearchPage
-import com.epaymark.big9.utils.helpers.Constants.searchList
-import com.epaymark.big9.utils.helpers.Constants.searchValue
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.ui.base.BaseFragment
+import com.epaymark.epay.utils.helpers.Constants.isFromSearchPage
+import com.epaymark.epay.utils.helpers.Constants.searchList
+import com.epaymark.epay.utils.helpers.Constants.searchValue
+import com.epaymark.epay.utils.`interface`.CallBack
 
 class SearchFragment : BaseFragment() {
     lateinit var binding: FragmentSearchBinding
-    var searchAdapter:SearchAdapter?=null
+    var searchAdapter: SearchAdapter?=null
+    private val viewModel: MyViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +37,7 @@ class SearchFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+
         isFromSearchPage=true
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +51,8 @@ class SearchFragment : BaseFragment() {
             recycleViewSearchService?.apply {
                 searchAdapter= SearchAdapter(searchList,R.drawable.circle_shape2,object : CallBack {
                 override fun getValue(s: String) {
-                    searchValue=s
+                    searchValue =s
+                    viewModel.from_page_message.value="search"
                     findNavController().popBackStack()
                 }
 

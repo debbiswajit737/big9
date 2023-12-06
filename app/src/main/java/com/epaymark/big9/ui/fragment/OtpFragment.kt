@@ -18,9 +18,9 @@ import com.epaymark.big9.R
 import com.epaymark.big9.adapter.PhonePadAdapter
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentOtpBinding
-import com.epaymark.big9.ui.base.BaseFragment
 
-import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
+import com.epaymark.big9.ui.base.BaseFragment
+import com.epaymark.epay.utils.`interface`.KeyPadOnClickListner
 import java.util.concurrent.TimeUnit
 
 class OtpFragment : BaseFragment() {

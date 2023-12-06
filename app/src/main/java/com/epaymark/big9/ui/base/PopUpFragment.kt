@@ -17,7 +17,7 @@ open class PopUpFragment: DialogFragment() {
         return dialog
     }
     override fun getTheme(): Int {
-        return com.epaymark.big9.R.style.SheetDialog
+        return R.style.SheetDialog
     }
     fun ImageView.back(){
         this.setOnClickListener{

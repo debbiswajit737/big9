@@ -30,22 +30,25 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.window.layout.WindowMetricsCalculator
 import com.epaymark.big9.R
+import com.epaymark.big9.data.model.onBoading.RegForm
+
 import com.epaymark.big9.adapter.StateListAdapter
 import com.epaymark.big9.data.model.StateCityModel
-import com.epaymark.big9.data.model.onBoading.regForm
-
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentRegBinding
+
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
-import com.epaymark.big9.utils.*
-import com.epaymark.big9.utils.helpers.Constants
-import com.epaymark.big9.utils.helpers.Constants.isBackCamera
-import com.epaymark.big9.utils.helpers.PermissionUtils
-import com.epaymark.big9.utils.helpers.PermissionUtils.createAlertDialog
-import com.epaymark.big9.utils.`interface`.CallBack
-import com.epaymark.big9.utils.`interface`.PermissionsCallback
-import com.google.gson.Gson
+import com.epaymark.epay.ui.popup.ErrorPopUp
+import com.epaymark.epay.ui.popup.LoadingPopup
+import com.epaymark.epay.utils.helpers.Constants
+import com.epaymark.epay.utils.helpers.Constants.isBackCamera
+import com.epaymark.epay.utils.helpers.PermissionUtils
+import com.epaymark.epay.utils.helpers.PermissionUtils.createAlertDialog
+import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.epay.utils.`interface`.PermissionsCallback
 import java.net.URLEncoder
 
 
@@ -53,9 +56,11 @@ class RegFragment : BaseFragment() {
     lateinit var binding: FragmentRegBinding
     var stateList = ArrayList<StateCityModel>()
     var cityList = ArrayList<StateCityModel>()
-    var stateListAdapter:StateListAdapter?=null
-    var cityListAdapter:StateListAdapter?=null
+    var stateListAdapter: StateListAdapter?=null
+    var cityListAdapter: StateListAdapter?=null
     var type=""
+    var loadingPopup: LoadingPopup? = null
+    var errorPopUp: ErrorPopUp? = null
     private val authViewModel: AuthViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,7 +92,6 @@ class RegFragment : BaseFragment() {
                 setSpinner(object :CallBack{
                 override fun getValue(s: String) {
                     authViewModel.genderReg.value=s
-                   // Toast.makeText(binding.root.context, "$s", Toast.LENGTH_SHORT).show()
                 }
             },genderArray)
             }
@@ -97,46 +101,45 @@ class RegFragment : BaseFragment() {
                         //tvDob.text = s
                         viewModel?.dateOfBirth?.value=s
                         viewModel?.dateOfBirthErrorVisible?.value =
-                        viewModel?.dateOfBirth?.value?.isNotEmpty() != true
+                            viewModel?.dateOfBirth?.value?.isNotEmpty() != true
                     }
+
                 })
             }
             btnNext.setOnClickListener {
 
                 if (authViewModel?.regValidation()==true) {
+                        val regModel = RegForm(
+                            name = authViewModel.name.value,
+                            mobile = authViewModel.mobile.value,
+                            alternativeMobile = authViewModel.alternativeMobile.value,
+                            email = authViewModel.email.value,
+                            address = authViewModel.address.value,
+                            pinCode = authViewModel.pinCode.value,
+                            dateOfBirth = authViewModel.dateOfBirth.value,
+                            state = authViewModel.state.value,
+                            city = authViewModel.city.value,
+                            area = authViewModel.area.value,
+                            aadhar = authViewModel.aadhar.value,
+                            panCardNo = authViewModel.panCardNo.value,
+                            llPanBase64 = authViewModel.llPanBase64.value,
+                            llCpanBase64 = authViewModel.llCpanBase64.value,
+                            llBpanBase64 = authViewModel.llBpanBase64.value,
+                            gender=authViewModel.genderReg.value
+                        )
 
+                       // val gson = Gson()
+                       // val json: JsonObject = gson.toJsonTree(regModel).asJsonObject
 
-
-                    val regModel = regForm(
-                        name = authViewModel.name.value,
-                        mobile = authViewModel.mobile.value,
-                        alternativeMobile = authViewModel.alternativeMobile.value,
-                        email = authViewModel.email.value,
-                        address = authViewModel.address.value,
-                        pinCode = authViewModel.pinCode.value,
-                        dateOfBirth = authViewModel.dateOfBirth.value,
-                        state = authViewModel.state.value,
-                        city = authViewModel.city.value,
-                        area = authViewModel.area.value,
-                        aadhar = authViewModel.aadhar.value,
-                        panCardNo = authViewModel.panCardNo.value,
-                        llPanBase64 = authViewModel.llPanBase64.value,
-                        llCpanBase64 = authViewModel.llCpanBase64.value,
-                        llBpanBase64 = authViewModel.llBpanBase64.value,
-                        gender=authViewModel.genderReg.value
-                    )
-
-                    val gson = Gson()
-                    val json = gson.toJson(regModel)
-                    //json.toString().testDataFile()
-
+                       // viewModel?.formRegistration(regModel)
+                        //json.toString().testDataFile()
                    findNavController().navigate(R.id.action_regFragment_to_kycDetailsFragment)
                 }
             }
 
             activity?.let {act->
                 llPan.setOnClickListener{
-                    Constants.isBackCamera =true
+                    isBackCamera =true
                     type="llPan"
                     Constants.isPdf =false
                     val cameraDialog = CameraDialog(object : CallBack {
@@ -440,6 +443,59 @@ class RegFragment : BaseFragment() {
             //Log.d("TAG_file", "true setObserver: "+it.uriToBase64(binding.root.context.contentResolver))
         }
 
+                  authViewModel.formResponseLiveData.observe(viewLifecycleOwner) {
+                              when (it) {
+                                  is ResponseState.Loading -> {
+                                      loadingPopup?.show()
+                                  }
+
+                                  is ResponseState.Success -> {
+                                      loadingPopup?.dismiss()
+                                      context?.let{ctx->
+                                          findNavController().navigate(R.id.action_regFragment_to_kycDetailsFragment)
+                                      }
+
+                                  }
+
+                                  is ResponseState.Error -> {
+                                      loadingPopup?.dismiss()
+                                      handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                                  }
+                              }
+                          }
+
+
+        /*authViewModel.formResponseLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseState.Loading -> {
+                    loadingPopup?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loadingPopup?.dismiss()
+                    context?.let{ctx->
+                        Toast.makeText(
+                            ctx,
+                            "" + it?.data?.response?.data?.get(0)?.name,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        //var a=it.data?.response?.data?.get(0)?.name?.encryptData("ttt")
+                        var a = it?.data?.response?.data?.get(0)?.name
+                        var b = a?.decryptData("ttt")
+                        Toast.makeText(ctx, "$b", Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.action_regFragment_to_kycDetailsFragment)
+                    }
+
+                }
+
+                is ResponseState.Error -> {
+                    loadingPopup?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }*/
+
+
     }
 
     private fun checkFocus() {
@@ -642,6 +698,11 @@ class RegFragment : BaseFragment() {
 
             Log.d("PhotoPicker", "No media selected")
         }
+
+    }
+
+    fun observer(){
+
 
     }
 }

@@ -12,15 +12,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
+
 import com.epaymark.big9.adapter.AdminBankListAdapter
 import com.epaymark.big9.data.model.AdminBankListModel
 import com.epaymark.big9.data.model.UserDetails
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentBalenceEnquaryBinding
+
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.big9.ui.receipt.BalenceEnquaryReceptDialogFragment
-import com.epaymark.big9.utils.`interface`.CallBack
-import com.epaymark.big9.utils.`interface`.CallBack4
+import com.epaymark.epay.ui.receipt.BalenceEnquaryReceptDialogFragment
+import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.epay.utils.`interface`.CallBack4
 import java.util.Objects
 
 class BalenceAEPSFragment : BaseFragment() {
@@ -28,7 +30,7 @@ class BalenceAEPSFragment : BaseFragment() {
     private val viewModel: MyViewModel by activityViewModels()
     var userDetailsList = ArrayList<UserDetails>()
     var bankList = ArrayList<AdminBankListModel>()
-    var adminBankListAdapter:AdminBankListAdapter?=null
+    var adminBankListAdapter: AdminBankListAdapter?=null
     var selectedBank:String=""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,9 +56,9 @@ class BalenceAEPSFragment : BaseFragment() {
                 if (viewModel?.balenceValidation() == true){
                     if (selectedBank.isNotEmpty()) {
                         activity?.let { act ->
-                            val aadharAuthBottomSheetDialog =
+                            /*val aadharAuthBottomSheetDialog =
                                 AadharAuthBottomSheetDialog(object : CallBack {
-                                    override fun getValue(s: String) {
+                                    override fun getValue(s: String) {*/
                                         val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
                                             override fun getValue(s: String) {
                                                 val dialogFragment = BalenceEnquaryReceptDialogFragment(object: CallBack {
@@ -72,12 +74,12 @@ class BalenceAEPSFragment : BaseFragment() {
                                         activity?.let {act->
                                             tpinBottomSheetDialog.show(act.supportFragmentManager, tpinBottomSheetDialog.tag)
                                         }
-                                    }
-                                })
-                            aadharAuthBottomSheetDialog.show(
+                                /*    }
+                                })*/
+                            /*aadharAuthBottomSheetDialog.show(
                                 act.supportFragmentManager,
                                 aadharAuthBottomSheetDialog.tag
-                            )
+                            )*/
                         }
                     }
                     else{

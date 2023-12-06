@@ -25,16 +25,20 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.epaymark.big9.R
-import com.epaymark.big9.utils.helpers.Constants.INPUT_FILTER_MAX_VALUE
-import com.epaymark.big9.utils.helpers.Constants.INPUT_FILTER_POINTER_LENGTH
-import com.epaymark.big9.utils.helpers.DecimalDigitsInputFilter
-import com.epaymark.big9.utils.helpers.SharedPreff
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.epay.R
+import com.epaymark.epay.utils.helpers.Constants.AES_ALGORITHM
+import com.epaymark.epay.utils.helpers.Constants.AES_IV
+import com.epaymark.epay.utils.helpers.Constants.AES_KEY
+import com.epaymark.epay.utils.helpers.Constants.AES_TRANSFORMATION
+import com.epaymark.epay.utils.helpers.Constants.INPUT_FILTER_MAX_VALUE
+import com.epaymark.epay.utils.helpers.Constants.INPUT_FILTER_POINTER_LENGTH
+
+import com.epaymark.epay.utils.helpers.DecimalDigitsInputFilter
+import com.epaymark.epay.utils.helpers.SharedPreff
+import com.epaymark.epay.utils.`interface`.CallBack
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -44,6 +48,9 @@ import java.io.IOException
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -316,49 +323,49 @@ open class BaseFragment: Fragment(){
 
                 else -> {
 
-                    // For other URI schemes
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
-                        DocumentsContract.isDocumentUri(ctx, this)
-                    ) {
-                        // If it's a DocumentsProvider URI
-                        val docId: String = DocumentsContract.getDocumentId(this)
-                        val split: List<String> = docId.split(":")
-                        if (split.size > 1) {
-                            val contentUri: Uri = when (split[0]) {
-                                "image" -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                                "video" -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-                                "audio" -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                                else -> throw IllegalArgumentException("Unsupported URI scheme")
-                            }
-                            val selection: String = "_id=?"
-                            val selectionArgs: Array<String> = arrayOf(split[1])
-                            val projection: Array<String> =
-                                arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
-                            val cursor: Cursor? =
-                                ctx.contentResolver.query(
-                                    contentUri,
-                                    projection,
-                                    selection,
-                                    selectionArgs,
-                                    null
-                                )
-                            cursor?.use {
-                                if (it.moveToFirst()) {
-                                    val displayNameIndex: Int =
-                                        it.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
-                                    if (displayNameIndex != -1) {
-                                        fileName = it.getString(displayNameIndex)
+                        // For other URI schemes
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
+                            DocumentsContract.isDocumentUri(ctx, this)
+                        ) {
+                            // If it's a DocumentsProvider URI
+                            val docId: String = DocumentsContract.getDocumentId(this)
+                            val split: List<String> = docId.split(":")
+                            if (split.size > 1) {
+                                val contentUri: Uri = when (split[0]) {
+                                    "image" -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                                    "video" -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                                    "audio" -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                                    else -> throw IllegalArgumentException("Unsupported URI scheme")
+                                }
+                                val selection: String = "_id=?"
+                                val selectionArgs: Array<String> = arrayOf(split[1])
+                                val projection: Array<String> =
+                                    arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
+                                val cursor: Cursor? =
+                                    ctx.contentResolver.query(
+                                        contentUri,
+                                        projection,
+                                        selection,
+                                        selectionArgs,
+                                        null
+                                    )
+                                cursor?.use {
+                                    if (it.moveToFirst()) {
+                                        val displayNameIndex: Int =
+                                            it.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
+                                        if (displayNameIndex != -1) {
+                                            fileName = it.getString(displayNameIndex)
+                                        }
                                     }
                                 }
                             }
+                            else{
+                                fileName=this.toString()
+                            }
                         }
-                        else{
+                    else{
                             fileName=this.toString()
                         }
-                    }
-                    else{
-                        fileName=this.toString()
-                    }
 
 
                 }
@@ -408,6 +415,49 @@ open class BaseFragment: Fragment(){
         }
 
         return false
+    }
+    fun View.takeScreenshot2(): Bitmap {
+        // Create a Bitmap with the same dimensions as the View
+        val bitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
+
+        // Create a Canvas to draw the View onto the Bitmap
+        val canvas = Canvas(bitmap)
+
+        // Draw the View onto the Canvas
+        this.draw(canvas)
+
+        return bitmap
+    }
+
+    fun String.encrypt(): String {
+        val fixedIV = if (AES_IV.length < 16) AES_IV + " ".repeat(16 - AES_IV.length) else AES_IV.substring(0, 16)
+
+        val keySpec = SecretKeySpec(AES_KEY.toByteArray(Charsets.UTF_8),
+            AES_ALGORITHM
+        )
+        val ivParameterSpec = IvParameterSpec(fixedIV.toByteArray(Charsets.UTF_8))
+
+        val cipher = Cipher.getInstance(AES_TRANSFORMATION)
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParameterSpec)
+
+        val encryptedBytes = cipher.doFinal(this.toByteArray(Charsets.UTF_8))
+        return Base64.encodeToString(encryptedBytes, Base64.DEFAULT)
+    }
+
+    fun String.decrypt(): String {
+        val fixedIV = if (AES_IV.length < 13) AES_IV + " ".repeat(13 - AES_IV.length) else AES_IV.substring(0, 13)
+
+        val keySpec = SecretKeySpec(AES_KEY.toByteArray(Charsets.UTF_8),
+            AES_ALGORITHM
+        )
+        val ivParameterSpec = IvParameterSpec(fixedIV.toByteArray(Charsets.UTF_8))
+
+        val cipher = Cipher.getInstance(AES_TRANSFORMATION)
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParameterSpec)
+
+        val encryptedBytes = Base64.decode(this, Base64.DEFAULT)
+        val decryptedBytes = cipher.doFinal(encryptedBytes)
+        return String(decryptedBytes, Charsets.UTF_8)
     }
 }
 

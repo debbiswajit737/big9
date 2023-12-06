@@ -11,13 +11,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.epaymark.big9.R
 import com.epaymark.big9.databinding.FragmentCongratulationBinding
+
 import com.epaymark.big9.ui.activity.AuthenticationActivity
 import com.epaymark.big9.ui.activity.DashboardActivity
-import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.big9.utils.helpers.Constants
+import com.epaymark.epay.utils.helpers.Constants
 import kotlinx.coroutines.launch
 
-class CongratulationFragment : BaseFragment() {
+class CongratulationFragment : Fragment() {
     lateinit var binding: FragmentCongratulationBinding
 
     override fun onCreateView(
@@ -49,7 +49,7 @@ class CongratulationFragment : BaseFragment() {
                     lifecycleScope.launch {
 
 
-                        (activity as? AuthenticationActivity)?.let{act->
+                        (activity as? AuthenticationActivity)?.let{ act->
                             startActivity(Intent(act, DashboardActivity::class.java))
                             act.finish()
                         }

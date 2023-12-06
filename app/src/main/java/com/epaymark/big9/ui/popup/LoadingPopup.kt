@@ -1,11 +1,11 @@
-package com.epaymark.big9.ui.popup
+package com.epaymark.epay.ui.popup
 
 import android.app.Activity
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
-import com.epaymark.big9.R
+import com.epaymark.epay.R
 
 
 class LoadingPopup(private val activity: Activity?) {

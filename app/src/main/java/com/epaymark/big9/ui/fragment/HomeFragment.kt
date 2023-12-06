@@ -21,8 +21,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import com.epaymark.big9.adapter.HorizontalMarginItemDecoration
 import com.epaymark.big9.R
+import com.epaymark.big9.adapter.HorizontalMarginItemDecoration
 import com.epaymark.big9.adapter.AEPSAdapter
 import com.epaymark.big9.adapter.AutoScrollHandler
 import com.epaymark.big9.adapter.BannerViewpagerAdapter
@@ -36,18 +36,19 @@ import com.epaymark.big9.adapter.UtilityAdapter
 import com.epaymark.big9.data.model.ListIcon
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentHomeBinding
+
+
 import com.epaymark.big9.ui.base.BaseFragment
-
-
-import com.epaymark.big9.ui.popup.CustomPopup.showBalencePopup
-import com.epaymark.big9.utils.common.MethodClass.userLogout
-import com.epaymark.big9.utils.helpers.Constants.isCashWithdraw
-import com.epaymark.big9.utils.helpers.Constants.isFromSearchPage
-import com.epaymark.big9.utils.helpers.Constants.searchList
-import com.epaymark.big9.utils.helpers.Constants.searchValue
-import com.epaymark.big9.utils.helpers.PermissionUtils
-import com.epaymark.big9.utils.`interface`.CallBack
-import com.epaymark.big9.utils.`interface`.PermissionsCallback
+import com.epaymark.big9.ui.fragment.fragmentDialog.GasBillerListDialog
+import com.epaymark.epay.ui.popup.CustomPopup.showBalencePopup
+import com.epaymark.epay.utils.common.MethodClass.userLogout
+import com.epaymark.epay.utils.helpers.Constants.isCashWithdraw
+import com.epaymark.epay.utils.helpers.Constants.isFromSearchPage
+import com.epaymark.epay.utils.helpers.Constants.searchList
+import com.epaymark.epay.utils.helpers.Constants.searchValue
+import com.epaymark.epay.utils.helpers.PermissionUtils
+import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.epay.utils.`interface`.PermissionsCallback
 
 
 class HomeFragment : BaseFragment() {
@@ -87,8 +88,29 @@ class HomeFragment : BaseFragment() {
         val view = binding.root
         init()
         viewOnClick()
-
+        observer()
         return view
+    }
+
+    private fun observer() {
+        viewModel.from_page_message.observe(viewLifecycleOwner) {
+            if(isFromSearchPage){
+                if (searchValue.isNotEmpty()){
+                    serviceNavigation(searchValue)
+                    searchValue=""
+                }
+
+                isFromSearchPage=false
+            }
+
+            /*if(isFromUtilityPage){
+                if (utilityValue.isNotEmpty()){
+                    serviceNavigation(utilityValue)
+                    utilityValue=""
+                }
+                isFromUtilityPage=false
+            }*/
+        }
     }
 
     private fun getDeviceWIDTHandHeight() {
@@ -154,25 +176,74 @@ class HomeFragment : BaseFragment() {
 
             getString(R.string.balance) -> {
               //  showBalencePopup(binding.root.context)
-                findNavController().navigate(R.id.action_homeFragment2_to_balenceAEPSFragment)
+                activity?.let {act->
+                    val aadharAuthBottomSheetDialog =
+                        AadharAuthBottomSheetDialog(object : CallBack {
+                            override fun getValue(s: String) {
+                                findNavController().navigate(R.id.action_homeFragment2_to_balenceAEPSFragment)
+                            }
+                        })
+                    aadharAuthBottomSheetDialog.show(
+                        act.supportFragmentManager,
+                        aadharAuthBottomSheetDialog.tag
+                    )
+                }
+
+
             }
 
             getString(R.string.cash_withdraw) -> {
                 isCashWithdraw=false
-                findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+                activity?.let {act->
+                    val aadharAuthBottomSheetDialog =
+                        AadharAuthBottomSheetDialog(object : CallBack {
+                            override fun getValue(s: String) {
+                                findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+                            }
+                        })
+                    aadharAuthBottomSheetDialog.show(
+                        act.supportFragmentManager,
+                        aadharAuthBottomSheetDialog.tag
+                    )
+                }
+
             }
 
 
             getString(R.string.mini_statement) -> {
                 viewModel.reportType.value=getString(R.string.dmt)
-                findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFormFragment)
-                //findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFragment)
-                // findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
-            }
+                activity?.let {act->
+                    val aadharAuthBottomSheetDialog =
+                        AadharAuthBottomSheetDialog(object : CallBack {
+                            override fun getValue(s: String) {
+                                findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFormFragment)
+                                //findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFragment)
+                                // findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+
+                            }
+                        })
+                    aadharAuthBottomSheetDialog.show(
+                        act.supportFragmentManager,
+                        aadharAuthBottomSheetDialog.tag
+                    )
+                }
+                }
 
             getString(R.string.aadhar_pay) -> {
                 isCashWithdraw=false
-                findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+                activity?.let {act->
+                    val aadharAuthBottomSheetDialog =
+                        AadharAuthBottomSheetDialog(object : CallBack {
+                            override fun getValue(s: String) {
+                                findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+                            }
+                        })
+                    aadharAuthBottomSheetDialog.show(
+                        act.supportFragmentManager,
+                        aadharAuthBottomSheetDialog.tag
+                    )
+                }
+
             }
 
 
@@ -222,7 +293,33 @@ class HomeFragment : BaseFragment() {
 
                 }
             }
-            getString(R.string.view_more)->{}
+
+             getString(R.string.gas)->{
+                activity?.let {act->
+                    val stateListDialog = StateListDialog(object : CallBack {
+                        override fun getValue(s: String) {
+                            viewModel?.state?.value=s
+                            val gasBillerListDialog = GasBillerListDialog(object : CallBack {
+                                override fun getValue(s: String) {
+                                    viewModel?.gasBiller?.value=s
+                                    findNavController().navigate(R.id.action_homeFragment2_to_gasBookingFragment)
+                                }
+
+                            })
+                            gasBillerListDialog.show(act.supportFragmentManager, gasBillerListDialog.tag)
+
+                        }
+
+                    })
+                    stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
+
+                }
+            }
+
+
+            getString(R.string.view_more)->{
+                findNavController().navigate(R.id.action_homeFragment2_to_viewMoreFragment)
+            }
 
             //recycleFinancial
 
@@ -963,6 +1060,8 @@ class HomeFragment : BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun init() {
+        /**/
+        viewModel.from_page_message.value="home"
         checkPermission()
         //sharedPreff.setTestData("Abcd")
         //Toast.makeText(requireActivity(), ""+sharedPreff.getTestData(), Toast.LENGTH_SHORT).show()
@@ -1067,13 +1166,8 @@ class HomeFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        if(isFromSearchPage){
-            if (searchValue.isNotEmpty()){
-                serviceNavigation(searchValue)
-                searchValue=""
-            }
-            isFromSearchPage=false
-        }
+
+
         autoScrollHandler.startAutoScroll()
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {}
     }

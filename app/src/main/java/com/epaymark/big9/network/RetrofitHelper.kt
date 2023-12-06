@@ -3,8 +3,8 @@ package com.epaymark.big9.network
 import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.epaymark.big9.ui.popup.ErrorPopUp
-import com.epaymark.big9.utils.common.MethodClass.userLogout
+import com.epaymark.epay.ui.popup.ErrorPopUp
+import com.epaymark.epay.utils.common.MethodClass.userLogout
 import com.google.gson.GsonBuilder
 
 import okhttp3.Interceptor
@@ -31,9 +31,9 @@ object RetrofitHelper {
 
         //Okhttp Client
         val client = OkHttpClient.Builder().also { client ->
-            client.readTimeout(60, TimeUnit.SECONDS)
-            client.writeTimeout(60, TimeUnit.SECONDS)
-            client.connectTimeout(60, TimeUnit.SECONDS)
+            client.readTimeout(120, TimeUnit.SECONDS)
+            client.writeTimeout(120, TimeUnit.SECONDS)
+            client.connectTimeout(120, TimeUnit.SECONDS)
             client.addInterceptor(commonHeaderInterceptor)
            // if (BuildConfig.DEBUG) {
                 client.addInterceptor(interceptor)
@@ -82,10 +82,13 @@ object RetrofitHelper {
                         ErrorPopUp(context).showMessageDialog(errorMessage)
                 }
                 401 -> {
+                    //Required Field Missing
+                    ErrorPopUp(context).showMessageDialog(errorMessage)
                     //session logout
                 //    context.userLogout()
                 }
                 403 -> {
+
                     //App Update Required
                   //  context.appUpdateRequired()
                 }

@@ -14,10 +14,10 @@ import com.epaymark.big9.R
 
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentUtilityBillPaymentBinding
-import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.big9.ui.receipt.ElectricReceptDialogFragment
-import com.epaymark.big9.utils.`interface`.CallBack
 
+import com.epaymark.big9.ui.base.BaseFragment
+import com.epaymark.epay.ui.receipt.ElectricReceptDialogFragment
+import com.epaymark.epay.utils.`interface`.CallBack
 import java.util.Objects
 
 class UtilityBillPaymentFragment : BaseFragment() {

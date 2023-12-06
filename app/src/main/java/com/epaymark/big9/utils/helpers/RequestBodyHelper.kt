@@ -1,16 +1,18 @@
-package com.epaymark.big9.utils.helpers
+package com.epaymark.epay.utils.helpers
 
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import com.epaymark.big9.BuildConfig
-import com.epaymark.big9.R
-
-
+import com.epaymark.epay.BuildConfig
+import com.epaymark.epay.R
 import com.google.gson.JsonObject
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
 
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import java.util.TimeZone
 
 import javax.inject.Inject

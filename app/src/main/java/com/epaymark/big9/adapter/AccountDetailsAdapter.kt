@@ -3,12 +3,13 @@ package com.epaymark.big9.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.epaymark.big9.data.model.AccountDetailsModel
 import com.epaymark.big9.databinding.AccountDetailsLayoutBinding
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.data.model.AccountDetailsModel
+
+import com.epaymark.epay.utils.`interface`.CallBack
 
 
-class AccountDetailsAdapter(private val items: ArrayList<AccountDetailsModel>,val callback: CallBack) : RecyclerView.Adapter<AccountDetailsAdapter.MyViewHolder>() {
+class AccountDetailsAdapter(private val items: ArrayList<AccountDetailsModel>, val callback: CallBack) : RecyclerView.Adapter<AccountDetailsAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         //report_layout_item

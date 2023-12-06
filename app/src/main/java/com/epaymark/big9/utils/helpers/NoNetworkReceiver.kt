@@ -1,10 +1,12 @@
-package com.epaymark.big9.utils.helpers
+package com.epaymark.epay.utils.helpers
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.epaymark.big9.utils.common.MethodClass
-import com.epaymark.big9.utils.interfaces.NetworkCallBack
+import android.widget.Toast
+import com.epaymark.epay.utils.common.MethodClass
+import com.epaymark.epay.utils.`interface`.NetworkConnectionListener
+import com.epaymark.epay.utils.interfaces.NetworkCallBack
 
 
 class NoNetworkReceiver(val ntwrklstnr: NetworkCallBack) : BroadcastReceiver(){

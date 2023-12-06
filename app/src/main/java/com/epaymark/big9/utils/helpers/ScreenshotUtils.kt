@@ -1,11 +1,15 @@
-package com.epaymark.big9.utils.helpers
+package com.epaymark.epay.utils.helpers
 
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.core.content.FileProvider
+import com.epaymark.epay.R
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

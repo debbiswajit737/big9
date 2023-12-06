@@ -1,16 +1,25 @@
 package com.epaymark.big9.ui.activity
 
+import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.epaymark.big9.R
 import com.epaymark.big9.databinding.ActivityNetworkBinding
 
-import com.epaymark.big9.utils.helpers.NoNetworkReceiver
-import com.epaymark.big9.utils.interfaces.NetworkCallBack
-
+import com.epaymark.epay.utils.common.MethodClass
+import com.epaymark.epay.utils.helpers.NoNetworkReceiver
+import com.epaymark.epay.utils.`interface`.NetworkConnectionListener
+import com.epaymark.epay.utils.interfaces.NetworkCallBack
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

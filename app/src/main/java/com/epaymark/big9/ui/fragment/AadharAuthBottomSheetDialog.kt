@@ -9,13 +9,14 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.epaymark.big9.R
+
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.AadharAuthBottomsheetLayoutBinding
+
 import com.epaymark.big9.ui.base.BaseBottomSheetFragment
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.epay.utils.`interface`.CallBack
 
-
-class AadharAuthBottomSheetDialog(val callBack: CallBack) :BaseBottomSheetFragment() {
+class AadharAuthBottomSheetDialog(val callBack: CallBack) : BaseBottomSheetFragment() {
     lateinit var binding: AadharAuthBottomsheetLayoutBinding
     private val myViewModel: MyViewModel by activityViewModels()
 

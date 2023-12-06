@@ -1,10 +1,11 @@
-package com.epaymark.big9.utils.helpers
+package com.epaymark.epay.utils.helpers
 
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.View

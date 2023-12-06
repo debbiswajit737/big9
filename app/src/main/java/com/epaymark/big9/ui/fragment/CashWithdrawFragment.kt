@@ -13,17 +13,20 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
+
 import com.epaymark.big9.adapter.AdminBankListAdapter
 import com.epaymark.big9.adapter.UserDetailsAdapter
 import com.epaymark.big9.data.model.AdminBankListModel
 import com.epaymark.big9.data.model.UserDetails
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentCashWithdrawBinding
+
+
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.big9.ui.receipt.CashWithdrawReceptDialogFragment
-import com.epaymark.big9.utils.helpers.Constants.isCashWithdraw
-import com.epaymark.big9.utils.`interface`.CallBack
-import com.epaymark.big9.utils.`interface`.CallBack4
+import com.epaymark.epay.ui.receipt.CashWithdrawReceptDialogFragment
+import com.epaymark.epay.utils.helpers.Constants.isCashWithdraw
+import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.epay.utils.`interface`.CallBack4
 import java.util.Objects
 
 class CashWithdrawFragment : BaseFragment() {
@@ -31,7 +34,7 @@ class CashWithdrawFragment : BaseFragment() {
     private val viewModel: MyViewModel by activityViewModels()
     var userDetailsList = ArrayList<UserDetails>()
     var bankList = ArrayList<AdminBankListModel>()
-    var adminBankListAdapter:AdminBankListAdapter?=null
+    var adminBankListAdapter: AdminBankListAdapter?=null
     var selectBank=""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,9 +82,9 @@ class CashWithdrawFragment : BaseFragment() {
                 if (viewModel?.cashWithdrawalValidation()==true){
                     if (selectBank.isNotEmpty()) {
                         activity?.let { act ->
-                            val aadharAuthBottomSheetDialog =
+                            /*val aadharAuthBottomSheetDialog =
                                 AadharAuthBottomSheetDialog(object : CallBack {
-                                    override fun getValue(s: String) {
+                                    override fun getValue(s: String) {*/
 
 
                                         val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
@@ -102,12 +105,12 @@ class CashWithdrawFragment : BaseFragment() {
 
 
 
-                                    }
+                                 /*   }
                                 })
                             aadharAuthBottomSheetDialog.show(
                                 act.supportFragmentManager,
                                 aadharAuthBottomSheetDialog.tag
-                            )
+                            )*/
                         }
                     }
                     else{

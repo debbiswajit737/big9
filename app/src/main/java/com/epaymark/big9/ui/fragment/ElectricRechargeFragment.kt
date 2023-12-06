@@ -11,12 +11,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
+
 import com.epaymark.big9.adapter.BillerListAdapter
 import com.epaymark.big9.data.model.ElectricModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentElectricRechargeBinding
+
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.epay.utils.`interface`.CallBack
 
 class ElectricRechargeFragment : BaseFragment() {
     lateinit var binding: FragmentElectricRechargeBinding

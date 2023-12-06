@@ -14,6 +14,7 @@ import com.epaymark.big9.R
 import com.epaymark.big9.data.model.ContactModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentTermsAndConditionBinding
+
 import com.epaymark.big9.ui.base.BaseFragment
 
 

@@ -23,20 +23,22 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
+
 import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentDocuploadBinding
+
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
-import com.epaymark.big9.utils.common.MethodClass
-import com.epaymark.big9.utils.helpers.Constants.isBackCamera
-import com.epaymark.big9.utils.helpers.Constants.isGallary
-import com.epaymark.big9.utils.helpers.Constants.isPdf
-import com.epaymark.big9.utils.helpers.Constants.isVideo
-import com.epaymark.big9.utils.helpers.SharedPreff
-import com.epaymark.big9.utils.`interface`.CallBack
-import com.google.gson.Gson
+import com.epaymark.epay.utils.common.MethodClass
+import com.epaymark.epay.utils.helpers.Constants.isAfterReg
+import com.epaymark.epay.utils.helpers.Constants.isBackCamera
+import com.epaymark.epay.utils.helpers.Constants.isGallary
+import com.epaymark.epay.utils.helpers.Constants.isPdf
+import com.epaymark.epay.utils.helpers.Constants.isVideo
+import com.epaymark.epay.utils.helpers.SharedPreff
+import com.epaymark.epay.utils.`interface`.CallBack
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import javax.inject.Inject
@@ -252,22 +254,23 @@ class DocuploadFragment : BaseFragment() {
 
 
                         if (docValidation()) {
-                            sharedPreff?.setLoginData()
+                          //  sharedPreff?.setLoginData()
 
-                            val json = Gson().toJson(DocumentUploadModel(
-                                panPathBase64= panPathBase64.value,
-                                cpanPathBase64=cpanPathBase64.value,
-                                paadharBase64=paadharBase64.value,
-                                partnerAadharBackBase64=PartnerAadharBackBase64.value,
-                                llGstBase64=llGstBase64.value,
-                                llCertificateOfIncorporationBase64=llCertificateOfIncorporationBase64.value,
-                                llBoardResolutionBase64=llBoardResolutionBase64.value,
-                                llTradeBase64=llTradeBase64 . value,
-                                llUserSelfiBase64=llUserSelfiBase64.value,
-                                llCselfiBase64=llCselfiBase64 . value,
-                                videokycBase64=videokycBase64.value,
-                            ))
-                            json.toString().testDataFile()
+                            val documentUploadModel = DocumentUploadModel(
+                                panPathBase64= panPathBase64.value/*?.encrypt()*/,
+                                cpanPathBase64=cpanPathBase64.value/*?.encrypt()*/,
+                                paadharBase64=paadharBase64.value/*?.encrypt()*/,
+                                partnerAadharBackBase64=PartnerAadharBackBase64.value?.encrypt(),
+                                llGstBase64=llGstBase64.value/*?.encrypt()*/,
+                                llCertificateOfIncorporationBase64=llCertificateOfIncorporationBase64.value/*?.encrypt()*/,
+                                llBoardResolutionBase64=llBoardResolutionBase64.value/*?.encrypt()*/,
+                                llTradeBase64=llTradeBase64 . value/*?.encrypt()*/,
+                                llUserSelfiBase64=llUserSelfiBase64.value/*?.encrypt()*/,
+                                llCselfiBase64=llCselfiBase64 . value/*?.encrypt()*/,
+                                videokycBase64=videokycBase64.value/*?.encrypt()*/,
+                            )
+
+                            //json.toString().testDataFile()
                             /*val regModel = DocumentUploadModel(
                                 panPathBase64= panPathBase64.value,
                                 cpanPathBase64=cpanPathBase64.value,
@@ -289,7 +292,13 @@ class DocuploadFragment : BaseFragment() {
                             partnerAadharBackBase64
                              */
 
-                            startActivity(Intent(requireActivity(), DashboardActivity::class.java))
+                            //startActivity(Intent(requireActivity(), DashboardActivity::class.java))
+                            val intent = Intent(requireActivity(), DashboardActivity::class.java)
+                            intent.putExtra(isAfterReg,true)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            requireActivity().startActivity(intent)
+                             //authViewModel.documentRegistration(documentUploadModel)
+
                             //Toast.makeText(binding.root.context, "Ok", Toast.LENGTH_SHORT).show()
                         }
                     } catch (e: Exception) {

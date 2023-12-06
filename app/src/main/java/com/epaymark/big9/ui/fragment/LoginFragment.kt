@@ -1,7 +1,8 @@
-package com.epaymark.big9.ui.fragment
+package com.epaymark.epay.ui.fragment
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +14,10 @@ import com.epaymark.big9.R
 import com.epaymark.big9.adapter.PhonePadAdapter
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentLoginBinding
+
+
 import com.epaymark.big9.ui.base.BaseFragment
-
-
-import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
+import com.epaymark.epay.utils.`interface`.KeyPadOnClickListner
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,6 +44,12 @@ class LoginFragment : BaseFragment() {
     }
 
     fun initView() {
+
+        var a="abc".encrypt()
+        Log.d("TAG_edata", "encript data : "+a)
+        val b=a.decrypt()
+        Log.d("TAG_edata", "decript data : "+b)
+
         keyPad.add(1)
         keyPad.add(2)
         keyPad.add(3)
@@ -57,7 +64,7 @@ class LoginFragment : BaseFragment() {
         keyPad.add(11)
         binding.recyclePhonePad.apply {
             //authViewModel.keyPadValue.value=getString(R.string.mobile_no_hint)
-            adapter=PhonePadAdapter(keyPad,object : KeyPadOnClickListner{
+            adapter= PhonePadAdapter(keyPad,object : KeyPadOnClickListner{
                 override fun onClick(item: Int) {
                     authViewModel.mobError.value=""
                     authViewModel.keyPadValue.value?.apply {
@@ -91,7 +98,15 @@ class LoginFragment : BaseFragment() {
                     authViewModel.mobError.value="Please enter a valid mobile number."
                 }
                 else{
+
                     authViewModel.mobError.value=""
+                    viewModel?.keyPadValue?.value?.let {
+                        /*val loginModel=LoginModel(authData=it)
+                        val gson= Gson()
+                        val jsonString = gson.toJson(loginModel)
+                        viewModel.authLoginRegistration(jsonString.encrypt())*/
+                    }
+
                     findNavController().navigate(R.id.action_loginFragment_to_otpFragment)
                 }
             }

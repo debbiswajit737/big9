@@ -3,7 +3,6 @@ package com.epaymark.big9.ui.activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -16,14 +15,13 @@ import com.epaymark.big9.databinding.ActivityDashboardBinding
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetrofitHelper.handleApiError
 import com.epaymark.big9.ui.base.BaseActivity
-import com.epaymark.big9.ui.popup.ErrorPopUp
-import com.epaymark.big9.ui.popup.LoadingPopup
-import com.epaymark.big9.utils.helpers.Constants.isRecept
-import com.epaymark.big9.utils.helpers.RequestBodyHelper
-import com.epaymark.big9.utils.helpers.ScreenshotUtils.Companion.takeScreenshot
-import com.epaymark.big9.utils.helpers.SharedPreff
-import com.epaymark.big9.utils.helpers.helper.decryptData
-
+import com.epaymark.epay.ui.popup.ErrorPopUp
+import com.epaymark.epay.ui.popup.LoadingPopup
+import com.epaymark.epay.utils.helpers.Constants.isAfterReg
+import com.epaymark.epay.utils.helpers.Constants.isRecept
+import com.epaymark.epay.utils.helpers.RequestBodyHelper
+import com.epaymark.epay.utils.helpers.ScreenshotUtils.Companion.takeScreenshot
+import com.epaymark.epay.utils.helpers.SharedPreff
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -62,10 +60,13 @@ class DashboardActivity  : BaseActivity() {
         navController = navHostFragment.navController
         intent?.let {intentData->
             val isReceptBooleanValue=intentData.getBooleanExtra(isRecept,false)
+            val isAfterRegVal=intentData.getBooleanExtra(isAfterReg,false)
             if (isReceptBooleanValue){
 
             }
-           // checkDebugMode()
+            if (isAfterRegVal){
+                navController?.navigate(R.id.homeFragment2)
+            }
         }
 
         var currentFragmentId = navController?.currentDestination?.id
@@ -89,11 +90,11 @@ class DashboardActivity  : BaseActivity() {
                 }
                 is ResponseState.Success -> {
                     loadingPopup?.dismiss()
-                    Toast.makeText(this, ""+it?.data?.response?.data?.get(0)?.name, Toast.LENGTH_SHORT).show()
+                  //  Toast.makeText(this, ""+it?.data?.response?.data?.get(0)?.name, Toast.LENGTH_SHORT).show()
                     //var a=it.data?.response?.data?.get(0)?.name?.encryptData("ttt")
-                    var a=it?.data?.response?.data?.get(0)?.name
-                    var b=a?.decryptData("ttt")
-                    Toast.makeText(this, "$b", Toast.LENGTH_SHORT).show()
+                   // var a=it?.data?.response?.data?.get(0)?.name
+                    //var b=a?.decryptData("ttt")
+                    //Toast.makeText(this, "$b", Toast.LENGTH_SHORT).show()
                 }
                 is ResponseState.Error -> {
                     loadingPopup?.dismiss()

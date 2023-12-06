@@ -3,8 +3,9 @@ package com.epaymark.big9.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.epaymark.big9.data.model.ListIcon
 import com.epaymark.big9.databinding.BannerItemsBinding
+import com.epaymark.big9.data.model.ListIcon
+
 
 
 class BannerViewpagerAdapter(private val items: List<ListIcon>) : RecyclerView.Adapter<BannerViewpagerAdapter.MyViewHolder>() {

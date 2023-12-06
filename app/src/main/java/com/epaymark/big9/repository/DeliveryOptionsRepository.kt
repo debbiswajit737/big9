@@ -13,7 +13,7 @@ import javax.inject.Inject
 class DeliveryOptionsRepository  @Inject constructor(private val api : RetroApi) {
 
     private val _loginResponseLiveData =
-        MutableLiveData< ResponseState<BaseResponse<Test>>>()
+        MutableLiveData<ResponseState<BaseResponse<Test>>>()
     val loginResponseLiveData: LiveData<ResponseState<BaseResponse<Test>>>
         get() = _loginResponseLiveData
 
@@ -33,6 +33,7 @@ class DeliveryOptionsRepository  @Inject constructor(private val api : RetroApi)
         }
 
     }
+
 }
 
 

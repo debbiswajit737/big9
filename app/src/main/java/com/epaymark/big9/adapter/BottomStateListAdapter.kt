@@ -3,9 +3,10 @@ package com.epaymark.big9.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.epaymark.big9.data.model.BottomSheetStateListModel
 import com.epaymark.big9.databinding.BottomStateListBinding
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.data.model.BottomSheetStateListModel
+
+import com.epaymark.epay.utils.`interface`.CallBack
 
 class BottomStateListAdapter(private val operatorList: ArrayList<BottomSheetStateListModel>, val listner: CallBack) : RecyclerView.Adapter<BottomStateListAdapter.MyViewHolder>() {
 

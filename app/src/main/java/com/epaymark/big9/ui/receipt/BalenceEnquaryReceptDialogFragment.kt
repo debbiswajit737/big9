@@ -1,4 +1,4 @@
-package com.epaymark.big9.ui.receipt
+package com.epaymark.epay.ui.receipt
 
 
 import android.os.Bundle
@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import com.epaymark.big9.R
-
+import com.epaymark.epay.R
 import com.epaymark.big9.data.viewMovel.MyViewModel
-import com.epaymark.big9.databinding.FragmentBalenceEnquaryReceptDialogBinding
+import com.epaymark.epay.databinding.FragmentBalenceEnquaryReceptDialogBinding
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseCenterSheetFragment
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.epay.utils.`interface`.CallBack
 
 
 class BalenceEnquaryReceptDialogFragment(val callBack: CallBack) : BaseCenterSheetFragment() {

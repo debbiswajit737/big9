@@ -3,12 +3,13 @@ package com.epaymark.big9.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.epaymark.big9.data.model.ListIcon
 import com.epaymark.big9.databinding.MyBig9LayoutBinding
-import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.data.model.ListIcon
+
+import com.epaymark.epay.utils.`interface`.CallBack
 
 
-class MyBig9Adapter(private val items: List<ListIcon>, val circleShape: Int,val callBack:  CallBack) : RecyclerView.Adapter<MyBig9Adapter.MyViewHolder>() {
+class MyBig9Adapter(private val items: List<ListIcon>, val circleShape: Int, val callBack:  CallBack) : RecyclerView.Adapter<MyBig9Adapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         /*val view = LayoutInflater.from(parent.context).inflate(R.layout.banner_items, parent, false)

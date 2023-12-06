@@ -1,5 +1,6 @@
-package com.epaymark.big9.utils.common
+package com.epaymark.epay.utils.common
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -8,19 +9,24 @@ import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
-import com.epaymark.big9.R
-
+import com.epaymark.epay.R
 import com.epaymark.big9.ui.activity.RegActivity
-import com.epaymark.big9.utils.helpers.SharedPreff
-
+import com.epaymark.epay.utils.helpers.SharedPreff
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.ResponseBody
 import org.json.JSONObject
+import java.net.InetAddress
+import java.net.NetworkInterface
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Enumeration
+import java.util.Locale
 
 
 object MethodClass {
@@ -103,6 +109,67 @@ object MethodClass {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         this.startActivity(intent)
         // Toast.makeText(this, "Logout", Toast.LENGTH_LONG).show()
+    }
+
+    @SuppressLint("HardwareIds")
+    fun deviceUid(context: Context): String {
+
+        //String device_uid = tManager.getDeviceId() != null ? tManager.getDeviceId() : "123";
+        return Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
+    }
+
+    fun getLocalIPAddress(): String {
+        try {
+            val interfaces: Enumeration<NetworkInterface> = NetworkInterface.getNetworkInterfaces()
+            while (interfaces.hasMoreElements()) {
+                val networkInterface: NetworkInterface = interfaces.nextElement()
+                val addresses: Enumeration<InetAddress> = networkInterface.inetAddresses
+                while (addresses.hasMoreElements()) {
+                    val address: InetAddress = addresses.nextElement()
+                    if (!address.isLoopbackAddress) {
+                        return address.hostAddress
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return "Unable to retrieve IP address"
+    }
+
+
+    fun getCurrentTimestamp(): String {
+        val calendar = Calendar.getInstance()
+
+        // Format for the date and time
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
+        // Extracting components
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1 // Month is zero-based
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+        val second = calendar.get(Calendar.SECOND)
+
+        // Creating a formatted date and time string
+        val formattedDateTime = dateFormat.format(calendar.time)
+
+        // Example: Print the current date and time components
+        println("Year: $year")
+        println("Month: $month")
+        println("Day: $day")
+        println("Hour: $hour")
+        println("Minute: $minute")
+        println("Second: $second")
+
+        // Example: Print the formatted date and time
+        println("Formatted Date and Time: $formattedDateTime")
+
+        return formattedDateTime
     }
 }
 
