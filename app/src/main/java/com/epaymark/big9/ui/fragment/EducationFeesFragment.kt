@@ -18,8 +18,8 @@ import com.epaymark.big9.databinding.FragmentEducationFeeBinding
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.fragmentDialog.BankListWithAddBankBottomSheetDialog
 import com.epaymark.big9.ui.fragment.fragmentDialog.InstituteListDialogFragment
-import com.epaymark.epay.ui.receipt.InstituteReceptDialogFragment
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.ui.receipt.InstituteReceptDialogFragment
+import com.epaymark.big9.utils.`interface`.CallBack
 import java.util.Objects
 
 class EducationFeesFragment : BaseFragment() {
@@ -51,7 +51,8 @@ class EducationFeesFragment : BaseFragment() {
             }
             rlBank.setOnClickListener{
                 activity?.let {act->
-                    val bankListWithAddBankBottomSheetDialog = BankListWithAddBankBottomSheetDialog(object : CallBack {
+                    val bankListWithAddBankBottomSheetDialog = BankListWithAddBankBottomSheetDialog(object :
+                        CallBack {
                         override fun getValue(s: String) {
 
                         }
@@ -109,7 +110,8 @@ class EducationFeesFragment : BaseFragment() {
             }
             rlInstitute.setOnClickListener{
                 activity?.let {act->
-                    val instituteListDialogFragment = InstituteListDialogFragment(object : CallBack {
+                    val instituteListDialogFragment = InstituteListDialogFragment(object :
+                        CallBack {
                         override fun getValue(s: String) {
                             // Toast.makeText(requireActivity(), "$s", Toast.LENGTH_SHORT).show()
                         }

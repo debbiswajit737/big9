@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.databinding.BrowserListBinding
 import com.epaymark.big9.data.model.BrowserModel
 
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 
 class BrowserAdapter(private val operatorList: ArrayList<BrowserModel>, val listner: CallBack) : RecyclerView.Adapter<BrowserAdapter.MyViewHolder>() {
 

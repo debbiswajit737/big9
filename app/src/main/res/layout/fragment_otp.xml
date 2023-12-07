@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.epaymark.epay.data.viewMovel.AuthViewModel" />
+            type="com.epaymark.big9.data.viewMovel.AuthViewModel" />
     </data>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

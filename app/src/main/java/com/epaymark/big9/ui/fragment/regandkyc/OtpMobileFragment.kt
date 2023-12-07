@@ -27,13 +27,14 @@ import com.epaymark.big9.ui.activity.AuthenticationActivity
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.activity.RegActivity
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.ui.popup.LoadingPopup
-import com.epaymark.epay.utils.common.MethodClass
-import com.epaymark.epay.utils.common.MethodClass.getCurrentTimestamp
-import com.epaymark.epay.utils.common.MethodClass.getLocalIPAddress
-import com.epaymark.epay.utils.helpers.Constants
-import com.epaymark.epay.utils.`interface`.KeyPadOnClickListner
+import com.epaymark.big9.ui.popup.LoadingPopup
+import com.epaymark.big9.utils.common.MethodClass
+import com.epaymark.big9.utils.common.MethodClass.getCurrentTimestamp
+import com.epaymark.big9.utils.common.MethodClass.getLocalIPAddress
+import com.epaymark.big9.utils.helpers.Constants
+import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 import com.google.gson.Gson
 import kotlinx.coroutines.launch

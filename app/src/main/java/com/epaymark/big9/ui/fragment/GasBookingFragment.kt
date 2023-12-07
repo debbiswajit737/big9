@@ -15,8 +15,8 @@ import com.epaymark.big9.databinding.FragmentGasBookingBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.fragmentDialog.GasBillerListDialog
-import com.epaymark.epay.ui.receipt.GasBookingReceptDialogFragment
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.ui.receipt.GasBookingReceptDialogFragment
+import com.epaymark.big9.utils.`interface`.CallBack
 import java.util.Objects
 
 class GasBookingFragment : BaseFragment() {

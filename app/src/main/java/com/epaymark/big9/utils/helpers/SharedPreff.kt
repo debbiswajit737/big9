@@ -1,11 +1,11 @@
-package com.epaymark.epay.utils.helpers
+package com.epaymark.big9.utils.helpers
 
 import android.content.Context
 import com.epaymark.big9.data.model.login.LoginResponse
-import com.epaymark.epay.utils.helpers.Constants.EPAY_SHAREDFREFFRENCE
-import com.epaymark.epay.utils.helpers.Constants.ISLogin
-import com.epaymark.epay.utils.helpers.Constants.TEST
-import com.epaymark.epay.utils.helpers.Constants.loginData
+import com.epaymark.big9.utils.helpers.Constants.EPAY_SHAREDFREFFRENCE
+import com.epaymark.big9.utils.helpers.Constants.ISLogin
+import com.epaymark.big9.utils.helpers.Constants.TEST
+import com.epaymark.big9.utils.helpers.Constants.loginData
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

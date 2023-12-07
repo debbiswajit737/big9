@@ -1,15 +1,10 @@
-package com.epaymark.epay.utils.helpers
+package com.epaymark.big9.utils.helpers
 
-import android.app.DatePickerDialog
 import android.util.Base64
-import android.view.View
-import android.widget.TextView
-import com.epaymark.epay.utils.helpers.Constants.AES_CODE
-import com.epaymark.epay.utils.helpers.Constants.CHIPER_CODE
-import com.epaymark.epay.utils.helpers.Constants.SECRET_KEY
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.helpers.Constants.AES_CODE
+import com.epaymark.big9.utils.helpers.Constants.CHIPER_CODE
+import com.epaymark.big9.utils.helpers.Constants.SECRET_KEY
 import java.security.SecureRandom
-import java.util.Calendar
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.IvParameterSpec

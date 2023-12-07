@@ -1,4 +1,4 @@
-package com.epaymark.epay.utils.helpers
+package com.epaymark.big9.utils.helpers
 
 import android.content.ContentValues
 import android.content.Context
@@ -79,7 +79,7 @@ class ScreenshotHelper(private val context: Context) {
     fun shareScreenshot(screenshotFile: File) {
         val uri = FileProvider.getUriForFile(
             context,
-            "com.epaymark.epay.fileprovider",
+            "com.epaymark.big9.fileprovider",
             screenshotFile
         )
 

@@ -41,14 +41,14 @@ import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetrofitHelper.handleApiError
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
-import com.epaymark.epay.ui.popup.ErrorPopUp
-import com.epaymark.epay.ui.popup.LoadingPopup
-import com.epaymark.epay.utils.helpers.Constants
-import com.epaymark.epay.utils.helpers.Constants.isBackCamera
-import com.epaymark.epay.utils.helpers.PermissionUtils
-import com.epaymark.epay.utils.helpers.PermissionUtils.createAlertDialog
-import com.epaymark.epay.utils.`interface`.CallBack
-import com.epaymark.epay.utils.`interface`.PermissionsCallback
+import com.epaymark.big9.ui.popup.ErrorPopUp
+import com.epaymark.big9.ui.popup.LoadingPopup
+import com.epaymark.big9.utils.helpers.Constants
+import com.epaymark.big9.utils.helpers.Constants.isBackCamera
+import com.epaymark.big9.utils.helpers.PermissionUtils
+import com.epaymark.big9.utils.helpers.PermissionUtils.createAlertDialog
+import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.PermissionsCallback
 import java.net.URLEncoder
 
 
@@ -89,14 +89,14 @@ class RegFragment : BaseFragment() {
             spinnerGender.apply {
                 val genderArray = arrayOf("Male", "Female")
                 adapter = ArrayAdapter<String>(this.context, R.layout.custom_spinner_item, genderArray)
-                setSpinner(object :CallBack{
+                setSpinner(object : CallBack {
                 override fun getValue(s: String) {
                     authViewModel.genderReg.value=s
                 }
             },genderArray)
             }
             tvDob.setOnClickListener {
-                it.showDatePickerDialog(object :CallBack{
+                it.showDatePickerDialog(object : CallBack {
                     override fun getValue(s: String) {
                         //tvDob.text = s
                         viewModel?.dateOfBirth?.value=s
@@ -305,7 +305,7 @@ class RegFragment : BaseFragment() {
                 binding.tvState.isVisible=!binding.recycleState.isVisible
                 binding.tvStateListSearch.isVisible=binding.recycleState.isVisible
             }
-            stateListAdapter= StateListAdapter(stateList,object :CallBack{
+            stateListAdapter= StateListAdapter(stateList,object : CallBack {
                 override fun getValue(s: String) {
                     //binding.tvState.text = s
                     authViewModel.state.value=s
@@ -349,7 +349,7 @@ class RegFragment : BaseFragment() {
 
         binding.recycleCity.apply {
 
-            cityListAdapter= StateListAdapter(cityList,object :CallBack{
+            cityListAdapter= StateListAdapter(cityList,object : CallBack {
                 override fun getValue(s: String) {
 
 

@@ -1,4 +1,4 @@
-package com.epaymark.epay.ui.fragment
+package com.epaymark.big9.ui.fragment
 
 
 import android.os.Bundle
@@ -17,7 +17,7 @@ import com.epaymark.big9.databinding.FragmentLoginBinding
 
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.utils.`interface`.KeyPadOnClickListner
+import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

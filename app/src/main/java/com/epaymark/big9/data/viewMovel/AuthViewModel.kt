@@ -16,7 +16,7 @@ import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.network.ResponseState
 
 import com.epaymark.big9.repository.AuthRepositoryRepository
-import com.epaymark.epay.utils.helpers.helper.validate
+import com.epaymark.big9.utils.helpers.helper.validate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

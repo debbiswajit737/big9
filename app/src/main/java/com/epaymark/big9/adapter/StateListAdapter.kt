@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 import android.widget.Filter
 import android.widget.Filterable
 import com.epaymark.big9.databinding.StateListBinding

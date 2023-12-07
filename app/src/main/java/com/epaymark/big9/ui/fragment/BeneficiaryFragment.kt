@@ -19,9 +19,9 @@ import com.epaymark.big9.data.model.BeneficiaryListModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentBeneficiaryBinding
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.utils.*
-import com.epaymark.epay.utils.`interface`.CallBack
-import com.epaymark.epay.utils.`interface`.CallBack4
+import com.epaymark.big9.utils.*
+import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack4
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix

@@ -15,10 +15,10 @@ import com.epaymark.big9.databinding.FragmentBroadbandBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.fragmentDialog.OperatorListDialogFragment
-import com.epaymark.epay.ui.popup.SuccessPopupFragment
-import com.epaymark.epay.ui.receipt.BroadBandReceptDialogFragment
-import com.epaymark.epay.utils.`interface`.CallBack
-import com.epaymark.epay.utils.`interface`.CallBack4
+import com.epaymark.big9.ui.popup.SuccessPopupFragment
+import com.epaymark.big9.ui.receipt.BroadBandReceptDialogFragment
+import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack4
 import java.util.Objects
 
 class BroadBandFragment : BaseFragment() {
@@ -71,7 +71,8 @@ class BroadBandFragment : BaseFragment() {
                                             s3: String,
                                             s4: String
                                         ) {
-                                            val dialogFragment = BroadBandReceptDialogFragment(object: CallBack {
+                                            val dialogFragment = BroadBandReceptDialogFragment(object:
+                                                CallBack {
                                                 override fun getValue(s: String) {
                                                     if (Objects.equals(s,"back")) {
                                                         findNavController().popBackStack()
@@ -106,7 +107,8 @@ class BroadBandFragment : BaseFragment() {
             rlOperator.setOnClickListener{
                 activity?.let {act->
                     activity?.let {act->
-                        val operatorListDialogFragment = OperatorListDialogFragment(object : CallBack {
+                        val operatorListDialogFragment = OperatorListDialogFragment(object :
+                            CallBack {
                             override fun getValue(s: String) {
                                 // Toast.makeText(requireActivity(), "$s", Toast.LENGTH_SHORT).show()
                             }

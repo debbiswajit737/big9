@@ -25,10 +25,10 @@ import com.epaymark.big9.network.RetrofitHelper.handleApiError
 import com.epaymark.big9.ui.activity.AuthenticationActivity
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.ui.popup.LoadingPopup
-import com.epaymark.epay.utils.helpers.Constants.API_KEY
-import com.epaymark.epay.utils.helpers.Constants.CLIENT_ID
-import com.epaymark.epay.utils.`interface`.KeyPadOnClickListner
+import com.epaymark.big9.ui.popup.LoadingPopup
+import com.epaymark.big9.utils.helpers.Constants.API_KEY
+import com.epaymark.big9.utils.helpers.Constants.CLIENT_ID
+import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
 
 import com.google.gson.Gson
 import kotlin.random.Random

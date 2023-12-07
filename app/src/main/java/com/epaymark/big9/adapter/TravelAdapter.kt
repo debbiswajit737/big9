@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.databinding.TravelLayoutBinding
 import com.epaymark.big9.data.model.ListIcon
 
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 
 
 class TravelAdapter(private val items: List<ListIcon>, val circleShape: Int, param: CallBack) : RecyclerView.Adapter<TravelAdapter.MyViewHolder>() {

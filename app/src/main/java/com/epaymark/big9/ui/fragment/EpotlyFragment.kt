@@ -13,10 +13,10 @@ import com.epaymark.big9.R
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentEpotlyBinding
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.ui.popup.SuccessPopupFragment
-import com.epaymark.epay.ui.receipt.EPotlyReceptDialogFragment
-import com.epaymark.epay.utils.`interface`.CallBack
-import com.epaymark.epay.utils.`interface`.CallBack4
+import com.epaymark.big9.ui.popup.SuccessPopupFragment
+import com.epaymark.big9.ui.receipt.EPotlyReceptDialogFragment
+import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack4
 import java.util.Objects
 
 class EpotlyFragment : BaseFragment() {
@@ -63,7 +63,8 @@ class EpotlyFragment : BaseFragment() {
                                         ) {
 
 
-                                                    val dialogFragment = EPotlyReceptDialogFragment(object: CallBack {
+                                                    val dialogFragment = EPotlyReceptDialogFragment(object:
+                                                        CallBack {
                                                         override fun getValue(s: String) {
                                                             if (Objects.equals(s,"back")) {
                                                                 findNavController().popBackStack()

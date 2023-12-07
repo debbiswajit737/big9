@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.databinding.FasttagBankListLayoutBinding
 import com.epaymark.big9.data.model.FastTagBankListModel
 
-import com.epaymark.epay.utils.`interface`.CallBack4
+import com.epaymark.big9.utils.`interface`.CallBack4
 
 
 class FastTagBankListAdapter(private val items: List<FastTagBankListModel>, val callback: CallBack4) : RecyclerView.Adapter<FastTagBankListAdapter.MyViewHolder>() {

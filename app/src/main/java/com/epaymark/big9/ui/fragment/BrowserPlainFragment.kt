@@ -17,7 +17,7 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.BrowserBottomsheetLayoutBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 
 class BrowserPlainFragment : BaseFragment() {
     lateinit var binding: BrowserBottomsheetLayoutBinding

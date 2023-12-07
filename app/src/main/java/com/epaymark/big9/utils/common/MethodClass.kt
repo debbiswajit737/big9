@@ -1,4 +1,4 @@
-package com.epaymark.epay.utils.common
+package com.epaymark.big9.utils.common
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -14,9 +14,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
-import com.epaymark.epay.R
+import com.epaymark.big9.R
 import com.epaymark.big9.ui.activity.RegActivity
-import com.epaymark.epay.utils.helpers.SharedPreff
+import com.epaymark.big9.utils.helpers.SharedPreff
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.ResponseBody

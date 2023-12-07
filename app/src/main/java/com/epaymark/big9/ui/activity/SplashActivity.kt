@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil
 import com.epaymark.big9.R
 import com.epaymark.big9.databinding.ActivitySplashBinding
 
-import com.epaymark.epay.utils.helpers.SharedPreff
+import com.epaymark.big9.utils.helpers.SharedPreff
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

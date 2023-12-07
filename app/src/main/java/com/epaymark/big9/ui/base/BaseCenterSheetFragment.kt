@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
+import com.epaymark.big9.ui.activity.DashboardActivity
 import java.io.File
 import java.io.FileOutputStream
 
@@ -25,9 +26,9 @@ open class BaseCenterSheetFragment: DialogFragment() {
 
     fun ImageView.backToHome(){
         this.setOnClickListener{
-            //(activity as? DashboardActivity)?.navigate()
+            (activity as? DashboardActivity)?.navigate()
 
-            findNavController().popBackStack(R.id.homeFragment2,false)
+            //findNavController().popBackStack(R.id.homeFragment2,false)
         }
     }
     fun View.takeScreenshot(): Bitmap {

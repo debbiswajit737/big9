@@ -1,4 +1,4 @@
-package com.epaymark.epay.data.bindingAdapter
+package com.epaymark.big9.data.bindingAdapter
 
 import android.text.Editable
 import android.text.TextWatcher

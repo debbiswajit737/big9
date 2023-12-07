@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="model"
-            type="com.epaymark.epay.data.model.AdminBankListModel" />
+            type="com.epaymark.big9.data.model.AdminBankListModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/ll_container"

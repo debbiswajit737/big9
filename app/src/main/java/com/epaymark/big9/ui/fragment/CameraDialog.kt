@@ -19,8 +19,8 @@ import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.CameraBottomsheetLayoutBinding
 
 import com.epaymark.big9.ui.base.BaseBottomSheetFragment
-import com.epaymark.epay.utils.helpers.Constants.isPdf
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.helpers.Constants.isPdf
+import com.epaymark.big9.utils.`interface`.CallBack
 
 class CameraDialog(val callBack: CallBack) : BaseBottomSheetFragment() {
     lateinit var binding: CameraBottomsheetLayoutBinding

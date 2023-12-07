@@ -7,7 +7,7 @@ import com.epaymark.big9.databinding.ReportLayoutItemBinding
 import com.epaymark.big9.data.model.ReportModel
 import com.epaymark.big9.data.model.ReportPropertyModel
 
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 import com.google.gson.Gson
 
 

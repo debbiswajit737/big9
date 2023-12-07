@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.epaymark.big9.data.model.BottomSheetGasBillerListModel
 import com.epaymark.big9.databinding.BottomGasBillerItemsListBinding
 
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 
 class BottomGasBillerListAdapter(private val operatorList: ArrayList<BottomSheetGasBillerListModel>, val listner: CallBack) : RecyclerView.Adapter<BottomGasBillerListAdapter.MyViewHolder>() {
 

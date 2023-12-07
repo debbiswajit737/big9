@@ -40,15 +40,15 @@ import com.epaymark.big9.databinding.FragmentHomeBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.fragmentDialog.GasBillerListDialog
-import com.epaymark.epay.ui.popup.CustomPopup.showBalencePopup
-import com.epaymark.epay.utils.common.MethodClass.userLogout
-import com.epaymark.epay.utils.helpers.Constants.isCashWithdraw
-import com.epaymark.epay.utils.helpers.Constants.isFromSearchPage
-import com.epaymark.epay.utils.helpers.Constants.searchList
-import com.epaymark.epay.utils.helpers.Constants.searchValue
-import com.epaymark.epay.utils.helpers.PermissionUtils
-import com.epaymark.epay.utils.`interface`.CallBack
-import com.epaymark.epay.utils.`interface`.PermissionsCallback
+import com.epaymark.big9.ui.popup.CustomPopup.showBalencePopup
+import com.epaymark.big9.utils.common.MethodClass.userLogout
+import com.epaymark.big9.utils.helpers.Constants.isCashWithdraw
+import com.epaymark.big9.utils.helpers.Constants.isFromSearchPage
+import com.epaymark.big9.utils.helpers.Constants.searchList
+import com.epaymark.big9.utils.helpers.Constants.searchValue
+import com.epaymark.big9.utils.helpers.PermissionUtils
+import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.PermissionsCallback
 
 
 class HomeFragment : BaseFragment() {
@@ -348,10 +348,12 @@ class HomeFragment : BaseFragment() {
                         override fun getValue(microAtmTitle: String) {
 
 
-                                    val selectTransactionTypeBottomSheetDialog = SelectTransactionTypeBottomSheetDialog(object : CallBack {
+                                    val selectTransactionTypeBottomSheetDialog = SelectTransactionTypeBottomSheetDialog(object :
+                                        CallBack {
                                     override fun getValue(s: String) {
 
-                                        val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
+                                        val tpinBottomSheetDialog = TpinBottomSheetDialog(object :
+                                            CallBack {
                                             override fun getValue(s: String) {
                                                 when(microAtmTitle) {
                                                     "balence_enquery"->{

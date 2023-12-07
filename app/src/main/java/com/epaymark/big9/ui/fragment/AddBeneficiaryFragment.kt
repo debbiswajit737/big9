@@ -15,8 +15,8 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentAddBeneficiaryBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.ui.popup.CustomPopup.showDebitPopup
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.ui.popup.CustomPopup.showDebitPopup
+import com.epaymark.big9.utils.`interface`.CallBack
 
 class AddBeneficiaryFragment : BaseFragment() {
     lateinit var binding: FragmentAddBeneficiaryBinding
@@ -56,7 +56,7 @@ class AddBeneficiaryFragment : BaseFragment() {
             }
             tvVerify.setOnClickListener{
                 if (viewModel?.beneficiaryVerifyValidation() == true){
-                    showDebitPopup(tvVerify.context,object:CallBack{
+                    showDebitPopup(tvVerify.context,object: CallBack {
                         override fun getValue(s: String) {
                             // API call
                             viewModel?.beneficiary_name?.value="Sample Beneficiary Name"

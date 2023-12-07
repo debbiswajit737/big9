@@ -1,4 +1,4 @@
-package com.epaymark.epay.ui.popup
+package com.epaymark.big9.ui.popup
 
 import android.app.Dialog
 import android.content.Context
@@ -7,7 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
-import com.epaymark.epay.R
+import com.epaymark.big9.R
 
 
 class ErrorPopUp(val context: Context) {

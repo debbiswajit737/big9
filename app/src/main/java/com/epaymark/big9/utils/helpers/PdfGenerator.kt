@@ -1,11 +1,11 @@
-package com.epaymark.epay.utils.helpers
+package com.epaymark.big9.utils.helpers
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Environment
 import androidx.core.content.ContextCompat
-import com.epaymark.epay.R
+import com.epaymark.big9.R
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfWriter

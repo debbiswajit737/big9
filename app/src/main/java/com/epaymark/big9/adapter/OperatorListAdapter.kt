@@ -4,8 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.data.model.OperatorListModel
+import com.epaymark.big9.databinding.OperatorListLayoutBinding
 
-import com.epaymark.epay.utils.`interface`.CallBack4
+import com.epaymark.big9.utils.`interface`.CallBack4
 
 
 class OperatorListAdapter(private val items: ArrayList<OperatorListModel>, val callback: CallBack4) : RecyclerView.Adapter<OperatorListAdapter.MyViewHolder>() {

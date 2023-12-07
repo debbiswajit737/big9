@@ -14,9 +14,9 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMobileRechargeBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.ui.receipt.MobileReceptDialogFragment
-import com.epaymark.epay.utils.helpers.Constants.isDthOperator
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.ui.receipt.MobileReceptDialogFragment
+import com.epaymark.big9.utils.helpers.Constants.isDthOperator
+import com.epaymark.big9.utils.`interface`.CallBack
 import java.util.Objects
 
 class MobileRechargeFragment : BaseFragment() {
@@ -85,7 +85,7 @@ class MobileRechargeFragment : BaseFragment() {
                     if (viewModel?.regValidation() == true){
                         val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
                             override fun getValue(s: String) {
-                                val dialogFragment = MobileReceptDialogFragment(object:CallBack{
+                                val dialogFragment = MobileReceptDialogFragment(object: CallBack {
                                     override fun getValue(s: String) {
                                         if (Objects.equals(s,"back")) {
                                             findNavController().popBackStack()

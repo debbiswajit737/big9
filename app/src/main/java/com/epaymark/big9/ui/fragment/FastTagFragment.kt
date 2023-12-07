@@ -14,7 +14,7 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentFastTagBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 
 class FastTagFragment : BaseFragment() {
     lateinit var binding: FragmentFastTagBinding
@@ -43,7 +43,8 @@ class FastTagFragment : BaseFragment() {
 
             btnCustomerInfo.setOnClickListener{
                 activity?.let {act->
-                    val fasttagOperatorListBottomSheetDialog = FasttagOperatorListBottomSheetDialog(object : CallBack {
+                    val fasttagOperatorListBottomSheetDialog = FasttagOperatorListBottomSheetDialog(object :
+                        CallBack {
                         override fun getValue(s: String) {
                             Toast.makeText(requireActivity(), "$s", Toast.LENGTH_SHORT).show()
                         }

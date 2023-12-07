@@ -18,7 +18,7 @@ import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.KycDetailsFragmentBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 import com.google.gson.Gson
 
 class KycDetailsFragment : BaseFragment() {

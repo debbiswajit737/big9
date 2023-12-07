@@ -18,10 +18,10 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentSearchBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.utils.helpers.Constants.isFromSearchPage
-import com.epaymark.epay.utils.helpers.Constants.searchList
-import com.epaymark.epay.utils.helpers.Constants.searchValue
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.helpers.Constants.isFromSearchPage
+import com.epaymark.big9.utils.helpers.Constants.searchList
+import com.epaymark.big9.utils.helpers.Constants.searchValue
+import com.epaymark.big9.utils.`interface`.CallBack
 
 class SearchFragment : BaseFragment() {
     lateinit var binding: FragmentSearchBinding

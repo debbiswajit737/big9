@@ -23,10 +23,10 @@ import com.epaymark.big9.databinding.FragmentCashWithdrawBinding
 
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.ui.receipt.CashWithdrawReceptDialogFragment
-import com.epaymark.epay.utils.helpers.Constants.isCashWithdraw
-import com.epaymark.epay.utils.`interface`.CallBack
-import com.epaymark.epay.utils.`interface`.CallBack4
+import com.epaymark.big9.ui.receipt.CashWithdrawReceptDialogFragment
+import com.epaymark.big9.utils.helpers.Constants.isCashWithdraw
+import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack4
 import java.util.Objects
 
 class CashWithdrawFragment : BaseFragment() {
@@ -87,9 +87,11 @@ class CashWithdrawFragment : BaseFragment() {
                                     override fun getValue(s: String) {*/
 
 
-                                        val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
+                                        val tpinBottomSheetDialog = TpinBottomSheetDialog(object :
+                                            CallBack {
                                             override fun getValue(s: String) {
-                                                val dialogFragment = CashWithdrawReceptDialogFragment(object: CallBack {
+                                                val dialogFragment = CashWithdrawReceptDialogFragment(object:
+                                                    CallBack {
                                                     override fun getValue(s: String) {
                                                         if (Objects.equals(s,"back")) {
                                                             findNavController().popBackStack()

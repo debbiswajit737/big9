@@ -6,8 +6,8 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.epaymark.big9.ui.activity.NetworkActivity
-import com.epaymark.epay.utils.helpers.NoNetworkReceiver
-import com.epaymark.epay.utils.interfaces.NetworkCallBack
+import com.epaymark.big9.utils.helpers.NoNetworkReceiver
+import com.epaymark.big9.utils.interfaces.NetworkCallBack
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

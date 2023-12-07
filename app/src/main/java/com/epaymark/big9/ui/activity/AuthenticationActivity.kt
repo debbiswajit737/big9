@@ -12,7 +12,7 @@ import com.epaymark.big9.R
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.ActivityAuthenticationBinding
 
-import com.epaymark.epay.utils.helpers.Constants
+import com.epaymark.big9.utils.helpers.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

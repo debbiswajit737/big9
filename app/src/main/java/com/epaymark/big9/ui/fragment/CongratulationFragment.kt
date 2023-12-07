@@ -14,7 +14,7 @@ import com.epaymark.big9.databinding.FragmentCongratulationBinding
 
 import com.epaymark.big9.ui.activity.AuthenticationActivity
 import com.epaymark.big9.ui.activity.DashboardActivity
-import com.epaymark.epay.utils.helpers.Constants
+import com.epaymark.big9.utils.helpers.Constants
 import kotlinx.coroutines.launch
 
 class CongratulationFragment : Fragment() {

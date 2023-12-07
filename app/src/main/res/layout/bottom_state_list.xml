@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.epaymark.epay.data.model.BottomSheetStateListModel" />
+            type="com.epaymark.big9.data.model.BottomSheetStateListModel" />
     </data>
 
     <androidx.cardview.widget.CardView

@@ -23,8 +23,8 @@ import com.epaymark.big9.databinding.BankDetailsFragmentBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
-import com.epaymark.epay.utils.helpers.Constants
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.helpers.Constants
+import com.epaymark.big9.utils.`interface`.CallBack
 import com.google.gson.Gson
 
 class BankDetailsFragment : BaseFragment() {

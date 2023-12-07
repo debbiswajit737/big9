@@ -18,10 +18,9 @@ import com.epaymark.big9.databinding.FragmentViewMoreBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.fragmentDialog.GasBillerListDialog
-import com.epaymark.epay.utils.*
-import com.epaymark.epay.utils.helpers.Constants.isFromUtilityPage
-import com.epaymark.epay.utils.helpers.Constants.utilityValue
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.helpers.Constants.isFromUtilityPage
+import com.epaymark.big9.utils.helpers.Constants.utilityValue
+import com.epaymark.big9.utils.`interface`.CallBack
 
 
 class ViewMoreFragment : BaseFragment() {

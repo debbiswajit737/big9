@@ -20,9 +20,9 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMinistatementFormBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.ui.receipt.MiniStatementReceptDialogFragment
-import com.epaymark.epay.utils.`interface`.CallBack
-import com.epaymark.epay.utils.`interface`.CallBack4
+import com.epaymark.big9.ui.receipt.MiniStatementReceptDialogFragment
+import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack4
 import java.util.Objects
 
 class MiniStatementFormFragment : BaseFragment() {
@@ -60,9 +60,11 @@ class MiniStatementFormFragment : BaseFragment() {
                                 AadharAuthBottomSheetDialog(object : CallBack {
                                     override fun getValue(s: String) {*/
                                         //findNavController().navigate(R.id.action_miniStatementFormFragment_to_miniStatementFragment)
-                                        val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
+                                        val tpinBottomSheetDialog = TpinBottomSheetDialog(object :
+                                            CallBack {
                                             override fun getValue(s: String) {
-                                                val dialogFragment = MiniStatementReceptDialogFragment(object: CallBack {
+                                                val dialogFragment = MiniStatementReceptDialogFragment(object:
+                                                    CallBack {
                                                     override fun getValue(s: String) {
                                                         if (Objects.equals(s,"back")) {
                                                             findNavController().popBackStack()

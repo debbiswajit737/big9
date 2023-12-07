@@ -15,9 +15,9 @@ import com.epaymark.big9.databinding.FragmentLoanPaymentBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.fragmentDialog.BankListOnlyNameBottomSheetDialog
-import com.epaymark.epay.ui.popup.SuccessPopupFragment
-import com.epaymark.epay.utils.`interface`.CallBack
-import com.epaymark.epay.utils.`interface`.CallBack4
+import com.epaymark.big9.ui.popup.SuccessPopupFragment
+import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack4
 
 class LoanPaymentFragment : BaseFragment() {
     lateinit var binding: FragmentLoanPaymentBinding
@@ -57,7 +57,8 @@ class LoanPaymentFragment : BaseFragment() {
 
             etSelectBank.setOnClickListener {
                 activity?.let {act->
-                    val bankListOnlyNameBottomSheetDialog = BankListOnlyNameBottomSheetDialog(object : CallBack {
+                    val bankListOnlyNameBottomSheetDialog = BankListOnlyNameBottomSheetDialog(object :
+                        CallBack {
                         override fun getValue(s: String) {
                            // Toast.makeText(requireActivity(), "$s", Toast.LENGTH_SHORT).show()
                         }

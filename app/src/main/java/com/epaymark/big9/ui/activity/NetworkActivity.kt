@@ -16,10 +16,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.epaymark.big9.R
 import com.epaymark.big9.databinding.ActivityNetworkBinding
 
-import com.epaymark.epay.utils.common.MethodClass
-import com.epaymark.epay.utils.helpers.NoNetworkReceiver
-import com.epaymark.epay.utils.`interface`.NetworkConnectionListener
-import com.epaymark.epay.utils.interfaces.NetworkCallBack
+import com.epaymark.big9.utils.common.MethodClass
+import com.epaymark.big9.utils.helpers.NoNetworkReceiver
+import com.epaymark.big9.utils.`interface`.NetworkConnectionListener
+import com.epaymark.big9.utils.interfaces.NetworkCallBack
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

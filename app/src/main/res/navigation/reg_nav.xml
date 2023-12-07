@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/loginMobileFragment"
-        android:name="com.epaymark.epay.ui.fragment.regandkyc.LoginMobileFragment"
+        android:name="com.epaymark.big9.ui.fragment.regandkyc.LoginMobileFragment"
         android:label="LoginMobileFragment" >
         <action
             android:id="@+id/action_loginMobileFragment_to_otpMobileFragment"
@@ -16,6 +16,6 @@
     </fragment>
     <fragment
         android:id="@+id/otpMobileFragment"
-        android:name="com.epaymark.epay.ui.fragment.regandkyc.OtpMobileFragment"
+        android:name="com.epaymark.big9.ui.fragment.regandkyc.OtpMobileFragment"
         android:label="OtpMobileFragment" />
 </navigation>

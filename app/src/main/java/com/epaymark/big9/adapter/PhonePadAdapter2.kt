@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.databinding.KeypadLayout2Binding
 
-import com.epaymark.epay.utils.`interface`.KeyPadOnClickListner
+import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
 
 class PhonePadAdapter2(private val items: List<Int>, val keyPadOnClickListner: KeyPadOnClickListner) : RecyclerView.Adapter<PhonePadAdapter2.MyViewHolder>() {
 

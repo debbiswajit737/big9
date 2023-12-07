@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.databinding.TravelLayoutBinding
 import com.epaymark.big9.data.model.ListIcon
 
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 
 
 class ReportAdapter(private val items: List<ListIcon>, val circleShape: Int, val callBack: CallBack) : RecyclerView.Adapter<ReportAdapter.MyViewHolder>() {

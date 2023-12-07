@@ -18,11 +18,11 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMoveToWalletBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.ui.popup.SuccessPopupFragment
-import com.epaymark.epay.ui.receipt.MoveToWalletPayabhiReceptDialogFragment
-import com.epaymark.epay.ui.receipt.MoveToWalletReceptDialogFragment
-import com.epaymark.epay.utils.`interface`.CallBack
-import com.epaymark.epay.utils.`interface`.CallBack4
+import com.epaymark.big9.ui.popup.SuccessPopupFragment
+import com.epaymark.big9.ui.receipt.MoveToWalletPayabhiReceptDialogFragment
+import com.epaymark.big9.ui.receipt.MoveToWalletReceptDialogFragment
+import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack4
 import java.util.Objects
 
 
@@ -136,7 +136,8 @@ class MoveToWalletFragment : BaseFragment() {
                                         s3: String,
                                         s4: String
                                     ) {
-                                        val dialogFragment = MoveToWalletReceptDialogFragment(object: CallBack {
+                                        val dialogFragment = MoveToWalletReceptDialogFragment(object:
+                                            CallBack {
                                             override fun getValue(s: String) {
                                                 if (Objects.equals(s,"back")) {
                                                     findNavController().popBackStack()
@@ -180,7 +181,8 @@ class MoveToWalletFragment : BaseFragment() {
                     if (viewModel?.payabhiValidation() == true) {
                         val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
                             override fun getValue(s: String) {
-                                val dialogFragment = MoveToWalletPayabhiReceptDialogFragment(object: CallBack {
+                                val dialogFragment = MoveToWalletPayabhiReceptDialogFragment(object:
+                                    CallBack {
                                     override fun getValue(s: String) {
                                         if (Objects.equals(s,"back")) {
                                             findNavController().popBackStack()

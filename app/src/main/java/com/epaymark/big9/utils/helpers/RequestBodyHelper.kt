@@ -1,11 +1,11 @@
-package com.epaymark.epay.utils.helpers
+package com.epaymark.big9.utils.helpers
 
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import com.epaymark.epay.BuildConfig
-import com.epaymark.epay.R
+import com.epaymark.big9.BuildConfig
+import com.epaymark.big9.R
 import com.google.gson.JsonObject
 import dagger.Module
 import dagger.Provides

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.epaymark.epay.data.viewMovel.AuthViewModel" />
+            type="com.epaymark.big9.data.viewMovel.AuthViewModel" />
 
     </data>
 

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.databinding.SearchServiceLayoutBinding
 import com.epaymark.big9.data.model.ListIcon
 
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 import java.util.*
 import kotlin.collections.ArrayList
 

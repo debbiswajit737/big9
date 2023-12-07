@@ -45,14 +45,14 @@ import com.epaymark.big9.databinding.FragmentCameraBinding
 
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.utils.helpers.Constants.contentValues
-import com.epaymark.epay.utils.helpers.Constants.isBackCamera
-import com.epaymark.epay.utils.helpers.Constants.isGallary
-import com.epaymark.epay.utils.helpers.Constants.isPdf
-import com.epaymark.epay.utils.helpers.Constants.isVideo
-import com.epaymark.epay.utils.helpers.PermissionUtils
-import com.epaymark.epay.utils.helpers.PermissionUtils.createAlertDialog
-import com.epaymark.epay.utils.`interface`.PermissionsCallback
+import com.epaymark.big9.utils.helpers.Constants.contentValues
+import com.epaymark.big9.utils.helpers.Constants.isBackCamera
+import com.epaymark.big9.utils.helpers.Constants.isGallary
+import com.epaymark.big9.utils.helpers.Constants.isPdf
+import com.epaymark.big9.utils.helpers.Constants.isVideo
+import com.epaymark.big9.utils.helpers.PermissionUtils
+import com.epaymark.big9.utils.helpers.PermissionUtils.createAlertDialog
+import com.epaymark.big9.utils.`interface`.PermissionsCallback
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale

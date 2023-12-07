@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.databinding.BeneficiaryListLayoutBinding
 import com.epaymark.big9.data.model.BeneficiaryListModel
 
-import com.epaymark.epay.utils.`interface`.CallBack4
+import com.epaymark.big9.utils.`interface`.CallBack4
 import java.util.*
 import kotlin.collections.ArrayList
 

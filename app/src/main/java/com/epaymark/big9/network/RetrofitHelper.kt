@@ -3,8 +3,8 @@ package com.epaymark.big9.network
 import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.epaymark.epay.ui.popup.ErrorPopUp
-import com.epaymark.epay.utils.common.MethodClass.userLogout
+import com.epaymark.big9.ui.popup.ErrorPopUp
+import com.epaymark.big9.utils.common.MethodClass.userLogout
 import com.google.gson.GsonBuilder
 
 import okhttp3.Interceptor

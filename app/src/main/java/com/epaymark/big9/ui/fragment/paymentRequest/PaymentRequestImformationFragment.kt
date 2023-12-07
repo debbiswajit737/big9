@@ -22,11 +22,11 @@ import com.epaymark.big9.databinding.FragmentPaymentRequestImformationBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
-import com.epaymark.epay.utils.helpers.Constants
-import com.epaymark.epay.utils.helpers.Constants.isGallary
-import com.epaymark.epay.utils.helpers.Constants.isIsPaySlip
-import com.epaymark.epay.utils.helpers.Constants.isVideo
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.helpers.Constants
+import com.epaymark.big9.utils.helpers.Constants.isGallary
+import com.epaymark.big9.utils.helpers.Constants.isIsPaySlip
+import com.epaymark.big9.utils.helpers.Constants.isVideo
+import com.epaymark.big9.utils.`interface`.CallBack
 
 class PaymentRequestImformationFragment : BaseFragment() {
     lateinit var binding: FragmentPaymentRequestImformationBinding
@@ -80,7 +80,7 @@ class PaymentRequestImformationFragment : BaseFragment() {
                 }
                 }
             tvDate.setOnClickListener {
-                it.showDatePickerDialog(object :CallBack{
+                it.showDatePickerDialog(object : CallBack {
                     override fun getValue(s: String) {
                         //tvDob.text = s
                         viewModel?.depositeDate?.value=s

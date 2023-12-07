@@ -20,9 +20,9 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentBalenceEnquaryBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.ui.receipt.BalenceEnquaryReceptDialogFragment
-import com.epaymark.epay.utils.`interface`.CallBack
-import com.epaymark.epay.utils.`interface`.CallBack4
+import com.epaymark.big9.ui.receipt.BalenceEnquaryReceptDialogFragment
+import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack4
 import java.util.Objects
 
 class BalenceAEPSFragment : BaseFragment() {
@@ -59,9 +59,11 @@ class BalenceAEPSFragment : BaseFragment() {
                             /*val aadharAuthBottomSheetDialog =
                                 AadharAuthBottomSheetDialog(object : CallBack {
                                     override fun getValue(s: String) {*/
-                                        val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
+                                        val tpinBottomSheetDialog = TpinBottomSheetDialog(object :
+                                            CallBack {
                                             override fun getValue(s: String) {
-                                                val dialogFragment = BalenceEnquaryReceptDialogFragment(object: CallBack {
+                                                val dialogFragment = BalenceEnquaryReceptDialogFragment(object:
+                                                    CallBack {
                                                     override fun getValue(s: String) {
                                                         if (Objects.equals(s,"back")) {
                                                             findNavController().popBackStack()

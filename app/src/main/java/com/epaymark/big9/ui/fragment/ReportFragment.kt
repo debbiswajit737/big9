@@ -1,4 +1,4 @@
-package com.epaymark.epay.ui.fragment
+package com.epaymark.big9.ui.fragment
 
 
 import android.os.Bundle
@@ -18,7 +18,7 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentReportBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 
 class ReportFragment : BaseFragment() {
     lateinit var binding: FragmentReportBinding

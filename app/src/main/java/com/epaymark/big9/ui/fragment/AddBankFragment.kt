@@ -21,9 +21,9 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentAddBankBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
-import com.epaymark.epay.utils.helpers.Constants
-import com.epaymark.epay.utils.helpers.Constants.isIsCheck
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.helpers.Constants
+import com.epaymark.big9.utils.helpers.Constants.isIsCheck
+import com.epaymark.big9.utils.`interface`.CallBack
 
 class AddBankFragment : BaseFragment() {
     lateinit var binding: FragmentAddBankBinding

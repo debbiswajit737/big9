@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.databinding.AccountDetailsLayoutBinding
 import com.epaymark.big9.data.model.AccountDetailsModel
 
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 
 
 class AccountDetailsAdapter(private val items: ArrayList<AccountDetailsModel>, val callback: CallBack) : RecyclerView.Adapter<AccountDetailsAdapter.MyViewHolder>() {

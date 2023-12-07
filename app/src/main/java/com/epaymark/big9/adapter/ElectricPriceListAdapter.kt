@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.databinding.ElectricPriceListStateListBinding
 import com.epaymark.big9.data.model.ElectricListModel
 
-import com.epaymark.epay.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack
 
 class ElectricPriceListAdapter(private val priceList: ArrayList<ElectricListModel>, val listner: CallBack) : RecyclerView.Adapter<ElectricPriceListAdapter.MyViewHolder>() {
 
