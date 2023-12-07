@@ -45,7 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_medium"
-            android:text="Test User"
+            android:text="@{viewModel.userProfileName}"
+            tools:text="User Name"
             android:textColor="@color/white"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintBottom_toTopOf="@+id/td_resend_otp"
@@ -63,7 +64,7 @@
             android:fontFamily="@font/open_sans_medium"
             android:longClickable="false"
 
-            android:text="9858525555"
+            android:text="@{viewModel.userProfileMobile}"
             android:textColor="@color/white"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintBottom_toTopOf="@+id/tv_unblock"

@@ -8,8 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.epaymark.big9.R
 
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.login.LoginResponse
+import com.epaymark.big9.data.model.otp.OtpResponse
+import com.epaymark.big9.data.model.profile.profileResponse
 import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.repository.AuthRepositoryRepository
 
 import com.epaymark.big9.repository.DeliveryOptionsRepository
 import com.epaymark.big9.utils.helpers.helper.validate
@@ -19,7 +23,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRepository) : ViewModel() {
+class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepository) : ViewModel() {
 
 
     val selectedButton = MutableLiveData<Int>()
@@ -28,7 +32,11 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
 
 
 
+    val userProfileMobile = MutableLiveData<String>()
+    val userProfileName = MutableLiveData<String>()
+
     val from_page_message = MutableLiveData<String>()
+
     val popup_message = MutableLiveData<String>("Success!")
     val receiveStatus = MutableLiveData<String>("")
     val receiveReceptMessahe = MutableLiveData<String>("")
@@ -412,13 +420,13 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
         return isValid
     }
 
-        val loginResponseLiveData: LiveData<ResponseState<BaseResponse<Test>>>
+     /*   val loginResponseLiveData: LiveData<ResponseState<BaseResponse<Test>>>
         get() = repository.loginResponseLiveData
     fun login(requestBody: JsonObject) {
         viewModelScope.launch {
             repository.login(requestBody)
         }
-    }
+    }*/
 
 
 
@@ -1227,5 +1235,17 @@ class MyViewModel @Inject constructor(private val repository: DeliveryOptionsRep
 
 
 
+
+    val authLogin: LiveData<ResponseState<BaseResponse<LoginResponse>>>
+        get() = repository.loginResponseLiveData
+
+
+    val profileResponse: LiveData<ResponseState<profileResponse>>
+        get() = repository.profileResponseLiveData
+    fun profile(token: String, data: String) {
+        viewModelScope.launch {
+            repository.profile(token,data)
+        }
+    }
 
 }

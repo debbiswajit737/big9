@@ -140,7 +140,7 @@ class OtpMobileFragment : BaseFragment() {
                                 authViewModel.otp.value = "${this}${item}"
                                 val (isLogin, loginResponse) =sharedPreff.getLoginData()
                                 loginResponse?.let {loginData->
-                                    loginResponse
+
 
                                     val data = mapOf(
                                         "otp" to authViewModel.otp.value,
@@ -158,7 +158,8 @@ class OtpMobileFragment : BaseFragment() {
 
                                     if (this.length==5) {
                                         loginData.AuthToken?.let {
-                                        authViewModel?.sendOtp(it,jsonString.encrypt()) }
+                                        authViewModel?.sendOtp(it,jsonString.encrypt())
+                                        }
                                     }
 
                                 }
@@ -216,7 +217,8 @@ class OtpMobileFragment : BaseFragment() {
                     lifecycleScope.launch {
                         //delay(500L)
                         (activity as? RegActivity)?.let {
-                            val intent=Intent(requireActivity(), AuthenticationActivity::class.java)
+                            val intent=Intent(requireActivity(), DashboardActivity::class.java)
+                            //val intent=Intent(requireActivity(), AuthenticationActivity::class.java)
                             intent.putExtra("stape",step.toString())
                             startActivity(intent)
                             it.finish()

@@ -8,6 +8,7 @@ import com.epaymark.big9.data.model.login.LoginResponse
 import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.model.onBoading.RegForm
 import com.epaymark.big9.data.model.otp.OtpResponse
+import com.epaymark.big9.data.model.profile.profileResponse
 import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetroApi
@@ -102,6 +103,25 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     }
 
+
+    //profile
+
+    private val _profileResponseLiveData =
+        MutableLiveData<ResponseState<profileResponse>>()
+    val profileResponseLiveData: LiveData<ResponseState<profileResponse>>
+        get() = _profileResponseLiveData
+
+
+    suspend fun profile(token: String, loginModel: String) {
+        _profileResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.profile(token, loginModel.replace("\n", "").replace("\r", ""))
+            _profileResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _profileResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
 
 }
 

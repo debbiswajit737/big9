@@ -5,6 +5,7 @@ package com.epaymark.big9.ui.fragment.regandkyc
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.popup.LoadingPopup
 import com.epaymark.big9.utils.helpers.Constants.API_KEY
 import com.epaymark.big9.utils.helpers.Constants.CLIENT_ID
+
 import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
 
 import com.google.gson.Gson
@@ -85,36 +87,57 @@ class LoginMobileFragment : BaseFragment() {
 
                     it?.data?.data?.let {loginResponse->
                         try {
-                            loginResponse.beforeLogin?.let {
-                                if (it.toInt()>6){
-                                    sharedPreff?.setLoginData(loginResponse,true,"INACTIVE")
-                                    findNavController().navigate(R.id.action_loginMobileFragment_to_otpMobileFragment,bundle)
-                                }
-                                else{
-                                    if (loginResponse.userStatus?.trim()=="INACTIVE"){
-                                        sharedPreff?.setLoginData(loginResponse,true,"INACTIVE")
-                                        if (loginResponse.kycstep!=null) {
+                            //if (loginResponse.UserType!=null && (loginResponse.UserType=="R" || loginResponse.UserType=="D" || loginResponse.UserType=="SD" )) {
+
+                                loginResponse.beforeLogin?.let {
+                                    if (it.toInt() > 6) {
+
+                                        sharedPreff?.setLoginData(loginResponse, true, "INACTIVE")
+                                        findNavController().navigate(
+                                            R.id.action_loginMobileFragment_to_otpMobileFragment,
+                                            bundle
+                                        )
+                                    } else {
+                                        if (loginResponse.userStatus?.trim() == "INACTIVE") {
+                                            sharedPreff?.setLoginData(
+                                                loginResponse,
+                                                true,
+                                                "INACTIVE"
+                                            )
+                                            if (loginResponse.kycstep != null) {
+                                                startActivity(
+                                                    Intent(
+                                                        requireActivity(),
+                                                        AuthenticationActivity::class.java
+                                                    )
+                                                )
+                                            } else {
+                                                findNavController().navigate(
+                                                    R.id.action_loginMobileFragment_to_otpMobileFragment,
+                                                    bundle
+                                                )
+                                            }
+                                        } else if (loginResponse.userStatus?.trim() == "ACTIVE") {
+                                            sharedPreff?.setLoginData(loginResponse, true, "ACTIVE")
                                             startActivity(
                                                 Intent(
                                                     requireActivity(),
-                                                    AuthenticationActivity::class.java
+                                                    DashboardActivity::class.java
                                                 )
                                             )
+                                        } else {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "You are not valid user",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
                                         }
-                                        else{
-                                            findNavController().navigate(R.id.action_loginMobileFragment_to_otpMobileFragment,bundle)
-                                        }
-                                    }
-                                    else if (loginResponse.userStatus?.trim()=="ACTIVE"){
-                                        sharedPreff?.setLoginData(loginResponse,true,"ACTIVE")
-                                        startActivity(Intent(requireActivity(), DashboardActivity::class.java))
-                                    }
-                                    else{
-                                        Toast.makeText(requireContext(), "You are not valid user", Toast.LENGTH_SHORT).show()
                                     }
                                 }
-                            }
-
+                            /*}
+                            else{
+                                Toast.makeText(requireContext(), "You are not valid user", Toast.LENGTH_SHORT).show()
+                            }*/
 
                         }catch (e:Exception){
                             Toast.makeText(requireContext(), ""+e.message, Toast.LENGTH_SHORT).show()
@@ -143,14 +166,15 @@ class LoginMobileFragment : BaseFragment() {
 
                         //"9356561988"
                         val data = mapOf(
-                            "ClientID" to CLIENT_ID,
-                            "secretKey" to API_KEY,
-
+                            "clientid" to CLIENT_ID,
+                            "secretkey" to API_KEY,
+                            "mobile" to it,
                             "refid" to "big9"+generateRandomNumberInRange().toString()
                         )
                         val gson= Gson()
                         var jsonString = gson.toJson(data)
-
+                        Log.d("TAG_p", "AUTHcallProfile:json "+jsonString)
+                        Log.d("TAG_p", "AUTHcallProfile:e \n"+jsonString.encrypt())
                         viewModel?.authLoginRegistration(jsonString.encrypt())
                     }
 

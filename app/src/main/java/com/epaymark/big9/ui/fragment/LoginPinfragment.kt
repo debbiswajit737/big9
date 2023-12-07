@@ -1,12 +1,16 @@
 package com.epaymark.big9.ui.fragment
 
 
+
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,23 +19,29 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.epaymark.big9.R
-
 import com.epaymark.big9.adapter.PhonePadAdapter2
 import com.epaymark.big9.data.model.ReceiptModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentLoginPinBinding
-
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 import com.epaymark.big9.ui.activity.RegActivity
 import com.epaymark.big9.ui.base.BaseFragment
+import com.epaymark.big9.ui.popup.LoadingPopup
+import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.PermissionUtils
 import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
 import com.epaymark.big9.utils.`interface`.PermissionsCallback
+import com.google.gson.Gson
+
 
 class LoginPinfragment : BaseFragment() {
     lateinit var binding: FragmentLoginPinBinding
     var keyPad = ArrayList<Int>()
+    var loadingPopup: LoadingPopup? = null
     private val myViewModel: MyViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,8 +57,9 @@ class LoginPinfragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        setObserver()
+
         onViewClick()
+        observer()
     }
 
     private fun onViewClick() {
@@ -76,6 +87,7 @@ class LoginPinfragment : BaseFragment() {
     }
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun initView() {
+
         checkPermission()
         setKeyPad(binding.recyclePhonePad)
         binding.apply {
@@ -115,12 +127,57 @@ class LoginPinfragment : BaseFragment() {
         /*val dialogFragment = ReceptDialogFragment()
         dialogFragment.show(childFragmentManager, dialogFragment.tag)*/
 
+        /*val (isLogin, loginResponse) =sharedPreff.getLoginData()
+        loginResponse?.let {loginData->
+
+
+            val data = mapOf(
+              "userid" to loginData.userid
+            )
+
+            val gson= Gson()
+            var jsonString = gson.toJson(data)
+            Log.d("TAG_otp_jsonString", "initView:jsonString "+jsonString)
+            Log.d("TAG_otp_jsonString", "initView:encript "+jsonString.encrypt())
+            //if (isLogin) {
+               // loginData.AuthToken?.let {
+                    myViewModel?.profile(auth,jsonString.encrypt())
+
+                //}
+           // }
+
+        }*/
+        callProfile()
     }
 
-    fun setObserver() {
+    private fun callProfile() {
+        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+
+
+        loginResponse?.let {
+            val data = mapOf(
+
+                "userid" to it.userid,
+
+                )
+            val gson= Gson()
+            var jsonString = gson.toJson(data)
+            Log.d("TAG_p", "callProfile:json "+jsonString)
+            Log.d("TAG_p", "callProfile:e \n"+jsonString.encrypt())
+            loginResponse?.AuthToken?.let {
+                myViewModel?.profile(it,jsonString.encrypt())
+            }
+        }
+
+            /*"referenceid" to loginData.,*/
+
+            //val a="eyJ1c2VyX2lkIjoiIiwidGltZXN0YW1wIjoxNzAxOTM5MTk2LCJyYW5kb20iOiJhN2ZjZWRjMjM1NzkxOGJlZDdjNjY2OGJjYmVhYmNhMmU4NWNhYWIwODE2ODg5ZjdhODY5YTY3MzBmNWY3Y2MzIn0="
+
+
 
 
     }
+
 
     fun setKeyPad(PhonePad: RecyclerView) {
         keyPad.clear()
@@ -147,7 +204,7 @@ class LoginPinfragment : BaseFragment() {
                                 myViewModel.loginPin.value= loginPin
                                 if(myViewModel.loginPin.value?.length==6){
                                     if (myViewModel.loginPin.value=="123456") {
-                                        findNavController().navigate(R.id.action_loginPinfragment_to_homeFragment2)
+                                        findNavController().navigate(com.epaymark.big9.R.id.action_loginPinfragment_to_homeFragment2)
                                     }
                                 }
 
@@ -228,4 +285,62 @@ class LoginPinfragment : BaseFragment() {
             }
         }
     }
+
+    private fun observer() {
+        myViewModel?.profileResponse?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loadingPopup?.show()
+                }
+
+                is ResponseState.Success -> {
+                    it.data?.data?.SelfieImageData?.let {
+                        val decodedString: ByteArray = Base64.decode(it, Base64.DEFAULT)
+                        val decodedByte =
+                            BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+
+                        Glide.with(this)
+                            .asBitmap() // Use asBitmap() instead of asGif()
+                            .load(decodedByte)
+                            .error(R.drawable.ic_success) // Set the default image resource
+
+                            .into(binding.profileImage)
+                    }
+                    myViewModel.apply {
+                        userProfileMobile.value=it.data?.data?.mobileNo
+                        userProfileName.value=it.data?.data?.name
+                    }
+
+
+                  //  Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                }
+
+                is ResponseState.Error -> {
+                    //   loadingPopup?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
+    }
+
+   /* private fun setObserver() {
+        myViewModel?.profileResponse?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loadingPopup?.show()
+                }
+
+                is ResponseState.Success -> {
+                      loadingPopup?.dismiss()
+                    Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+                    }
+
+                is ResponseState.Error -> {
+                    //   loadingPopup?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
+    }*/
 }

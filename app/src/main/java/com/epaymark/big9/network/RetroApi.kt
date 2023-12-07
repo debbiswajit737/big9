@@ -6,6 +6,7 @@ import com.epaymark.big9.data.model.login.LoginResponse
 import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.model.onBoading.RegForm
 import com.epaymark.big9.data.model.otp.OtpResponse
+import com.epaymark.big9.data.model.profile.profileResponse
 import com.google.gson.JsonObject
 import retrofit2.Response
 import retrofit2.http.Body
@@ -41,4 +42,13 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String): Response<OtpResponse>
 
+    @POST("https://big9.payabhi.net/restapi/v1/users/profile")
+    suspend fun profile(
+        @Header("Authtoken") token: String,
+        @Body data: String): Response<profileResponse>
+
+    @POST("https://big9.payabhi.net/restapi/v1/users/profile")
+    suspend fun testing(
+        @Header("Authtoken") token: String,
+        @Body data: String): Response<OtpResponse>
 }

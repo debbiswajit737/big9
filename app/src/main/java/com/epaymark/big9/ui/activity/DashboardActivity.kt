@@ -57,6 +57,8 @@ class DashboardActivity : BaseActivity() {
 
     fun init() {
 
+
+
         val navHostFragment: NavHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -83,7 +85,7 @@ class DashboardActivity : BaseActivity() {
 
     fun observer() {
 
-        myViewModel.loginResponseLiveData.observe(this) {
+       /* myViewModel.loginResponseLiveData.observe(this) {
 
             when (it) {
                 is ResponseState.Loading -> {
@@ -104,7 +106,7 @@ class DashboardActivity : BaseActivity() {
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }
-        }
+        }*/
     }
 
     fun navigate() {
