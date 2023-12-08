@@ -8,16 +8,27 @@ import androidx.lifecycle.viewModelScope
 import com.epaymark.big9.R
 
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
+import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
+import com.epaymark.big9.data.model.allReport.DmtReportReportModel
+import com.epaymark.big9.data.model.allReport.MicroatmReportModel
+import com.epaymark.big9.data.model.allReport.TransactionReportResponse
+import com.epaymark.big9.data.model.allReport.receipt.Transcation_report_receiptReportModel
+import com.epaymark.big9.data.model.allReport.WalletLedgerModel
+import com.epaymark.big9.data.model.allReport.WalletSettleReportModel
+import com.epaymark.big9.data.model.allReport.aepsReportModel
+import com.epaymark.big9.data.model.allReport.commissionReportModel
+import com.epaymark.big9.data.model.allReport.complaints_reportMode
+import com.epaymark.big9.data.model.allReport.loadRequestModel
+import com.epaymark.big9.data.model.allReport.receipt.Microatm_report_receipt
 import com.epaymark.big9.data.model.login.LoginResponse
 import com.epaymark.big9.data.model.otp.OtpResponse
+import com.epaymark.big9.data.model.paymentReport.PaymentReportResponse
 import com.epaymark.big9.data.model.profile.profileResponse
-import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.repository.AuthRepositoryRepository
 
-import com.epaymark.big9.repository.DeliveryOptionsRepository
 import com.epaymark.big9.utils.helpers.helper.validate
-import com.google.gson.JsonObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -1247,5 +1258,134 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             repository.profile(token,data)
         }
     }
+
+    val otpResponse: LiveData<ResponseState<OtpResponse>>
+        get() = repository.otpResponseLiveData
+    fun sendOtp(token: String, data: String) {
+        viewModelScope.launch {
+            repository.otp(token,data)
+        }
+    }
+
+
+
+    val profile2Response: LiveData<ResponseState<profileResponse>>
+        get() = repository.profile2ResponseLiveData
+    fun profile2(token: String, data: String) {
+        viewModelScope.launch {
+            repository.profile2(token,data)
+        }
+    }
+
+    //paymentReport
+    val paymentReportResponseLiveData: LiveData<ResponseState<PaymentReportResponse>>
+        get() = repository.paymentReportResponseLiveData
+    fun paymentReport(token: String, data: String) {
+        viewModelScope.launch {
+            repository.paymentReport(token,data)
+        }
+    }
+
+    //transcationReport
+    val ranscationReportResponseLiveData: LiveData<ResponseState<TransactionReportResponse>>
+        get() = repository._ranscationReportResponseLiveData
+    fun transcationReport(token: String, data: String) {
+        viewModelScope.launch {
+            repository.transcationReport(token,data)
+        }
+    }
+
+    //dmtReport
+    val dmtReportResponseLiveData: LiveData<ResponseState<DmtReportReportModel>>
+        get() = repository.dmtReportResponseLiveData
+    fun dmtReport(token: String, data: String) {
+        viewModelScope.launch {
+            repository.dmtReport(token,data)
+        }
+    }
+
+    //loadRequestReport
+    val loadRequestReportResponseLiveData: LiveData<ResponseState<loadRequestModel>>
+        get() = repository.loadRequestReportResponseLiveData
+    fun loadRequestReport(token: String, data: String) {
+        viewModelScope.launch {
+            repository.loadRequestReport(token,data)
+        }
+    }
+
+    //walletLedgerReport
+    val walletLedgerReportResponseLiveData: LiveData<ResponseState<WalletLedgerModel>>
+        get() = repository.walletLedgerReportResponseLiveData
+    fun walletLedgerReport(token: String, data: String) {
+        viewModelScope.launch {
+            repository.walletLedgerReport(token,data)
+        }
+    }
+
+    //aepsReport
+    val aepsReportResponseLiveData: LiveData<ResponseState<aepsReportModel>>
+        get() = repository.aepsReportResponseLiveData
+    fun aepsReport(token: String, data: String) {
+        viewModelScope.launch {
+            repository.aepsReport(token,data)
+        }
+    }
+
+    //microatmReport
+    val microatmReportResponseLiveData: LiveData<ResponseState<MicroatmReportModel>>
+        get() = repository.microatmReportResponseLiveData
+    fun microatmReport(token: String, data: String) {
+        viewModelScope.launch {
+            repository.microatmReport(token,data)
+        }
+    }
+
+    //commissionReport
+    val commissionReportResponseLiveData: LiveData<ResponseState<commissionReportModel>>
+        get() = repository.commissionReportResponseLiveData
+    fun commissionReport(token: String, data: String) {
+        viewModelScope.launch {
+            repository.commissionReport(token,data)
+        }
+    }
+
+    //complaints_report
+    val complaints_reportResponseLiveData: LiveData<ResponseState<complaints_reportMode>>
+        get() = repository.complaints_reportResponseLiveData
+    fun complaints_report(token: String, data: String) {
+        viewModelScope.launch {
+            repository.complaints_report(token,data)
+        }
+    }
+
+    //walletSettleReport
+    val walletSettleReportResponseLiveData: LiveData<ResponseState<WalletSettleReportModel>>
+        get() = repository.walletSettleReportResponseLiveData
+    fun walletSettleReport(token: String, data: String) {
+        viewModelScope.launch {
+            repository.walletSettleReport(token,data)
+        }
+    }
+
+    //bank_settle_report
+    val bank_settle_reportResponseLiveData: LiveData<ResponseState<Bank_settle_reportModel>>
+        get() = repository.bank_settle_reportResponseLiveData
+    fun bank_settle_report(token: String, data: String) {
+        viewModelScope.launch {
+            repository.bank_settle_report(token,data)
+        }
+    }
+
+    //cashout_ledger_report
+    val cashout_ledger_reportResponseLiveData: LiveData<ResponseState<Cashout_ledger_reportModel>>
+        get() = repository.cashout_ledger_reportResponseLiveData
+    fun cashout_ledger_report(token: String, data: String) {
+        viewModelScope.launch {
+            repository.cashout_ledger_report(token,data)
+        }
+    }
+
+
+
 
 }

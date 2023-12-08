@@ -2,6 +2,7 @@ package com.epaymark.big9.ui.fragment
 
 
 
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -42,6 +43,7 @@ class LoginPinfragment : BaseFragment() {
     lateinit var binding: FragmentLoginPinBinding
     var keyPad = ArrayList<Int>()
     var loadingPopup: LoadingPopup? = null
+    private var loader: Dialog? = null
     private val myViewModel: MyViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,7 +89,9 @@ class LoginPinfragment : BaseFragment() {
     }
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun initView() {
-
+        activity?.let {
+            loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
+        }
         checkPermission()
         setKeyPad(binding.recyclePhonePad)
         binding.apply {
@@ -151,7 +155,7 @@ class LoginPinfragment : BaseFragment() {
     }
 
     private fun callProfile() {
-        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+        /*val (isLogin, loginResponse) =sharedPreff.getLoginData()
 
 
         loginResponse?.let {
@@ -165,15 +169,41 @@ class LoginPinfragment : BaseFragment() {
             Log.d("TAG_p", "callProfile:json "+jsonString)
             Log.d("TAG_p", "callProfile:e \n"+jsonString.encrypt())
             loginResponse?.AuthToken?.let {
-                myViewModel?.profile(it,jsonString.encrypt())
+                var auth="eyJ1c2VyX2lkIjoiIiwidGltZXN0YW1wIjoxNzAxOTM5MTk2LCJyYW5kb20iOiJhN2ZjZWRjMjM1NzkxOGJlZDdjNjY2OGJjYmVhYmNhMmU4NWNhYWIwODE2ODg5ZjdhODY5YTY3MzBmNWY3Y2MzIn0="
+                var data="ZqHbVba0bT2zVD2pxkGEH9tsoSvGvl18BD8ZpvkXvtM="
+                myViewModel?.profile(auth,data)
+               // myViewModel?.profile(it,jsonString.encrypt())
             }
-        }
+        }*/
 
             /*"referenceid" to loginData.,*/
 
             //val a="eyJ1c2VyX2lkIjoiIiwidGltZXN0YW1wIjoxNzAxOTM5MTk2LCJyYW5kb20iOiJhN2ZjZWRjMjM1NzkxOGJlZDdjNjY2OGJjYmVhYmNhMmU4NWNhYWIwODE2ODg5ZjdhODY5YTY3MzBmNWY3Y2MzIn0="
+        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+        loginResponse?.let {loginData->
 
 
+            val data = mapOf(
+                "otp" to "123456",
+                "userid" to loginData.userid,
+
+                "deviceid" to MethodClass.deviceUid(binding.root.context),
+                "ipaddress" to MethodClass.getLocalIPAddress(),
+                "location" to "123",
+                "referenceid" to "123",
+                "Timestamp" to MethodClass.getCurrentTimestamp()
+            )
+            /*"referenceid" to loginData.,*/
+            val gson= Gson()
+            var jsonString = gson.toJson(data)
+
+
+                loginData.AuthToken?.let {
+                    myViewModel?.profile2(it,jsonString.encrypt())
+                }
+
+
+        }
 
 
     }
@@ -287,13 +317,14 @@ class LoginPinfragment : BaseFragment() {
     }
 
     private fun observer() {
-        myViewModel?.profileResponse?.observe(viewLifecycleOwner){
+        myViewModel?.profile2Response?.observe(viewLifecycleOwner){
             when (it) {
                 is ResponseState.Loading -> {
-                    loadingPopup?.show()
+                    loader?.show()
                 }
 
                 is ResponseState.Success -> {
+                    loader?.dismiss()
                     it.data?.data?.SelfieImageData?.let {
                         val decodedString: ByteArray = Base64.decode(it, Base64.DEFAULT)
                         val decodedByte =
@@ -317,7 +348,7 @@ class LoginPinfragment : BaseFragment() {
                 }
 
                 is ResponseState.Error -> {
-                    //   loadingPopup?.dismiss()
+                    loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }

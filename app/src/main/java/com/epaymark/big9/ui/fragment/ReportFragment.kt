@@ -1,10 +1,13 @@
 package com.epaymark.big9.ui.fragment
 
 
+import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -16,14 +19,22 @@ import com.epaymark.big9.data.model.ReportModel
 import com.epaymark.big9.data.model.ReportPropertyModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentReportBinding
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
+import com.epaymark.big9.ui.activity.DashboardActivity
+import com.epaymark.big9.ui.activity.RegActivity
 
 import com.epaymark.big9.ui.base.BaseFragment
+import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.google.gson.Gson
 
 class ReportFragment : BaseFragment() {
     lateinit var binding: FragmentReportBinding
     private val viewModel: MyViewModel by activityViewModels()
     var reportList = ArrayList<ReportModel>()
+    private val myViewModel: MyViewModel by activityViewModels()
+    private var loader: Dialog? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,7 +48,7 @@ class ReportFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        setObserver()
+        observer()
         onViewClick()
     }
 
@@ -62,6 +73,10 @@ class ReportFragment : BaseFragment() {
                     }
 
                 })
+            }
+
+            tvConfirm.setOnClickListener{
+                getAllData()
             }
 
             recycleViewReport.apply {
@@ -347,17 +362,508 @@ class ReportFragment : BaseFragment() {
     }
 
     fun initView() {
+        activity?.let {
+            loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
+        }
         viewModel?.apply {
             startDate.value ="".currentdate()
             enddate.value="".currentdate()
         }
-
+        getAllData()
     }
 
-    fun setObserver() {
-        binding.apply {
+    private fun getAllData() {
+        viewModel?.reportType?.value?.let { type ->
+            when (type) {
 
+
+                getString(R.string.payment) -> {
+
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (!isLogin){
+                    loginResponse?.let {loginData->
+                        val data = mapOf(
+                            "userid" to loginData.userid,
+                            "startdate" to viewModel?.startDate?.value,
+                            "enddate" to viewModel?.enddate?.value,
+                        )
+                        val gson= Gson()
+                        var jsonString = gson.toJson(data)
+                        /*val requestBody = """
+                        {
+                        "userid": ${loginData.userid},
+                        "startdate": "07-12-2022",
+                        "enddate": "07-12-2023"
+                        }
+                        """.trimIndent()*/
+                        /*val requestBody = """${jsonString.encrypt()}"""*/
+
+
+                        loginData.AuthToken?.let {
+                            myViewModel?.paymentReport(it,jsonString.encrypt())
+                        }
+                    }
+                }
+                }
+
+
+                getString(R.string.transactions) -> {
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "startdate" to "07-12-2022",
+                                "enddate" to "07-12-2023",
+                            )
+                            val gson= Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                myViewModel?.transcationReport(it,jsonString.encrypt())
+                            }
+                        }
+                    }
+
+                }
+
+                getString(R.string.dmt) -> {
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "startdate" to "07-12-2022",
+                                "enddate" to "07-12-2023",
+                            )
+                            val gson= Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                myViewModel?.dmtReport(it,jsonString.encrypt())
+                            }
+                        }
+                    }
+
+                }
+
+                getString(R.string.load_Requests) -> {
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "startdate" to "07-12-2022",
+                                "enddate" to "07-12-2023",
+                            )
+                            val gson= Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                myViewModel?.loadRequestReport(it,jsonString.encrypt())
+                            }
+                        }
+                    }
+                }
+
+                getString(R.string.wallet_ledger) -> {
+
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "startdate" to "07-12-2022",
+                                "enddate" to "07-12-2023",
+                            )
+                            val gson= Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                myViewModel?.walletLedgerReport(it,jsonString.encrypt())
+                            }
+                        }
+                    }
+                }
+
+                getString(R.string.cashout_ledger) -> {
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "startdate" to "07-12-2022",
+                                "enddate" to "07-12-2023",
+                            )
+                            val gson= Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                myViewModel?.cashout_ledger_report(it,jsonString.encrypt())
+                            }
+                        }
+                    }
+                }
+
+                getString(R.string.aeps) -> {
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "startdate" to "07-12-2022",
+                                "enddate" to "07-12-2023",
+                            )
+                            val gson= Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                myViewModel?.aepsReport(it,jsonString.encrypt())
+                            }
+                        }
+                    }
+                }
+
+                getString(R.string.micro_atm) -> {
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "startdate" to "07-12-2022",
+                                "enddate" to "07-12-2023",
+                            )
+                            val gson= Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                myViewModel?.microatmReport(it,jsonString.encrypt())
+                            }
+                        }
+                    }
+                }
+
+                getString(R.string.commissions) -> {
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "startdate" to "07-12-2022",
+                                "enddate" to "07-12-2023",
+                            )
+                            val gson= Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                myViewModel?.commissionReport(it,jsonString.encrypt())
+                            }
+                        }
+                    }
+                }
+
+                getString(R.string.bank_settle) -> {
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "startdate" to "07-12-2022",
+                                "enddate" to "07-12-2023",
+                            )
+                            val gson= Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                myViewModel?.bank_settle_report(it,jsonString.encrypt())
+                            }
+                        }
+                    }
+                }
+
+                getString(R.string.wallet_settle) -> {
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "startdate" to "07-12-2022",
+                                "enddate" to "07-12-2023",
+                            )
+                            val gson= Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                myViewModel?.walletSettleReport(it,jsonString.encrypt())
+                            }
+                        }
+                    }
+                }
+
+                getString(R.string.complaints) -> {
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "startdate" to "07-12-2022",
+                                "enddate" to "07-12-2023",
+                            )
+                            val gson= Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                myViewModel?.complaints_report(it,jsonString.encrypt())
+                            }
+                        }
+                    }
+                }
+
+                else -> {}
+
+            }
         }
+    }
+
+
+
+    private fun observer() {
+        myViewModel?.paymentReportResponseLiveData?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                }
+
+                is ResponseState.Error -> {
+                    //   loadingPopup?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
+
+
+        myViewModel?.ranscationReportResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        is ResponseState.Error -> {
+                            //   loadingPopup?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                }
+
+
+        myViewModel?.dmtReportResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        is ResponseState.Error -> {
+                            //   loadingPopup?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                }
+
+
+        myViewModel?.loadRequestReportResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        is ResponseState.Error -> {
+                            //   loadingPopup?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                }
+
+
+        myViewModel?.walletLedgerReportResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        is ResponseState.Error -> {
+                            //   loadingPopup?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                }
+
+
+        myViewModel?.aepsReportResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        is ResponseState.Error -> {
+                            //   loadingPopup?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                }
+
+
+        myViewModel?.microatmReportResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        is ResponseState.Error -> {
+                            //   loadingPopup?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                }
+
+
+        myViewModel?.commissionReportResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        is ResponseState.Error -> {
+                            //   loadingPopup?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                }
+
+
+        myViewModel?.complaints_reportResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        is ResponseState.Error -> {
+                            //   loadingPopup?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                }
+
+
+        myViewModel?.walletSettleReportResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        is ResponseState.Error -> {
+                            //   loadingPopup?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                }
+
+
+        myViewModel?.bank_settle_reportResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        is ResponseState.Error -> {
+                            //   loadingPopup?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                }
+
+
+        myViewModel?.cashout_ledger_reportResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        is ResponseState.Error -> {
+                            //   loadingPopup?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                }
+
+
+        /*myViewModel?.transcation_report_receiptResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        is ResponseState.Error -> {
+                            //   loadingPopup?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                }*/
+
+
 
     }
 }

@@ -4,10 +4,24 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
+import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
+import com.epaymark.big9.data.model.allReport.DmtReportReportModel
+import com.epaymark.big9.data.model.allReport.MicroatmReportModel
+import com.epaymark.big9.data.model.allReport.TransactionReportResponse
+import com.epaymark.big9.data.model.allReport.receipt.Transcation_report_receiptReportModel
+import com.epaymark.big9.data.model.allReport.WalletLedgerModel
+import com.epaymark.big9.data.model.allReport.WalletSettleReportModel
+import com.epaymark.big9.data.model.allReport.aepsReportModel
+import com.epaymark.big9.data.model.allReport.commissionReportModel
+import com.epaymark.big9.data.model.allReport.complaints_reportMode
+import com.epaymark.big9.data.model.allReport.loadRequestModel
+import com.epaymark.big9.data.model.allReport.receipt.Microatm_report_receipt
 import com.epaymark.big9.data.model.login.LoginResponse
 import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.model.onBoading.RegForm
 import com.epaymark.big9.data.model.otp.OtpResponse
+import com.epaymark.big9.data.model.paymentReport.PaymentReportResponse
 import com.epaymark.big9.data.model.profile.profileResponse
 import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.network.ResponseState
@@ -104,6 +118,25 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     }
 
 
+    //Profile2
+    private val _profile2ResponseLiveData =
+        MutableLiveData<ResponseState<profileResponse>>()
+    val profile2ResponseLiveData: LiveData<ResponseState<profileResponse>>
+        get() = _profile2ResponseLiveData
+
+
+    suspend fun profile2(token: String, loginModel: String) {
+        _profile2ResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.profile2(token, loginModel.replace("\n", "").replace("\r", ""))
+            _profile2ResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _profile2ResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
     //profile
 
     private val _profileResponseLiveData =
@@ -115,7 +148,10 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     suspend fun profile(token: String, loginModel: String) {
         _profileResponseLiveData.postValue(ResponseState.Loading())
         try {
-            val response = api.profile(token, loginModel.replace("\n", "").replace("\r", ""))
+            var token =
+                "eyJ1c2VyX2lkIjoiIiwidGltZXN0YW1wIjoxNzAxOTM5MTk2LCJyYW5kb20iOiJhN2ZjZWRjMjM1NzkxOGJlZDdjNjY2OGJjYmVhYmNhMmU4NWNhYWIwODE2ODg5ZjdhODY5YTY3MzBmNWY3Y2MzIn0="
+            var data = "ZqHbVba0bT2zVD2pxkGEH9tsoSvGvl18BD8ZpvkXvtM="
+            val response = api.profile(token, data.replace("\n", "").replace("\r", ""))
             _profileResponseLiveData.postValue(ResponseState.create(response, "aa"))
         } catch (throwable: Throwable) {
             _profileResponseLiveData.postValue(ResponseState.create(throwable))
@@ -123,6 +159,345 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     }
 
-}
+    //paymentReport
+    private val _paymentReportResponseLiveData =
+        MutableLiveData<ResponseState<PaymentReportResponse>>()
+    val paymentReportResponseLiveData: LiveData<ResponseState<PaymentReportResponse>>
+        get() = _paymentReportResponseLiveData
 
+
+    suspend fun paymentReport(token: String, data: String) {
+        _paymentReportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+
+            val response = api.paymentReport(token, data.replace("\n", "").replace("\r", ""))
+            _paymentReportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _paymentReportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //transcationReport
+    private val _transcationReportResponseLiveData =
+        MutableLiveData<ResponseState<TransactionReportResponse>>()
+    val _ranscationReportResponseLiveData: LiveData<ResponseState<TransactionReportResponse>>
+        get() = _transcationReportResponseLiveData
+
+
+    suspend fun transcationReport(token: String, loginModel: String) {
+        _transcationReportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.transcationReport(token, loginModel.replace("\n", "").replace("\r", ""))
+            _transcationReportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _transcationReportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //dmtReport
+    private val _dmtReportResponseLiveData =
+        MutableLiveData<ResponseState<DmtReportReportModel>>()
+    val dmtReportResponseLiveData: LiveData<ResponseState<DmtReportReportModel>>
+        get() = _dmtReportResponseLiveData
+
+
+    suspend fun dmtReport(token: String, loginModel: String) {
+        _dmtReportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.dmtReport(token, loginModel.replace("\n", "").replace("\r", ""))
+            _dmtReportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _dmtReportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //loadRequestReport
+    private val _loadRequestReportResponseLiveData =
+        MutableLiveData<ResponseState<loadRequestModel>>()
+    val loadRequestReportResponseLiveData: LiveData<ResponseState<loadRequestModel>>
+        get() = _loadRequestReportResponseLiveData
+
+
+    suspend fun loadRequestReport(token: String, loginModel: String) {
+        _loadRequestReportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.loadRequestReport(token, loginModel.replace("\n", "").replace("\r", ""))
+            _loadRequestReportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _loadRequestReportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //walletLedgerReport
+    private val _walletLedgerReportResponseLiveData =
+        MutableLiveData<ResponseState<WalletLedgerModel>>()
+    val walletLedgerReportResponseLiveData: LiveData<ResponseState<WalletLedgerModel>>
+        get() = _walletLedgerReportResponseLiveData
+
+
+    suspend fun walletLedgerReport(token: String, loginModel: String) {
+        _walletLedgerReportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.walletLedgerReport(token, loginModel.replace("\n", "").replace("\r", ""))
+            _walletLedgerReportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _walletLedgerReportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //aepsReport
+    private val _aepsReportResponseLiveData =
+        MutableLiveData<ResponseState<aepsReportModel>>()
+    val aepsReportResponseLiveData: LiveData<ResponseState<aepsReportModel>>
+        get() = _aepsReportResponseLiveData
+
+
+    suspend fun aepsReport(token: String, loginModel: String) {
+        _aepsReportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.aepsReport(token, loginModel.replace("\n", "").replace("\r", ""))
+            _aepsReportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _aepsReportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //microatmReport
+    private val _microatmReportResponseLiveData =
+        MutableLiveData<ResponseState<MicroatmReportModel>>()
+    val microatmReportResponseLiveData: LiveData<ResponseState<MicroatmReportModel>>
+        get() = _microatmReportResponseLiveData
+
+
+    suspend fun microatmReport(token: String, loginModel: String) {
+        _microatmReportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.microatmReport(token, loginModel.replace("\n", "").replace("\r", ""))
+            _microatmReportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _microatmReportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //commissionReport
+    private val _commissionReportResponseLiveData =
+        MutableLiveData<ResponseState<commissionReportModel>>()
+    val commissionReportResponseLiveData: LiveData<ResponseState<commissionReportModel>>
+        get() = _commissionReportResponseLiveData
+
+
+    suspend fun commissionReport(token: String, loginModel: String) {
+        _commissionReportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.commissionReport(token, loginModel.replace("\n", "").replace("\r", ""))
+            _commissionReportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _commissionReportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //complaints_report
+    private val _complaints_reportResponseLiveData =
+        MutableLiveData<ResponseState<complaints_reportMode>>()
+    val complaints_reportResponseLiveData: LiveData<ResponseState<complaints_reportMode>>
+        get() = _complaints_reportResponseLiveData
+
+
+    suspend fun complaints_report(token: String, loginModel: String) {
+        _complaints_reportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.complaints_report(token, loginModel.replace("\n", "").replace("\r", ""))
+            _complaints_reportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _complaints_reportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //walletSettleReport
+    private val _walletSettleReportResponseLiveData =
+        MutableLiveData<ResponseState<WalletSettleReportModel>>()
+    val walletSettleReportResponseLiveData: LiveData<ResponseState<WalletSettleReportModel>>
+        get() = _walletSettleReportResponseLiveData
+
+
+    suspend fun walletSettleReport(token: String, loginModel: String) {
+        _walletSettleReportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.walletSettleReport(token, loginModel.replace("\n", "").replace("\r", ""))
+            _walletSettleReportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _walletSettleReportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //bank_settle_report
+    private val _bank_settle_reportResponseLiveData =
+        MutableLiveData<ResponseState<Bank_settle_reportModel>>()
+    val bank_settle_reportResponseLiveData: LiveData<ResponseState<Bank_settle_reportModel>>
+        get() = _bank_settle_reportResponseLiveData
+
+
+    suspend fun bank_settle_report(token: String, loginModel: String) {
+        _bank_settle_reportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.bank_settle_report(token, loginModel.replace("\n", "").replace("\r", ""))
+            _bank_settle_reportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _bank_settle_reportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //cashout_ledger_report
+    private val _cashout_ledger_reportResponseLiveData =
+        MutableLiveData<ResponseState<Cashout_ledger_reportModel>>()
+    val cashout_ledger_reportResponseLiveData: LiveData<ResponseState<Cashout_ledger_reportModel>>
+        get() = _cashout_ledger_reportResponseLiveData
+
+
+    suspend fun cashout_ledger_report(token: String, loginModel: String) {
+        _cashout_ledger_reportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.cashout_ledger_report(token, loginModel.replace("\n", "").replace("\r", ""))
+            _cashout_ledger_reportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _cashout_ledger_reportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //transcation_report_receipt
+    private val _transcation_report_receiptResponseLiveData =
+        MutableLiveData<ResponseState<Transcation_report_receiptReportModel>>()
+    val transcation_report_receiptResponseLiveData: LiveData<ResponseState<Transcation_report_receiptReportModel>>
+        get() = _transcation_report_receiptResponseLiveData
+
+
+    suspend fun transcation_report_receipt(token: String, loginModel: String) {
+        _transcation_report_receiptResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.transcation_report_receipt(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _transcation_report_receiptResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _transcation_report_receiptResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //Aeps_report_receipt
+    private val _aeps_report_receiptResponseLiveData =
+        MutableLiveData<ResponseState<Transcation_report_receiptReportModel>>()
+    val aeps_report_receiptResponseLiveData: LiveData<ResponseState<Transcation_report_receiptReportModel>>
+        get() = _aeps_report_receiptResponseLiveData
+
+
+    suspend fun aeps_report_receiptResponseLiveData(token: String, loginModel: String) {
+        _aeps_report_receiptResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.transcation_report_receipt(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _aeps_report_receiptResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _aeps_report_receiptResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //Dmt_report_receiptModel
+    private val _dmt_report_receiptModelResponseLiveData =
+        MutableLiveData<ResponseState<Transcation_report_receiptReportModel>>()
+    val dmt_report_receiptModelResponseLiveData: LiveData<ResponseState<Transcation_report_receiptReportModel>>
+        get() = _dmt_report_receiptModelResponseLiveData
+
+
+    suspend fun dmt_report_receiptModelResponseLiveData(token: String, loginModel: String) {
+        _dmt_report_receiptModelResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.transcation_report_receipt(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _dmt_report_receiptModelResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _dmt_report_receiptModelResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //Microatm_report_receipt
+    private val _microatm_report_receiptResponseLiveData =
+        MutableLiveData<ResponseState<Microatm_report_receipt>>()
+    val microatm_report_receiptResponseLiveData: LiveData<ResponseState<Microatm_report_receipt>>
+        get() = _microatm_report_receiptResponseLiveData
+
+
+    suspend fun microatm_report_receiptResponseLiveData(token: String, loginModel: String) {
+        _microatm_report_receiptResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.microatm_report_receipt(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _microatm_report_receiptResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _microatm_report_receiptResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+}
 

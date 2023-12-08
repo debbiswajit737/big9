@@ -181,6 +181,8 @@ dependencies {
     implementation ("com.itextpdf:itext7-core:7.1.15")
 
     implementation ("androidx.viewpager2:viewpager2:1.0.0")
+
+    implementation ("com.google.android.gms:play-services-location:17.0.1")
 }
 
 kapt {

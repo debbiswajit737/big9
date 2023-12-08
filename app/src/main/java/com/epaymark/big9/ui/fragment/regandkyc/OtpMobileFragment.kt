@@ -1,33 +1,42 @@
 package com.epaymark.big9.ui.fragment.regandkyc
 
+import android.location.Location
 
 
+
+import android.Manifest
 import android.animation.Animator
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.R
-
 import com.epaymark.big9.adapter.PhonePadAdapter
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentOtpMobileBinding
-
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetrofitHelper.handleApiError
-import com.epaymark.big9.ui.activity.AuthenticationActivity
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.activity.RegActivity
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.popup.LoadingPopup
+import com.epaymark.big9.utils.*
 import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.common.MethodClass.getCurrentTimestamp
 import com.epaymark.big9.utils.common.MethodClass.getLocalIPAddress
@@ -35,16 +44,22 @@ import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import kotlinx.coroutines.launch
+import java.util.Currency
+import java.util.Locale
+import java.util.TimeZone
 
 
 class OtpMobileFragment : BaseFragment() {
     lateinit var binding: FragmentOtpMobileBinding
     var keyPad = ArrayList<Int>()
+    val MY_PERMISSIONS_REQUEST_LOCATION=1
     private val authViewModel: AuthViewModel by activityViewModels()
     var isForgotPinPage=false
+    val jsonDataLocation=JsonObject()
+    private var loader: Dialog? = null
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     var loadingPopup: LoadingPopup? = null
 
@@ -72,15 +87,23 @@ class OtpMobileFragment : BaseFragment() {
         authViewModel?.otpResponse?.observe(viewLifecycleOwner){
             when (it) {
                 is ResponseState.Loading -> {
-                    loadingPopup?.show()
+                    loader?.show()
                 }
 
                 is ResponseState.Success -> {
+                    loader?.dismiss()
                     Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
-                    if (it.data?.step==1){
+                    if (it.data?.step==null){
+                        (activity as? RegActivity)?.let {
+                            val intent=Intent(requireActivity(), DashboardActivity::class.java)
+
+                            startActivity(intent)
+                            it.finish()
+
+
                        // if(authViewModel.otp.value=="123456"){
                                     //binding.lottieTickAnim.visibility=View.VISIBLE
-                                    binding.lottieConfettiAnim.visibility=View.VISIBLE
+                                   /* binding.lottieConfettiAnim.visibility=View.VISIBLE
                                     if (!isForgotPinPage) {
                                         it.data?.step?.let {
                                             setdata2(it)
@@ -92,7 +115,7 @@ class OtpMobileFragment : BaseFragment() {
                                             val intent = Intent(act, DashboardActivity::class.java)
                                             startActivity(intent)
                                             act.finish()
-                                        }
+                                        }*/
                                     }
                                     //findNavController().navigate(R.id.action_otpFragment_to_congratulationFragment)
                                     // Toast.makeText(requireContext(), "match", Toast.LENGTH_SHORT).show()
@@ -101,7 +124,7 @@ class OtpMobileFragment : BaseFragment() {
                 }
 
                 is ResponseState.Error -> {
-                    //   loadingPopup?.dismiss()
+                    loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }
@@ -109,8 +132,153 @@ class OtpMobileFragment : BaseFragment() {
     }
 
     fun init(){
+        activity?.let {
+            loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
+        }
+
        activity?.let {  mFusedLocationClient = LocationServices.getFusedLocationProviderClient(it)}
+        userLocation()
     }
+
+    private fun userLocation() {
+        // Check for runtime permissions
+        if (ContextCompat.checkSelfPermission(
+                binding.root.context,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Request the permission
+            activity?.let {
+                ActivityCompat.requestPermissions(
+                    it,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    MY_PERMISSIONS_REQUEST_LOCATION
+                )
+            }
+
+        } else {
+            // Permission already granted
+            // Proceed with getting location
+            getLocation()
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLocation() {
+        activity?.let {act->
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(act)
+
+
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location ->
+                    if (location != null) {
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+
+
+
+                        val accuracy = location.accuracy
+
+                        jsonDataLocation.addProperty("locationAccuracyRadius",accuracy)
+
+                        getFullLocation(latitude,longitude)
+
+                        // Do something with the latitude and longitude
+
+                    } else {
+                        // Handle the case where the location is null
+                    }
+                }
+                .addOnFailureListener { e ->
+                    // Handle errors that may occur while retrieving the location
+                    Log.e("Location", "Error getting location", e)
+                }
+        }
+
+
+    }
+
+    private fun getCurrency() {
+
+    }
+
+
+
+    fun getFullLocation(latitude: Double, longitude: Double) {
+        val defaultLocale = Locale.getDefault()
+        Currency.getInstance( Locale("en", "IN")).apply {
+            jsonDataLocation.addProperty("currencyCode",currencyCode)
+            jsonDataLocation.addProperty("currencySymbol",symbol)
+        }
+        TimeZone.getDefault()?.let {
+            jsonDataLocation.addProperty("timezone",it.id)
+        }
+        /*
+        timezone
+        currencyCode
+        currencySymbol
+        subAdminArea
+        locationAccuracyRadius
+        continentName
+        */
+
+        val geocoder: Geocoder
+        val addresses: List<Address>?
+        geocoder = Geocoder(binding.root.context, Locale.getDefault())
+
+        addresses = geocoder.getFromLocation(
+            latitude,
+            longitude,
+            1
+        ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+
+       /* val address: String =
+            addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+
+        val city: String = addresses!![0].locality
+        val state: String = addresses!![0].adminArea
+        val country: String = addresses!![0].countryName
+        val postalCode: String = addresses!![0].postalCode
+        val knownName: String = addresses!![0].featureName*/
+        addresses?.get(0)?.let {
+
+            jsonDataLocation.addProperty("subAdminArea",it.subAdminArea)
+            jsonDataLocation.addProperty("continentName",it.countryName)
+
+            jsonDataLocation.addProperty("city",it.locality)
+            jsonDataLocation.addProperty("state",it.adminArea)
+
+            jsonDataLocation.addProperty("postalCode",it.postalCode)
+            jsonDataLocation.addProperty("knownName",it.featureName)
+            jsonDataLocation.addProperty("latitude",it.latitude)
+            jsonDataLocation.addProperty("longitude",it.longitude)
+
+            jsonDataLocation.addProperty("subLocality",it.subLocality)
+            jsonDataLocation.addProperty("address1",it.getAddressLine(1))
+            jsonDataLocation.addProperty("address2",it.getAddressLine(2))
+        }
+
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_LOCATION -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted
+                    getLocation()
+                } else {
+                    // Permission denied
+                    // Handle accordingly (e.g., show a message)
+                }
+            }
+        }
+    }
+
     private fun onViewClick() {
 
 
@@ -148,14 +316,13 @@ class OtpMobileFragment : BaseFragment() {
 
                                         "deviceid" to MethodClass.deviceUid(binding.root.context),
                                         "ipaddress" to getLocalIPAddress(),
-                                        "location" to "123",
+                                        "location" to jsonDataLocation.toString(),
                                         "referenceid" to "123",
                                          "Timestamp" to getCurrentTimestamp()
                                     )
                                     /*"referenceid" to loginData.,*/
                                     val gson= Gson()
                                     var jsonString = gson.toJson(data)
-
                                     if (this.length==5) {
                                         loginData.AuthToken?.let {
                                         authViewModel?.sendOtp(it,jsonString.encrypt())
@@ -230,7 +397,6 @@ class OtpMobileFragment : BaseFragment() {
                 override fun onAnimationRepeat(animation: Animator) {}
             })
     }
-
 
 
     }

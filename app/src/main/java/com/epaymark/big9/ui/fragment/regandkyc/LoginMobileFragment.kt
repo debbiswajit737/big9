@@ -2,9 +2,13 @@ package com.epaymark.big9.ui.fragment.regandkyc
 
 
 
+import android.app.Dialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,10 +31,13 @@ import com.epaymark.big9.ui.activity.AuthenticationActivity
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.popup.LoadingPopup
+import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants.API_KEY
 import com.epaymark.big9.utils.helpers.Constants.CLIENT_ID
+import com.epaymark.big9.utils.helpers.PermissionUtils
 
 import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
+import com.epaymark.big9.utils.`interface`.PermissionsCallback
 
 import com.google.gson.Gson
 import kotlin.random.Random
@@ -40,6 +47,7 @@ class LoginMobileFragment : BaseFragment() {
     lateinit var binding: FragmentLoginMobileBinding
     var keyPad = ArrayList<Int>()
     var loadingPopup: LoadingPopup? = null
+    private var loader: Dialog? = null
     private val authViewModel: AuthViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +62,8 @@ class LoginMobileFragment : BaseFragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity?.let { loader = MethodClass.custom_loader(it, getString(R.string.please_wait)) }
+        checkPermission()
         setKeyPad(binding.recyclePhonePad)
         onViewClick()
         setObserver()
@@ -77,11 +87,13 @@ class LoginMobileFragment : BaseFragment() {
         authViewModel?.authLogin?.observe(viewLifecycleOwner){
             when (it) {
                 is ResponseState.Loading -> {
-                    loadingPopup?.show()
+                    //loadingPopup?.show()
+                    loader?.let { it.show() }
                 }
 
                 is ResponseState.Success -> {
                   //  loadingPopup?.dismiss()
+                    loader?.let { it.dismiss() }
                     val bundle=Bundle()
                     bundle.putBoolean("isForgotPin",false)
 
@@ -149,6 +161,7 @@ class LoginMobileFragment : BaseFragment() {
 
                 is ResponseState.Error -> {
                  //   loadingPopup?.dismiss()
+                    loader?.let { it.dismiss() }
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }
@@ -234,6 +247,63 @@ class LoginMobileFragment : BaseFragment() {
     }
     fun generateRandomNumberInRange(): Int {
         return Random.nextInt(1000, 9999)
+    }
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun checkPermission() {
+        if (!PermissionUtils.hasVideoRecordingPermissions(binding.root.context)) {
+
+
+            PermissionUtils.requestVideoRecordingPermission(binding.root.context, object :
+                PermissionsCallback {
+                override fun onPermissionRequest(granted: Boolean) {
+                    if (!granted) {
+                        dialogRecordingPermission()
+
+                    } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            if (!Environment.isExternalStorageManager()) {
+                                dialogAllFileAccessPermissionAbove30()
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            })
+
+        }
+    }
+    private fun dialogRecordingPermission() {
+        PermissionUtils.createAlertDialog(
+            binding.root.context,
+            "Permission Denied!",
+            "Go to setting and enable recording permission",
+            "OK", ""
+        ) { value ->
+            if (value) {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", requireActivity().packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+        }
+    }
+
+    fun dialogAllFileAccessPermissionAbove30() {
+        PermissionUtils.createAlertDialog(
+            binding.root.context,
+            "All file permissions",
+            "Go to setting and enable all files permission",
+            "OK", ""
+        ) { value ->
+            if (value) {
+                val getpermission = Intent()
+                getpermission.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                startActivity(getpermission)
+            }
+        }
     }
     }
 

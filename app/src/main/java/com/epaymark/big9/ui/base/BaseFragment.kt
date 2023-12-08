@@ -48,6 +48,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -247,7 +248,7 @@ open class BaseFragment: Fragment(){
             this.context,
             R.style.MyDatePickerDialogTheme,
             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                val selectedDate = "$year-${month + 1}-$dayOfMonth" // +1 because months are zero-based
+                val selectedDate = "$dayOfMonth-${month + 1}-$year" // +1 because months are zero-based
                 callBack.getValue(selectedDate)
             },
             year,
@@ -257,9 +258,15 @@ open class BaseFragment: Fragment(){
 
         datePickerDialog.show()
     }
+
+    fun String.getCurrentDate(callBack: CallBack) {
+        val calendar = Calendar.getInstance()
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+        callBack.getValue(currentDate)
+    }
     fun String.currentdate(): String {
         val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy")
         val currentDate = dateFormat.format(calendar.time)
         return currentDate
     }
