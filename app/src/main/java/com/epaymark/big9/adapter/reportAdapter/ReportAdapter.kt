@@ -54,7 +54,7 @@ class ReportAdapter(
 
                 model=item
                 cardView.setOnClickListener{
-                    if (item.isClickAble){
+                    if (item.isClickAble == true){
                         val gson = Gson()
                         val json = gson.toJson(item)
                         callBack.getValue(json)

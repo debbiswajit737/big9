@@ -6,10 +6,13 @@ class MicroatmReportModel {
 
     @SerializedName("Description")
     var Description: String? = null
+
     @SerializedName("response_code")
     var responseCode: Int? = null
+
     @SerializedName("data")
     var data: ArrayList<MicroatmReportData> = arrayListOf()
+
     @SerializedName("timestamp")
     var timestamp: String? = null
 
@@ -18,20 +21,14 @@ class MicroatmReportModel {
 
 data class MicroatmReportData(
 
-    @SerializedName("AccountID") var AccountID: String? = null,
-    @SerializedName("LastTransactionAmount") var LastTransactionAmount: String? = null,
-    @SerializedName("LastTransactionTime") var LastTransactionTime: String? = null,
-    @SerializedName("AmountMode") var AmountMode: String? = null,
-    @SerializedName("PaymentBYId") var PaymentBYId: String? = null,
-    @SerializedName("ReceiveById") var ReceiveById: String? = null,
-    @SerializedName("curBal_sender") var curBalSender: String? = null,
-    @SerializedName("curBal_receiver") var curBalReceiver: String? = null,
-    @SerializedName("senderID") var senderID: String? = null,
-    @SerializedName("senderMobileNo") var senderMobileNo: String? = null,
-    @SerializedName("senderName") var senderName: String? = null,
-    @SerializedName("receiverID") var receiverID: String? = null,
-    @SerializedName("receiverMobileNo") var receiverMobileNo: String? = null,
-    @SerializedName("receiverName") var receiverName: String? = null
+    @SerializedName("tran_id") var tranId: String? = null,
+    @SerializedName("tran_status") var tranStatus: String? = null,
+    @SerializedName("type") var type: String? = null,
+    @SerializedName("tran_amt") var tranAmt: String? = null,
+    @SerializedName("response_description") var responseDescription: String? = null,
+    @SerializedName("masked_pan") var maskedPan: String? = null,
+    @SerializedName("BankReferenceNumber") var BankReferenceNumber: String? = null,
+    @SerializedName("trans_dt") var transDt: String? = null
 
 )
 

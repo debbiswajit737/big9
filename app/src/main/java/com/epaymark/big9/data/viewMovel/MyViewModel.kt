@@ -1345,19 +1345,32 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         get() = repository.commissionReportResponseLiveData
     fun commissionReport(token: String, data: String) {
         viewModelScope.launch {
-            repository.commissionReport(token,data)
+            viewModelScope.launch {
+                repository.commissionReport(token, data)
+            }
         }
     }
 
     //complaints_report
-    val complaints_reportResponseLiveData: LiveData<ResponseState<complaints_reportMode>>
-        get() = repository.complaints_reportResponseLiveData
+    /*val complaints_reportResponseLiveData: LiveData<ResponseState<WalletSettleReportModel>>
+        get() = repository.complaints_reportReportResponseLiveData
+    fun complaints_report(token: String, data: String) {
+        viewModelScope.launch {
+            repository.complaints_report(token,data)
+        }
+    }*/
+
+
+
+
+    //complants Report
+    val complaints_reportReportResponseLiveData: LiveData<ResponseState<complaints_reportMode>>
+        get() = repository.complaints_reportReportResponseLiveData
     fun complaints_report(token: String, data: String) {
         viewModelScope.launch {
             repository.complaints_report(token,data)
         }
     }
-
     //walletSettleReport
     val walletSettleReportResponseLiveData: LiveData<ResponseState<WalletSettleReportModel>>
         get() = repository.walletSettleReportResponseLiveData
@@ -1366,6 +1379,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             repository.walletSettleReport(token,data)
         }
     }
+
 
     //bank_settle_report
     val bank_settle_reportResponseLiveData: LiveData<ResponseState<Bank_settle_reportModel>>
@@ -1384,8 +1398,5 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             repository.cashout_ledger_report(token,data)
         }
     }
-
-
-
 
 }

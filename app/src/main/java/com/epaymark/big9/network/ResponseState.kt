@@ -46,6 +46,7 @@ sealed class ResponseState<T>(
         fun <T> create(response: Response<T>,s:String): ResponseState<T> {
 
             Log.d(TAG, "GenericApiResponse: response: ${response.body().toString()}")
+            Log.d(TAG, "GenericApiResponse: response: ${response.body().toString()}")
             Log.d(TAG, "GenericApiResponse: raw: ${response.raw()}")
             Log.d(TAG, "GenericApiResponse: headers: ${response.headers()}")
             Log.d(TAG, "GenericApiResponse: message: ${response.message()}")

@@ -22,7 +22,7 @@ data class TransactionData(
     @SerializedName("logo") var logo: String? = null,
     @SerializedName("Amount") var Amount: String? = null,
     @SerializedName("Transaction_ID") var TransactionID: String? = null,
-    @SerializedName("Date") var Date: String? = null,
+    @SerializedName("Date") var tDate: String? = null,
     @SerializedName("Status") var Status: String? = null,
     @SerializedName("Operator") var Operator: String? = null,
     @SerializedName("CustNo") var CustNo: String? = null,

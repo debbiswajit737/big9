@@ -6,10 +6,13 @@ class PaymentReportResponse {
 
     @SerializedName("Description")
     var Description: String? = null
+
     @SerializedName("response_code")
     var responseCode: Int? = null
+
     @SerializedName("data")
     var data: ArrayList<Data> = arrayListOf()
+
     @SerializedName("timestamp")
     var timestamp: String? = null
 

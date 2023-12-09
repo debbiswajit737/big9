@@ -316,10 +316,10 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     }
 
 
-    //complaints_report
+    /*//complaints_report
     private val _complaints_reportResponseLiveData =
-        MutableLiveData<ResponseState<complaints_reportMode>>()
-    val complaints_reportResponseLiveData: LiveData<ResponseState<complaints_reportMode>>
+        MutableLiveData<ResponseState<WalletSettleReportModel>>()
+    val complaints_reportResponseLiveData: LiveData<ResponseState<WalletSettleReportModel>>
         get() = _complaints_reportResponseLiveData
 
 
@@ -327,14 +327,33 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         _complaints_reportResponseLiveData.postValue(ResponseState.Loading())
         try {
             val response =
-                api.complaints_report(token, loginModel.replace("\n", "").replace("\r", ""))
+                api.walletSettleReportTest(token, loginModel.replace("\n", "").replace("\r", ""))
             _complaints_reportResponseLiveData.postValue(ResponseState.create(response, "aa"))
         } catch (throwable: Throwable) {
             _complaints_reportResponseLiveData.postValue(ResponseState.create(throwable))
         }
 
-    }
+    }*/
 
+
+    //Complaints
+    private val _complaints_reportReportResponseLiveData =
+        MutableLiveData<ResponseState<complaints_reportMode>>()
+    val complaints_reportReportResponseLiveData: LiveData<ResponseState<complaints_reportMode>>
+        get() = _complaints_reportReportResponseLiveData
+
+
+    suspend fun complaints_report(token: String, loginModel: String) {
+        _complaints_reportReportResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.complaints_report(token, loginModel.replace("\n", "").replace("\r", ""))
+            _complaints_reportReportResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _complaints_reportReportResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
 
     //walletSettleReport
     private val _walletSettleReportResponseLiveData =
@@ -354,6 +373,8 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         }
 
     }
+
+
 
 
     //bank_settle_report

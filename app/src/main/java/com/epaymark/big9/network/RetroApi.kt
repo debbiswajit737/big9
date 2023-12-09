@@ -128,6 +128,12 @@ interface RetroApi {
         @Body data: String
     ): Response<commissionReportModel>
 
+   /* @POST("v1/reports/complaints_report")
+    suspend fun complaints_report(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<complaints_reportMode>*/
+
     @POST("v1/reports/complaints_report")
     suspend fun complaints_report(
         @Header("Authtoken") token: String,

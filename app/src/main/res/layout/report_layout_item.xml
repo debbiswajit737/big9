@@ -152,42 +152,44 @@
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/montserrat_regular_400"
                     android:text="@{model.desc}"
-                    android:visibility="@{model.desc==``?View.GONE:View.VISIBLE}"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_8ssp"
-                    app:layout_constraintEnd_toStartOf="@+id/imageView6"
+                    android:visibility="@{model.desc==``?View.GONE:View.VISIBLE}"
+                    app:layout_constraintEnd_toStartOf="@+id/profile_image"
                     app:layout_constraintStart_toStartOf="@+id/textView15"
                     app:layout_constraintTop_toBottomOf="@+id/textView15"
                     tools:text="desc" />
-
+                <!--app:civ_border_width="@dimen/_1sdp"-->
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_image"
                     android:layout_width="33dp"
                     android:layout_height="33dp"
-                    app:civ_border_width="@dimen/_1sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
-                    android:visibility="@{model.image1==2?View.VISIBLE:View.GONE}"
                     android:src="@drawable/default_1"
+                    android:visibility="@{model.image1==2?View.VISIBLE:View.GONE}"
+
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView16"
                     app:setImage="@{model.imageInt}" />
 
                 <TextView
+                    android:id="@+id/textView22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:background="@drawable/btn_bg"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:paddingVertical="@dimen/_1sdp"
                     android:text="@{model.miniStatementValue}"
-                    tools:text="Mini Statement"
-                    android:visibility="@{model.isMiniStatement==true?View.VISIBLE:View.GONE }"
-                    android:layout_marginEnd="@dimen/_10sdp"
                     android:textColor="@color/white"
+                    android:visibility="@{model.isMiniStatement==true?View.VISIBLE:View.GONE }"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView16"
+                    tools:text="Mini Statement" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

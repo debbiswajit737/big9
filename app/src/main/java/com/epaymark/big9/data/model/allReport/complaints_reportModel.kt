@@ -4,19 +4,20 @@ import com.google.gson.annotations.SerializedName
 
 class complaints_reportMode {
 
+
     @SerializedName("Description")
     var Description: String? = null
     @SerializedName("response_code")
     var responseCode: Int? = null
     @SerializedName("data")
-    var data: ArrayList<complaints_reportData> = arrayListOf()
+    var data: ArrayList<complaints_reportData2> = arrayListOf()
     @SerializedName("timestamp")
     var timestamp: String? = null
 
 
 }
 
-data class complaints_reportData(
+data class complaints_reportData2(
 
     @SerializedName("ddlComplaintCategory") var ddlComplaintCategory: String? = null,
     @SerializedName("ddlComplaintType") var ddlComplaintType: String? = null,
