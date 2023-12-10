@@ -1,9 +1,12 @@
 package com.epaymark.big9.utils.helpers
 
 import android.content.ContentValues
+import androidx.recyclerview.widget.RecyclerView
+import com.epaymark.big9.adapter.reportAdapter.ReportAdapter
 
 import com.epaymark.big9.data.model.ListIcon
 import com.epaymark.big9.data.model.ReceiptModel
+import com.epaymark.big9.data.model.ReportModel
 
 object Constants {
     const val INPUT_FILTER_MAX_VALUE:Long = 9999999999999
@@ -42,4 +45,9 @@ object Constants {
     const val API_KEY =  "677a05e769f1a888ddb86397eb45c57d2700bb7b83b4f3b7282bf6aba4266c7f"
     const val CLIENT_ID =  "big9_164604122023"
 
+    var reportList = ArrayList<ReportModel>()
+    var reportList2 = ArrayList<ReportModel>()
+
+    var recyclerView: RecyclerView?=null
+    var reportAdapter: ReportAdapter?=null
 }

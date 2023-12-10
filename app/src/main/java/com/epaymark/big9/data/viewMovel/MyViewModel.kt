@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.epaymark.big9.R
 
 import com.epaymark.big9.data.genericmodel.BaseResponse
@@ -27,6 +29,7 @@ import com.epaymark.big9.data.model.paymentReport.PaymentReportResponse
 import com.epaymark.big9.data.model.profile.profileResponse
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.repository.AuthRepositoryRepository
+import com.epaymark.big9.repository.TableRepository
 
 import com.epaymark.big9.utils.helpers.helper.validate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +37,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepository) : ViewModel() {
+class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepository,private val tableRepository: TableRepository) : ViewModel() {
 
 
     val selectedButton = MutableLiveData<Int>()
@@ -1398,5 +1401,8 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             repository.cashout_ledger_report(token,data)
         }
     }
+
+
+
 
 }

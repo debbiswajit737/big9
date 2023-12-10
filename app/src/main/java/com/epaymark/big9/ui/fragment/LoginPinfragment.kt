@@ -320,7 +320,7 @@ class LoginPinfragment : BaseFragment() {
         myViewModel?.profile2Response?.observe(viewLifecycleOwner){
             when (it) {
                 is ResponseState.Loading -> {
-                    loader?.show()
+                   // loader?.show()
                 }
 
                 is ResponseState.Success -> {

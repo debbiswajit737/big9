@@ -4,6 +4,8 @@ package com.epaymark.big9.ui.fragment
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +14,19 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.R
+import com.epaymark.big9.adapter.reportAdapter.PagingReportAdapter
 
 import com.epaymark.big9.adapter.reportAdapter.ReportAdapter
 import com.epaymark.big9.data.model.ReportModel
 import com.epaymark.big9.data.model.ReportPropertyModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
+import com.epaymark.big9.data.viewMovel.TableViewModel
 import com.epaymark.big9.databinding.FragmentReportBinding
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetrofitHelper.handleApiError
@@ -27,26 +35,48 @@ import com.epaymark.big9.ui.activity.RegActivity
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.utils.common.MethodClass
+import com.epaymark.big9.utils.helpers.Constants.reportAdapter
+import com.epaymark.big9.utils.helpers.Constants.reportList
+import com.epaymark.big9.utils.helpers.Constants.reportList2
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.table.DataEntity
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ReportFragment : BaseFragment() {
     lateinit var binding: FragmentReportBinding
     private val viewModel: MyViewModel by activityViewModels()
-    var reportList = ArrayList<ReportModel>()
+
+    var commissionReportList = ArrayList<ReportModel>()
     private val myViewModel: MyViewModel by activityViewModels()
     private var loader: Dialog? = null
     var startDate=""
     var endDate=""
+    val startIndex = 0
+    val endIndex = 10
+    private lateinit var recyclerView: RecyclerView
+
+    private lateinit var pagingreportAdapter: PagingReportAdapter
+    private var arryList = mutableListOf<String>() // Replace with your actual data type
+
+    private val itemsPerPage = 10
+    private var currentPage = 0
+    private var isLoading = false
+
+    private lateinit var tableViewModel: TableViewModel
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_report, container, false)
+        tableViewModel = ViewModelProvider(this)[TableViewModel::class.java]
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         return binding.root
@@ -62,6 +92,11 @@ class ReportFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         //reportList?.clear()
+        reportAdapter?.let {
+            it.items=ArrayList()
+            it.notifyDataSetChanged()
+        }
+        getAllData()
     }
     private fun onViewClick() {
 
@@ -101,12 +136,14 @@ class ReportFragment : BaseFragment() {
     fun initView() {
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
+
         }
         viewModel?.apply {
             startDate.value ="".currentdate()
             enddate.value="".currentdate()
         }
-        getAllData()
+
+
     }
 
     private fun getAllData() {
@@ -410,10 +447,11 @@ class ReportFragment : BaseFragment() {
         myViewModel?.paymentReportResponseLiveData?.observe(viewLifecycleOwner){
             when (it) {
                 is ResponseState.Loading -> {
-                   // loader?.show()
+                    loader?.show()
                 }
 
                 is ResponseState.Success -> {
+                    loader?.dismiss()
                     //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
 
                     //reportList.add(ReportModel("001","778.00","10-10-2023","Payment send",0, desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",imageInt = R.drawable.send_logo))
@@ -436,7 +474,7 @@ class ReportFragment : BaseFragment() {
                 }
 
                 is ResponseState.Error -> {
-                    //   loadingPopup?.dismiss()
+                    loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }
@@ -446,10 +484,11 @@ class ReportFragment : BaseFragment() {
         myViewModel?.ranscationReportResponseLiveData?.observe(viewLifecycleOwner){
                     when (it) {
                         is ResponseState.Loading -> {
-                           // loader?.show()
+                            loader?.show()
                         }
 
                         is ResponseState.Success -> {
+                            loader?.dismiss()
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             reportList.clear()
                             /*reportList.add(
@@ -507,7 +546,7 @@ class ReportFragment : BaseFragment() {
                         }
 
                         is ResponseState.Error -> {
-                            //   loadingPopup?.dismiss()
+                            loader?.dismiss()
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -517,10 +556,11 @@ class ReportFragment : BaseFragment() {
         myViewModel?.dmtReportResponseLiveData?.observe(viewLifecycleOwner){
                     when (it) {
                         is ResponseState.Loading -> {
-                           // loader?.show()
+                            loader?.show()
                         }
 
                         is ResponseState.Success -> {
+                            loader?.dismiss()
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             /*reportList.add(
                                 ReportModel(
@@ -580,7 +620,7 @@ class ReportFragment : BaseFragment() {
                         }
 
                         is ResponseState.Error -> {
-                            //   loadingPopup?.dismiss()
+                            loader?.dismiss()
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -590,10 +630,11 @@ class ReportFragment : BaseFragment() {
         myViewModel?.loadRequestReportResponseLiveData?.observe(viewLifecycleOwner){
                     when (it) {
                         is ResponseState.Loading -> {
-                         //   loader?.show()
+                            loader?.show()
                         }
 
                         is ResponseState.Success -> {
+                            loader?.dismiss()
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             /*reportList.add(
                             ReportModel(
@@ -637,7 +678,7 @@ class ReportFragment : BaseFragment() {
                         }
 
                         is ResponseState.Error -> {
-                            //   loadingPopup?.dismiss()
+                            loader?.dismiss()
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -647,10 +688,11 @@ class ReportFragment : BaseFragment() {
         myViewModel?.walletLedgerReportResponseLiveData?.observe(viewLifecycleOwner){
                     when (it) {
                         is ResponseState.Loading -> {
-                          //  loader?.show()
+                            loader?.show()
                         }
 
                         is ResponseState.Success -> {
+                            loader?.dismiss()
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             /*reportList.add(
                                 ReportModel(
@@ -704,7 +746,7 @@ class ReportFragment : BaseFragment() {
                         }
 
                         is ResponseState.Error -> {
-                            //   loadingPopup?.dismiss()
+                            loader?.dismiss()
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -714,10 +756,11 @@ class ReportFragment : BaseFragment() {
         myViewModel?.aepsReportResponseLiveData?.observe(viewLifecycleOwner){
                     when (it) {
                         is ResponseState.Loading -> {
-                          //  loader?.show()
+                            loader?.show()
                         }
 
                         is ResponseState.Success -> {
+                            loader?.dismiss()
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                          /*   reportList.add(
                             ReportModel(
@@ -752,7 +795,7 @@ class ReportFragment : BaseFragment() {
                         }
 
                         is ResponseState.Error -> {
-                            //   loadingPopup?.dismiss()
+                            loader?.dismiss()
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -762,7 +805,7 @@ class ReportFragment : BaseFragment() {
         myViewModel?.microatmReportResponseLiveData?.observe(viewLifecycleOwner){
                     when (it) {
                         is ResponseState.Loading -> {
-                          //  loader?.show()
+                            loader?.show()
                         }
 
                         is ResponseState.Success -> {
@@ -786,7 +829,7 @@ class ReportFragment : BaseFragment() {
                         }
 
                         is ResponseState.Error -> {
-                            //   loadingPopup?.dismiss()
+                            loader?.dismiss()
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -803,28 +846,73 @@ class ReportFragment : BaseFragment() {
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             if(!it.data?.data.isNullOrEmpty()){
                                 it.data?.data?.let { responseData ->
-                                    var paging=0
-                                    CoroutineScope(Main).launch {
-                                        if (paging!=10){
 
-                                            //for (items in responseData) {
+                                    CoroutineScope(Main).launch {
+
+                                    for (index in responseData.indices) {
+
                                                // paging++
-                                            if (responseData.isNotEmpty()) {
-                                                responseData[0].apply {
-                                                    val desc = "$opname   "
-                                                    reportList.add(
-                                                        ReportModel(
-                                                            "",
-                                                            desc = desc,
-                                                            price = comm,
-                                                            imageInt = R.drawable.rounded_i
-                                                        )
-                                                    )
-                                                }
+
+                                                 if (responseData.isNotEmpty()) {
+                                                     responseData[index].apply {
+                                                         val desc = "$opname   "
+                                                         if (index<=20) {
+                                                         reportList.add(
+                                                             ReportModel(
+                                                                 "",
+                                                                 desc = desc,
+                                                                 price = comm,
+                                                                 imageInt = R.drawable.rounded_i
+                                                             )
+                                                         )
+                                                     }
+                                                         Log.d("TAG_table", "observer: "+tableViewModel.insertData(DataEntity(responseId="",
+                                                             desc = desc,
+                                                             price = comm,
+                                                             imageInt = R.drawable.rounded_i)))
+                                                             reportList2.add(
+                                                                 ReportModel(
+                                                                     "",
+                                                                     desc = desc,
+                                                                     price = comm,
+                                                                     imageInt = R.drawable.rounded_i
+                                                                 )
+                                                             )
+
+                                                     }
+                                                     showPagingRecycleView()
+                                                     //showrecycleView()
+                                                 }
+
                                             }
-                                            //}
-                                            showrecycleView()
-                                        }
+
+                                            /*for (index in responseData.indices) {
+                                               // paging++
+                                             if (index<=20) {
+                                                 if (responseData.isNotEmpty()) {
+                                                     responseData[index].apply {
+                                                         val desc = "$opname   "
+                                                         reportList.add(
+                                                             ReportModel(
+                                                                 "",
+                                                                 desc = desc,
+                                                                 price = comm,
+                                                                 imageInt = R.drawable.rounded_i
+                                                             )
+                                                         )
+                                                     }
+                                                     showrecycleView()
+                                                 }
+                                             }
+                                            }*/
+                                        /*if (commissionReportList.size>10){
+                                            for(index in commissionReportList.indices){
+                                                i
+                                            }
+                                            reportList
+                                        }*/
+
+
 
                                     }
                                 }
@@ -1026,287 +1114,659 @@ class ReportFragment : BaseFragment() {
 
     }
 
-    fun showrecycleView(){
-        binding.recycleViewReport.apply {
-            //reportList.clear()
+    fun showrecycleView() {
+        val handler = Handler(Looper.getMainLooper())
+        handler.post {
+            binding.recycleViewReport.apply {
+                //reportList.clear()
 
-            viewModel?.reportType?.value?.let { type ->
-                when (type) {
+                viewModel?.reportType?.value?.let { type ->
+                    when (type) {
 
-                    getString(R.string.payment) -> {
-                       // reportList.add(ReportModel("001","778.00","10-10-2023","Payment send",0, desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",imageInt = R.drawable.send_logo))
-                      //  reportList.add(ReportModel("002","778.00","10-10-2023","Payment received",1 ,desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",imageInt = R.drawable.receive_logo))
-
-
-                    }
+                        getString(R.string.payment) -> {
+                            // reportList.add(ReportModel("001","778.00","10-10-2023","Payment send",0, desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",imageInt = R.drawable.send_logo))
+                            //  reportList.add(ReportModel("002","778.00","10-10-2023","Payment received",1 ,desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",imageInt = R.drawable.receive_logo))
 
 
-                    getString(R.string.transactions) -> {
-                       /* reportList.add(
-                            ReportModel(
-                                "001",
-                                "778.00",
-                                "10-10-2023",
-                                "Failed",
-                                0,
-                                desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",
-                                imageInt = R.drawable.close_icon,
-                                isClickAble = true
-                            )
+                        }
+
+
+                        getString(R.string.transactions) -> {
+                            /* reportList.add(
+                        ReportModel(
+                            "001",
+                            "778.00",
+                            "10-10-2023",
+                            "Failed",
+                            0,
+                            desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",
+                            imageInt = R.drawable.close_icon,
+                            isClickAble = true
                         )
-                        reportList.add(
-                            ReportModel(
-                                "002",
-                                "778.00",
-                                "10-10-2023",
-                                getString(R.string.success),
-                                1,
-                                desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",
-                                imageInt = R.drawable.right_tick
-                            )
-                        )*/
-
-                    }
-
-                    getString(R.string.dmt) -> {
-                       /* reportList.add(
-                            ReportModel(
-                                "001",
-                                "778.00",
-                                "10-10-2023",
-                                "Refunded",
-                                0,
-                                desc = "Rajiv\nA/c No.:111111111111\nSender: 5555555555",
-                                imageInt = R.drawable.imps_logo,
-                                image1 = 2,
-                                isClickAble = true
-                            )
+                    )
+                    reportList.add(
+                        ReportModel(
+                            "002",
+                            "778.00",
+                            "10-10-2023",
+                            getString(R.string.success),
+                            1,
+                            desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",
+                            imageInt = R.drawable.right_tick
                         )
-                        reportList.add(
-                            ReportModel(
-                                "002",
-                                "778.00",
-                                "10-10-2023",
-                                getString(R.string.success),
-                                1,
-                                desc = "Jhuma Chowdhary\nA/c No.:000000000000\nSender :8888888888",
-                                imageInt = R.drawable.imps_logo,
-                                image1 = 2
-                            )
-                        )*/
+                    )*/
 
-                    }
+                        }
 
-                    getString(R.string.load_Requests) -> {
-                       /* reportList.add(
-                            ReportModel(
-                                "001",
-                                "778.00",
-                                "10-10-2023",
-                                "Credit/Sales Supports",
-                                2,
-                                desc = "Axis Bank-Online\nPayment Ref id- 5376254\nApproved on 2023-10-30",
-                                imageInt = R.drawable.right_tick
-                            )
+                        getString(R.string.dmt) -> {
+                            /* reportList.add(
+                        ReportModel(
+                            "001",
+                            "778.00",
+                            "10-10-2023",
+                            "Refunded",
+                            0,
+                            desc = "Rajiv\nA/c No.:111111111111\nSender: 5555555555",
+                            imageInt = R.drawable.imps_logo,
+                            image1 = 2,
+                            isClickAble = true
                         )
-                        reportList.add(
-                            ReportModel(
-                                "001",
-                                "778.00",
-                                "10-10-2023",
-                                "Credit/Sales Supports",
-                                2,
-                                desc = "Axis Bank-Online\nSame Bank\nPayment Ref Id: ASEESSS",
-                                imageInt = R.drawable.rounded_i
-                            )
-                        )*/
-                    }
-
-                    getString(R.string.wallet_ledger) -> {
-                       /* reportList.add(
-                            ReportModel(
-                                "001",
-                                "-778.00",
-                                "10-10-2023\n" +
-                                        "05:49:11",
-                                "ePotlyNB Money\nForward",
-                                3,
-                                desc = "",
-                                image1 = 2,
-                                imageInt=R.drawable.rupee_rounded,
-                                price2 = "Closing ₹1021.00",
-                                proce1TextColor = 2,
-                                isMiniStatement = false
-                            )
+                    )
+                    reportList.add(
+                        ReportModel(
+                            "002",
+                            "778.00",
+                            "10-10-2023",
+                            getString(R.string.success),
+                            1,
+                            desc = "Jhuma Chowdhary\nA/c No.:000000000000\nSender :8888888888",
+                            imageInt = R.drawable.imps_logo,
+                            image1 = 2
                         )
-                        reportList.add(
-                            ReportModel(
-                                "001",
-                                "-778.00",
-                                "10-10-2023\n" +
-                                        "05:49:11",
-                                "ePotlyNB Money\nForward",
-                                3,
-                                desc = "",
-                                image1 = 2,
-                                imageInt=R.drawable.rupee_rounded,
-                                price2 = "Closing ₹1021.00",
-                                proce1TextColor = 2,
-                                isMiniStatement = false
-                            )
-                        )*/
+                    )*/
 
-                    }
+                        }
 
-                    getString(R.string.cashout_ledger) -> {
-                        reportList.add(
-                            ReportModel(
-                                "001",
-                                "-778.00",
-                                "10-10-2023\n" +
-                                        "05:49:11",
-                                "ePotlyNB Money\nForward",
-                                3,
-                                desc = "",
-                                image1 = 2,
-                                imageInt=R.drawable.rupee_rounded,
-                                price2 = "Closing ₹1021.00",
-                                proce1TextColor = 2,
-                                isMiniStatement = false
-                            )
+                        getString(R.string.load_Requests) -> {
+                            /* reportList.add(
+                        ReportModel(
+                            "001",
+                            "778.00",
+                            "10-10-2023",
+                            "Credit/Sales Supports",
+                            2,
+                            desc = "Axis Bank-Online\nPayment Ref id- 5376254\nApproved on 2023-10-30",
+                            imageInt = R.drawable.right_tick
                         )
-                    }
+                    )
+                    reportList.add(
+                        ReportModel(
+                            "001",
+                            "778.00",
+                            "10-10-2023",
+                            "Credit/Sales Supports",
+                            2,
+                            desc = "Axis Bank-Online\nSame Bank\nPayment Ref Id: ASEESSS",
+                            imageInt = R.drawable.rounded_i
+                        )
+                    )*/
+                        }
 
-                    getString(R.string.aeps) -> {
-                        /*reportList.add(
-                            ReportModel(
-                                "001",
-                                "778.00",
-                                "10-10-2023",
+                        getString(R.string.wallet_ledger) -> {
+                            /* reportList.add(
+                        ReportModel(
+                            "001",
+                            "-778.00",
+                            "10-10-2023\n" +
+                                    "05:49:11",
+                            "ePotlyNB Money\nForward",
+                            3,
+                            desc = "",
+                            image1 = 2,
+                            imageInt=R.drawable.rupee_rounded,
+                            price2 = "Closing ₹1021.00",
+                            proce1TextColor = 2,
+                            isMiniStatement = false
+                        )
+                    )
+                    reportList.add(
+                        ReportModel(
+                            "001",
+                            "-778.00",
+                            "10-10-2023\n" +
+                                    "05:49:11",
+                            "ePotlyNB Money\nForward",
+                            3,
+                            desc = "",
+                            image1 = 2,
+                            imageInt=R.drawable.rupee_rounded,
+                            price2 = "Closing ₹1021.00",
+                            proce1TextColor = 2,
+                            isMiniStatement = false
+                        )
+                    )*/
 
-                                desc = "AAdhar No.:xxxx-xxxx-1458\nRRN: Balance 0\nSettltment Transaction id: 300000312",
-                                imageInt = R.drawable.close_icon,
-                                isMiniStatement = true,
-                                miniStatementValue = "Mini Statement",
-                                isClickAble = true
+                        }
+
+                        getString(R.string.cashout_ledger) -> {
+                            reportList.add(
+                                ReportModel(
+                                    "001",
+                                    "-778.00",
+                                    "10-10-2023\n" +
+                                            "05:49:11",
+                                    "ePotlyNB Money\nForward",
+                                    3,
+                                    desc = "",
+                                    image1 = 2,
+                                    imageInt = R.drawable.rupee_rounded,
+                                    price2 = "Closing ₹1021.00",
+                                    proce1TextColor = 2,
+                                    isMiniStatement = false
+                                )
                             )
-                        )*/
+                        }
+
+                        getString(R.string.aeps) -> {
+                            /*reportList.add(
+                        ReportModel(
+                            "001",
+                            "778.00",
+                            "10-10-2023",
+
+                            desc = "AAdhar No.:xxxx-xxxx-1458\nRRN: Balance 0\nSettltment Transaction id: 300000312",
+                            imageInt = R.drawable.close_icon,
+                            isMiniStatement = true,
+                            miniStatementValue = "Mini Statement",
+                            isClickAble = true
+                        )
+                    )*/
+                        }
+
+                        getString(R.string.micro_atm) -> {
+                            // ReportPropertyModel("Transaction id")
+                            //isClickAble = true
+                        }
+
+                        getString(R.string.commissions) -> {
+                            //  ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.bank_settle) -> {
+                            /*reportList.add(
+                        ReportModel(
+                            "001",
+                            "778.00",
+                            "10-10-2023",
+                            "Failed",
+                            0,
+                            desc = "Type: Settle to bank",
+                            isClickAble = true,
+                            image1 = 3
+                        )
+                    )*/
+                        }
+
+                        getString(R.string.wallet_settle) -> {
+                            /*reportList.add(
+                        ReportModel(
+                            "001",
+                            "10.00",
+                            "10-10-2023",
+                            "Failed",
+                            0,
+                            desc = "Type: Settle to wallet\nstatus - processed\ndetails-wallet",
+
+                            image1 = 3
+                        )
+                    )*/
+                        }
+
+                        getString(R.string.complaints) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        else -> {}
                     }
-
-                    getString(R.string.micro_atm) -> {
-                       // ReportPropertyModel("Transaction id")
-                        //isClickAble = true
-                    }
-
-                    getString(R.string.commissions) -> {
-                      //  ReportPropertyModel("Transaction id")
-                    }
-
-                    getString(R.string.bank_settle) -> {
-                        /*reportList.add(
-                            ReportModel(
-                                "001",
-                                "778.00",
-                                "10-10-2023",
-                                "Failed",
-                                0,
-                                desc = "Type: Settle to bank",
-                                isClickAble = true,
-                                image1 = 3
-                            )
-                        )*/
-                    }
-
-                    getString(R.string.wallet_settle) -> {
-                        /*reportList.add(
-                            ReportModel(
-                                "001",
-                                "10.00",
-                                "10-10-2023",
-                                "Failed",
-                                0,
-                                desc = "Type: Settle to wallet\nstatus - processed\ndetails-wallet",
-
-                                image1 = 3
-                            )
-                        )*/
-                    }
-
-                    getString(R.string.complaints) -> {
-                        ReportPropertyModel("Transaction id")
-                    }
-
-                    else -> {}
                 }
+
+
+
+
+                viewModel?.reportType?.value?.let { type ->
+
+                    val reportPropertyModel = when (type) {
+
+                        getString(R.string.payment) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.transactions) -> {
+                            ReportPropertyModel("Transaction id", "")
+                        }
+
+                        getString(R.string.dmt) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.load_Requests) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.wallet_ledger) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.cashout_ledger) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.aeps) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.micro_atm) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.commissions) -> {
+                            ReportPropertyModel("Commissions")
+                        }
+
+                        getString(R.string.bank_settle) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.wallet_settle) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.complaints) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        else -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+                    }
+                    recyclerView=this
+                    if (reportList.size > 0) {
+                        binding.tvNoDataFound.visibility = View.GONE
+                    } else {
+                        binding.tvNoDataFound.visibility = View.VISIBLE
+
+                    }
+                    // binding.nsv.isVisible=!binding.tvNoDataFound.isVisible
+                    reportAdapter = ReportAdapter(reportPropertyModel,reportList,  object : CallBack {
+                        override fun getValue(s: String) {
+                            val bundle = Bundle()
+                            bundle.putString("jsonData", s)
+                            findNavController().navigate(
+                                R.id.action_reportFragment_to_reportDetailsFragment,
+                                bundle
+                            )
+                        }
+
+                    })
+                    adapter=reportAdapter
+                    //loadAllData()
+                    /*handler.postDelayed({
+                        reportAdapter.items=reportList2
+                        reportAdapter.notifyDataSetChanged()
+                    }, 2000)*/
+
+
+
+                }
+
             }
 
-
-
-
-            viewModel?.reportType?.value?.let {type->
-
-                val reportPropertyModel=   when(type){
-
-                    getString(R.string.payment)->{
-                        ReportPropertyModel("Transaction id")
-                    }
-                    getString(R.string.transactions)->{
-                        ReportPropertyModel("Transaction id","")
-                    }
-                    getString(R.string.dmt)->{
-                        ReportPropertyModel("Transaction id")
-                    }
-                    getString(R.string.load_Requests)->{
-                        ReportPropertyModel("Transaction id")
-                    }
-                    getString(R.string.wallet_ledger)->{
-                        ReportPropertyModel("Transaction id")
-                    }
-                    getString(R.string.cashout_ledger)->{
-                        ReportPropertyModel("Transaction id")
-                    }
-                    getString(R.string.aeps)->{
-                        ReportPropertyModel("Transaction id")
-                    }
-                    getString(R.string.micro_atm)->{
-                        ReportPropertyModel("Transaction id")
-                    }
-                    getString(R.string.commissions)->{
-                        ReportPropertyModel("Transaction id")
-                    }
-                    getString(R.string.bank_settle)->{
-                        ReportPropertyModel("Transaction id")
-                    }
-                    getString(R.string.wallet_settle)->{
-                        ReportPropertyModel("Transaction id")
-                    }
-                    getString(R.string.complaints)->{
-                        ReportPropertyModel("Transaction id")
-                    }
-
-                    else -> {
-                        ReportPropertyModel("Transaction id")
-                    }
+            /*lifecycleScope.launchWhenStarted {
+                tableViewModel.data.collectLatest { pagingData ->
+                    reportAdapter.submitData(pagingData)
                 }
-                if (reportList.size>0){
-                    binding.tvNoDataFound.visibility=View.GONE
-                }else{
-                    binding.tvNoDataFound.visibility=View.VISIBLE
-
+            }*/
+           /* lifecycleScope.launchWhenStarted {
+                tableViewModel.data.observe(viewLifecycleOwner) { pagingData ->
+                    reportAdapter.submitData(lifecycle, pagingData)
                 }
-                binding.nsv.isVisible=!binding.tvNoDataFound.isVisible
-                adapter= ReportAdapter(reportPropertyModel,reportList,  object : CallBack {
-                    override fun getValue(s: String) {
-                        val bundle = Bundle()
-                        bundle.putString("jsonData", s)
-                        findNavController().navigate(R.id.action_reportFragment_to_reportDetailsFragment,bundle)
-                    }
-
-                })
             }
-
+            tableViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+                binding.bottomLoader.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }*/
         }
     }
 
 
+    fun showPagingRecycleView() {
+        val handler = Handler(Looper.getMainLooper())
+        handler.post {
+            binding.recycleViewReport.apply {
+                //reportList.clear()
+
+                viewModel?.reportType?.value?.let { type ->
+                    when (type) {
+
+                        getString(R.string.payment) -> {
+                            // reportList.add(ReportModel("001","778.00","10-10-2023","Payment send",0, desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",imageInt = R.drawable.send_logo))
+                            //  reportList.add(ReportModel("002","778.00","10-10-2023","Payment received",1 ,desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",imageInt = R.drawable.receive_logo))
+
+
+                        }
+
+
+                        getString(R.string.transactions) -> {
+                            /* reportList.add(
+                        ReportModel(
+                            "001",
+                            "778.00",
+                            "10-10-2023",
+                            "Failed",
+                            0,
+                            desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",
+                            imageInt = R.drawable.close_icon,
+                            isClickAble = true
+                        )
+                    )
+                    reportList.add(
+                        ReportModel(
+                            "002",
+                            "778.00",
+                            "10-10-2023",
+                            getString(R.string.success),
+                            1,
+                            desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",
+                            imageInt = R.drawable.right_tick
+                        )
+                    )*/
+
+                        }
+
+                        getString(R.string.dmt) -> {
+                            /* reportList.add(
+                        ReportModel(
+                            "001",
+                            "778.00",
+                            "10-10-2023",
+                            "Refunded",
+                            0,
+                            desc = "Rajiv\nA/c No.:111111111111\nSender: 5555555555",
+                            imageInt = R.drawable.imps_logo,
+                            image1 = 2,
+                            isClickAble = true
+                        )
+                    )
+                    reportList.add(
+                        ReportModel(
+                            "002",
+                            "778.00",
+                            "10-10-2023",
+                            getString(R.string.success),
+                            1,
+                            desc = "Jhuma Chowdhary\nA/c No.:000000000000\nSender :8888888888",
+                            imageInt = R.drawable.imps_logo,
+                            image1 = 2
+                        )
+                    )*/
+
+                        }
+
+                        getString(R.string.load_Requests) -> {
+                            /* reportList.add(
+                        ReportModel(
+                            "001",
+                            "778.00",
+                            "10-10-2023",
+                            "Credit/Sales Supports",
+                            2,
+                            desc = "Axis Bank-Online\nPayment Ref id- 5376254\nApproved on 2023-10-30",
+                            imageInt = R.drawable.right_tick
+                        )
+                    )
+                    reportList.add(
+                        ReportModel(
+                            "001",
+                            "778.00",
+                            "10-10-2023",
+                            "Credit/Sales Supports",
+                            2,
+                            desc = "Axis Bank-Online\nSame Bank\nPayment Ref Id: ASEESSS",
+                            imageInt = R.drawable.rounded_i
+                        )
+                    )*/
+                        }
+
+                        getString(R.string.wallet_ledger) -> {
+                            /* reportList.add(
+                        ReportModel(
+                            "001",
+                            "-778.00",
+                            "10-10-2023\n" +
+                                    "05:49:11",
+                            "ePotlyNB Money\nForward",
+                            3,
+                            desc = "",
+                            image1 = 2,
+                            imageInt=R.drawable.rupee_rounded,
+                            price2 = "Closing ₹1021.00",
+                            proce1TextColor = 2,
+                            isMiniStatement = false
+                        )
+                    )
+                    reportList.add(
+                        ReportModel(
+                            "001",
+                            "-778.00",
+                            "10-10-2023\n" +
+                                    "05:49:11",
+                            "ePotlyNB Money\nForward",
+                            3,
+                            desc = "",
+                            image1 = 2,
+                            imageInt=R.drawable.rupee_rounded,
+                            price2 = "Closing ₹1021.00",
+                            proce1TextColor = 2,
+                            isMiniStatement = false
+                        )
+                    )*/
+
+                        }
+
+                        getString(R.string.cashout_ledger) -> {
+                            reportList.add(
+                                ReportModel(
+                                    "001",
+                                    "-778.00",
+                                    "10-10-2023\n" +
+                                            "05:49:11",
+                                    "ePotlyNB Money\nForward",
+                                    3,
+                                    desc = "",
+                                    image1 = 2,
+                                    imageInt = R.drawable.rupee_rounded,
+                                    price2 = "Closing ₹1021.00",
+                                    proce1TextColor = 2,
+                                    isMiniStatement = false
+                                )
+                            )
+                        }
+
+                        getString(R.string.aeps) -> {
+                            /*reportList.add(
+                        ReportModel(
+                            "001",
+                            "778.00",
+                            "10-10-2023",
+
+                            desc = "AAdhar No.:xxxx-xxxx-1458\nRRN: Balance 0\nSettltment Transaction id: 300000312",
+                            imageInt = R.drawable.close_icon,
+                            isMiniStatement = true,
+                            miniStatementValue = "Mini Statement",
+                            isClickAble = true
+                        )
+                    )*/
+                        }
+
+                        getString(R.string.micro_atm) -> {
+                            // ReportPropertyModel("Transaction id")
+                            //isClickAble = true
+                        }
+
+                        getString(R.string.commissions) -> {
+                            //  ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.bank_settle) -> {
+                            /*reportList.add(
+                        ReportModel(
+                            "001",
+                            "778.00",
+                            "10-10-2023",
+                            "Failed",
+                            0,
+                            desc = "Type: Settle to bank",
+                            isClickAble = true,
+                            image1 = 3
+                        )
+                    )*/
+                        }
+
+                        getString(R.string.wallet_settle) -> {
+                            /*reportList.add(
+                        ReportModel(
+                            "001",
+                            "10.00",
+                            "10-10-2023",
+                            "Failed",
+                            0,
+                            desc = "Type: Settle to wallet\nstatus - processed\ndetails-wallet",
+
+                            image1 = 3
+                        )
+                    )*/
+                        }
+
+                        getString(R.string.complaints) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        else -> {}
+                    }
+                }
+
+
+
+
+                viewModel?.reportType?.value?.let { type ->
+
+                    val reportPropertyModel = when (type) {
+
+                        getString(R.string.payment) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.transactions) -> {
+                            ReportPropertyModel("Transaction id", "")
+                        }
+
+                        getString(R.string.dmt) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.load_Requests) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.wallet_ledger) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.cashout_ledger) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.aeps) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.micro_atm) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.commissions) -> {
+                            ReportPropertyModel("Commissions")
+                        }
+
+                        getString(R.string.bank_settle) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.wallet_settle) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        getString(R.string.complaints) -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+
+                        else -> {
+                            ReportPropertyModel("Transaction id")
+                        }
+                    }
+                    recyclerView=this
+                    if (reportList.size > 0) {
+                        binding.tvNoDataFound.visibility = View.GONE
+                    } else {
+                        binding.tvNoDataFound.visibility = View.VISIBLE
+
+                    }
+                    // binding.nsv.isVisible=!binding.tvNoDataFound.isVisible
+                    pagingreportAdapter = PagingReportAdapter(reportPropertyModel,  object : CallBack {
+                        override fun getValue(s: String) {
+                            val bundle = Bundle()
+                            bundle.putString("jsonData", s)
+                            findNavController().navigate(
+                                R.id.action_reportFragment_to_reportDetailsFragment,
+                                bundle
+                            )
+                        }
+
+                    })
+                    adapter=reportAdapter
+                    //loadAllData()
+                    /*handler.postDelayed({
+                        reportAdapter.items=reportList2
+                        reportAdapter.notifyDataSetChanged()
+                    }, 2000)*/
+
+
+
+                }
+
+            }
+
+            /*lifecycleScope.launchWhenStarted {
+                tableViewModel.data.collectLatest { pagingData ->
+                    reportAdapter.submitData(pagingData)
+                }
+            }*/
+            lifecycleScope.launchWhenStarted {
+                tableViewModel.data.observe(viewLifecycleOwner) { pagingData ->
+                    pagingreportAdapter.submitData(lifecycle, pagingData)
+                }
+            }
+            tableViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+                binding.bottomLoader.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        reportAdapter?.let {
+            it.items=ArrayList()
+            it.notifyDataSetChanged()
+        }
+    }
 }
+

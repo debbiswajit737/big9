@@ -16,6 +16,7 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 
 
 @BindingAdapter("app:hideErrorTextView")
+
 fun hideErrorTextView(view: TextView, isVisible: Boolean) {
     if (isVisible)
         view.visibility = View.VISIBLE

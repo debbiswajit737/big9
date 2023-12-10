@@ -29,6 +29,7 @@ import javax.inject.Inject
 class DashboardActivity : BaseActivity() {
     lateinit var binding: ActivityDashboardBinding
     private lateinit var myViewModel: MyViewModel
+
     private var navController: NavController? = null
 
     @Inject

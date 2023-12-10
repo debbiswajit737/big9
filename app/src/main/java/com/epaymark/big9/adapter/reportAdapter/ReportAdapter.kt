@@ -1,11 +1,14 @@
 package com.epaymark.big9.adapter.reportAdapter
 
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.epaymark.big9.R
 import com.epaymark.big9.databinding.ReportLayoutItemBinding
 import com.epaymark.big9.data.model.ReportModel
 import com.epaymark.big9.data.model.ReportPropertyModel
+import com.epaymark.big9.databinding.BannerItemsBinding
 
 import com.epaymark.big9.utils.`interface`.CallBack
 import com.google.gson.Gson
@@ -13,7 +16,7 @@ import com.google.gson.Gson
 
 class ReportAdapter(
     val reportPropertyModel: ReportPropertyModel,
-    private val items: List<ReportModel>,
+    var items: List<ReportModel>,
 
     val callBack: CallBack
 ) : RecyclerView.Adapter<ReportAdapter.MyViewHolder>() {

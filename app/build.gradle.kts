@@ -6,6 +6,7 @@ plugins {
     id ("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("dagger.hilt.android.plugin")
 }
 
 
@@ -183,6 +184,18 @@ dependencies {
     implementation ("androidx.viewpager2:viewpager2:1.0.0")
 
     implementation ("com.google.android.gms:play-services-location:17.0.1")
+
+    implementation ("androidx.room:room-runtime:2.6.1")
+    implementation ("androidx.room:room-paging:2.6.1")
+
+
+    implementation ("androidx.room:room-ktx:2.6.1")
+
+
+    kapt ("androidx.room:room-compiler:2.6.1")
+
+    //implementation ("com.google.dagger:hilt-android:2.44.2")
+    kapt ("com.google.dagger:hilt-android-compiler:2.39.1")
 }
 
 kapt {
