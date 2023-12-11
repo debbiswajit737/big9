@@ -14,4 +14,9 @@
     <dimen name="text_size_9ssp">@dimen/_9ssp</dimen>
     <dimen name="spacing_medium">16dp</dimen>
     <dimen name="spacing_small">5dp</dimen>
+
+    <dimen name="corner_radius">8dp</dimen>
+    <dimen name="btn_vertical_padding">12dp</dimen>
+    <dimen name="btn_horizontal_padding">16dp</dimen>
+    <dimen name="margin_standard">16dp</dimen>
 </resources>
