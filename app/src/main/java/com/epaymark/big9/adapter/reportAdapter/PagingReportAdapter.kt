@@ -1,5 +1,6 @@
 package com.epaymark.big9.adapter.reportAdapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -24,7 +25,9 @@ class PagingReportAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        getItem(position)?.let { holder.bind(it, position) }
+        getItem(position)?.let {
+            Log.d("TAG_data", "onBindViewHolder: "+it.id)
+            holder.bind(it, position) }
     }
 
     inner class MyViewHolder(private val binding: ReportPagingLayoutItemBinding) :

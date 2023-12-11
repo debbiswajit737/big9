@@ -2,10 +2,13 @@ package com.epaymark.big9.network
 
 import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
 import com.epaymark.big9.data.model.allReport.DmtReportReportModel
 import com.epaymark.big9.data.model.allReport.MicroatmReportModel
+import com.epaymark.big9.data.model.allReport.PostPaidMobileOperatorListModel
+import com.epaymark.big9.data.model.allReport.PostPaidMobileTranspherModel
 import com.epaymark.big9.data.model.allReport.TransactionReportResponse
 import com.epaymark.big9.data.model.allReport.receipt.Transcation_report_receiptReportModel
 import com.epaymark.big9.data.model.allReport.WalletLedgerModel
@@ -181,6 +184,27 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<Dmt_report_receiptModel>
+
+    @POST("v1/services/operatorlist")
+    suspend fun MobilePostPaidOperatorList(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<PostPaidMobileOperatorListModel>
+
+    @POST("v1/services/mobile/post_transfer")
+    suspend fun PostPaidMobileTranspher(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<PostPaidMobileTranspherModel>
+
+
+    @POST("v1/services/operatorlist")
+    suspend fun MobilePrePaidOperatorList(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<PrePaidMobileOperatorListModel>
+
+
 
 
 }

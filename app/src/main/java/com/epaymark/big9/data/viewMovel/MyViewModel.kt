@@ -10,10 +10,13 @@ import androidx.paging.PagingConfig
 import com.epaymark.big9.R
 
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
 import com.epaymark.big9.data.model.allReport.DmtReportReportModel
 import com.epaymark.big9.data.model.allReport.MicroatmReportModel
+import com.epaymark.big9.data.model.allReport.PostPaidMobileOperatorListModel
+import com.epaymark.big9.data.model.allReport.PostPaidMobileTranspherModel
 import com.epaymark.big9.data.model.allReport.TransactionReportResponse
 import com.epaymark.big9.data.model.allReport.receipt.Transcation_report_receiptReportModel
 import com.epaymark.big9.data.model.allReport.WalletLedgerModel
@@ -89,9 +92,20 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
 
     val operatorName = MutableLiveData<String>()
 
+    val minMobileLength = MutableLiveData<Int>()
+    val maxMobileLength = MutableLiveData<Int>()
+
+    val minrecharge = MutableLiveData<Int>()
+    val maxrecharge = MutableLiveData<Int>()
+
+
+
+
+
 
     val mobile = MutableLiveData<String>()
     val operator = MutableLiveData<String>()
+    val operatorCode = MutableLiveData<String>()
     val amt = MutableLiveData<String>()
     val subId = MutableLiveData<String>()
     val dthOperator = MutableLiveData<String>()
@@ -331,14 +345,16 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             mobileErrorVisible.value = true
             isValid = false
         } else {
-            if (mobile.value?.trim()?.validate("mobile") == false) {
-                mobileError.value = "Mobile number is not valid"
-                mobileErrorVisible.value = true
-                isValid = false
-            } else {
+            if ((mobile?.value?.length?:-1 >= minMobileLength?.value?:0) && (mobile?.value?.length?:-1 <= maxMobileLength?.value?:0)){
                 mobileError.value = ""
                 mobileErrorVisible.value = false
             }
+            else{
+                mobileError.value = "Valid mobile number required"
+                mobileErrorVisible.value = true
+                isValid = false
+            }
+
         }
 
         if (amt.value?.trim().isNullOrBlank()) {
@@ -346,8 +362,24 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             amtErrorErrorVisible.value = true
             isValid = false
         } else {
-            amtError.value = ""
-            amtErrorErrorVisible.value = false
+            try {
+                val amtValue=amt?.value?.toInt()
+                if ((amtValue?:-1 >= minrecharge?.value?:0) && (amtValue?:-1 <= maxrecharge?.value?:0)){
+                    amtError.value = ""
+                    amtErrorErrorVisible.value = false
+                }
+                else{
+                    amtError.value = "Kindly provide a valid amount. Ensure the amount is not less than ₹${minrecharge?.value} and does not exceed ₹${maxrecharge?.value}"
+                    amtErrorErrorVisible.value = true
+                    isValid = false
+                }
+            }catch (e:Exception){
+                amtError.value = "Please enter valid amount"
+                amtErrorErrorVisible.value = true
+                isValid = false
+            }
+
+
         }
 
         if (operator.value?.trim().isNullOrBlank()) {
@@ -1393,6 +1425,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         }
     }
 
+
     //cashout_ledger_report
     val cashout_ledger_reportResponseLiveData: LiveData<ResponseState<Cashout_ledger_reportModel>>
         get() = repository.cashout_ledger_reportResponseLiveData
@@ -1401,6 +1434,38 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             repository.cashout_ledger_report(token,data)
         }
     }
+
+
+
+    //postpaid mobile operator list
+    val postpaid_mobile_operator_listResponseLiveData: LiveData<ResponseState<PostPaidMobileOperatorListModel>>
+        get() = repository.postpaid_mobile_operator_listResponseLiveData
+    fun postpaid_mobile_operator_list(token: String, data: String) {
+        viewModelScope.launch {
+            repository.postpaid_mobile_operator_list(token,data)
+        }
+    }
+
+    //prepaid mobile operator list
+    val prepaid_mobile_operator_listResponseLiveData: LiveData<ResponseState<PrePaidMobileOperatorListModel>>
+        get() = repository.prepaid_mobile_operator_listResponseLiveData
+    fun prepaid_mobile_operator_list(token: String, data: String) {
+        viewModelScope.launch {
+            repository.prepaid_mobile_operator_list(token,data)
+        }
+    }
+
+
+
+    //postpaid mobile transpher
+    val postPaidMobileTranspherResponseLiveData: LiveData<ResponseState<PostPaidMobileTranspherModel>>
+        get() = repository.postPaidMobileTranspherResponseLiveData
+    fun PostPaidMobileTranspher(token: String, data: String) {
+        viewModelScope.launch {
+            repository.PostPaidMobileTranspher(token,data)
+        }
+    }
+
 
 
 

@@ -5,10 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagingSource
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
 import com.epaymark.big9.data.model.allReport.DmtReportReportModel
 import com.epaymark.big9.data.model.allReport.MicroatmReportModel
+import com.epaymark.big9.data.model.allReport.PostPaidMobileOperatorListModel
+import com.epaymark.big9.data.model.allReport.PostPaidMobileTranspherModel
 import com.epaymark.big9.data.model.allReport.TransactionReportResponse
 import com.epaymark.big9.data.model.allReport.receipt.Transcation_report_receiptReportModel
 import com.epaymark.big9.data.model.allReport.WalletLedgerModel
@@ -523,6 +526,89 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         }
 
     }
+
+    //Postpaid mobile operator list
+    private val _postpaid_mobile_operator_listResponseLiveData =
+        MutableLiveData<ResponseState<PostPaidMobileOperatorListModel>>()
+    val postpaid_mobile_operator_listResponseLiveData: LiveData<ResponseState<PostPaidMobileOperatorListModel>>
+        get() = _postpaid_mobile_operator_listResponseLiveData
+
+
+    suspend fun postpaid_mobile_operator_list(token: String, loginModel: String) {
+        _postpaid_mobile_operator_listResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.MobilePostPaidOperatorList(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _postpaid_mobile_operator_listResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _postpaid_mobile_operator_listResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //Prepaid mobile operator list
+    private val _prepaid_mobile_operator_listResponseLiveData =
+        MutableLiveData<ResponseState<PrePaidMobileOperatorListModel>>()
+    val prepaid_mobile_operator_listResponseLiveData: LiveData<ResponseState<PrePaidMobileOperatorListModel>>
+        get() = _prepaid_mobile_operator_listResponseLiveData
+
+
+    suspend fun prepaid_mobile_operator_list(token: String, loginModel: String) {
+        _prepaid_mobile_operator_listResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.MobilePrePaidOperatorList(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _prepaid_mobile_operator_listResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            Log.d("TAGjsondata", "prepaid_mobile_operator_list: "+throwable.message)
+            _prepaid_mobile_operator_listResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+
+    //Postpaid mobile transpher
+    private val _postPaidMobileTranspherResponseLiveData =
+        MutableLiveData<ResponseState<PostPaidMobileTranspherModel>>()
+    val postPaidMobileTranspherResponseLiveData: LiveData<ResponseState<PostPaidMobileTranspherModel>>
+        get() = _postPaidMobileTranspherResponseLiveData
+
+
+    suspend fun PostPaidMobileTranspher(token: String, loginModel: String) {
+        _postPaidMobileTranspherResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.PostPaidMobileTranspher(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _postPaidMobileTranspherResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _postPaidMobileTranspherResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
 
 
 }

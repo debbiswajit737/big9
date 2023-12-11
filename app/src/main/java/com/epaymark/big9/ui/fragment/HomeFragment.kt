@@ -47,6 +47,8 @@ import com.epaymark.big9.ui.fragment.fragmentDialog.GasBillerListDialog
 import com.epaymark.big9.ui.popup.CustomPopup.showBalencePopup
 import com.epaymark.big9.utils.common.MethodClass.userLogout
 import com.epaymark.big9.utils.helpers.Constants
+import com.epaymark.big9.utils.helpers.Constants.Postpaid
+import com.epaymark.big9.utils.helpers.Constants.Prepaid
 import com.epaymark.big9.utils.helpers.Constants.isCashWithdraw
 import com.epaymark.big9.utils.helpers.Constants.isFromSearchPage
 import com.epaymark.big9.utils.helpers.Constants.reportAdapter
@@ -259,14 +261,14 @@ class HomeFragment : BaseFragment() {
 
             //recycleEssential
             getString(R.string.prepaid)->{
-                viewModel.prepaitOrPostPaid.value="Prepaid"
+                viewModel.prepaitOrPostPaid.value=Prepaid
                 viewModel.mobile.value=""
                 viewModel.operator.value=""
                 viewModel.amt.value=""
                 findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)
             }
             getString(R.string.postpaid)->{
-                viewModel.prepaitOrPostPaid.value="Postpaid"
+                viewModel.prepaitOrPostPaid.value=Postpaid
                 viewModel.mobile.value=""
                 viewModel.operator.value=""
                 viewModel.amt.value=""
@@ -1000,10 +1002,16 @@ class HomeFragment : BaseFragment() {
 
                         reportAdapter?.let {
                         it.items=ArrayList()
-                            it.notifyDataSetChanged()
+                        it.notifyDataSetChanged()
                         }
-                        viewModel.reportType.value=s//.replaceFirstChar(Char::titlecase)
-                        findNavController().navigate(R.id.action_homeFragment2_to_reportFragment)
+                        viewModel.reportType.value = s
+                        if (s==getString(R.string.commissions)){
+                            findNavController().navigate(R.id.action_homeFragment2_to_commissionReportFragment)
+                        }
+                        else {
+                            //viewModel.reportType.value = s//.replaceFirstChar(Char::titlecase)
+                            findNavController().navigate(R.id.action_homeFragment2_to_reportFragment)
+                        }
                        /*when(s){
 
                            getString(R.string.payment)->{}

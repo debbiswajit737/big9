@@ -44,10 +44,14 @@ object Constants {
     const val AES_IV =  "gPmSeGRX2BdOm50EuHW0f9jUHKmfTLtW"
     const val API_KEY =  "677a05e769f1a888ddb86397eb45c57d2700bb7b83b4f3b7282bf6aba4266c7f"
     const val CLIENT_ID =  "big9_164604122023"
+    const val Postpaid =  "Postpaid"
+    const val Prepaid =  "Prepaid"
 
     var reportList = ArrayList<ReportModel>()
     var reportList2 = ArrayList<ReportModel>()
 
     var recyclerView: RecyclerView?=null
     var reportAdapter: ReportAdapter?=null
+
+    var isFirstPageOpeenPostPaidMobile=true
 }

@@ -870,14 +870,14 @@ class ReportFragment : BaseFragment() {
                                                              desc = desc,
                                                              price = comm,
                                                              imageInt = R.drawable.rounded_i)))
-                                                             reportList2.add(
+                                                             /*reportList2.add(
                                                                  ReportModel(
                                                                      "",
                                                                      desc = desc,
                                                                      price = comm,
                                                                      imageInt = R.drawable.rounded_i
                                                                  )
-                                                             )
+                                                             )*/
 
                                                      }
                                                      showPagingRecycleView()
@@ -1439,7 +1439,13 @@ class ReportFragment : BaseFragment() {
 
 
     fun showPagingRecycleView() {
-        val handler = Handler(Looper.getMainLooper())
+        val startIndex = 1
+        val endIndex = 20
+        val dataInRange = tableViewModel.getDataInRange(startIndex, endIndex)
+        dataInRange?.forEach(){
+            Log.d("TAG_id", "showPagingRecycleView: "+it?.id)
+        }
+       /* val handler = Handler(Looper.getMainLooper())
         handler.post {
             binding.recycleViewReport.apply {
                 //reportList.clear()
@@ -1456,7 +1462,7 @@ class ReportFragment : BaseFragment() {
 
 
                         getString(R.string.transactions) -> {
-                            /* reportList.add(
+                            *//* reportList.add(
                         ReportModel(
                             "001",
                             "778.00",
@@ -1478,12 +1484,12 @@ class ReportFragment : BaseFragment() {
                             desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",
                             imageInt = R.drawable.right_tick
                         )
-                    )*/
+                    )*//*
 
                         }
 
                         getString(R.string.dmt) -> {
-                            /* reportList.add(
+                            *//* reportList.add(
                         ReportModel(
                             "001",
                             "778.00",
@@ -1507,12 +1513,12 @@ class ReportFragment : BaseFragment() {
                             imageInt = R.drawable.imps_logo,
                             image1 = 2
                         )
-                    )*/
+                    )*//*
 
                         }
 
                         getString(R.string.load_Requests) -> {
-                            /* reportList.add(
+                            *//* reportList.add(
                         ReportModel(
                             "001",
                             "778.00",
@@ -1533,11 +1539,11 @@ class ReportFragment : BaseFragment() {
                             desc = "Axis Bank-Online\nSame Bank\nPayment Ref Id: ASEESSS",
                             imageInt = R.drawable.rounded_i
                         )
-                    )*/
+                    )*//*
                         }
 
                         getString(R.string.wallet_ledger) -> {
-                            /* reportList.add(
+                            *//* reportList.add(
                         ReportModel(
                             "001",
                             "-778.00",
@@ -1568,7 +1574,7 @@ class ReportFragment : BaseFragment() {
                             proce1TextColor = 2,
                             isMiniStatement = false
                         )
-                    )*/
+                    )*//*
 
                         }
 
@@ -1592,7 +1598,7 @@ class ReportFragment : BaseFragment() {
                         }
 
                         getString(R.string.aeps) -> {
-                            /*reportList.add(
+                            *//*reportList.add(
                         ReportModel(
                             "001",
                             "778.00",
@@ -1604,7 +1610,7 @@ class ReportFragment : BaseFragment() {
                             miniStatementValue = "Mini Statement",
                             isClickAble = true
                         )
-                    )*/
+                    )*//*
                         }
 
                         getString(R.string.micro_atm) -> {
@@ -1617,7 +1623,7 @@ class ReportFragment : BaseFragment() {
                         }
 
                         getString(R.string.bank_settle) -> {
-                            /*reportList.add(
+                            *//*reportList.add(
                         ReportModel(
                             "001",
                             "778.00",
@@ -1628,11 +1634,11 @@ class ReportFragment : BaseFragment() {
                             isClickAble = true,
                             image1 = 3
                         )
-                    )*/
+                    )*//*
                         }
 
                         getString(R.string.wallet_settle) -> {
-                            /*reportList.add(
+                            *//*reportList.add(
                         ReportModel(
                             "001",
                             "10.00",
@@ -1643,7 +1649,7 @@ class ReportFragment : BaseFragment() {
 
                             image1 = 3
                         )
-                    )*/
+                    )*//*
                         }
 
                         getString(R.string.complaints) -> {
@@ -1734,10 +1740,10 @@ class ReportFragment : BaseFragment() {
                     })
                     adapter=reportAdapter
                     //loadAllData()
-                    /*handler.postDelayed({
+                    *//*handler.postDelayed({
                         reportAdapter.items=reportList2
                         reportAdapter.notifyDataSetChanged()
-                    }, 2000)*/
+                    }, 2000)*//*
 
 
 
@@ -1745,28 +1751,43 @@ class ReportFragment : BaseFragment() {
 
             }
 
-            /*lifecycleScope.launchWhenStarted {
+            *//*lifecycleScope.launchWhenStarted {
                 tableViewModel.data.collectLatest { pagingData ->
                     reportAdapter.submitData(pagingData)
                 }
-            }*/
-            lifecycleScope.launchWhenStarted {
+            }*//*
+            *//*lifecycleScope.launchWhenStarted {
                 tableViewModel.data.observe(viewLifecycleOwner) { pagingData ->
                     pagingreportAdapter.submitData(lifecycle, pagingData)
                 }
             }
             tableViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
                 binding.bottomLoader.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }*//*
+
+            tableViewModel.data.observe(viewLifecycleOwner) { pagingData ->
+
+                Log.d("TAGpagingData", "showPagingRecycleView: "+pagingData)
+                pagingreportAdapter.submitData(viewLifecycleOwner.lifecycle, pagingData)
             }
-        }
+
+            // Observe the loading state
+            tableViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+                // Update UI based on the loading state
+                binding.bottomLoader.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }
+        }*/
+
+        // Example: Get data in a specific range
+
     }
 
-    override fun onPause() {
+    /*override fun onPause() {
         super.onPause()
         reportAdapter?.let {
             it.items=ArrayList()
             it.notifyDataSetChanged()
         }
-    }
+    }*/
 }
 

@@ -6,13 +6,13 @@ class commissionReportModel {
 
     @SerializedName("Description"   ) var Description  : String?         = null
     @SerializedName("response_code" ) var responseCode : String?            = null
-    @SerializedName("data"          ) var data         : ArrayList<commissionReportData> = arrayListOf()
+    @SerializedName("data"          ) var data         : ArrayList<CommissionReportData> = arrayListOf()
     @SerializedName("timestamp"     ) var timestamp    : String?         = null
 
 
 }
 
-data class commissionReportData(
+data class CommissionReportData(
 
     @SerializedName("opname" ) var opname : String? = null,
     @SerializedName("comm"   ) var comm   : String? = null,

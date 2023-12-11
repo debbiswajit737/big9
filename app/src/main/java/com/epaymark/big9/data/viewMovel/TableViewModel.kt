@@ -1,4 +1,5 @@
 package com.epaymark.big9.data.viewMovel
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +15,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,7 +35,7 @@ class TableViewModel @Inject constructor(private val repository: TableRepository
             .cachedIn(viewModelScope) // Ensure to use cachedIn to prevent illegal state exception
             .collectLatest { emit(it) }
     }*/
-    private val _isLoading = MutableLiveData<Boolean>()
+    /*private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
@@ -44,7 +47,36 @@ class TableViewModel @Inject constructor(private val repository: TableRepository
                 _isLoading.postValue(false) // Hide loader when data is loaded
                 emit(it)
             }
+    }*/
+
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
+    val data: LiveData<PagingData<DataEntity>> = liveData {
+        _isLoading.postValue(true) // Show loader when starting to load data
+
+        val pagingConfig = PagingConfig(
+            pageSize = 20, // Number of items to load per page
+            prefetchDistance = 3, // The number of items to prefetch in advance
+            enablePlaceholders = false
+        )
+
+        val pager = Pager(
+            config = pagingConfig,
+            pagingSourceFactory = { repository.getDataPaged() }
+        )
+
+        pager.flow
+            .cachedIn(viewModelScope)
+            .collectLatest {
+                _isLoading.postValue(false) // Hide loader when data is loaded
+                emit(it)
+            }
     }
+
+
     fun insertData(data2: DataEntity) {
         viewModelScope.launch {
             repository.insertData(data2)
@@ -64,4 +96,21 @@ class TableViewModel @Inject constructor(private val repository: TableRepository
             }
         }
     }
+
+    fun getDataInRange(startIndex: Int, endIndex: Int): List<DataEntity?>? {
+        var data:List<DataEntity?>? =null
+            viewModelScope.launch {
+
+                data= repository.getDataInRange(startIndex, endIndex)
+            data?.forEach {
+                // Log or process the data
+                Log.d("TAG_eee", "showRecyclerView: ${it?.desc}")
+            }
+
+        }
+        return data
+    }
+
+
+
 }
