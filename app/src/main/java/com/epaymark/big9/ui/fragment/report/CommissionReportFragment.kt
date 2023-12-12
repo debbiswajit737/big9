@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.epaymark.big9.R
 import com.epaymark.big9.adapter.reportAdapter.CommissionReportAdapter
 import com.epaymark.big9.adapter.reportAdapter.PagingReportAdapter
@@ -55,13 +57,11 @@ class CommissionReportFragment : BaseFragment() {
     var endDate = ""
     private var lastClickTime1: Long = 0
     var startIndex = 0
-    var endIndex = 10
+    var endIndex = 20
     private lateinit var recyclerView: RecyclerView
 
-    private lateinit var pagingreportAdapter: PagingReportAdapter
-    private var arryList = mutableListOf<String>() // Replace with your actual data type
+    var isDataLoadingFromLocal=false
 
-    private val itemsPerPage = 10
     private var currentPage = 0
     private var isLoading = false
 
@@ -125,6 +125,12 @@ class CommissionReportFragment : BaseFragment() {
             }
 
             tvConfirm.setOnClickListener {
+                commissionReportAdapter?.let {
+                    commissionReportList.clear()
+                    commissionReportList2.clear()
+                    it.notifyDataSetChanged()
+                }
+                binding.btnHasdata.visibility=View.GONE
                 getAllData()
             }
 
@@ -137,6 +143,10 @@ class CommissionReportFragment : BaseFragment() {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
 
         }
+        Glide.with(binding.imgLoader.context)
+            .load(R.drawable.loading_gif)
+            .into(binding.imgLoader)
+
         viewModel?.apply {
             startDate.value = "".currentdate()
             enddate.value = "".currentdate()
@@ -180,7 +190,51 @@ class CommissionReportFragment : BaseFragment() {
 
 
     private fun observer() {
+      /*      binding.nsvTop.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            // Check if the scroll position has changed
+            *//*if (scrollY != oldScrollY) {
+                Log.d("TAG_position", "observer: ")
+            }*//*
 
+                if (scrollY != oldScrollY) {
+                    // Get the last child view in the NestedScrollView
+                    val lastChildIndex = binding.nsvTop.childCount - 1
+                    val lastChildView = binding.nsvTop.getChildAt(lastChildIndex)
+
+                    // Now you can perform actions on the last child view
+                    // For example, if it's a TextView, you can get its text
+                    if (lastChildView is Button) {
+                        val lastItemText = lastChildView.text.toString()
+                        Log.d("TAG_position", "Last item text: $lastItemText")
+                    }
+                }
+            }
+*/
+        binding.nsvTop.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            // Check if the scroll position has changed
+            if (scrollY != oldScrollY) {
+                // Check if the NestedScrollView has reached the bottom
+                val maxScrollRange = binding.nsvTop.getChildAt(0).height - binding.nsvTop.height
+                val isAtBottom = scrollY >= maxScrollRange
+
+                if (isAtBottom) {
+                    // NestedScrollView is at the bottom, perform your actions here
+                    if (!isDataLoadingFromLocal) {
+                        if (!(SystemClock.elapsedRealtime() - lastClickTime1 < 10000) ){
+
+                            binding.imgLoader.visibility=View.VISIBLE
+                            loadMoreData()
+                            //isDataLoadingFromLocal=true
+                        }
+                    }
+                    Log.d("TAG_position", "NestedScrollView is at the bottom")
+                } else {
+                    // NestedScrollView is not at the bottom
+                    Log.d("TAG_position", "NestedScrollView is not at the bottom")
+
+                }
+            }
+        }
 
         myViewModel?.commissionReportResponseLiveData?.observe(viewLifecycleOwner) {
             when (it) {
@@ -257,7 +311,7 @@ class CommissionReportFragment : BaseFragment() {
 
     fun showrecycleView() {
         binding.btnHasdata.setOnClickListener {
-            loadMoreData()
+
         }
       /*  binding.nsv?.viewTreeObserver?.addOnScrollChangedListener {
             val scrollY = binding.nsv?.scrollY
@@ -331,6 +385,7 @@ class CommissionReportFragment : BaseFragment() {
         activity?.let {
 
             lifecycleScope.launch {
+                loader?.show()
                 getAllData2()
             }
 
@@ -340,7 +395,8 @@ class CommissionReportFragment : BaseFragment() {
 
     private fun getAllData2() {
         if (!(endIndex >= (commissionReportList.size - 1))) {
-            for (index in commissionReportList.indices) {
+            //for (index in commissionReportList.indices) {
+            for (index in startIndex until minOf(endIndex, commissionReportList.size)) {
                 if (index >= startIndex && index <= endIndex) {
                     var items = commissionReportList[index]
                     items.apply {
@@ -354,12 +410,25 @@ class CommissionReportFragment : BaseFragment() {
             commissionReportAdapter?.notifyDataSetChanged()
 
         } else {
-            binding.btnHasdata.visibility = View.GONE
+            isDataLoadingFromLocal=false
+        }
+        if(commissionReportList.size>20) {
+           // isDataLoadingFromLocal=true
+        }
+        else{
+          //  isDataLoadingFromLocal=false
         }
         //delay(2000)
         loader?.dismiss()
         startIndex = endIndex + 1
         endIndex += 10
+        //loader?.dismiss()
+        if (!(endIndex >= (commissionReportList.size - 1))) {
+            isDataLoadingFromLocal = false
+        }
+        else{
+            isDataLoadingFromLocal = true
+        }
         //showrecycleView()
     }
     /*lifecycleScope.launch {

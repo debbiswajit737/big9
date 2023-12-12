@@ -1,5 +1,7 @@
 package com.epaymark.big9.ui.fragment
 
+
+
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -20,37 +22,35 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.epaymark.big9.R
-import com.epaymark.big9.adapter.HorizontalMarginItemDecoration
 import com.epaymark.big9.adapter.AEPSAdapter
 import com.epaymark.big9.adapter.AutoScrollHandler
+import com.epaymark.big9.adapter.BankingAdapter
 import com.epaymark.big9.adapter.BannerViewpagerAdapter
 import com.epaymark.big9.adapter.EssentialAdapter
+import com.epaymark.big9.adapter.FinancialAdapter
+import com.epaymark.big9.adapter.HorizontalMarginItemDecoration
+import com.epaymark.big9.adapter.MostPopularAdapter
 import com.epaymark.big9.adapter.ReportAdapter
 import com.epaymark.big9.adapter.TravelAdapter
-import com.epaymark.big9.adapter.BankingAdapter
-import com.epaymark.big9.adapter.FinancialAdapter
-import com.epaymark.big9.adapter.MostPopularAdapter
 import com.epaymark.big9.adapter.UtilityAdapter
 import com.epaymark.big9.data.model.ListIcon
 import com.epaymark.big9.data.model.ReportModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.data.viewMovel.TableViewModel
 import com.epaymark.big9.databinding.FragmentHomeBinding
-
-
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.fragmentDialog.GasBillerListDialog
 import com.epaymark.big9.ui.popup.CustomPopup.showBalencePopup
+import com.epaymark.big9.utils.*
 import com.epaymark.big9.utils.common.MethodClass.userLogout
-import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.Postpaid
 import com.epaymark.big9.utils.helpers.Constants.Prepaid
 import com.epaymark.big9.utils.helpers.Constants.isCashWithdraw
 import com.epaymark.big9.utils.helpers.Constants.isFromSearchPage
+import com.epaymark.big9.utils.helpers.Constants.newReportList
 import com.epaymark.big9.utils.helpers.Constants.reportAdapter
 import com.epaymark.big9.utils.helpers.Constants.reportList
 import com.epaymark.big9.utils.helpers.Constants.reportList2
@@ -138,7 +138,7 @@ class HomeFragment : BaseFragment() {
     private fun serviceNavigation(s: String) {
         when(s){
             //recycleViewEpayBanking
-            getString(R.string.scan)->{
+            getString(com.epaymark.big9.R.string.scan)->{
                 findNavController().navigate(R.id.action_homeFragment2_to_QRCodeFragment)
             }
 
@@ -1001,6 +1001,8 @@ class HomeFragment : BaseFragment() {
 
 
                         reportAdapter?.let {
+                            reportList.clear()
+                            newReportList.clear()
                         it.items=ArrayList()
                         it.notifyDataSetChanged()
                         }

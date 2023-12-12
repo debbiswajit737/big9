@@ -3,6 +3,8 @@ package com.epaymark.big9.network
 import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
+import com.epaymark.big9.data.model.PrepaidMobolePlainModel
+import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
 import com.epaymark.big9.data.model.allReport.DmtReportReportModel
@@ -204,7 +206,19 @@ interface RetroApi {
         @Body data: String
     ): Response<PrePaidMobileOperatorListModel>
 
+    @POST("v1/services/mrcplan")
+    suspend fun MobilePrePaidPlainList(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<PrepaidMobolePlainModel>
 
+
+
+    @POST("v1/services/mobile/pre_transfer")
+    suspend fun MobilePrePaidpreTransfer(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<PrepaidMoboleTranspherModel>
 
 
 }

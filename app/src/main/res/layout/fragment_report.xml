@@ -169,7 +169,7 @@
                     android:layout_marginTop="@dimen/_20sdp"/>
                 <androidx.core.widget.NestedScrollView
                     android:id="@+id/nsv"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/cardView2"
@@ -183,6 +183,7 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recycleViewReport"
                             android:layout_width="match_parent"
+
                             android:layout_height="wrap_content"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -193,7 +194,18 @@
                             app:layout_constraintVertical_bias="0.0"
                             tools:listitem="@layout/report_layout_item"
                             app:layout_constraintBottom_toTopOf="@+id/bottomLoader"/>
-
+                        <Button
+                            android:id="@+id/btn_hasdata"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Load More"
+                            android:visibility="gone"
+                            android:textColor="@android:color/white"
+                            android:background="@drawable/btn_load_more"
+                            android:layout_margin="@dimen/_10sdp"
+                            app:layout_constraintTop_toBottomOf="@+id/recycleViewReport"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
                         <ProgressBar
                             android:id="@+id/bottomLoader"
                             style="?android:attr/progressBarStyleHorizontal"

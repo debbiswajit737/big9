@@ -11,6 +11,8 @@ import com.epaymark.big9.R
 
 import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
+import com.epaymark.big9.data.model.PrepaidMobolePlainModel
+import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
 import com.epaymark.big9.data.model.allReport.DmtReportReportModel
@@ -395,6 +397,35 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
 
         return isValid
     }
+
+    fun mobileValidation(): Boolean {
+
+        invisibleErrorTexts()
+
+        var isValid = true
+        if (mobile.value?.trim().isNullOrBlank()) {
+            mobileError.value = "Mobile number is required"
+            mobileErrorVisible.value = true
+            isValid = false
+        } else {
+            if ((mobile?.value?.length?:-1 >= minMobileLength?.value?:0) && (mobile?.value?.length?:-1 <= maxMobileLength?.value?:0)){
+                mobileError.value = ""
+                mobileErrorVisible.value = false
+            }
+            else{
+                mobileError.value = "Valid mobile number required"
+                mobileErrorVisible.value = true
+                isValid = false
+            }
+
+        }
+
+
+
+        return isValid
+    }
+
+
 
 
 
@@ -1467,6 +1498,24 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     }
 
 
+
+    //prepaid mobile list
+    val prePaidMobilePlainListResponseLiveData: LiveData<ResponseState<PrepaidMobolePlainModel>>
+        get() = repository.prePaidMobilePlainListResponseLiveData
+    fun prePaidMobilePlainList(token: String, data: String) {
+        viewModelScope.launch {
+            repository.prePaidMobilePlainList(token,data)
+        }
+    }
+
+    //prepaid mobile transpher
+    val prePaidMobileTranspherResponseLiveData: LiveData<ResponseState<PrepaidMoboleTranspherModel>>
+        get() = repository.prePaidMobileTranspherResponseLiveData
+    fun PrePaidMobileTranspher(token: String, data: String) {
+        viewModelScope.launch {
+            repository.PostPaidMobileTranspher(token,data)
+        }
+    }
 
 
 

@@ -8,7 +8,7 @@ import com.epaymark.big9.data.model.BrowserModel
 
 import com.epaymark.big9.utils.`interface`.CallBack
 
-class BrowserAdapter(private val operatorList: ArrayList<BrowserModel>, val listner: CallBack) : RecyclerView.Adapter<BrowserAdapter.MyViewHolder>() {
+class BrowserAdapter(var operatorList: ArrayList<BrowserModel>, val listner: CallBack) : RecyclerView.Adapter<BrowserAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 

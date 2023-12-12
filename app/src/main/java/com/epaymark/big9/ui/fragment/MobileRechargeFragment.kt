@@ -86,13 +86,12 @@ class MobileRechargeFragment : BaseFragment() {
                        viewModel?.operator?.value=s
                     }
                 })*/
-
+                if (viewModel?.mobileValidation() == true){
                     activity?.let { act ->
                         findNavController().navigate(R.id.action_mobileRechargeFragment_to_browserPlainFragment)
                         //browserPlainDialog.show(act.supportFragmentManager, browserPlainDialog.tag)
-
+                    }
                 }
-
             }
 
             btnSubmit.setOnClickListener{
@@ -106,9 +105,6 @@ class MobileRechargeFragment : BaseFragment() {
                                 }
                             })
                             tpinBottomSheetDialog.show(act.supportFragmentManager, tpinBottomSheetDialog.tag)
-
-
-
 
 
                     }
@@ -125,7 +121,7 @@ class MobileRechargeFragment : BaseFragment() {
     private fun submit(tpin: String) {
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
-            if (viewModel?.prepaitOrPostPaid?.value== Constants.Postpaid){
+
                 val (isLogin, loginResponse) =sharedPreff.getLoginData()
                 if (isLogin){
                     loginResponse?.let {loginData->
@@ -143,13 +139,18 @@ class MobileRechargeFragment : BaseFragment() {
 
                             var jsonString = gson.toJson(data)*/
                             loginData.AuthToken?.let {
-                                viewModel?.PostPaidMobileTranspher(it,data.encrypt())
+                                if (viewModel?.prepaitOrPostPaid?.value== Constants.Postpaid) {
+                                    viewModel?.PostPaidMobileTranspher(it, data.encrypt())
+                                }
+                                else if (viewModel?.prepaitOrPostPaid?.value== Constants.Prepaid) {
+                                    viewModel?.PrePaidMobileTranspher(it, data.encrypt())
+                                }
                                 //loader?.show()
                             }
 
                     }
                 }
-            }
+
         }
     }
 

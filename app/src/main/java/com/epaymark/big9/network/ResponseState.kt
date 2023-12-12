@@ -72,7 +72,7 @@ sealed class ResponseState<T>(
                 //val responseStatus = responseObj?.optJSONObject("status")
                 //val errorMessage = responseStatus?.optString("msg")
                 val errorCode = response.code()
-                Error(false,"Invalid",errorCode)
+                Error(false,response.message(),errorCode)
             }
         }
     }

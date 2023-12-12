@@ -87,6 +87,12 @@ object RetrofitHelper {
                     //session logout
                 //    context.userLogout()
                 }
+                402 -> {
+                    //Required Field Missing
+                    ErrorPopUp(context).showMessageDialog(errorMessage)
+                    //session logout
+                //    context.userLogout()
+                }
                 403 -> {
 
                     //App Update Required

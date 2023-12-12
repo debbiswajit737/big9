@@ -15,7 +15,7 @@ import com.google.gson.Gson
 
 
 class ReportAdapter(
-    val reportPropertyModel: ReportPropertyModel,
+    var reportPropertyModel: ReportPropertyModel,
     var items: List<ReportModel>,
 
     val callBack: CallBack

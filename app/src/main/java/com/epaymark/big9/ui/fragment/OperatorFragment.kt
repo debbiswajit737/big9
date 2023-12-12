@@ -116,7 +116,7 @@ class OperatorFragment : BaseFragment() {
     private fun initView() {
         isFirstPageOpeenPostPaidMobile=false
 
-            activity?.let {
+        activity?.let {
                 loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
                 val operator_mode=if (viewModel?.prepaitOrPostPaid?.value== Constants.Postpaid){
                     "operator_postpaid"

@@ -45,6 +45,7 @@
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsv_top"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -173,12 +174,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/cardView2"
-                    tools:layout_editor_absoluteX="0dp">
+                    >
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-
+                        <ImageView
+                            android:id="@+id/imgLoader"
+                            android:layout_marginBottom="@dimen/_30sdp"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:src="@drawable/default_1"
+                            android:progress="50"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.51"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/recycleViewReport" />
                         <!-- Add a ProgressBar for bottom loader -->
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recycleViewReport"
@@ -194,28 +206,33 @@
                             tools:listitem="@layout/report_layout_item"
                             app:layout_constraintBottom_toTopOf="@+id/bottomLoader"/>
 
+
+
                         <Button
                             android:id="@+id/btn_hasdata"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Load More"
-                            android:textColor="@android:color/white"
-                            android:background="@drawable/btn_load_more"
                             android:layout_margin="@dimen/_10sdp"
-                            app:layout_constraintTop_toBottomOf="@+id/recycleViewReport"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            android:background="@drawable/btn_load_more"
+                            android:text="Wait...."
+                            android:textColor="@android:color/white"
+                            android:visibility="invisible"
+                            app:layout_constraintBottom_toTopOf="@+id/recycleViewReport"
+                            app:layout_constraintEnd_toStartOf="@+id/recycleViewReport"
+                            app:layout_constraintStart_toEndOf="@+id/recycleViewReport" />
+
                         <ProgressBar
                             android:id="@+id/bottomLoader"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_80sdp"
                             android:layout_gravity="bottom"
-                            android:visibility="gone"
+
 
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.core.widget.NestedScrollView>
 

@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -20,11 +21,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.R
+import com.epaymark.big9.adapter.reportAdapter.CommissionReportAdapter
 import com.epaymark.big9.adapter.reportAdapter.PagingReportAdapter
 
 import com.epaymark.big9.adapter.reportAdapter.ReportAdapter
 import com.epaymark.big9.data.model.ReportModel
 import com.epaymark.big9.data.model.ReportPropertyModel
+import com.epaymark.big9.data.model.allReport.CommissionReportData
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.data.viewMovel.TableViewModel
 import com.epaymark.big9.databinding.FragmentReportBinding
@@ -35,6 +38,7 @@ import com.epaymark.big9.ui.activity.RegActivity
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.utils.common.MethodClass
+import com.epaymark.big9.utils.helpers.Constants.newReportList
 import com.epaymark.big9.utils.helpers.Constants.reportAdapter
 import com.epaymark.big9.utils.helpers.Constants.reportList
 import com.epaymark.big9.utils.helpers.Constants.reportList2
@@ -48,25 +52,19 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ReportFragment : BaseFragment() {
+class ReportFragment : BaseFragment()  {
     lateinit var binding: FragmentReportBinding
     private val viewModel: MyViewModel by activityViewModels()
 
-    var commissionReportList = ArrayList<ReportModel>()
+
     private val myViewModel: MyViewModel by activityViewModels()
     private var loader: Dialog? = null
     var startDate=""
     var endDate=""
-    val startIndex = 0
-    val endIndex = 10
+    var startIndex = 0
+    var endIndex = 10
     private lateinit var recyclerView: RecyclerView
 
-    private lateinit var pagingreportAdapter: PagingReportAdapter
-    private var arryList = mutableListOf<String>() // Replace with your actual data type
-
-    private val itemsPerPage = 10
-    private var currentPage = 0
-    private var isLoading = false
 
     private lateinit var tableViewModel: TableViewModel
 
@@ -92,17 +90,31 @@ class ReportFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         //reportList?.clear()
+
+    }
+
+    fun clearAllData(){
+        //reportList?.clear()
         reportAdapter?.let {
+            binding.bottomLoader.visibility=View.GONE
+            //reportList.clear()
+            //newReportList.clear()
             it.items=ArrayList()
             it.notifyDataSetChanged()
         }
-        getAllData()
     }
     private fun onViewClick() {
 
         binding.apply {
           imgBack.setOnClickListener{
               reportList?.clear()
+              reportAdapter?.let {
+                  binding.bottomLoader.visibility=View.GONE
+                  reportList.clear()
+                  newReportList.clear()
+                  it.items=ArrayList()
+                  it.notifyDataSetChanged()
+              }
               findNavController().popBackStack()
           }
           //imgBack.back()
@@ -126,6 +138,15 @@ class ReportFragment : BaseFragment() {
             }
 
             tvConfirm.setOnClickListener{
+                startIndex = 0
+                endIndex = 10
+                binding.btnHasdata.visibility = View.GONE
+                reportAdapter?.let {
+                    reportList.clear()
+                    newReportList.clear()
+                    it.items=ArrayList()
+                    it.notifyDataSetChanged()
+                }
                 getAllData()
             }
 
@@ -134,6 +155,8 @@ class ReportFragment : BaseFragment() {
     }
 
     fun initView() {
+        startIndex = 0
+        endIndex = 10
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
 
@@ -143,11 +166,44 @@ class ReportFragment : BaseFragment() {
             enddate.value="".currentdate()
         }
 
+        initRecycleView()
+        reportAdapter?.let {
+            reportList.clear()
+            newReportList.clear()
+            it.items=ArrayList()
+            it.notifyDataSetChanged()
+        }
+        getAllData()
+        backPressed()
+    }
 
+    private fun initRecycleView() {
+        binding.recycleViewReport.apply {
+            recyclerView = this
+            reportAdapter = ReportAdapter(ReportPropertyModel(""),ArrayList(),  object : CallBack {
+                override fun getValue(s: String) {
+                    val bundle = Bundle()
+                    bundle.putString("jsonData", s)
+                    /*findNavController().navigate(
+                        R.id.action_reportFragment_to_reportDetailsFragment,
+                        bundle
+                    )*/
+                }
+
+            })
+            adapter=reportAdapter
+
+        }
     }
 
     private fun getAllData() {
         reportList.clear()
+        reportAdapter?.let {
+            reportList.clear()
+            newReportList.clear()
+            it.items=ArrayList()
+            it.notifyDataSetChanged()
+        }
         viewModel?.reportType?.value?.let { type ->
             when (type) {
 
@@ -465,7 +521,7 @@ class ReportFragment : BaseFragment() {
                                 }
 
                             }
-                            showrecycleView()
+                            showrecycleView(1)
                         }
 
 
@@ -537,7 +593,7 @@ class ReportFragment : BaseFragment() {
                                         }
 
                                     }
-                                    showrecycleView()
+                                    showrecycleView(9)
                                 }
 
 
@@ -611,7 +667,7 @@ class ReportFragment : BaseFragment() {
                                         }
 
                                     }
-                                    showrecycleView()
+                                    showrecycleView(8)
                                 }
 
 
@@ -669,7 +725,7 @@ class ReportFragment : BaseFragment() {
                                         }
 
                                     }
-                                    showrecycleView()
+                                    showrecycleView(7)
                                 }
 
 
@@ -737,7 +793,7 @@ class ReportFragment : BaseFragment() {
                                         }
 
                                     }
-                                    showrecycleView()
+                                    showrecycleView(6)
                                 }
 
 
@@ -786,7 +842,7 @@ class ReportFragment : BaseFragment() {
                                         }
 
                                     }
-                                    showrecycleView()
+                                    showrecycleView(5)
                                 }
 
 
@@ -809,7 +865,7 @@ class ReportFragment : BaseFragment() {
                         }
 
                         is ResponseState.Success -> {
-                            //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+                            loader?.dismiss()
                             if(!it.data?.data.isNullOrEmpty()){
                                 it.data?.data?.let {responseData->
                                     for (items in responseData){
@@ -820,7 +876,7 @@ class ReportFragment : BaseFragment() {
                                         }
 
                                     }
-                                    showrecycleView()
+                                    showrecycleView(4)
                                 }
 
 
@@ -880,7 +936,7 @@ class ReportFragment : BaseFragment() {
                                                              )*/
 
                                                      }
-                                                     showPagingRecycleView()
+                                                    // showPagingRecycleView()
                                                      //showrecycleView()
                                                  }
 
@@ -967,7 +1023,7 @@ class ReportFragment : BaseFragment() {
         myViewModel?.complaints_reportReportResponseLiveData?.observe(viewLifecycleOwner){
             when (it) {
                 is ResponseState.Loading -> {
-                    // loader?.show()
+                     loader?.show()
                 }
 
                 is ResponseState.Success -> {
@@ -986,12 +1042,12 @@ class ReportFragment : BaseFragment() {
                                 }
 
                             }
-                            showrecycleView()
+
                         }
 
 
                     }
-
+                    showrecycleView(33)
                 }
 
                 is ResponseState.Error -> {
@@ -1076,7 +1132,7 @@ class ReportFragment : BaseFragment() {
                                         }
 
                                     }
-                                    showrecycleView()
+                                    showrecycleView(2)
                                 }
 
 
@@ -1114,10 +1170,12 @@ class ReportFragment : BaseFragment() {
 
     }
 
-    fun showrecycleView() {
+    fun showrecycleView(a:Int) {
+        Log.d("TAG_position", "showrecycleView: "+a)
+        clearAllData()
         val handler = Handler(Looper.getMainLooper())
         handler.post {
-            binding.recycleViewReport.apply {
+            reportAdapter?.apply {
                 //reportList.clear()
 
                 viewModel?.reportType?.value?.let { type ->
@@ -1249,7 +1307,7 @@ class ReportFragment : BaseFragment() {
                         }
 
                         getString(R.string.cashout_ledger) -> {
-                            reportList.add(
+                            /*reportList.add(
                                 ReportModel(
                                     "001",
                                     "-778.00",
@@ -1264,7 +1322,7 @@ class ReportFragment : BaseFragment() {
                                     proce1TextColor = 2,
                                     isMiniStatement = false
                                 )
-                            )
+                            )*/
                         }
 
                         getString(R.string.aeps) -> {
@@ -1335,7 +1393,7 @@ class ReportFragment : BaseFragment() {
 
                 viewModel?.reportType?.value?.let { type ->
 
-                    val reportPropertyModel = when (type) {
+                    val setReportPropertyModel = when (type) {
 
                         getString(R.string.payment) -> {
                             ReportPropertyModel("Transaction id")
@@ -1389,26 +1447,34 @@ class ReportFragment : BaseFragment() {
                             ReportPropertyModel("Transaction id")
                         }
                     }
-                    recyclerView=this
+
                     if (reportList.size > 0) {
                         binding.tvNoDataFound.visibility = View.GONE
                     } else {
                         binding.tvNoDataFound.visibility = View.VISIBLE
 
                     }
-                    // binding.nsv.isVisible=!binding.tvNoDataFound.isVisible
-                    reportAdapter = ReportAdapter(reportPropertyModel,reportList,  object : CallBack {
-                        override fun getValue(s: String) {
-                            val bundle = Bundle()
-                            bundle.putString("jsonData", s)
-                            findNavController().navigate(
-                                R.id.action_reportFragment_to_reportDetailsFragment,
-                                bundle
-                            )
+                    binding.nsv.isVisible=!binding.tvNoDataFound.isVisible
+                    reportPropertyModel=setReportPropertyModel
+                    //items=reportList
+                    lifecycleScope.launch {
+                        binding.btnHasdata.visibility=View.GONE
+                        if(reportList.size>10) {
+                            getAllData2()
+
+
+                        }
+                        else{
+                            //binding.btnHasdata.visibility=View.GONE
+                            reportAdapter?.items = reportList
+                            reportAdapter?.notifyDataSetChanged()
                         }
 
-                    })
-                    adapter=reportAdapter
+                    }
+                    binding.btnHasdata.setOnClickListener {
+                        binding.btnHasdata.visibility=View.GONE
+                        getAllData2()
+                    }
                     //loadAllData()
                     /*handler.postDelayed({
                         reportAdapter.items=reportList2
@@ -1436,16 +1502,42 @@ class ReportFragment : BaseFragment() {
             }*/
         }
     }
+    private fun getAllData2() {
+        loader?.show()
+        if (!(endIndex >= (reportList.size - 1))) {
+            for (index in reportList.indices) {
+                if (index >= startIndex && index <= endIndex) {
+                    var items = reportList[index]
+                    items.apply {
+                        newReportList.add(this)
+                    }
 
+                }
+            }
 
-    fun showPagingRecycleView() {
+            reportAdapter?.items = newReportList
+            reportAdapter?.notifyDataSetChanged()
+            binding.btnHasdata.visibility=View.VISIBLE
+        } else {
+            binding.btnHasdata.visibility = View.GONE
+        }
+
+        //delay(2000)
+        loader?.dismiss()
+        startIndex = endIndex + 1
+        endIndex += 10
+        loader?.dismiss()
+        //showrecycleView()
+    }
+
+    /*fun showPagingRecycleView() {
         val startIndex = 1
         val endIndex = 20
         val dataInRange = tableViewModel.getDataInRange(startIndex, endIndex)
         dataInRange?.forEach(){
             Log.d("TAG_id", "showPagingRecycleView: "+it?.id)
         }
-       /* val handler = Handler(Looper.getMainLooper())
+       *//* val handler = Handler(Looper.getMainLooper())
         handler.post {
             binding.recycleViewReport.apply {
                 //reportList.clear()
@@ -1462,7 +1554,7 @@ class ReportFragment : BaseFragment() {
 
 
                         getString(R.string.transactions) -> {
-                            *//* reportList.add(
+                            *//**//* reportList.add(
                         ReportModel(
                             "001",
                             "778.00",
@@ -1484,12 +1576,12 @@ class ReportFragment : BaseFragment() {
                             desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",
                             imageInt = R.drawable.right_tick
                         )
-                    )*//*
+                    )*//**//*
 
                         }
 
                         getString(R.string.dmt) -> {
-                            *//* reportList.add(
+                            *//**//* reportList.add(
                         ReportModel(
                             "001",
                             "778.00",
@@ -1513,12 +1605,12 @@ class ReportFragment : BaseFragment() {
                             imageInt = R.drawable.imps_logo,
                             image1 = 2
                         )
-                    )*//*
+                    )*//**//*
 
                         }
 
                         getString(R.string.load_Requests) -> {
-                            *//* reportList.add(
+                            *//**//* reportList.add(
                         ReportModel(
                             "001",
                             "778.00",
@@ -1539,11 +1631,11 @@ class ReportFragment : BaseFragment() {
                             desc = "Axis Bank-Online\nSame Bank\nPayment Ref Id: ASEESSS",
                             imageInt = R.drawable.rounded_i
                         )
-                    )*//*
+                    )*//**//*
                         }
 
                         getString(R.string.wallet_ledger) -> {
-                            *//* reportList.add(
+                            *//**//* reportList.add(
                         ReportModel(
                             "001",
                             "-778.00",
@@ -1574,7 +1666,7 @@ class ReportFragment : BaseFragment() {
                             proce1TextColor = 2,
                             isMiniStatement = false
                         )
-                    )*//*
+                    )*//**//*
 
                         }
 
@@ -1598,7 +1690,7 @@ class ReportFragment : BaseFragment() {
                         }
 
                         getString(R.string.aeps) -> {
-                            *//*reportList.add(
+                            *//**//*reportList.add(
                         ReportModel(
                             "001",
                             "778.00",
@@ -1610,7 +1702,7 @@ class ReportFragment : BaseFragment() {
                             miniStatementValue = "Mini Statement",
                             isClickAble = true
                         )
-                    )*//*
+                    )*//**//*
                         }
 
                         getString(R.string.micro_atm) -> {
@@ -1623,7 +1715,7 @@ class ReportFragment : BaseFragment() {
                         }
 
                         getString(R.string.bank_settle) -> {
-                            *//*reportList.add(
+                            *//**//*reportList.add(
                         ReportModel(
                             "001",
                             "778.00",
@@ -1634,11 +1726,11 @@ class ReportFragment : BaseFragment() {
                             isClickAble = true,
                             image1 = 3
                         )
-                    )*//*
+                    )*//**//*
                         }
 
                         getString(R.string.wallet_settle) -> {
-                            *//*reportList.add(
+                            *//**//*reportList.add(
                         ReportModel(
                             "001",
                             "10.00",
@@ -1649,7 +1741,7 @@ class ReportFragment : BaseFragment() {
 
                             image1 = 3
                         )
-                    )*//*
+                    )*//**//*
                         }
 
                         getString(R.string.complaints) -> {
@@ -1740,10 +1832,10 @@ class ReportFragment : BaseFragment() {
                     })
                     adapter=reportAdapter
                     //loadAllData()
-                    *//*handler.postDelayed({
+                    *//**//*handler.postDelayed({
                         reportAdapter.items=reportList2
                         reportAdapter.notifyDataSetChanged()
-                    }, 2000)*//*
+                    }, 2000)*//**//*
 
 
 
@@ -1751,19 +1843,19 @@ class ReportFragment : BaseFragment() {
 
             }
 
-            *//*lifecycleScope.launchWhenStarted {
+            *//**//*lifecycleScope.launchWhenStarted {
                 tableViewModel.data.collectLatest { pagingData ->
                     reportAdapter.submitData(pagingData)
                 }
-            }*//*
-            *//*lifecycleScope.launchWhenStarted {
+            }*//**//*
+            *//**//*lifecycleScope.launchWhenStarted {
                 tableViewModel.data.observe(viewLifecycleOwner) { pagingData ->
                     pagingreportAdapter.submitData(lifecycle, pagingData)
                 }
             }
             tableViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
                 binding.bottomLoader.visibility = if (isLoading) View.VISIBLE else View.GONE
-            }*//*
+            }*//**//*
 
             tableViewModel.data.observe(viewLifecycleOwner) { pagingData ->
 
@@ -1776,11 +1868,11 @@ class ReportFragment : BaseFragment() {
                 // Update UI based on the loading state
                 binding.bottomLoader.visibility = if (isLoading) View.VISIBLE else View.GONE
             }
-        }*/
+        }*//*
 
         // Example: Get data in a specific range
 
-    }
+    }*/
 
     /*override fun onPause() {
         super.onPause()
@@ -1789,5 +1881,30 @@ class ReportFragment : BaseFragment() {
             it.notifyDataSetChanged()
         }
     }*/
+    fun backPressed(){
+        activity?.let {
+            it.onBackPressedDispatcher
+            .addCallback(it, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+
+                    if (isEnabled) {
+                        isEnabled = false
+                        reportAdapter?.let {
+                            binding.bottomLoader.visibility=View.GONE
+                            reportList.clear()
+                            newReportList.clear()
+                            it.items=ArrayList()
+                            it.notifyDataSetChanged()
+                        }
+                        it.onBackPressedDispatcher.onBackPressed()
+
+                    }
+                }
+            }
+            )
+        }
+
+    }
+
 }
 

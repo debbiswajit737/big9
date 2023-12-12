@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagingSource
 import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
+import com.epaymark.big9.data.model.PrepaidMobolePlainModel
+import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
 import com.epaymark.big9.data.model.allReport.DmtReportReportModel
@@ -604,6 +606,61 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
             )
         } catch (throwable: Throwable) {
             _postPaidMobileTranspherResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+
+    //Prepaid mobile transpher
+    private val _prePaidMobilePlainListResponseLiveData =
+        MutableLiveData<ResponseState<PrepaidMobolePlainModel>>()
+    val prePaidMobilePlainListResponseLiveData: LiveData<ResponseState<PrepaidMobolePlainModel>>
+        get() = _prePaidMobilePlainListResponseLiveData
+
+
+    suspend fun prePaidMobilePlainList(token: String, loginModel: String) {
+        _prePaidMobilePlainListResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.MobilePrePaidPlainList(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _prePaidMobilePlainListResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _prePaidMobilePlainListResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+
+    //Prepaid mobile transpher
+    private val _prePaidMobileTranspherResponseLiveData =
+        MutableLiveData<ResponseState<PrepaidMoboleTranspherModel>>()
+    val prePaidMobileTranspherResponseLiveData: LiveData<ResponseState<PrepaidMoboleTranspherModel>>
+        get() = _prePaidMobileTranspherResponseLiveData
+
+    suspend fun PrePaidMobileTranspher(token: String, loginModel: String) {
+        _prePaidMobileTranspherResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.MobilePrePaidpreTransfer(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _prePaidMobileTranspherResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _prePaidMobileTranspherResponseLiveData.postValue(ResponseState.create(throwable))
         }
 
     }
