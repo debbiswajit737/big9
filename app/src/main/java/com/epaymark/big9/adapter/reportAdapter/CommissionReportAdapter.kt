@@ -1,11 +1,14 @@
 package com.epaymark.big9.adapter.reportAdapter
 
 
+
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.epaymark.big9.R
 import com.epaymark.big9.data.model.allReport.CommissionReportData
+import com.epaymark.big9.databinding.BannerItemsBinding
 import com.epaymark.big9.databinding.CommissionReportLayoutItemBinding
 import com.epaymark.big9.utils.`interface`.CallBack
 
@@ -18,10 +21,12 @@ class CommissionReportAdapter(
 ) : RecyclerView.Adapter<CommissionReportAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        /*val view = LayoutInflater.from(parent.context).inflate(R.layout.banner_items, parent, false)
+/*val view = LayoutInflater.from(parent.context).inflate(R.layout.banner_items, parent, false)
         return MyViewHolder(view)*/
-       /* val binding = BannerItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+/* val binding = BannerItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding.root)*/
+
 
         //commission_report_layout_item
         val layoutInflater = LayoutInflater.from(parent.context)

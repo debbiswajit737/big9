@@ -41,9 +41,13 @@ import com.epaymark.big9.utils.`interface`.CallBack
 import com.epaymark.big9.utils.table.DataEntity
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class CommissionReportFragment : BaseFragment() {
     lateinit var binding: CommissionFragmentReportBinding
@@ -57,7 +61,7 @@ class CommissionReportFragment : BaseFragment() {
     var endDate = ""
     private var lastClickTime1: Long = 0
     var startIndex = 0
-    var endIndex = 20
+    var endIndex = 10
     private lateinit var recyclerView: RecyclerView
 
     var isDataLoadingFromLocal=false
@@ -130,7 +134,7 @@ class CommissionReportFragment : BaseFragment() {
                     commissionReportList2.clear()
                     it.notifyDataSetChanged()
                 }
-                binding.btnHasdata.visibility=View.GONE
+
                 getAllData()
             }
 
@@ -143,9 +147,7 @@ class CommissionReportFragment : BaseFragment() {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
 
         }
-        Glide.with(binding.imgLoader.context)
-            .load(R.drawable.loading_gif)
-            .into(binding.imgLoader)
+
 
         viewModel?.apply {
             startDate.value = "".currentdate()
@@ -210,31 +212,44 @@ class CommissionReportFragment : BaseFragment() {
                 }
             }
 */
-        binding.nsvTop.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
-            // Check if the scroll position has changed
-            if (scrollY != oldScrollY) {
-                // Check if the NestedScrollView has reached the bottom
-                val maxScrollRange = binding.nsvTop.getChildAt(0).height - binding.nsvTop.height
-                val isAtBottom = scrollY >= maxScrollRange
+        CoroutineScope(Dispatchers.Main).launch{
+            launch(Dispatchers.Main) {
+                // Perform UI-related operation here, e.g., update UI elements
+                binding.nsvTop.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+                    // Check if the scroll position has changed
+                    if (scrollY != oldScrollY) {
+                        // Check if the NestedScrollView has reached the bottom
+                        val maxScrollRange = binding.nsvTop.getChildAt(0).height - binding.nsvTop.height
+                        val isAtBottom = scrollY >= maxScrollRange
 
-                if (isAtBottom) {
-                    // NestedScrollView is at the bottom, perform your actions here
-                    if (!isDataLoadingFromLocal) {
-                        if (!(SystemClock.elapsedRealtime() - lastClickTime1 < 10000) ){
+                        if (isAtBottom) {
+                            // NestedScrollView is at the bottom, perform your actions here
+                            if (!isDataLoadingFromLocal) {
+                               // if (!(SystemClock.elapsedRealtime() - lastClickTime1 < 10000) ){
 
-                            binding.imgLoader.visibility=View.VISIBLE
-                            loadMoreData()
-                            //isDataLoadingFromLocal=true
+                                    CoroutineScope(Dispatchers.Main).launch{
+                                        binding.loaderBottom.visibility=View.VISIBLE
+                                    }
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    getAllData3()
+                                }
+                                    //isDataLoadingFromLocal=true
+                                //}
+                            }
+                            Log.d("TAG_position", "NestedScrollView is at the bottom")
+                        } else {
+                            // NestedScrollView is not at the bottom
+                            Log.d("TAG_position", "NestedScrollView is not at the bottom")
+
                         }
                     }
-                    Log.d("TAG_position", "NestedScrollView is at the bottom")
-                } else {
-                    // NestedScrollView is not at the bottom
-                    Log.d("TAG_position", "NestedScrollView is not at the bottom")
-
                 }
             }
+
+            // Other code in the main coroutine
+            println("Main coroutine is not blocked")
         }
+
 
         myViewModel?.commissionReportResponseLiveData?.observe(viewLifecycleOwner) {
             when (it) {
@@ -310,9 +325,7 @@ class CommissionReportFragment : BaseFragment() {
     }
 
     fun showrecycleView() {
-        binding.btnHasdata.setOnClickListener {
 
-        }
       /*  binding.nsv?.viewTreeObserver?.addOnScrollChangedListener {
             val scrollY = binding.nsv?.scrollY
             val scrollViewHeight = binding.nsv?.height
@@ -385,7 +398,7 @@ class CommissionReportFragment : BaseFragment() {
         activity?.let {
 
             lifecycleScope.launch {
-                loader?.show()
+
                 getAllData2()
             }
 
@@ -394,24 +407,105 @@ class CommissionReportFragment : BaseFragment() {
     }
 
     private fun getAllData2() {
-        if (!(endIndex >= (commissionReportList.size - 1))) {
-            //for (index in commissionReportList.indices) {
-            for (index in startIndex until minOf(endIndex, commissionReportList.size)) {
-                if (index >= startIndex && index <= endIndex) {
-                    var items = commissionReportList[index]
-                    items.apply {
-                        commissionReportList2.add(CommissionReportData(opname, comm, type))
-                    }
+        lifecycleScope.launch(Dispatchers.IO) {
 
+            if (!(endIndex >= (commissionReportList.size - 1))) {
+                //for (index in commissionReportList.indices) {
+                for (index in startIndex until minOf(endIndex, commissionReportList.size)) {
+                    if (index >= startIndex && index <= endIndex) {
+                        var items = commissionReportList[index]
+                        items.apply {
+                            commissionReportList2.add(CommissionReportData(opname, comm, type))
+                        }
+
+                    }
                 }
+
+                commissionReportAdapter?.items = commissionReportList2
+
+
+            } else {
+                isDataLoadingFromLocal = false
             }
 
-            commissionReportAdapter?.items = commissionReportList2
-            commissionReportAdapter?.notifyDataSetChanged()
-
-        } else {
-            isDataLoadingFromLocal=false
         }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+        withContext(Dispatchers.Main) {
+
+            // Perform UI-related operation here, e.g., update UI elements
+            commissionReportAdapter?.notifyDataSetChanged()
+            delay(3000)
+            loader?.dismiss()
+            binding.loaderBottom.visibility = View.GONE
+            // Other code in the main coroutine
+            println("Main coroutine is not blocked")
+        }
+    }
+
+
+
+        if(commissionReportList.size>20) {
+           // isDataLoadingFromLocal=true
+        }
+        else{
+          //  isDataLoadingFromLocal=false
+        }
+        //delay(2000)
+        loader?.dismiss()
+
+
+        startIndex += 10
+        endIndex += 10
+        //loader?.dismiss()
+        if (!(endIndex >= (commissionReportList.size - 1))) {
+            isDataLoadingFromLocal = false
+        }
+        else{
+            isDataLoadingFromLocal = true
+        }
+        //showrecycleView()
+    }
+
+    private fun getAllData3() {
+        CoroutineScope(Dispatchers.IO).launch{
+
+                if (!(endIndex >= (commissionReportList.size - 1))) {
+                    //for (index in commissionReportList.indices) {
+                    for (index in startIndex until minOf(endIndex, commissionReportList.size)) {
+                        if (index >= startIndex && index <= endIndex) {
+                            var items = commissionReportList[index]
+                            items.apply {
+                                commissionReportList2.add(CommissionReportData(opname, comm, type))
+                            }
+
+                        }
+                    }
+
+                    //commissionReportAdapter?.items = commissionReportList2
+
+
+                } else {
+                    isDataLoadingFromLocal=false
+                }
+
+        }
+
+
+        CoroutineScope(Dispatchers.Main).launch{
+
+                    // Perform UI-related operation here, e.g., update UI elements
+                    commissionReportAdapter?.notifyDataSetChanged()
+                    delay(3000)
+                    loader?.dismiss()
+                    binding.loaderBottom.visibility=View.GONE
+                // Other code in the main coroutine
+                println("Main coroutine is not blocked")
+            }
+
+
+
+
         if(commissionReportList.size>20) {
            // isDataLoadingFromLocal=true
         }
