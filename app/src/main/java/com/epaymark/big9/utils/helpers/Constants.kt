@@ -2,11 +2,13 @@ package com.epaymark.big9.utils.helpers
 
 import android.content.ContentValues
 import androidx.recyclerview.widget.RecyclerView
+import com.epaymark.big9.adapter.reportAdapter.CommissionReportAdapter
 import com.epaymark.big9.adapter.reportAdapter.ReportAdapter
 
 import com.epaymark.big9.data.model.ListIcon
 import com.epaymark.big9.data.model.ReceiptModel
 import com.epaymark.big9.data.model.ReportModel
+import com.epaymark.big9.data.model.allReport.CommissionReportData
 
 object Constants {
     const val INPUT_FILTER_MAX_VALUE:Long = 9999999999999
@@ -55,4 +57,9 @@ object Constants {
     var reportAdapter: ReportAdapter?=null
 
     var isFirstPageOpeenPostPaidMobile=true
+
+
+    var commissionReportAdapter: CommissionReportAdapter? = null
+    var commissionReportList = ArrayList<CommissionReportData>()
+    var commissionReportList2 = ArrayList<CommissionReportData>()
 }

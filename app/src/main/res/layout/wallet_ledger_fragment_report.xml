@@ -45,7 +45,7 @@
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/nsvTop"
+            android:id="@+id/nsv_top"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -91,20 +91,20 @@
                             app:layout_constraintStart_toStartOf="parent"
                             tools:layout_editor_absoluteY="122dp"
                             tools:text="Bank Settlement History" />
-<!--                        <com.airbnb.lottie.LottieAnimationView-->
-<!--                            android:id="@+id/animationView"-->
-<!--                            android:layout_width="@dimen/_80sdp"-->
-<!--                            android:layout_height="@dimen/_80sdp"-->
-<!--                            app:layout_constraintEnd_toEndOf="parent"-->
-<!--                            app:layout_constraintStart_toStartOf="parent"-->
-<!--                            android:layout_marginBottom="@dimen/_15sdp"-->
-<!--                            app:lottie_autoPlay="true"-->
-<!--                            android:scaleType="fitXY"-->
-<!--                            android:layout_gravity="center_horizontal"-->
-<!--                            app:lottie_loop="true"-->
-<!--                            app:lottie_rawRes="@raw/report_2"-->
-<!--                            tools:ignore="MissingConstraints" />-->
-                         <LinearLayout
+                        <!--                        <com.airbnb.lottie.LottieAnimationView-->
+                        <!--                            android:id="@+id/animationView"-->
+                        <!--                            android:layout_width="@dimen/_80sdp"-->
+                        <!--                            android:layout_height="@dimen/_80sdp"-->
+                        <!--                            app:layout_constraintEnd_toEndOf="parent"-->
+                        <!--                            app:layout_constraintStart_toStartOf="parent"-->
+                        <!--                            android:layout_marginBottom="@dimen/_15sdp"-->
+                        <!--                            app:lottie_autoPlay="true"-->
+                        <!--                            android:scaleType="fitXY"-->
+                        <!--                            android:layout_gravity="center_horizontal"-->
+                        <!--                            app:lottie_loop="true"-->
+                        <!--                            app:lottie_rawRes="@raw/report_2"-->
+                        <!--                            tools:ignore="MissingConstraints" />-->
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
@@ -170,16 +170,25 @@
                     android:layout_marginTop="@dimen/_20sdp"/>
                 <androidx.core.widget.NestedScrollView
                     android:id="@+id/nsv"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/cardView2"
-                    tools:layout_editor_absoluteX="0dp">
+                    >
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+                        <!-- <ProgressBar
+                             android:id="@+id/bottomLoader"
+                             style="?android:attr/progressBarStyleHorizontal"
+                             android:layout_width="match_parent"
+                             android:layout_height="@dimen/_80sdp"
+ -->
 
+
+                        />
+                        <!--app:layout_constraintBottom_toBottomOf="@+id/view_last"-->
                         <!-- Add a ProgressBar for bottom loader -->
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recycleViewReport"
@@ -192,7 +201,8 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.0"
-                            tools:listitem="@layout/report_layout_item"/>
+                            tools:listitem="@layout/report_layout_item"
+                            />
                         <View
                             android:id="@+id/view_last"
                             android:layout_width="match_parent"
@@ -202,6 +212,13 @@
                             app:layout_constraintHorizontal_bias="1.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/recycleViewReport"/>
+
+
+
+
+
+
+
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -241,5 +258,6 @@
                  app:trackThickness="@dimen/_2sdp"
                  />-->
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

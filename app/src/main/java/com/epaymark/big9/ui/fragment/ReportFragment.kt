@@ -3,12 +3,15 @@ package com.epaymark.big9.ui.fragment
 
 import android.app.Dialog
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -38,6 +41,7 @@ import com.epaymark.big9.ui.activity.RegActivity
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.utils.common.MethodClass
+import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.newReportList
 import com.epaymark.big9.utils.helpers.Constants.reportAdapter
 import com.epaymark.big9.utils.helpers.Constants.reportList
@@ -48,6 +52,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -55,8 +60,8 @@ import kotlinx.coroutines.withContext
 class ReportFragment : BaseFragment()  {
     lateinit var binding: FragmentReportBinding
     private val viewModel: MyViewModel by activityViewModels()
-
-
+    private var lastClickTime1: Long = 0
+    var isAsintask=true
     private val myViewModel: MyViewModel by activityViewModels()
     private var loader: Dialog? = null
     var startDate=""
@@ -66,7 +71,7 @@ class ReportFragment : BaseFragment()  {
     private lateinit var recyclerView: RecyclerView
 
 
-    private lateinit var tableViewModel: TableViewModel
+    //private lateinit var tableViewModel: TableViewModel
 
 
     override fun onCreateView(
@@ -74,7 +79,11 @@ class ReportFragment : BaseFragment()  {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_report, container, false)
-        tableViewModel = ViewModelProvider(this)[TableViewModel::class.java]
+
+
+
+
+       // tableViewModel = ViewModelProvider(this)[TableViewModel::class.java]
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         return binding.root
@@ -96,7 +105,7 @@ class ReportFragment : BaseFragment()  {
     fun clearAllData(){
         //reportList?.clear()
         reportAdapter?.let {
-            binding.bottomLoader.visibility=View.GONE
+           // binding.bottomLoader.visibility=View.GONE
             //reportList.clear()
             //newReportList.clear()
             it.items=ArrayList()
@@ -109,7 +118,7 @@ class ReportFragment : BaseFragment()  {
           imgBack.setOnClickListener{
               reportList?.clear()
               reportAdapter?.let {
-                  binding.bottomLoader.visibility=View.GONE
+                 // binding.bottomLoader.visibility=View.GONE
                   reportList.clear()
                   newReportList.clear()
                   it.items=ArrayList()
@@ -140,7 +149,7 @@ class ReportFragment : BaseFragment()  {
             tvConfirm.setOnClickListener{
                 startIndex = 0
                 endIndex = 10
-                binding.btnHasdata.visibility = View.GONE
+                //binding.btnHasdata.visibility = View.GONE
                 reportAdapter?.let {
                     reportList.clear()
                     newReportList.clear()
@@ -155,6 +164,9 @@ class ReportFragment : BaseFragment()  {
     }
 
     fun initView() {
+
+
+
         startIndex = 0
         endIndex = 10
         activity?.let {
@@ -167,13 +179,16 @@ class ReportFragment : BaseFragment()  {
         }
 
         initRecycleView()
-        reportAdapter?.let {
-            reportList.clear()
-            newReportList.clear()
-            it.items=ArrayList()
-            it.notifyDataSetChanged()
-        }
-        getAllData()
+        Handler(Looper.getMainLooper()).postDelayed({
+            reportAdapter?.let {
+                reportList.clear()
+                newReportList.clear()
+                it.items=ArrayList()
+                it.notifyDataSetChanged()
+            }
+            getAllData()
+        },100)
+
         backPressed()
     }
 
@@ -793,7 +808,7 @@ class ReportFragment : BaseFragment()  {
                                         }
 
                                     }
-                                    showrecycleView(6)
+                                    showrecycleView(reportList.size)
                                 }
 
 
@@ -922,10 +937,10 @@ class ReportFragment : BaseFragment()  {
                                                              )
                                                          )
                                                      }
-                                                         Log.d("TAG_table", "observer: "+tableViewModel.insertData(DataEntity(responseId="",
+                                                         /*Log.d("TAG_table", "observer: "+tableViewModel.insertData(DataEntity(responseId="",
                                                              desc = desc,
                                                              price = comm,
-                                                             imageInt = R.drawable.rounded_i)))
+                                                             imageInt = R.drawable.rounded_i)))*/
                                                              /*reportList2.add(
                                                                  ReportModel(
                                                                      "",
@@ -1165,9 +1180,101 @@ class ReportFragment : BaseFragment()  {
                         }
                     }
                 }*/
+        /*lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    launch(Dispatchers.Main) {
+                        // Perform UI-related operation here, e.g., update UI elements
+                        binding.nsvTop.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+                            // Check if the scroll position has changed
+                            if (scrollY != oldScrollY) {
+                                // Check if the NestedScrollView has reached the bottom
+                                val maxScrollRange =
+                                    binding.nsvTop.getChildAt(0).height - binding.nsvTop.height
+                                val isAtBottom = scrollY >= maxScrollRange
 
+                                if (isAtBottom) {
 
+                                    // NestedScrollView is at the bottom, perform your actions here
+                                    *//*if (!isDataLoadingFromLocal) {
+                               // if (!(SystemClock.elapsedRealtime() - lastClickTime1 < 10000) ){
 
+                                    CoroutineScope(Dispatchers.Main).launch{
+                                        binding.loaderBottom.visibility=View.VISIBLE
+                                    }
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    getAllData3()
+                                }
+                                    //isDataLoadingFromLocal=true
+                                //}
+                            }*//*
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        //getAllData3()
+                                        if (!(SystemClock.elapsedRealtime() - lastClickTime1 < 1500)) {
+                                            if (!(endIndex >= (Constants.reportList.size - 1))) {
+                                                if (isAsintask) {
+                                                    Log.d("TAG_s2", "observer:334 ")
+                                                    //commissionReportAdapter?.setLoading(true)
+                                                    CoroutineScope(Dispatchers.Main).launch {
+                                                        binding.loaderBottom.visibility =
+                                                            View.VISIBLE
+                                                    }
+                                                    lifecycleScope.launch {
+                                                        withContext(Dispatchers.IO) {
+                                                            CoroutineScope(Dispatchers.IO).launch {
+                                                                val loadMoreDataTask =
+                                                                    MyAsyncTask2()
+                                                                loadMoreDataTask.execute()
+                                                                isAsintask = false
+                                                            }
+                                                        }
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                    Log.d("TAG_s2", "observer:111 ")
+
+                                } else {
+                                    // NestedScrollView is not at the bottom
+                                    Log.d("TAG_s2", "observer:222 ")
+
+                                }
+                            }
+                        }
+                    }
+
+                    // Other code in the main coroutine
+
+                }
+            }
+        }*/
+
+        binding.nsvTop.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            if (scrollY != oldScrollY) {
+                val maxScrollRange = binding.nsvTop.getChildAt(0).height - binding.nsvTop.height
+                val isAtBottom = scrollY >= maxScrollRange
+
+                if (isAtBottom) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        binding.loaderBottom.visibility = View.VISIBLE
+                    }
+
+                    if (!(SystemClock.elapsedRealtime() - lastClickTime1 < 1500)) {
+                        if (!(endIndex >= (Constants.reportList.size - 1)) && isAsintask) {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val loadMoreDataTask = MyAsyncTask2()
+                                loadMoreDataTask.execute()
+                                isAsintask = false
+                            }
+                        }
+                    }
+                } else {
+                    // NestedScrollView is not at the bottom
+                }
+            }
+        }
     }
 
     fun showrecycleView(a:Int) {
@@ -1458,7 +1565,7 @@ class ReportFragment : BaseFragment()  {
                     reportPropertyModel=setReportPropertyModel
                     //items=reportList
                     lifecycleScope.launch {
-                        binding.btnHasdata.visibility=View.GONE
+                     //   binding.btnHasdata.visibility=View.GONE
                         if(reportList.size>10) {
                             getAllData2()
 
@@ -1471,10 +1578,10 @@ class ReportFragment : BaseFragment()  {
                         }
 
                     }
-                    binding.btnHasdata.setOnClickListener {
-                        binding.btnHasdata.visibility=View.GONE
+                  /*  binding.btnHasdata.setOnClickListener {
+                      //  binding.btnHasdata.visibility=View.GONE
                         getAllData2()
-                    }
+                    }*/
                     //loadAllData()
                     /*handler.postDelayed({
                         reportAdapter.items=reportList2
@@ -1517,14 +1624,14 @@ class ReportFragment : BaseFragment()  {
 
             reportAdapter?.items = newReportList
             reportAdapter?.notifyDataSetChanged()
-            binding.btnHasdata.visibility=View.VISIBLE
-        } else {
+           // binding.btnHasdata.visibility=View.VISIBLE
+        } /*else {
             binding.btnHasdata.visibility = View.GONE
-        }
+        }*/
 
         //delay(2000)
         loader?.dismiss()
-        startIndex = endIndex + 1
+        startIndex += 10
         endIndex += 10
         loader?.dismiss()
         //showrecycleView()
@@ -1890,7 +1997,7 @@ class ReportFragment : BaseFragment()  {
                     if (isEnabled) {
                         isEnabled = false
                         reportAdapter?.let {
-                            binding.bottomLoader.visibility=View.GONE
+                          //  binding.bottomLoader.visibility=View.GONE
                             reportList.clear()
                             newReportList.clear()
                             it.items=ArrayList()
@@ -1906,5 +2013,97 @@ class ReportFragment : BaseFragment()  {
 
     }
 
-}
+
+    inner class MyAsyncTask2 : AsyncTask<Void, Void, Unit>() {
+
+        override fun doInBackground(vararg params: Void?) {
+            // Background work (in a background thread)
+
+            /*for (index in reportList.indices) {
+                if (index >= startIndex && index <= endIndex) {
+                    var items = reportList[index]
+                    items.apply {
+                        newReportList.add(this)
+                    }
+
+                }
+            }
+
+            reportAdapter?.items = newReportList*/
+
+
+            if (!(endIndex >= (reportList.size - 1))) {
+               // Log.d("TAG_s2", "observer:444 ")
+                for (index in startIndex until minOf(endIndex, reportList.size)) {
+                   // Log.d("TAG_s2", "observer:555 ")
+                    if (index >= startIndex && index <= endIndex) {
+                      //  Log.d("TAG_s2", "observer:666 ")
+                        val items = Constants.reportList[index]
+                        items.apply {
+                            //reportList2.add(items)
+                            newReportList?.add(items)
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+        override fun onPostExecute(result: Unit?) {
+            // UI-related operations (in the main thread)
+            /*activity?.let {
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (!(endIndex >= (Constants.commissionReportList.size - 1))) {
+                        reportAdapter?.notifyDataSetChanged()
+                    }
+
+                startIndex += 10
+                endIndex += 10
+                loader?.dismiss()
+            }
+
+
+        }*/
+
+            activity?.let {
+                 it.runOnUiThread(){
+                CoroutineScope(Dispatchers.IO).launch {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        if (!(endIndex >= (reportList.size - 1))) {
+                            Log.d("TAG_s2", "observer:777 ")
+                           /* withContext(Dispatchers.Default) {
+                                reportAdapter?.items=reportList
+                            }*/
+                            withContext(Dispatchers.Main) {
+                                // Update the adapter on the main thread
+                                reportAdapter?.notifyDataSetChanged()
+                            }
+
+                           // reportAdapter?.notifyDataSetChanged()
+                        }
+                        loader?.dismiss()
+
+
+
+                        CoroutineScope(Dispatchers.IO).launch {
+                            startIndex = endIndex + 1
+                            endIndex += 10
+
+
+
+                            delay(500)
+                            isAsintask = true
+                        }
+                        CoroutineScope(Dispatchers.Main).launch {
+                            binding.loaderBottom.visibility = View.GONE
+                        }
+                    }
+                    }
+                }
+            }
+
+    }
+
+}}
 

@@ -94,6 +94,9 @@
         <action
             android:id="@+id/action_homeFragment2_to_commissionReportFragment"
             app:destination="@id/commissionReportFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_walletLedgerReportFragment"
+            app:destination="@id/walletLedgerReportFragment" />
     </fragment>
     <fragment
         android:id="@+id/mobileRechargeFragment"
@@ -362,4 +365,8 @@
         android:id="@+id/commissionReportFragment"
         android:name="com.epaymark.big9.ui.fragment.report.CommissionReportFragment"
         android:label="CommissionReportFragment" />
+    <fragment
+        android:id="@+id/walletLedgerReportFragment"
+        android:name="com.epaymark.big9.ui.fragment.report.WalletLedgerReportFragment"
+        android:label="WalletLedgerReportFragment" />
 </navigation>

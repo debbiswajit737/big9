@@ -188,13 +188,14 @@
 
 
                             />
+                        <!--app:layout_constraintBottom_toBottomOf="@+id/view_last"-->
                         <!-- Add a ProgressBar for bottom loader -->
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recycleViewReport"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            app:layout_constraintBottom_toBottomOf="parent"
+
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="1.0"
                             app:layout_constraintStart_toStartOf="parent"
@@ -202,6 +203,15 @@
                             app:layout_constraintVertical_bias="0.0"
                             tools:listitem="@layout/report_layout_item"
                            />
+                        <View
+                            android:id="@+id/view_last"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_30sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/recycleViewReport"/>
 
 
 
@@ -221,13 +231,21 @@
             android:id="@+id/loaderBottom"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_20sdp"
-            android:background="@color/logo_color"
+            android:background="@color/g5"
             android:orientation="vertical"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-            <com.google.android.material.progressindicator.CircularProgressIndicator
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Loading..."
+                android:gravity="center"
+                android:fontFamily="@font/montserrat_medium_500"
+                android:textSize="@dimen/_14ssp"
+                android:textColor="@color/white"/>
+           <!-- <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/bottomLoader"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="match_parent"
@@ -238,7 +256,7 @@
                 android:layout_gravity="center"
                 app:trackColor="@color/logo_second_color"
                 app:trackThickness="@dimen/_2sdp"
-                />
+                />-->
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

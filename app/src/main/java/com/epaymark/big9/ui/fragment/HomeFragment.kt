@@ -48,6 +48,9 @@ import com.epaymark.big9.utils.*
 import com.epaymark.big9.utils.common.MethodClass.userLogout
 import com.epaymark.big9.utils.helpers.Constants.Postpaid
 import com.epaymark.big9.utils.helpers.Constants.Prepaid
+import com.epaymark.big9.utils.helpers.Constants.commissionReportAdapter
+import com.epaymark.big9.utils.helpers.Constants.commissionReportList
+import com.epaymark.big9.utils.helpers.Constants.commissionReportList2
 import com.epaymark.big9.utils.helpers.Constants.isCashWithdraw
 import com.epaymark.big9.utils.helpers.Constants.isFromSearchPage
 import com.epaymark.big9.utils.helpers.Constants.newReportList
@@ -1008,8 +1011,24 @@ class HomeFragment : BaseFragment() {
                         }
                         viewModel.reportType.value = s
                         if (s==getString(R.string.commissions)){
+                            commissionReportAdapter?.let {
+                                commissionReportList.clear()
+                                commissionReportList2.clear()
+                                commissionReportAdapter?.items= ArrayList()
+                                commissionReportAdapter?.notifyDataSetChanged()
+                            }
                             findNavController().navigate(R.id.action_homeFragment2_to_commissionReportFragment)
                         }
+                        /*if (s==getString(R.string.wallet_ledger)){
+                            commissionReportAdapter?.let {
+                                commissionReportList.clear()
+                                commissionReportList2.clear()
+                                commissionReportAdapter?.items= ArrayList()
+                                commissionReportAdapter?.notifyDataSetChanged()
+                            }
+                            findNavController().navigate(R.id.action_homeFragment2_to_walletLedgerReportFragment)
+                        }*/
+
                         else {
                             //viewModel.reportType.value = s//.replaceFirstChar(Char::titlecase)
                             findNavController().navigate(R.id.action_homeFragment2_to_reportFragment)

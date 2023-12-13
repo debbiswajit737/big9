@@ -1,75 +1,55 @@
 package com.epaymark.big9.adapter.reportAdapter
 
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.epaymark.big9.R
-import com.epaymark.big9.databinding.ReportLayoutItemBinding
 import com.epaymark.big9.data.model.ReportModel
 import com.epaymark.big9.data.model.ReportPropertyModel
-import com.epaymark.big9.databinding.BannerItemsBinding
-
+import com.epaymark.big9.databinding.ReportLayoutItemBinding
 import com.epaymark.big9.utils.`interface`.CallBack
-import com.google.gson.Gson
 
-
-class ReportAdapter(
+class ReportAdapter2(
     var reportPropertyModel: ReportPropertyModel,
-    var items: ArrayList<ReportModel>,
-
     val callBack: CallBack
-) : RecyclerView.Adapter<ReportAdapter.MyViewHolder>() {
+) : PagingDataAdapter<ReportModel, ReportAdapter2.MyViewHolder>(ReportModelDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        /*val view = LayoutInflater.from(parent.context).inflate(R.layout.banner_items, parent, false)
-        return MyViewHolder(view)*/
-       /* val binding = BannerItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(binding.root)*/
-
-
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding: ReportLayoutItemBinding =
             ReportLayoutItemBinding.inflate(layoutInflater, parent, false)
         return MyViewHolder(binding)
-
-
     }
-
-
-
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(items[position],position)
+        getItem(position)?.let { holder.bind(it, position) }
     }
-
-    override fun getItemCount(): Int {
-        return items.size
-    }
-
-
-
 
     inner class MyViewHolder(val binding: ReportLayoutItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ReportModel, position: Int) {
             binding.apply {
-
-                model=item
-                cardView.setOnClickListener{
-                    if (item.isClickAble == true){
-                        val gson = Gson()
-                        val json = gson.toJson(item)
-                        callBack.getValue(json)
+                model = item
+                cardView.setOnClickListener {
+                    if (item.isClickAble == true) {
+                       /* val json = item.toJson() // Implement toJson() method in your ReportModel
+                        callBack.getValue(json)*/
                     }
-
                 }
                 propertyModel=reportPropertyModel
                 executePendingBindings()
             }
-
         }
     }
 
+    class ReportModelDiffCallback : DiffUtil.ItemCallback<ReportModel>() {
+        override fun areItemsTheSame(oldItem: ReportModel, newItem: ReportModel): Boolean {
+            return oldItem.id == newItem.id // Assuming you have an id field in your ReportModel
+        }
 
+        override fun areContentsTheSame(oldItem: ReportModel, newItem: ReportModel): Boolean {
+            return oldItem == newItem
+        }
+    }
 }

@@ -34,6 +34,7 @@ import com.epaymark.big9.data.model.allReport.CommissionReportData
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.data.viewMovel.TableViewModel
 import com.epaymark.big9.databinding.CommissionFragmentReportBinding
+import com.epaymark.big9.databinding.WalletLedgerFragmentReportBinding
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
@@ -56,8 +57,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-class CommissionReportFragment : BaseFragment() {
-    lateinit var binding: CommissionFragmentReportBinding
+class WalletLedgerReportFragment : BaseFragment() {
+    lateinit var binding: WalletLedgerFragmentReportBinding
     private val viewModel: MyViewModel by activityViewModels()
 
     private val myViewModel: MyViewModel by activityViewModels()
@@ -84,7 +85,7 @@ class CommissionReportFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.commission_fragment_report, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.wallet_ledger_fragment_report, container, false)
         tableViewModel = ViewModelProvider(this)[TableViewModel::class.java]
         binding.viewModel = viewModel
         binding.lifecycleOwner = this

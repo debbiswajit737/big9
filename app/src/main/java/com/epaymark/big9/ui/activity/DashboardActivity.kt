@@ -2,9 +2,12 @@ package com.epaymark.big9.ui.activity
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.view.ViewConfiguration
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.epaymark.big9.R
@@ -23,6 +26,10 @@ import com.epaymark.big9.utils.helpers.RequestBodyHelper
 import com.epaymark.big9.utils.helpers.ScreenshotUtils.Companion.takeScreenshot
 import com.epaymark.big9.utils.helpers.SharedPreff
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -47,6 +54,7 @@ class DashboardActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         myViewModel = ViewModelProvider(this)[MyViewModel::class.java]
         init()
+
         observer()
 
         loadingPopup = LoadingPopup(this)
@@ -59,29 +67,35 @@ class DashboardActivity : BaseActivity() {
     fun init() {
 
 
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val navHostFragment: NavHostFragment =
+                        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                    navController = navHostFragment.navController
+                    intent?.let { intentData ->
+                        val isReceptBooleanValue = intentData.getBooleanExtra(isRecept, false)
+                        val isAfterRegVal = intentData.getBooleanExtra(isAfterReg, false)
+                        if (isReceptBooleanValue) {
 
-        val navHostFragment: NavHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
-        intent?.let { intentData ->
-            val isReceptBooleanValue = intentData.getBooleanExtra(isRecept, false)
-            val isAfterRegVal = intentData.getBooleanExtra(isAfterReg, false)
-            if (isReceptBooleanValue) {
+                        }
+                        if (isAfterRegVal) {
+                            navController?.navigate(R.id.homeFragment2)
+                        }
+                    }
 
-            }
-            if (isAfterRegVal) {
-                navController?.navigate(R.id.homeFragment2)
+                    var currentFragmentId = navController?.currentDestination?.id
+                    if (currentFragmentId == R.id.homeFragment) {
+                        binding.bottomNav.visibility = View.VISIBLE
+                        binding.clHeader.visibility = View.VISIBLE
+                    } else {
+                        binding.bottomNav.visibility = View.GONE
+                        binding.clHeader.visibility = View.GONE
+                    }
+                }
             }
         }
 
-        var currentFragmentId = navController?.currentDestination?.id
-        if (currentFragmentId == R.id.homeFragment) {
-            binding.bottomNav.visibility = View.VISIBLE
-            binding.clHeader.visibility = View.VISIBLE
-        } else {
-            binding.bottomNav.visibility = View.GONE
-            binding.clHeader.visibility = View.GONE
-        }
     }
 
     fun observer() {
