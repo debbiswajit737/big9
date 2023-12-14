@@ -2,6 +2,9 @@ package com.epaymark.big9.network
 
 import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.CreditCardSendOtpModel
+import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
+import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
@@ -219,6 +222,32 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<PrepaidMoboleTranspherModel>
+
+
+    @POST("v1/services/creditcard/send_otp")
+    suspend fun creditCardSendOtp(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<CreditCardSendOtpModel>
+
+
+    @POST("v1/services/creditcard/verify_otp")
+    suspend fun creditCardverifyOtp(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<CreditCardVerifyOtpModel>
+
+
+    @POST("v1/services/epotly/epotly_transfer")
+    suspend fun epotlyTransfer(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<EPotlyTranspherModel>
+
+
+
+
+
 
 
 }

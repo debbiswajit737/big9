@@ -5,6 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagingSource
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.CreditCardSendOtpModel
+import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
+import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
@@ -665,8 +668,82 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     }
 
+    //Credit card send otp
+    private val _creditCardSendOtpResponseLiveData =
+        MutableLiveData<ResponseState<CreditCardSendOtpModel>>()
+    val creditCardSendOtpResponseLiveData: LiveData<ResponseState<CreditCardSendOtpModel>>
+        get() = _creditCardSendOtpResponseLiveData
+
+    suspend fun creditSendVerifyOtp(token: String, loginModel: String) {
+        _creditCardSendOtpResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.creditCardSendOtp(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _creditCardSendOtpResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _creditCardSendOtpResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //Credit card verify otp
+    private val _creditCardVeryfyOTPResponseLiveData =
+        MutableLiveData<ResponseState<CreditCardVerifyOtpModel>>()
+    val creditCardVeryfyOTPResponseLiveData: LiveData<ResponseState<CreditCardVerifyOtpModel>>
+        get() = _creditCardVeryfyOTPResponseLiveData
+
+    suspend fun creditCardVeryfyOTP(token: String, loginModel: String) {
+        _creditCardVeryfyOTPResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.creditCardverifyOtp(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _creditCardVeryfyOTPResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _creditCardVeryfyOTPResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
 
 
+
+    //Epotly Transpher
+    private val _epotlyTranspherResponseLiveData =
+        MutableLiveData<ResponseState<EPotlyTranspherModel>>()
+    val epotlyTranspherResponseLiveData: LiveData<ResponseState<EPotlyTranspherModel>>
+        get() = _epotlyTranspherResponseLiveData
+
+    suspend fun epotlyTranspher(token: String, loginModel: String) {
+        _epotlyTranspherResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.epotlyTransfer(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _epotlyTranspherResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _epotlyTranspherResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
 
 }
 

@@ -10,6 +10,9 @@ import androidx.paging.PagingConfig
 import com.epaymark.big9.R
 
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.CreditCardSendOtpModel
+import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
+import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
@@ -43,8 +46,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepository,private val tableRepository: TableRepository) : ViewModel() {
-
-
+    var fromPage=""
+    var data:Map<String, Any?>?=null
     val selectedButton = MutableLiveData<Int>()
 
 
@@ -100,8 +103,9 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val minrecharge = MutableLiveData<Int>()
     val maxrecharge = MutableLiveData<Int>()
 
-
-
+    //For creditcard
+    val creditCardID = MutableLiveData<String>()
+    val stateresp = MutableLiveData<String>()
 
 
 
@@ -1517,6 +1521,32 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         }
     }
 
+    //credit card send otp
+    val creditCardSendOtpResponseLiveData: LiveData<ResponseState<CreditCardSendOtpModel>>
+        get() = repository.creditCardSendOtpResponseLiveData
+    fun creditSendVerifyOtp(token: String, data: String) {
+        viewModelScope.launch {
+            repository.creditSendVerifyOtp(token,data)
+        }
+    }
+
+    //credit card verify otp
+    val creditCardVeryfyOTPResponseLiveData: LiveData<ResponseState<CreditCardVerifyOtpModel>>
+        get() = repository.creditCardVeryfyOTPResponseLiveData
+    fun creditCardVeryfyOTP(token: String, data: String) {
+        viewModelScope.launch {
+            repository.creditCardVeryfyOTP(token,data)
+        }
+    }
+
+    //Epotly transpher
+    val epotlyTranspherResponseLiveData: LiveData<ResponseState<EPotlyTranspherModel>>
+        get() = repository.epotlyTranspherResponseLiveData
+    fun epotlyTranspher(token: String, data: String) {
+        viewModelScope.launch {
+            repository.epotlyTranspher(token,data)
+        }
+    }
 
 
 }

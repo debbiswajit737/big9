@@ -22,6 +22,7 @@ object Constants {
     const val TEST = "TEST"
     const val ISLogin = "isLogin"
     const val loginData = "loginData"
+    const val USER_DATA = "userdata"
     var isDthOperator=false
     var isVideo=false
     var isIsPaySlip=false

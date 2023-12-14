@@ -8,8 +8,10 @@ import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.ui.activity.DashboardActivity
+import com.epaymark.big9.utils.helpers.SharedPreff
 import java.io.File
 import java.io.FileOutputStream
+import javax.inject.Inject
 
 
 open class BaseCenterSheetFragment: DialogFragment() {

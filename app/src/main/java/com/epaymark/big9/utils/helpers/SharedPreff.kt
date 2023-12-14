@@ -2,9 +2,11 @@ package com.epaymark.big9.utils.helpers
 
 import android.content.Context
 import com.epaymark.big9.data.model.login.LoginResponse
+import com.epaymark.big9.data.model.profile.Data
 import com.epaymark.big9.utils.helpers.Constants.EPAY_SHAREDFREFFRENCE
 import com.epaymark.big9.utils.helpers.Constants.ISLogin
 import com.epaymark.big9.utils.helpers.Constants.TEST
+import com.epaymark.big9.utils.helpers.Constants.USER_DATA
 import com.epaymark.big9.utils.helpers.Constants.loginData
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -58,6 +60,41 @@ class SharedPreff @Inject constructor(@ApplicationContext private val context: C
             editor?.apply()
         }
     }
+
+    fun setUserInfoData(userdata: Data?) {
+
+        context?.let {
+             settings =
+                context.getSharedPreferences(EPAY_SHAREDFREFFRENCE, Context.MODE_PRIVATE)
+            val editor = settings?.edit()
+
+
+            val gson = Gson()
+            val json = gson.toJson(userdata)
+            editor?.putString(USER_DATA, json)
+
+            editor?.apply()
+        }
+    }
+
+    fun getUserData(): Data? {
+        context?.let {
+            //var settings2 = context.getSharedPreferences(EPAY_SHAREDFREFFRENCE, Context.MODE_PRIVATE)
+
+
+            val json = settings?.getString(USER_DATA, null)
+
+            val gson = Gson()
+            val userData = if (json != null) gson.fromJson(json, Data::class.java) else null
+
+            return userData
+        }
+
+        // Return default values if context is null
+        return null
+    }
+
+
 
     fun checkIsLogin(): Boolean {
         var isLogin: Boolean? = null

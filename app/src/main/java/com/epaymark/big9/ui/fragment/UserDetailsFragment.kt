@@ -1,6 +1,7 @@
 package com.epaymark.big9.ui.fragment
 
 
+import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
@@ -15,9 +16,13 @@ import com.epaymark.big9.adapter.UserDetailsAdapter
 import com.epaymark.big9.data.model.UserDetails
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentUserDetailsBinding
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.utils.*
+import com.epaymark.big9.utils.common.MethodClass
+import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
@@ -28,6 +33,7 @@ class UserDetailsFragment : BaseFragment() {
     lateinit var binding: FragmentUserDetailsBinding
     private val viewModel: MyViewModel by activityViewModels()
     var userDetailsList = ArrayList<UserDetails>()
+    private var loader: Dialog? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,7 +48,7 @@ class UserDetailsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initView()
-        setObserver()
+        observer()
         onViewClick()
     }
 
@@ -56,6 +62,8 @@ class UserDetailsFragment : BaseFragment() {
 
 
     fun initView() {
+        userDetailsList.clear()
+        callProfile()
         binding.recycleViewUserdetails.apply {
             try {
                 val bitmap = encodeAsBitmap("HELLO")
@@ -63,7 +71,7 @@ class UserDetailsFragment : BaseFragment() {
             } catch (ex: WriterException) {
                 ex.printStackTrace()
             }
-            userDetailsList.add(UserDetails("Name","Test User"))
+            /*userDetailsList.add(UserDetails("Name","Test User"))
             userDetailsList.add(UserDetails("Business Name","Test Business Name"))
             userDetailsList.add(UserDetails("Registered Mobile Number","9999999999"))
             userDetailsList.add(UserDetails("Registered Email Id","test@test.com"))
@@ -72,16 +80,86 @@ class UserDetailsFragment : BaseFragment() {
             userDetailsList.add(UserDetails("State","West Bengal"))
             userDetailsList.add(UserDetails("Account Type","Distributor"))
             userDetailsList.add(UserDetails("Super Distributor","9999999999"))
-            userDetailsList.add(UserDetails("Distributor","9999999999"))
-            adapter= UserDetailsAdapter(userDetailsList)
+            userDetailsList.add(UserDetails("Distributor","9999999999"))*/
+
         }
     }
 
-    fun setObserver() {
-        binding.apply {
+    private fun callProfile() {
+
+
+        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+        loginResponse?.let {loginData->
+
+
+            val data = mapOf(
+                "otp" to "123456",
+                "userid" to loginData.userid,
+
+                "deviceid" to MethodClass.deviceUid(binding.root.context),
+                "ipaddress" to MethodClass.getLocalIPAddress(),
+                "location" to "123",
+                "referenceid" to "123",
+                "Timestamp" to MethodClass.getCurrentTimestamp()
+            )
+            /*"referenceid" to loginData.,*/
+            val gson= Gson()
+            var jsonString = gson.toJson(data)
+
+
+            loginData.AuthToken?.let {
+                viewModel?.profile2(it,jsonString.encrypt())
+            }
+
 
         }
 
+
+    }
+    private fun observer() {
+        viewModel?.profile2Response?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    // loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+                    it.data?.data?.let {
+                        binding.recycleViewUserdetails.apply {
+                            try {
+                                val bitmap = encodeAsBitmap("HELLO")
+                                binding.imgQrcode.setImageBitmap(bitmap)
+                            } catch (ex: WriterException) {
+                                ex.printStackTrace()
+                            }
+
+                            //sharedPreff?.setUserInfoData(it)
+                            userDetailsList.add(UserDetails("Name",it.name.toString()))
+                            userDetailsList.add(UserDetails("MobileNo",it.mobileNo.toString()))
+                            userDetailsList.add(UserDetails("Alternate Number",it.AlternateNumber.toString()))
+                            userDetailsList.add(UserDetails("Email ID",it.emailId.toString()))
+                            userDetailsList.add(UserDetails("Address",it.address.toString()))
+                            userDetailsList.add(UserDetails("Gender",it.gender.toString()))
+                            userDetailsList.add(UserDetails("Pincode",it.pincode.toString()))
+                            userDetailsList.add(UserDetails("DOB",it.dob.toString()))
+                            userDetailsList.add(UserDetails("Payout Balance",it.payoutBalance.toString()))
+                            userDetailsList.add(UserDetails("Payabhi Wallet",it.payabhiWallet.toString()))
+                            userDetailsList.add(UserDetails("Payabhi Wallet",it.payabhiWallet.toString()))
+                            adapter= UserDetailsAdapter(userDetailsList)
+                        }
+
+                    }
+                    //  Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
     }
 
     @Throws(WriterException::class)

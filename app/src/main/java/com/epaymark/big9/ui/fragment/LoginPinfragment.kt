@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.epaymark.big9.R
 import com.epaymark.big9.adapter.PhonePadAdapter2
 import com.epaymark.big9.data.model.ReceiptModel
+import com.epaymark.big9.data.model.profile.Data
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentLoginPinBinding
 import com.epaymark.big9.network.ResponseState
@@ -98,6 +98,11 @@ class LoginPinfragment : BaseFragment() {
             recyclePhonePad.requestFocus()
             hideKeyBoard(firstPinView)
         }
+
+        sharedPreff?.getUserData()?.let{
+           setUserData(it)
+        }
+
 
         //transition slip
         myViewModel.receiveStatus.value=""
@@ -325,22 +330,11 @@ class LoginPinfragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
-                    it.data?.data?.SelfieImageData?.let {
-                        val decodedString: ByteArray = Base64.decode(it, Base64.DEFAULT)
-                        val decodedByte =
-                            BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
-
-                        Glide.with(this)
-                            .asBitmap() // Use asBitmap() instead of asGif()
-                            .load(decodedByte)
-                            .error(R.drawable.ic_success) // Set the default image resource
-
-                            .into(binding.profileImage)
+                    it.data?.data?.let {
+                        sharedPreff?.setUserInfoData(it)
+                        setUserData(it)
                     }
-                    myViewModel.apply {
-                        userProfileMobile.value=it.data?.data?.mobileNo
-                        userProfileName.value=it.data?.data?.name
-                    }
+
 
 
                   //  Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
@@ -355,23 +349,42 @@ class LoginPinfragment : BaseFragment() {
         }
     }
 
-   /* private fun setObserver() {
-        myViewModel?.profileResponse?.observe(viewLifecycleOwner){
-            when (it) {
-                is ResponseState.Loading -> {
-                    loadingPopup?.show()
-                }
+    private fun setUserData(data: Data) {
+        data.SelfieImageData?.let {
+            val decodedString: ByteArray = Base64.decode(it, Base64.DEFAULT)
+            val decodedByte =
+                BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
 
-                is ResponseState.Success -> {
-                      loadingPopup?.dismiss()
-                    Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
-                    }
+            Glide.with(this)
+                .asBitmap() // Use asBitmap() instead of asGif()
+                .load(decodedByte)
+                .error(R.drawable.ic_success) // Set the default image resource
 
-                is ResponseState.Error -> {
-                    //   loadingPopup?.dismiss()
-                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-                }
-            }
+                .into(binding.profileImage)
         }
-    }*/
+        myViewModel.apply {
+            userProfileMobile.value=data.mobileNo
+            userProfileName.value=data.name
+        }
+    }
+
+    /* private fun setObserver() {
+         myViewModel?.profileResponse?.observe(viewLifecycleOwner){
+             when (it) {
+                 is ResponseState.Loading -> {
+                     loadingPopup?.show()
+                 }
+
+                 is ResponseState.Success -> {
+                       loadingPopup?.dismiss()
+                     Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+                     }
+
+                 is ResponseState.Error -> {
+                     //   loadingPopup?.dismiss()
+                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                 }
+             }
+         }
+     }*/
 }

@@ -799,9 +799,18 @@ class ReportFragment : BaseFragment()  {
                             )*/
 
                             if(!it.data?.data.isNullOrEmpty()){
-                                it.data?.data?.let {responseData->
-                                    for (items in responseData){
+                                val size=if (it.data?.data?.size?:0 >=60){
+                                    60
+                                }
+                                else{
+                                    it.data?.data?.size?.minus(1)?:0
+                                }
 
+
+                                it.data?.data?.let {responseData->
+                                  //  for (items in responseData){
+                                    for (index in 0 until minOf(responseData.size, size)) {
+                                        val items=responseData[index]
                                         items.apply {
 
                                             reportList.add(ReportModel(refillid,amount,insdate,type,3,desc = "",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))

@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.epaymark.big9.R
+import com.epaymark.big9.data.model.epotlyData
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentSuccessPopupBinding
 import com.epaymark.big9.ui.base.PopUpFragment

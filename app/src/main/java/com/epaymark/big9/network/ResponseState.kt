@@ -68,11 +68,15 @@ sealed class ResponseState<T>(
                 //Error
                 val errorObj =
                     JSONObject(response.errorBody()?.charStream()?.readText()?:"{}")
-                val description = errorObj.optJSONObject("Description")
+                /*val description = errorObj.optJSONObject("Description")*/
                 //val responseStatus = responseObj?.optJSONObject("status")
                 //val errorMessage = responseStatus?.optString("msg")
+
+                //val errorObj = JSONObject(response.errorBody()?.charStream()?.readText() ?: "{}")
+                val description = errorObj.optString("Description", "")
+
                 val errorCode = response.code()
-                Error(false,response.message(),errorCode)
+                Error(false,description,errorCode)
             }
         }
     }
