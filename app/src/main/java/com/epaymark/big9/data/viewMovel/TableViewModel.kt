@@ -5,15 +5,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import androidx.paging.cachedIn
 import com.epaymark.big9.repository.TableRepository
 import com.epaymark.big9.utils.table.DataEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import androidx.paging.cachedIn
+import com.epaymark.big9.data.model.allReport.WalletLedgerData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -63,7 +67,7 @@ class TableViewModel @Inject constructor(private val repository: TableRepository
             enablePlaceholders = false
         )
 
-        val pager = Pager(
+       /* val pager = Pager(
             config = pagingConfig,
             pagingSourceFactory = { repository.getDataPaged() }
         )
@@ -73,11 +77,11 @@ class TableViewModel @Inject constructor(private val repository: TableRepository
             .collectLatest {
                 _isLoading.postValue(false) // Hide loader when data is loaded
                 emit(it)
-            }
+            }*/
     }
 
 
-    fun insertData(data2: DataEntity) {
+    fun insertData(data2: WalletLedgerData) {
         viewModelScope.launch {
             repository.insertData(data2)
         }
@@ -85,19 +89,19 @@ class TableViewModel @Inject constructor(private val repository: TableRepository
 
     fun deleteAllData() {
         viewModelScope.launch {
-            val rowsDeleted = repository.deleteAllData()
+           // val rowsDeleted = repository.deleteAllData()
 
-            if (rowsDeleted > 0) {
+            /*if (rowsDeleted > 0) {
                 // Rows were deleted successfully
                 // Perform any additional actions or UI updates
             } else {
                 // No rows were deleted (or an error occurred)
                 // Handle the situation accordingly
-            }
+            }*/
         }
     }
 
-    fun getDataInRange(startIndex: Int, endIndex: Int): List<DataEntity?>? {
+    /*fun getDataInRange(startIndex: Int, endIndex: Int): List<DataEntity?>? {
         var data:List<DataEntity?>? =null
             viewModelScope.launch {
 
@@ -109,8 +113,41 @@ class TableViewModel @Inject constructor(private val repository: TableRepository
 
         }
         return data
+    }*/
+
+    @OptIn(ExperimentalPagingApi::class)
+    val walletLedgerData: Flow<PagingData<WalletLedgerData>> =
+        Pager(
+            config = PagingConfig(pageSize = 10),
+            remoteMediator = repository.walletLedgerRemoteMediator
+        ) {
+            // Use a PagingSource based on Flow<PagingData<WalletLedgerData>>
+            PagingSourceFromFlow(repository.getAllWalletLedgerData())
+        }.flow.cachedIn(viewModelScope)
+
+
+
+inner class PagingSourceFromFlow(
+    private val flow: Flow<PagingData<WalletLedgerData>>
+) : PagingSource<Int, WalletLedgerData>() {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, WalletLedgerData> {
+        // Implement loading logic using the provided flow
+        // For simplicity, this example just returns a dummy result
+        return LoadResult.Page(
+            data = emptyList(),
+            prevKey = null,
+            nextKey = null
+        )
     }
 
+    override fun getRefreshKey(state: PagingState<Int, WalletLedgerData>): Int? {
+        // You should return a key that represents the position of the data that should be considered as the anchor for refresh
+        // This key is often the key of the first item currently in the loaded data
+        return state.anchorPosition?.let { anchorPosition ->
+            state.closestItemToPosition(anchorPosition)?.id
+        }
+    }
+}
 
 
 }

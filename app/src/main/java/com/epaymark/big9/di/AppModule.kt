@@ -1,6 +1,7 @@
 package com.epaymark.big9.di
 
 import android.content.Context
+import com.epaymark.big9.paging.WalletLedgerRemoteMediator
 import com.epaymark.big9.utils.table.TableDao
 import com.epaymark.big9.utils.table.TableDatabase
 import dagger.Module
@@ -24,5 +25,13 @@ object AppModule {
     @Singleton
     fun provideTableDatabase(@ApplicationContext context: Context): TableDatabase {
         return TableDatabase.getDatabase(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWalletLedgerRemoteMediator(
+        database: TableDatabase
+    ): WalletLedgerRemoteMediator {
+        return WalletLedgerRemoteMediator(database)
     }
 }

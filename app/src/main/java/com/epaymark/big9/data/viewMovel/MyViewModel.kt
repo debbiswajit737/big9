@@ -116,6 +116,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val subId = MutableLiveData<String>()
     val dthOperator = MutableLiveData<String>()
     val selectrdOperator = MutableLiveData<String>()
+    val selectrdOperatorForRecept = MutableLiveData<String>()
     val selectrdBroadbandOperator = MutableLiveData<String>()
     val dthAmt = MutableLiveData<String>()
 
@@ -1492,14 +1493,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
 
 
 
-    //postpaid mobile transpher
-    val postPaidMobileTranspherResponseLiveData: LiveData<ResponseState<PostPaidMobileTranspherModel>>
-        get() = repository.postPaidMobileTranspherResponseLiveData
-    fun PostPaidMobileTranspher(token: String, data: String) {
-        viewModelScope.launch {
-            repository.PostPaidMobileTranspher(token,data)
-        }
-    }
+
 
 
 
@@ -1512,14 +1506,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         }
     }
 
-    //prepaid mobile transpher
-    val prePaidMobileTranspherResponseLiveData: LiveData<ResponseState<PrepaidMoboleTranspherModel>>
-        get() = repository.prePaidMobileTranspherResponseLiveData
-    fun PrePaidMobileTranspher(token: String, data: String) {
-        viewModelScope.launch {
-            repository.PostPaidMobileTranspher(token,data)
-        }
-    }
+
 
     //credit card send otp
     val creditCardSendOtpResponseLiveData: LiveData<ResponseState<CreditCardSendOtpModel>>

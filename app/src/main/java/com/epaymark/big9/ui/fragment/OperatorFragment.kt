@@ -32,6 +32,7 @@ class OperatorFragment : BaseFragment() {
     private val viewModel: MyViewModel by activityViewModels()
     var operator = ArrayList<OperatorModel>()
     private var loader: Dialog? = null
+    var operatorAdapter:OperatorAdapter?=null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -115,17 +116,22 @@ class OperatorFragment : BaseFragment() {
 
     private fun initView() {
         isFirstPageOpeenPostPaidMobile=false
-
+        /*operatorAdapter?.let {
+            it.operatorList= ArrayList()
+            it.notifyDataSetChanged()
+        }*/
         activity?.let {
                 loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
-                val operator_mode=if (viewModel?.prepaitOrPostPaid?.value== Constants.Postpaid){
+                val operator_mode=if(isDthOperator){
+                    "operator_dth"
+                }else if (viewModel?.prepaitOrPostPaid?.value== Constants.Postpaid){
                     "operator_postpaid"
                 }
                 else{
                     "operator_prepaid"
                 }
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
-                    if (isLogin){
+                  //  if (isLogin){
                         loginResponse?.let {loginData->
                             val data = mapOf(
                                 "userid" to loginData.userid,
@@ -147,7 +153,7 @@ class OperatorFragment : BaseFragment() {
                                 //loader?.show()
                             }
                         }
-                    }
+                   // }
 
             }
 
@@ -171,11 +177,7 @@ class OperatorFragment : BaseFragment() {
                operator.add(OperatorModel(R.drawable.videocon,"VideoCon D2h",false))*/
            }
 
-
-
-
-
-           adapter= OperatorAdapter(operator, object : CallBack4 {
+           adapter=OperatorAdapter(operator, object : CallBack4 {
                override fun getValue4(s1: String, s2: String, s3: String, s4: String) {
                    viewModel?.apply {
                        operator.value=s1
@@ -187,10 +189,10 @@ class OperatorFragment : BaseFragment() {
                    findNavController().popBackStack()
                }
 
-
-
            },viewModel)
        }
+
+      // adapter=
     }
 
 }

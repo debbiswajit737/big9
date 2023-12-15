@@ -4,10 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.epaymark.big9.data.model.allReport.WalletLedgerData
 import dagger.hilt.android.HiltAndroidApp
 
 
-@Database(entities = [DataEntity::class], version = 1, exportSchema = false)
+@Database(entities = [WalletLedgerData::class], version = 2, exportSchema = false)
 abstract class TableDatabase : RoomDatabase() {
     abstract fun tableDao(): TableDao
 
@@ -20,7 +21,7 @@ abstract class TableDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     TableDatabase::class.java,
-                    "table_database"
+                    "big9database"
                 ).build()
                 INSTANCE = instance
                 instance

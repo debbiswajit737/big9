@@ -3,10 +3,11 @@ package com.epaymark.big9.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.paging.PagingSource
 import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.CreditCardSendOtpModel
 import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
+import com.epaymark.big9.data.model.DTHOperatorModel
+import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
@@ -35,8 +36,6 @@ import com.epaymark.big9.data.model.profile.profileResponse
 import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetroApi
-import com.epaymark.big9.utils.table.DataEntity
-import com.epaymark.big9.utils.table.TableDao
 import javax.inject.Inject
 
 class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
@@ -590,7 +589,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     //Postpaid mobile transpher
     private val _postPaidMobileTranspherResponseLiveData =
         MutableLiveData<ResponseState<PostPaidMobileTranspherModel>>()
-    val postPaidMobileTranspherResponseLiveData: LiveData<ResponseState<PostPaidMobileTranspherModel>>
+    val postPaidMobileTranspherResponseLiveData: MutableLiveData<ResponseState<PostPaidMobileTranspherModel>>
         get() = _postPaidMobileTranspherResponseLiveData
 
 
@@ -646,7 +645,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     //Prepaid mobile transpher
     private val _prePaidMobileTranspherResponseLiveData =
         MutableLiveData<ResponseState<PrepaidMoboleTranspherModel>>()
-    val prePaidMobileTranspherResponseLiveData: LiveData<ResponseState<PrepaidMoboleTranspherModel>>
+    val prePaidMobileTranspherResponseLiveData: MutableLiveData<ResponseState<PrepaidMoboleTranspherModel>>
         get() = _prePaidMobileTranspherResponseLiveData
 
     suspend fun PrePaidMobileTranspher(token: String, loginModel: String) {
@@ -744,6 +743,58 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         }
 
     }
+
+    //DTH Operator List
+    private val _dthTransferResponseLiveData =
+        MutableLiveData<ResponseState<DTHOperatorModel>>()
+    val dthTransferResponseLiveData: LiveData<ResponseState<DTHOperatorModel>>
+        get() = _dthTransferResponseLiveData
+
+    suspend fun dthTransfer(token: String, loginModel: String) {
+        _dthTransferResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.dthTransfer(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _dthTransferResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _dthTransferResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //DTH USER INFO
+    private val _dthUserInfoResponseLiveData =
+        MutableLiveData<ResponseState<DTHUserInfoModel>>()
+    val dthUserInfoResponseLiveData: LiveData<ResponseState<DTHUserInfoModel>>
+        get() = _dthUserInfoResponseLiveData
+
+    suspend fun dthUserInfo(token: String, loginModel: String) {
+        _dthUserInfoResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.dthUserInfo(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _dthUserInfoResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _dthUserInfoResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
 
 }
 

@@ -269,6 +269,7 @@ class HomeFragment : BaseFragment() {
                 viewModel.operator.value=""
                 viewModel.amt.value=""
                 findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)
+
             }
             getString(R.string.postpaid)->{
                 viewModel.prepaitOrPostPaid.value=Postpaid
@@ -286,7 +287,7 @@ class HomeFragment : BaseFragment() {
             }
 
             getString(R.string.insurance)->{
-               WebView(binding.root.context).set("https://www.gibl.in/wallet/validate2/","ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0=")
+             //  WebView(binding.root.context).set("https://www.gibl.in/wallet/validate2/","ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0=")
             }
 
 
@@ -1019,7 +1020,7 @@ class HomeFragment : BaseFragment() {
                             }
                             findNavController().navigate(R.id.action_homeFragment2_to_commissionReportFragment)
                         }
-                        /*if (s==getString(R.string.wallet_ledger)){
+                       /* if (s==getString(R.string.wallet_ledger)){
                             commissionReportAdapter?.let {
                                 commissionReportList.clear()
                                 commissionReportList2.clear()
@@ -1027,12 +1028,12 @@ class HomeFragment : BaseFragment() {
                                 commissionReportAdapter?.notifyDataSetChanged()
                             }
                             findNavController().navigate(R.id.action_homeFragment2_to_walletLedgerReportFragment)
-                        }*/
+                        }
 
-                        else {
+                        else {*/
                             //viewModel.reportType.value = s//.replaceFirstChar(Char::titlecase)
                             findNavController().navigate(R.id.action_homeFragment2_to_reportFragment)
-                        }
+                       // }
                        /*when(s){
 
                            getString(R.string.payment)->{}

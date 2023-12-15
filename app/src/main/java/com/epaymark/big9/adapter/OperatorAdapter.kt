@@ -12,7 +12,7 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.utils.`interface`.CallBack4
 
 class OperatorAdapter(
-    private val operatorList: ArrayList<OperatorModel>,
+    var operatorList: ArrayList<OperatorModel>,
     val listner: CallBack4,
     val viewModel: MyViewModel
 ) : RecyclerView.Adapter<OperatorAdapter.MyViewHolder>() {

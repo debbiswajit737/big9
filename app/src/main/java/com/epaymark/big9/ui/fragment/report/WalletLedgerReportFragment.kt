@@ -27,6 +27,8 @@ import com.bumptech.glide.Glide
 import com.epaymark.big9.R
 import com.epaymark.big9.adapter.reportAdapter.CommissionReportAdapter
 import com.epaymark.big9.adapter.reportAdapter.PagingReportAdapter
+import com.epaymark.big9.adapter.reportAdapter.ReportAdapter
+import com.epaymark.big9.data.model.ReportModel
 
 import com.epaymark.big9.data.model.ReportPropertyModel
 import com.epaymark.big9.data.model.allReport.CommissionReportData
@@ -40,11 +42,11 @@ import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.utils.common.MethodClass
-import com.epaymark.big9.utils.helpers.Constants.commissionReportAdapter
-import com.epaymark.big9.utils.helpers.Constants.commissionReportList
-import com.epaymark.big9.utils.helpers.Constants.commissionReportList2
+import com.epaymark.big9.utils.helpers.Constants
+
 import com.epaymark.big9.utils.helpers.Constants.reportAdapter
 import com.epaymark.big9.utils.helpers.Constants.reportList
+import com.epaymark.big9.utils.helpers.Constants.reportList2
 import com.epaymark.big9.utils.`interface`.CallBack
 import com.epaymark.big9.utils.table.DataEntity
 import com.google.gson.Gson
@@ -62,6 +64,7 @@ class WalletLedgerReportFragment : BaseFragment() {
     private val viewModel: MyViewModel by activityViewModels()
 
     private val myViewModel: MyViewModel by activityViewModels()
+
     private var loader: Dialog? = null
     var startDate = ""
     var endDate = ""
@@ -137,18 +140,18 @@ class WalletLedgerReportFragment : BaseFragment() {
             }
 
             tvConfirm.setOnClickListener {
-                commissionReportAdapter?.let {
-                    commissionReportList.clear()
-                    commissionReportList2.clear()
+                reportAdapter?.let {
+                    reportList.clear()
+                    reportList2.clear()
                     it.notifyDataSetChanged()
                 }
 
                 getAllData()
             }
             Handler(Looper.getMainLooper()).postDelayed({
-                commissionReportAdapter?.let {
-                    commissionReportList.clear()
-                    commissionReportList2.clear()
+                reportAdapter?.let {
+                    reportList.clear()
+                    reportList2.clear()
                     it.notifyDataSetChanged()
                 }
 
@@ -173,19 +176,19 @@ class WalletLedgerReportFragment : BaseFragment() {
         binding.recycleViewReport.apply {
             recyclerView = this
             //val itemAnimator = FadeInAnimator()
-            recyclerView.itemAnimator = itemAnimator
-            commissionReportAdapter = CommissionReportAdapter(ArrayList(), object : CallBack {
+            recyclerView = this
+            reportAdapter = ReportAdapter(ReportPropertyModel(""),ArrayList(),  object : CallBack {
                 override fun getValue(s: String) {
                     val bundle = Bundle()
                     bundle.putString("jsonData", s)
-                    findNavController().navigate(
+                    /*findNavController().navigate(
                         R.id.action_reportFragment_to_reportDetailsFragment,
                         bundle
-                    )
+                    )*/
                 }
 
             })
-            adapter = commissionReportAdapter
+            adapter=reportAdapter
         }
         /*commissionReportAdapter?.let {
             commissionReportList.clear()
@@ -198,19 +201,19 @@ class WalletLedgerReportFragment : BaseFragment() {
 
 
     private fun getAllData() {
-        val (isLogin, loginResponse) = sharedPreff.getLoginData()
-        if (isLogin) {
-            loginResponse?.let { loginData ->
+        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+        if (isLogin){
+            loginResponse?.let {loginData->
                 val data = mapOf(
                     "userid" to loginData.userid,
-                    "startdate" to startDate,
-                    "enddate" to endDate,
+                    "startdate" to "01-12-2023",
+                    "enddate" to "15-12-2023",
                 )
-                val gson = Gson()
+                val gson= Gson()
                 var jsonString = gson.toJson(data)
                 loginData.AuthToken?.let {
-                    myViewModel?.commissionReport(it, jsonString.encrypt())
-                    //     loader?.show()
+                    myViewModel?.walletLedgerReport(it,jsonString.encrypt())
+                    //    loader?.show()
                 }
             }
         }
@@ -265,13 +268,13 @@ class WalletLedgerReportFragment : BaseFragment() {
                               CoroutineScope(Dispatchers.IO).launch {
                                   //getAllData3()
                                   if (!(SystemClock.elapsedRealtime() - lastClickTime1 < 1500)) {
-                                      if (!(endIndex >= (commissionReportList.size - 1))) {
+                                      if (!(endIndex >= (reportList.size - 1))) {
                                           if (isAsintask) {
                                               //commissionReportAdapter?.setLoading(true)
                                               CoroutineScope(Dispatchers.Main).launch {
                                                   binding.loaderBottom.visibility = View.VISIBLE
                                               }
-                                              val loadMoreDataTask = MyAsyncTask()
+                                              val loadMoreDataTask = MyAsyncTask3()
                                               loadMoreDataTask.execute()
                                               isAsintask = false
                                           }
@@ -293,7 +296,7 @@ class WalletLedgerReportFragment : BaseFragment() {
         }
 
 
-        myViewModel?.commissionReportResponseLiveData?.observe(viewLifecycleOwner) {
+        myViewModel?.walletLedgerReportResponseLiveData?.observe(viewLifecycleOwner){
             when (it) {
                 is ResponseState.Loading -> {
                     loader?.show()
@@ -302,57 +305,65 @@ class WalletLedgerReportFragment : BaseFragment() {
                 is ResponseState.Success -> {
                     loader?.dismiss()
                     //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
-                    if (!it.data?.data.isNullOrEmpty()) {
-                        it.data?.data?.let { responseData ->
-
-                            lifecycleScope.launch {
-                                /*if (responseData.isNotEmpty()) {
-                                    commissionReportList =responseData
-                                }*/
-                                for (index in responseData.indices) {
-                                    if (responseData.isNotEmpty() /*&& index<=15*/) {
-                                        responseData[index].apply {
-                                            commissionReportList.add(
-                                                CommissionReportData(
-                                                    responseData[index].opname,
-                                                    " Commission ${responseData[index].comm}",
-                                                    responseData[index].type
-                                                )
-                                            )
-                                            // tableViewModel.insertData(DataEntity(desc="${responseData[index].opname} Commission ${responseData[index].comm}${responseData[index].type}"))
-                                        }
-                                    }
-                                }
-                                extraArraySize=(commissionReportList.size%10)
-                                /* for (index in responseData.indices) {
-
-                                            // paging++
-
-                                              if (responseData.isNotEmpty()) {
-                                                  commissionReportList=
-                                                  responseData[index].apply {
-                                                      val desc = "$opname   "
-                                                      if (index<=20) {
-                                                          commissionReportList.add(
-                                                          ReportModel(
-                                                              "",
-                                                              desc = desc,
-                                                              price = comm,
-                                                              imageInt = R.drawable.rounded_i
-                                                          )
-                                                      )
-                                                  }
+                    /*reportList.add(
+                        ReportModel(
+                            "001",
+                            "-778.00",
+                            "10-10-2023\n" +
+                                    "05:49:11",
+                            "ePotlyNB Money\nForward",
+                            3,
+                            desc = "",
+                            image1 = 2,
+                            imageInt=R.drawable.rupee_rounded,
+                            price2 = "Closing ₹1021.00",
+                            proce1TextColor = 2,
+                            isMiniStatement = false
+                        )
+                    )
+                    reportList.add(
+                        ReportModel(
+                            "001",
+                            "-778.00",
+                            "10-10-2023\n" +
+                                    "05:49:11",
+                            "ePotlyNB Money\nForward",
+                            3,
+                            desc = "",
+                            image1 = 2,
+                            imageInt=R.drawable.rupee_rounded,
+                            price2 = "Closing ₹1021.00",
+                            proce1TextColor = 2,
+                            isMiniStatement = false
+                        )
+                    )*/
 
 
-                                                  }
-                                                 // showPagingRecycleView()
-
-                                              }
-
-                                         }*/
-                                showrecycleView()
-                            }
+                    if(!it.data?.data.isNullOrEmpty()){
+                        /*val size=if (it.data?.data?.size?:0 >=60){
+                            60
                         }
+                        else{
+                            it.data?.data?.size?.minus(1)?:0
+                        }
+*/
+                        Log.d("TAG_observer", "observer: "+it.data?.data?.size)
+                        it.data?.data?.let {responseData->
+                              for (index in responseData.indices){
+                           // for (index in 0 until minOf(responseData.size, size)) {
+                                val items=responseData[index]
+                                items.apply {
+
+                                      //  tableViewModel.insertData(items)
+
+                                    //reportList.add(ReportModel(refillid,amount,insdate,type,3,desc = "",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
+                                }
+
+                            }
+                            //showrecycleView()
+                        }
+
+
                     }
 
                 }
@@ -451,20 +462,20 @@ class WalletLedgerReportFragment : BaseFragment() {
 
     private fun getAllData2() {
         lifecycleScope.launch(Dispatchers.IO) {
-            if (commissionReportList.size>10) {
-                if (!(endIndex >= (commissionReportList.size - 1))) {
+            if (reportList.size>10) {
+                if (!(endIndex >= (reportList.size - 1))) {
                     //for (index in commissionReportList.indices) {
-                    for (index in startIndex until minOf(endIndex, commissionReportList.size)) {
+                    for (index in startIndex until minOf(endIndex, reportList.size)) {
                         if (index >= startIndex && index <= endIndex) {
-                            var items = commissionReportList[index]
+                            var items = reportList[index]
                             items.apply {
-                                commissionReportList2.add(CommissionReportData(opname, comm, type))
+                                reportList2.add(items)
                             }
 
                         }
                     }
 
-                    commissionReportAdapter?.items = commissionReportList2
+                  //  commissionReportAdapter?.items = commissionReportList2
 
 
                 } else {
@@ -473,8 +484,8 @@ class WalletLedgerReportFragment : BaseFragment() {
             }
             else{
                 CoroutineScope(Dispatchers.Main).launch {
-                    commissionReportAdapter?.items = commissionReportList
-                    commissionReportAdapter?.notifyDataSetChanged()
+                   // commissionReportAdapter?.items = commissionReportList
+                    reportAdapter?.notifyDataSetChanged()
                 }
             }
         }
@@ -483,7 +494,7 @@ class WalletLedgerReportFragment : BaseFragment() {
         withContext(Dispatchers.Main) {
 
             // Perform UI-related operation here, e.g., update UI elements
-            commissionReportAdapter?.notifyDataSetChanged()
+            reportAdapter?.notifyDataSetChanged()
             delay(3000)
             loader?.dismiss()
             binding.loaderBottom.visibility = View.GONE
@@ -494,12 +505,7 @@ class WalletLedgerReportFragment : BaseFragment() {
 
 
 
-        if(commissionReportList.size>20) {
-           // isDataLoadingFromLocal=true
-        }
-        else{
-          //  isDataLoadingFromLocal=false
-        }
+
         //delay(2000)
         loader?.dismiss()
 
@@ -507,12 +513,7 @@ class WalletLedgerReportFragment : BaseFragment() {
         startIndex += 10
         endIndex += 10
         //loader?.dismiss()
-        if (!(endIndex >= (commissionReportList.size - 1))) {
-            isDataLoadingFromLocal = false
-        }
-        else{
-            isDataLoadingFromLocal = true
-        }
+
         //showrecycleView()
     }
 
@@ -608,17 +609,90 @@ class WalletLedgerReportFragment : BaseFragment() {
 
     }*/
 
-    inner class MyAsyncTask : AsyncTask<Void, Void, Unit>() {
+    inner class MyAsyncTask3 : AsyncTask<Void, Void, Unit>() {
 
         override fun doInBackground(vararg params: Void?) {
             // Background work (in a background thread)
 
-            if (!(endIndex >= (commissionReportList.size - 1))) {
-                for (index in startIndex until minOf(endIndex, commissionReportList.size)) {
+            /*for (index in reportList.indices) {
+                if (index >= startIndex && index <= endIndex) {
+                    var items = reportList[index]
+                    items.apply {
+                        newReportList.add(this)
+                    }
+
+                }
+            }
+
+            reportAdapter?.items = newReportList*/
+
+
+            if (!(endIndex >= (reportList.size - 1))) {
+                // Log.d("TAG_s2", "observer:444 ")
+                for (index in startIndex until minOf(endIndex, reportList.size)) {
+                    // Log.d("TAG_s2", "observer:555 ")
                     if (index >= startIndex && index <= endIndex) {
-                        val items = commissionReportList[index]
+                        //  Log.d("TAG_s2", "observer:666 ")
+                        val items = Constants.reportList[index]
                         items.apply {
-                            commissionReportList2.add(CommissionReportData(opname, comm, type))
+                            //reportList2.add(items)
+                            Constants.newReportList?.add(items)
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+        override fun onPostExecute(result: Unit?) {
+            // UI-related operations (in the main thread)
+            /*activity?.let {
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (!(endIndex >= (Constants.commissionReportList.size - 1))) {
+                        reportAdapter?.notifyDataSetChanged()
+                    }
+
+                startIndex += 10
+                endIndex += 10
+                loader?.dismiss()
+            }
+
+
+        }*/
+
+            activity?.let {
+                it.runOnUiThread(){
+                    CoroutineScope(Dispatchers.IO).launch {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            if (!(endIndex >= (reportList.size - 1))) {
+                                Log.d("TAG_s2", "observer:777 ")
+                                /* withContext(Dispatchers.Default) {
+                                     reportAdapter?.items=reportList
+                                 }*/
+                                withContext(Dispatchers.Main) {
+                                    // Update the adapter on the main thread
+                                    reportAdapter?.notifyDataSetChanged()
+                                }
+
+                                // reportAdapter?.notifyDataSetChanged()
+                            }
+                            loader?.dismiss()
+
+
+
+                            CoroutineScope(Dispatchers.IO).launch {
+                                startIndex = endIndex + 1
+                                endIndex += 10
+
+
+
+                                delay(500)
+                                isAsintask = true
+                            }
+                            CoroutineScope(Dispatchers.Main).launch {
+                                binding.loaderBottom.visibility = View.GONE
+                            }
                         }
                     }
                 }
@@ -626,41 +700,6 @@ class WalletLedgerReportFragment : BaseFragment() {
 
         }
 
-        override fun onPostExecute(result: Unit?) {
-            // UI-related operations (in the main thread)
-            activity?.let {
-               // it.runOnUiThread(){
-                    CoroutineScope(Dispatchers.Main).launch {
-                        if (!(endIndex >= (commissionReportList.size - 1))) {
-                            commissionReportAdapter?.notifyDataSetChanged()
-                        }
-                        loader?.dismiss()
-
-
-                        if (commissionReportList.size > 20) {
-                            // isDataLoadingFromLocal = true
-                        } else {
-                            // isDataLoadingFromLocal = false
-                        }
-
-                        startIndex = endIndex + 1
-                        endIndex += 10
-
-                        if (!(endIndex >= (commissionReportList.size - 1))) {
-                            isDataLoadingFromLocal = false
-                        } else {
-                            isDataLoadingFromLocal = true
-                        }
-
-                        delay(500)
-                        isAsintask = true
-                        binding.loaderBottom.visibility = View.GONE
-                    }
-               // }
-            }
-
-
-        }
     }
 
 

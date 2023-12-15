@@ -13,6 +13,7 @@ class PrepaidMoboleTranspherModel {
     @SerializedName("curramt"    ) var curramt    : String? = null
     @SerializedName("operator"   ) var operator   : String? = null
     @SerializedName("operatorid" ) var operatorid : String? = null
+    var image:String?=""
 
 }
 

@@ -2,37 +2,39 @@ package com.epaymark.big9.ui.fragment
 
 
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
+import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
+import com.epaymark.big9.data.model.allReport.PostPaidMobileTranspherModel
+import com.epaymark.big9.data.viewMovel.MobileRechargeViewModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMobileRechargeBinding
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetrofitHelper.handleApiError
-import com.epaymark.big9.ui.activity.DashboardActivity
-import com.epaymark.big9.ui.activity.RegActivity
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.receipt.MobileReceptDialogFragment
+import com.epaymark.big9.ui.receipt.PostPaidMobileReceptDialogFragment
 import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.common.MethodClass.getLocalIPAddress
 import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.isDthOperator
 import com.epaymark.big9.utils.helpers.Constants.isFirstPageOpeenPostPaidMobile
 import com.epaymark.big9.utils.`interface`.CallBack
-import com.google.gson.Gson
 import java.util.Objects
 
 
 class MobileRechargeFragment : BaseFragment() {
     lateinit var binding: FragmentMobileRechargeBinding
     private val viewModel: MyViewModel by activityViewModels()
+    //private val mobileRechargeViewModel: MobileRechargeViewModel?=null
+    private val mobileRechargeViewModel: MobileRechargeViewModel by viewModels()
     private var loader: Dialog? = null
 
     override fun onCreateView(
@@ -47,7 +49,9 @@ class MobileRechargeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initView()
+        mobileRechargeViewModel?.prePaidMobileTranspherResponseLiveData?.value=null
         setObserver()
         onViewClick()
     }
@@ -56,7 +60,10 @@ class MobileRechargeFragment : BaseFragment() {
     private fun onViewClick() {
         binding.apply {
 
-            imgBack.back()
+            //imgBack.back()
+            imgBack.setOnClickListener{
+                findNavController().navigate(R.id.action_mobileRechargeFragment_to_homeFragment2)
+            }
             viewModel?.prepaitIsActive?.value=true
             llPostPaid.setOnClickListener{
                 viewModel?.prepaitIsActive?.value=false
@@ -106,7 +113,6 @@ class MobileRechargeFragment : BaseFragment() {
                             })
                             tpinBottomSheetDialog.show(act.supportFragmentManager, tpinBottomSheetDialog.tag)
 
-
                     }
                 }
 
@@ -140,10 +146,11 @@ class MobileRechargeFragment : BaseFragment() {
                             var jsonString = gson.toJson(data)*/
                             loginData.AuthToken?.let {
                                 if (viewModel?.prepaitOrPostPaid?.value== Constants.Postpaid) {
-                                    viewModel?.PostPaidMobileTranspher(it, data.encrypt())
+                                    mobileRechargeViewModel?.PostPaidMobileTranspher(it, data.encrypt())
                                 }
                                 else if (viewModel?.prepaitOrPostPaid?.value== Constants.Prepaid) {
-                                    viewModel?.PrePaidMobileTranspher(it, data.encrypt())
+
+                                    mobileRechargeViewModel?.PrePaidMobileTranspher(it, data.encrypt())
                                 }
                                 //loader?.show()
                             }
@@ -180,7 +187,8 @@ class MobileRechargeFragment : BaseFragment() {
     }
 
     fun setObserver() {
-        viewModel?.postPaidMobileTranspherResponseLiveData?.observe(viewLifecycleOwner){
+
+        mobileRechargeViewModel?.postPaidMobileTranspherResponseLiveData?.observe(viewLifecycleOwner){
             when (it) {
                 is ResponseState.Loading -> {
                     loader?.show()
@@ -189,20 +197,71 @@ class MobileRechargeFragment : BaseFragment() {
                 is ResponseState.Success -> {
                     loader?.dismiss()
 
-                    val dialogFragment = MobileReceptDialogFragment(object: CallBack {
+                    val data= PostPaidMobileTranspherModel()
+                    it.data?.let {
+                        data?.amount=it.amount
+                        data?.mobileno=it.mobileno
+                        data?.curramt=it.curramt
+                        data?.refillid=it.refillid
+                        data.image=viewModel?.selectrdOperator?.value
+                    }
+                    val dialogFragment = PostPaidMobileReceptDialogFragment(object: CallBack {
                                     override fun getValue(s: String) {
                                         if (Objects.equals(s,"back")) {
                                             findNavController().popBackStack()
                                         }
                                     }
-                                })
+                                }, data)
                                 dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                    mobileRechargeViewModel?.postPaidMobileTranspherResponseLiveData?.value=null
 
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    mobileRechargeViewModel?.postPaidMobileTranspherResponseLiveData?.value=null
+                }
+            }
+        }
+        mobileRechargeViewModel?.prePaidMobileTranspherResponseLiveData?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+
+                        val data= PrepaidMoboleTranspherModel()
+                        it.data?.let {
+                            data?.amount=it.amount
+                            data?.mobileno=it.mobileno
+                            data?.curramt=it.curramt
+                            data?.refillid=it.refillid
+                            data.image=viewModel?.selectrdOperator?.value
+                        }
+
+                        val dialogFragment = MobileReceptDialogFragment(object: CallBack {
+                            override fun getValue(s: String) {
+                                if (Objects.equals(s,"back")) {
+                                    findNavController().popBackStack()
+                                }
+                            }
+                        }, data)
+                        dialogFragment.show(childFragmentManager, dialogFragment.tag)
+
+
+                    mobileRechargeViewModel?.prePaidMobileTranspherResponseLiveData?.value=null
+                }
+
+                is ResponseState.Error -> {
+
+                    loader?.dismiss()
+
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    mobileRechargeViewModel?.prePaidMobileTranspherResponseLiveData?.value=null
+
                 }
             }
         }

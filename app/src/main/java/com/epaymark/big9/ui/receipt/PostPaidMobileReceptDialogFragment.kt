@@ -13,26 +13,27 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.epaymark.big9.R
-import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
+import com.epaymark.big9.data.model.allReport.PostPaidMobileTranspherModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMobileReceptDialogBinding
+import com.epaymark.big9.databinding.FragmentPostpaidMobileReceptDialogBinding
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseCenterSheetFragment
 import com.epaymark.big9.utils.`interface`.CallBack
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class MobileReceptDialogFragment(val callBack: CallBack, val data: PrepaidMoboleTranspherModel?) : BaseCenterSheetFragment() {
-    lateinit var binding: FragmentMobileReceptDialogBinding
+class PostPaidMobileReceptDialogFragment(val callBack: CallBack, val data: PostPaidMobileTranspherModel?) : BaseCenterSheetFragment() {
+    lateinit var binding: FragmentPostpaidMobileReceptDialogBinding
     private val viewModel: MyViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mobile_recept_dialog, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_postpaid_mobile_recept_dialog, container, false)
         binding.viewModel = viewModel
+        binding.model=data
         binding.model=data
         Log.d("TAG_amount", "onCreateView: "+data?.amount)
         binding.lifecycleOwner = this
@@ -50,7 +51,7 @@ class MobileReceptDialogFragment(val callBack: CallBack, val data: PrepaidMobole
 
         binding.apply {
             imgBack.setOnClickListener{
-               dismiss()
+                dismiss()
                 viewModel?.apply {
                     mobile.value=""
                     operator.value=""
@@ -78,8 +79,8 @@ class MobileReceptDialogFragment(val callBack: CallBack, val data: PrepaidMobole
                     it.startActivity(Intent(it,DashboardActivity::class.java).putExtra(isRecept,true).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
                 }*//*
             }*/
-          }
         }
+    }
 
 
 
@@ -103,7 +104,7 @@ class MobileReceptDialogFragment(val callBack: CallBack, val data: PrepaidMobole
             Glide.with(binding.root.context)
 
                 .load(data?.image)
-               // .transition(DrawableTransitionOptions.withCrossFade())
+                // .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.imgOperator)
             /*viewModel?.selectrdOperator?.observe(viewLifecycleOwner){operatorImage->
                 if (operatorImage!=null){
@@ -132,9 +133,9 @@ class MobileReceptDialogFragment(val callBack: CallBack, val data: PrepaidMobole
         binding.apply {
             viewModel?.selectrdOperator?.observe(viewLifecycleOwner){operatorImage->
                 if (operatorImage!=null){
-                   try {
-                       imgOperator.setImageResource(operatorImage.toInt())
-                   } catch (e:Exception){}
+                    try {
+                        imgOperator.setImageResource(operatorImage.toInt())
+                    } catch (e:Exception){}
                 }
             }
         }

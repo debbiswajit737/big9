@@ -9,22 +9,27 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
 
 import com.epaymark.big9.adapter.BrowserAdapter
 import com.epaymark.big9.data.model.BrowserModel
-import com.epaymark.big9.data.model.OperatorModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.BrowserBottomsheetLayoutBinding
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetrofitHelper.handleApiError
-
+import com.epaymark.big9.ui.base.BaseCenterSheetFragment
 import com.epaymark.big9.ui.base.BaseFragment
+
 import com.epaymark.big9.utils.common.MethodClass
-import com.epaymark.big9.utils.helpers.Constants
+import com.epaymark.big9.utils.helpers.SharedPreff
 import com.epaymark.big9.utils.`interface`.CallBack
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class BrowserPlainFragment : BaseFragment() {
     lateinit var binding: BrowserBottomsheetLayoutBinding
@@ -132,8 +137,16 @@ class BrowserPlainFragment : BaseFragment() {
                             browser.add(BrowserModel(it.rs.toString(),it.desc.toString(),result.toString(),"",it.validity.toString(),false))
                         }
                         browserAdapter?.operatorList=browser
-                        browserAdapter?.notifyDataSetChanged()
-                        loader?.dismiss()
+                        lifecycleScope.launch {
+                            val job=CoroutineScope(Dispatchers.Main).launch {
+                                browserAdapter?.notifyDataSetChanged()
+                            }
+
+                            delay(2000)
+                            loader?.dismiss()
+                        }
+
+
                     }
 
                 }

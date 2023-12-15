@@ -1,27 +1,41 @@
 package com.epaymark.big9.ui.fragment
 
 
+import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
+import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
+import com.epaymark.big9.data.viewMovel.DTHViewModel
 
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentDthRechargeBinding
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.receipt.DthReceptDialogFragment
+import com.epaymark.big9.ui.receipt.MobileReceptDialogFragment
+import com.epaymark.big9.utils.common.MethodClass
+import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.isDthOperator
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.google.gson.Gson
 import java.util.Objects
 
 class DTHRechargeFragment : BaseFragment() {
     lateinit var binding: FragmentDthRechargeBinding
     private val viewModel: MyViewModel by activityViewModels()
+    private val dthViewModel: DTHViewModel by viewModels()
+    private var loader: Dialog? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,28 +59,48 @@ class DTHRechargeFragment : BaseFragment() {
             imgBack.back()
 
             btnCustomerInfo.setOnClickListener{
-                context?.let {ctx->
+                activity?.let {
+                    loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
+
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "operator" to viewModel?.operator?.value,
+                                "opcode" to viewModel?.operatorCode?.value,
+                                "subscriber_id" to viewModel?.subId?.value,
+                                "opname" to viewModel?.dthOperator?.value,
+
+                            )
+                            val gson= Gson()
+
+                                var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                dthViewModel?.dthUserInfo(it, jsonString.encrypt())
+                            }
+
+                        }
+                    }
+
+                }
+
+               /* context?.let {ctx->
                     viewModel?.userName?.value = "Sample user"
                     viewModel?.balence?.value = "1009"
                     viewModel?.nextRecharge?.value = "01-01-2023"
                     viewModel?.monthly?.value = "789"
                     viewModel?.type?.value = "Active"
                     binding.cardUserDetails.visibility=View.VISIBLE
-                }
+                }*/
             }
 
             btnSubmit.setOnClickListener{
                 if (viewModel?.dthValidation() == true){
                     val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
                         override fun getValue(s: String) {
-                            val dialogFragment = DthReceptDialogFragment(object: CallBack {
-                                override fun getValue(s: String) {
-                                    if (Objects.equals(s,"back")) {
-                                        findNavController().popBackStack()
-                                    }
-                                }
-                            })
-                            dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                            submit(s)
+
                         }
                     })
                     activity?.let {act->
@@ -98,8 +132,106 @@ class DTHRechargeFragment : BaseFragment() {
         }
 
     }
+    private fun submit(tpin: String) {
+        activity?.let {
+            loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
 
+            val (isLogin, loginResponse) =sharedPreff.getLoginData()
+            if (isLogin){
+                loginResponse?.let {loginData->
+                    val data ="{\"userid\":\"${loginData.userid}\",\"operator\":\"${viewModel.operator.value}\",\"opcode\":\"${viewModel.operatorCode.value}\",\"tpin\":\"${tpin}\",\"subscriber_id\":\"${viewModel.mobile.value}\",\"rcamt\":\"${viewModel.amt.value}\",\"IP\":\"${MethodClass.getLocalIPAddress()}\"}"
+                    /*val data = mapOf(
+                        "userid" to loginData.userid,
+                        "operator" to viewModel.operator.value,
+                        "opcode" to viewModel.operatorCode.value,
+                        "tpin" to tpin,
+                        "custno" to viewModel.mobile.value,
+                        "rcamt" to viewModel.amt,
+                        "IP" to getLocalIPAddress(),
+                    )*/
+                    /*val gson= Gson()
+
+                        var jsonString = gson.toJson(data)*/
+                    loginData.AuthToken?.let {
+                            dthViewModel?.dthTransfer(it, data.encrypt())
+                    }
+
+                }
+            }
+
+        }
+    }
     fun setObserver() {
+        dthViewModel?.dthTransferResponseLiveData?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+                    val dialogFragment = DthReceptDialogFragment(object: CallBack {
+                        override fun getValue(s: String) {
+                            if (Objects.equals(s,"back")) {
+                                findNavController().popBackStack()
+                            }
+                        }
+                    })
+                    dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                }
+
+                is ResponseState.Error -> {
+
+                    loader?.dismiss()
+                    val dialogFragment = DthReceptDialogFragment(object: CallBack {
+                        override fun getValue(s: String) {
+                            if (Objects.equals(s,"back")) {
+                                findNavController().popBackStack()
+                            }
+                        }
+                    })
+                    dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                    //handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+
+                }
+            }
+        }
+
+        dthViewModel?.dthUserInfoResponseLiveData?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+                    context?.let { ctx ->
+                        it?.data?.data?.get(0)?.let {
+
+
+                        viewModel?.userName?.value = it.customerName
+                                viewModel?.balence?.value = it.Balance
+                        viewModel?.nextRecharge?.value = it.NextRechargeDate
+                        viewModel?.monthly?.value = it.MonthlyRecharge
+                        viewModel?.type?.value = it.status
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            binding.cardUserDetails.visibility = View.VISIBLE
+                        },100)
+
+                    }
+                    }
+                }
+
+                is ResponseState.Error -> {
+
+                    loader?.dismiss()
+
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+
+                }
+            }
+        }
+
 
     }
 

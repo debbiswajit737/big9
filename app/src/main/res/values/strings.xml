@@ -243,4 +243,5 @@
     <string name="select_bank_from_list">Select Bank From List</string>
     <string name="pay_broadband_landline_bill">Pay Broadband / Landline Bill</string>
     <string name="institute_type">Institute Type</string>
+    <string name="current_amount">Current amount</string>
 </resources>
