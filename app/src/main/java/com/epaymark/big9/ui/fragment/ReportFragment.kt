@@ -149,6 +149,7 @@ class ReportFragment : BaseFragment()  {
             tvConfirm.setOnClickListener{
                 startIndex = 0
                 endIndex = 10
+                binding.loaderBottom.visibility = View.GONE
                 //binding.btnHasdata.visibility = View.GONE
                 reportAdapter?.let {
                     reportList.clear()
@@ -529,10 +530,11 @@ class ReportFragment : BaseFragment()  {
                     //reportList.add(ReportModel("002","778.00","10-10-2023","Payment received",1 ,desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",imageInt = R.drawable.receive_logo))
                     if(!it.data?.data.isNullOrEmpty()){
                         it.data?.data?.let {responseData->
-                            for (items in responseData){
+                            for (index in responseData.indices){
+                                val items=responseData[index]
                                 items.apply {
                                     var desc="Referance id - $receiverID"
-                                    reportList.add(ReportModel(PaymentBYId,LastTransactionAmount,LastTransactionTime,AmountMode,0,desc,imageInt = R.drawable.send_logo))
+                                    reportList.add(ReportModel(PaymentBYId+" index $index",LastTransactionAmount,LastTransactionTime,AmountMode,0,desc,imageInt = R.drawable.send_logo))
                                 }
 
                             }
@@ -806,10 +808,10 @@ class ReportFragment : BaseFragment()  {
                                     it.data?.data?.size?.minus(1)?:0
                                 }
 
-
+                                Log.d("TAG_size", "observer: "+it.data?.data?.size)
                                 it.data?.data?.let {responseData->
-                                  //  for (items in responseData){
-                                    for (index in 0 until minOf(responseData.size, size)) {
+                                    for (index in responseData.indices){
+                                    //for (index in 0 until minOf(responseData.size, size)) {
                                         val items=responseData[index]
                                         items.apply {
 
@@ -1260,22 +1262,60 @@ class ReportFragment : BaseFragment()  {
             }
         }*/
 
+        /*binding.nsvTop.setOnScrollChangeListener { _, _, _, _, _ ->
+            val maxScrollRange = binding.nsvTop.getChildAt(0).height - binding.nsvTop.height
+            val isAtBottom = binding.nsvTop.scrollY >= maxScrollRange
+
+            if (isAtBottom) {
+                // Get the last visible item position in the RecyclerView
+                val layoutManager = (recyclerView.layoutManager as? LinearLayoutManager)
+                val lastVisibleItemPosition = layoutManager?.findLastVisibleItemPosition()
+
+                // Check if the last visible item position is within the last two items
+                if (lastVisibleItemPosition != null && lastVisibleItemPosition >= reportAdapter?.items?.size?.minus(
+                        2
+                    ) ?: 0) {
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            binding.loaderBottom.visibility = View.VISIBLE
+                        }
+
+                        if (!(SystemClock.elapsedRealtime() - lastClickTime1 < 1500)) {
+                            if (!(endIndex >= (Constants.reportList.size - 1)) && isAsintask) {
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    val loadMoreDataTask = MyAsyncTask2()
+                                    loadMoreDataTask.execute()
+                                    isAsintask = false
+                                }
+                            }
+                        }
+
+                }
+            }
+        }*/
         binding.nsvTop.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             if (scrollY != oldScrollY) {
                 val maxScrollRange = binding.nsvTop.getChildAt(0).height - binding.nsvTop.height
                 val isAtBottom = scrollY >= maxScrollRange
 
                 if (isAtBottom) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        binding.loaderBottom.visibility = View.VISIBLE
-                    }
+
 
                     if (!(SystemClock.elapsedRealtime() - lastClickTime1 < 1500)) {
                         if (!(endIndex >= (Constants.reportList.size - 1)) && isAsintask) {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                binding.loaderBottom.visibility = View.VISIBLE
+                            }
                             CoroutineScope(Dispatchers.IO).launch {
+
                                 val loadMoreDataTask = MyAsyncTask2()
                                 loadMoreDataTask.execute()
                                 isAsintask = false
+                            }
+                        }
+                        else{
+                            CoroutineScope(Dispatchers.Main).launch {
+                                binding.loaderBottom.visibility = View.GONE
                             }
                         }
                     }
@@ -1287,7 +1327,7 @@ class ReportFragment : BaseFragment()  {
     }
 
     fun showrecycleView(a:Int) {
-        Log.d("TAG_position", "showrecycleView: "+a)
+
         clearAllData()
         val handler = Handler(Looper.getMainLooper())
         handler.post {
@@ -2041,7 +2081,7 @@ class ReportFragment : BaseFragment()  {
             reportAdapter?.items = newReportList*/
 
 
-            if (!(endIndex >= (reportList.size - 1))) {
+            /*if (!(endIndex >= (reportList.size - 1))) {
                // Log.d("TAG_s2", "observer:444 ")
                 for (index in startIndex until minOf(endIndex, reportList.size)) {
                    // Log.d("TAG_s2", "observer:555 ")
@@ -2054,6 +2094,18 @@ class ReportFragment : BaseFragment()  {
                         }
                     }
                 }
+            }*/
+            val batchSize = 10
+
+
+            // Ensure that the indices are within bounds
+            if (startIndex < reportList.size && startIndex < endIndex) {
+                val newData = reportList.subList(startIndex, minOf(endIndex, reportList.size))
+                newReportList.addAll(newData)
+
+                // Update indices for the next batch
+                startIndex = endIndex
+                endIndex = minOf(endIndex + batchSize, reportList.size)
             }
 
 
@@ -2079,29 +2131,30 @@ class ReportFragment : BaseFragment()  {
                  it.runOnUiThread(){
                 CoroutineScope(Dispatchers.IO).launch {
                     CoroutineScope(Dispatchers.Main).launch {
-                        if (!(endIndex >= (reportList.size - 1))) {
-                            Log.d("TAG_s2", "observer:777 ")
+                      //  if (!(endIndex >= (reportList.size - 1))) {
+
                            /* withContext(Dispatchers.Default) {
                                 reportAdapter?.items=reportList
                             }*/
                             withContext(Dispatchers.Main) {
                                 // Update the adapter on the main thread
+                                delay(500)
                                 reportAdapter?.notifyDataSetChanged()
                             }
 
                            // reportAdapter?.notifyDataSetChanged()
-                        }
+                      //  }
                         loader?.dismiss()
 
 
 
                         CoroutineScope(Dispatchers.IO).launch {
-                            startIndex = endIndex + 1
-                            endIndex += 10
+                           /* startIndex = endIndex + 1
+                            endIndex += 10*/
 
 
 
-                            delay(500)
+
                             isAsintask = true
                         }
                         CoroutineScope(Dispatchers.Main).launch {
