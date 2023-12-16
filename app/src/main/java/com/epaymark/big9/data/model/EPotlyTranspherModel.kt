@@ -5,12 +5,12 @@ import com.google.gson.annotations.SerializedName
 data class EPotlyTranspherModel(
     @SerializedName("Description") var Description: String? = null,
     @SerializedName("response_code") var responseCode: Int? = null,
-    @SerializedName("data") var epotlyData: epotlyData? = epotlyData()
+    @SerializedName("data") var epotlyData: EpotlyData? = EpotlyData()
 
 )
 
 
-data class epotlyData(
+data class EpotlyData(
 
     @SerializedName("id") var id: Int? = null,
     @SerializedName("status") var status: String? = null,

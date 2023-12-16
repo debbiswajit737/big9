@@ -13,6 +13,7 @@ import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.CreditCardSendOtpModel
 import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
 import com.epaymark.big9.data.model.DTHOperatorModel
+import com.epaymark.big9.data.model.DTHTranspherModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
@@ -49,7 +50,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DTHViewModel @Inject constructor(private val repository: AuthRepositoryRepository, private val tableRepository: TableRepository) : ViewModel() {
     //DTH Operator List
-    val dthTransferResponseLiveData: LiveData<ResponseState<DTHOperatorModel>>
+    val dthTransferResponseLiveData: MutableLiveData<ResponseState<DTHTranspherModel>>
         get() = repository.dthTransferResponseLiveData
     fun dthTransfer(token: String, data: String) {
         viewModelScope.launch {

@@ -22,6 +22,7 @@ import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.`interface`.CallBack
 import com.epaymark.big9.utils.`interface`.CallBack4
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import java.util.Objects
 
 class EpotlyFragment : BaseFragment() {
@@ -120,27 +121,37 @@ class EpotlyFragment : BaseFragment() {
                                 s3: String,
                                 s4: String
                             ) {
-                                viewModel.popup_message.value="Success"
-                                val dialogFragment = EPotlyReceptDialogFragment(object:
-                                    CallBack {
-                                    override fun getValue(s: String) {
-                                        if (Objects.equals(s,"back")) {
-                                            findNavController().popBackStack()
-                                        }
+                                it?.data?.epotlyData?.let {ePotlyData->
+                                    sharedPreff.getUserData()?.let {userData->
+                                        viewModel.popup_message.value="Success"
+                                        val dialogFragment = EPotlyReceptDialogFragment(object:
+                                            CallBack {
+                                            override fun getValue(s: String) {
+                                                if (Objects.equals(s,"back")) {
+                                                    findNavController().popBackStack()
+                                                }
+                                            }
+                                        }, ePotlyData, userData)
+                                        dialogFragment.show(childFragmentManager, dialogFragment.tag)
                                     }
-                                }, it?.data?.epotlyData, sharedPreff.getUserData())
-                                dialogFragment.show(childFragmentManager, dialogFragment.tag)
+
+                                }
+
 
                             }
 
                         })
                         successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
+                    viewModel?.apply {
+                        epotly_mobile.value=""
+                        epotly_amt.value=""
+                    }
+
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-
 
                 }
             }

@@ -18,6 +18,7 @@ data class DTHOperatorData(
     @SerializedName("status") var status: String? = null,
     @SerializedName("mobileNo") var mobileNo: String? = null,
     @SerializedName("LastTransactionAmount") var LastTransactionAmount: String? = null,
-    @SerializedName("curramt") var curramt: String? = null
+    @SerializedName("curramt") var curramt: String? = null,
+
 
 )

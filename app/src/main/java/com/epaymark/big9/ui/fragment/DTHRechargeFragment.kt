@@ -11,9 +11,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
-import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
+import com.epaymark.big9.data.model.DTHOperatorData
+import com.epaymark.big9.data.model.DTHTranspherModel
 import com.epaymark.big9.data.viewMovel.DTHViewModel
 
 import com.epaymark.big9.data.viewMovel.MyViewModel
@@ -22,13 +24,15 @@ import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
 import com.epaymark.big9.ui.base.BaseFragment
+import com.epaymark.big9.ui.popup.SuccessPopupFragment
 import com.epaymark.big9.ui.receipt.DthReceptDialogFragment
-import com.epaymark.big9.ui.receipt.MobileReceptDialogFragment
 import com.epaymark.big9.utils.common.MethodClass
-import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.isDthOperator
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack4
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.launch
 import java.util.Objects
 
 class DTHRechargeFragment : BaseFragment() {
@@ -48,9 +52,11 @@ class DTHRechargeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
-        setObserver()
-        onViewClick()
+        lifecycleScope.launch {
+            initView()
+            setObserver()
+            onViewClick()
+        }
     }
 
     private fun onViewClick() {
@@ -170,29 +176,43 @@ class DTHRechargeFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
-                    val dialogFragment = DthReceptDialogFragment(object: CallBack {
-                        override fun getValue(s: String) {
-                            if (Objects.equals(s,"back")) {
-                                findNavController().popBackStack()
+                    viewModel?.popup_message?.value="Success"
+                    val successPopupFragment = SuccessPopupFragment(object :
+                        CallBack4 {
+                        override fun getValue4(
+                            s1: String,
+                            s2: String,
+                            s3: String,
+                            s4: String
+                        ) {
+                            it.data?.let {
+                                val dialogFragment = DthReceptDialogFragment(object: CallBack {
+                                    override fun getValue(s: String) {
+                                        if (Objects.equals(s,"back")) {
+                                            findNavController().popBackStack()
+                                        }
+                                    }
+                                },it)
+                                dialogFragment.show(childFragmentManager, dialogFragment.tag)
                             }
                         }
-                    })
-                    dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                    }
+                    )
+                    successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
+
+
+                    viewModel?.apply {
+                        subId.value=""
+                        dthOperator.value=""
+                        dthAmt.value=""
+                    }
+                    dthViewModel?.dthTransferResponseLiveData?.value=null
                 }
 
                 is ResponseState.Error -> {
-
                     loader?.dismiss()
-                    val dialogFragment = DthReceptDialogFragment(object: CallBack {
-                        override fun getValue(s: String) {
-                            if (Objects.equals(s,"back")) {
-                                findNavController().popBackStack()
-                            }
-                        }
-                    })
-                    dialogFragment.show(childFragmentManager, dialogFragment.tag)
-                    //handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    dthViewModel?.dthTransferResponseLiveData?.value=null
                 }
             }
         }
@@ -220,14 +240,13 @@ class DTHRechargeFragment : BaseFragment() {
 
                     }
                     }
+
+
                 }
 
                 is ResponseState.Error -> {
-
                     loader?.dismiss()
-
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-
                 }
             }
         }

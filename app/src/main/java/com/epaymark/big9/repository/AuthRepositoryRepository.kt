@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.ChangeUserPasswordModel
 import com.epaymark.big9.data.model.CreditCardSendOtpModel
 import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
 import com.epaymark.big9.data.model.DTHOperatorModel
+import com.epaymark.big9.data.model.DTHTranspherModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
@@ -670,7 +672,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     //Credit card send otp
     private val _creditCardSendOtpResponseLiveData =
         MutableLiveData<ResponseState<CreditCardSendOtpModel>>()
-    val creditCardSendOtpResponseLiveData: LiveData<ResponseState<CreditCardSendOtpModel>>
+    val creditCardSendOtpResponseLiveData: MutableLiveData<ResponseState<CreditCardSendOtpModel>>
         get() = _creditCardSendOtpResponseLiveData
 
     suspend fun creditSendVerifyOtp(token: String, loginModel: String) {
@@ -746,8 +748,8 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     //DTH Operator List
     private val _dthTransferResponseLiveData =
-        MutableLiveData<ResponseState<DTHOperatorModel>>()
-    val dthTransferResponseLiveData: LiveData<ResponseState<DTHOperatorModel>>
+        MutableLiveData<ResponseState<DTHTranspherModel>>()
+    val dthTransferResponseLiveData: MutableLiveData<ResponseState<DTHTranspherModel>>
         get() = _dthTransferResponseLiveData
 
     suspend fun dthTransfer(token: String, loginModel: String) {
@@ -793,6 +795,58 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         }
 
     }
+
+    //Change Passdord
+    private val _changePinResponseLiveData =
+        MutableLiveData<ResponseState<ChangeUserPasswordModel>>()
+    val changePinResponseLiveData: LiveData<ResponseState<ChangeUserPasswordModel>>
+        get() = _changePinResponseLiveData
+
+    suspend fun changePin(token: String, loginModel: String) {
+        _changePinResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.changePin(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _changePinResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _changePinResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //Change changeTpin
+    private val _changeTPinResponseLiveData =
+        MutableLiveData<ResponseState<ChangeUserPasswordModel>>()
+    val changeTPinResponseLiveData: LiveData<ResponseState<ChangeUserPasswordModel>>
+        get() = _changeTPinResponseLiveData
+
+    suspend fun changeTPin(token: String, loginModel: String) {
+        _changeTPinResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.changePin(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _changeTPinResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _changeTPinResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
 
 
 

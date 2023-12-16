@@ -2,9 +2,11 @@ package com.epaymark.big9.network
 
 import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.ChangeUserPasswordModel
 import com.epaymark.big9.data.model.CreditCardSendOtpModel
 import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
 import com.epaymark.big9.data.model.DTHOperatorModel
+import com.epaymark.big9.data.model.DTHTranspherModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
@@ -250,7 +252,8 @@ interface RetroApi {
     suspend fun dthTransfer(
         @Header("Authtoken") token: String,
         @Body data: String
-    ): Response<DTHOperatorModel>
+    ): Response<DTHTranspherModel>
+
 
 
     @POST("v1/services/dth/info")
@@ -261,8 +264,17 @@ interface RetroApi {
 
 
 
+    @POST("v1/password/change_pin")
+    suspend fun changePin(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<ChangeUserPasswordModel>
 
-
+    @POST("v1/password/change_tpin")
+    suspend fun changeTpin(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<ChangeUserPasswordModel>
 
 
 }

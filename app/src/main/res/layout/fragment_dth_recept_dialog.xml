@@ -8,6 +8,9 @@
         <variable
             name="viewModel"
             type="com.epaymark.big9.data.viewMovel.MyViewModel" />
+        <variable
+            name="model"
+            type="com.epaymark.big9.data.model.DTHTranspherModel" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -114,7 +117,7 @@
                         android:id="@+id/img_operator"
 
                         android:layout_centerInParent="true"
-                        android:src="@drawable/jio"
+                        android:src="@drawable/default_1"
                         app:civ_border_color="#FF000000"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -127,7 +130,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:text="Jio Prepaid"
+                        tools:text="Jio Prepaid"
+                        android:text="@{model.operator}"
                         android:fontFamily="@font/open_sans_medium"
                         android:textColor="@color/logo_second_color"
                         app:layout_constraintStart_toEndOf="@+id/img_operator"
@@ -138,7 +142,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:text="9999999999"
+                        tools:text="9999999999"
+                        android:text="@{model.subscriberId}"
                         android:fontFamily="@font/open_sans_medium"
                         android:textColor="@color/black"
                         app:layout_constraintStart_toEndOf="@+id/img_operator"
@@ -149,7 +154,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_medium"
-                        android:text="₹100"
+                        tools:text="₹100"
+                        android:text="@{`₹`+model.amount}"
                         android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="@+id/textView25"
                         app:layout_constraintEnd_toEndOf="@+id/img_write_tick"
@@ -198,7 +204,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:fontFamily="@font/open_sans_medium"
-                        android:text="₹100"
+                        tools:text="₹100"
+                        android:text="@{`₹`+model.amount}"
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_8ssp"
                         app:layout_constraintEnd_toEndOf="@+id/tv_price"
@@ -220,7 +227,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_e_bold"
-                        android:text="@string/total"
+                        android:text="@string/current_amount"
                         android:layout_marginTop="@dimen/_20sdp"
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_12ssp"
@@ -233,7 +240,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_e_bold"
-                        android:text="₹100"
+                        tools:text="₹100"
+                        android:text="@{`₹`+model.curramt}"
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_12ssp"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_total"
@@ -269,7 +277,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_medium"
-                        android:text="458555556522"
+                        tools:text="458555556522"
+                        android:text="@{model.refillid}"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_9ssp"
@@ -285,6 +294,7 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:adjustViewBounds="true"
                         android:src="@drawable/icici"
+                        android:visibility="invisible"
                         app:layout_constraintStart_toStartOf="@+id/textView24"
                         app:layout_constraintTop_toBottomOf="@+id/tv_transaction_id" />
                     <TextView
@@ -293,6 +303,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:text="******1234"
+                        android:visibility="invisible"
                         android:fontFamily="@font/open_sans_medium"
                         android:textColor="@color/black"
                         app:layout_constraintStart_toEndOf="@+id/img_operator"
@@ -303,7 +314,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_medium"
-                        android:text="₹100"
+                        tools:text="₹100"
+                        android:text="@{`₹`+model.amount}"
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="@+id/textView30"
                         app:layout_constraintTop_toTopOf="@+id/img_bank" />
@@ -313,6 +325,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
+                        android:visibility="invisible"
                         android:fontFamily="@font/open_sans_medium"
                         android:text="UTR 36985555555"
                         android:textColor="@color/black"

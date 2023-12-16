@@ -55,10 +55,10 @@ class TransactionOtpFragment : BaseFragment() {
 
     private fun onViewClick() {
         binding.apply {
-
-            imgBack.setOnClickListener{
+            imgBack.back()
+            /*imgBack.setOnClickListener{
                 findNavController().navigate(R.id.homeFragment)
-            }
+            }*/
            /* imgLogo.setOnClickListener{
                 findNavController().popBackStack()
             }*/
@@ -88,9 +88,9 @@ class TransactionOtpFragment : BaseFragment() {
 
     fun verifyOTP(){
         activity?.let {act->
-            if (viewModel?.fromPage=="creditCard"){
+
                 val (isLogin, loginResponse) =sharedPreff.getLoginData()
-                if (isLogin) {
+
                     loginResponse?.let { loginData ->
                         viewModel?.apply {
                             val  data = mapOf(
@@ -116,9 +116,9 @@ class TransactionOtpFragment : BaseFragment() {
                             }
                         }
                     }
-                }
 
-            }
+
+
         }
     }
 
@@ -197,6 +197,23 @@ class TransactionOtpFragment : BaseFragment() {
                 }
                 is ResponseState.Success -> {
                     loader?.dismiss()
+                    viewModel?.apply {
+                        credit_card.value=""
+                        credit_holder_name.value=""
+                        credit_mobile.value=""
+                        credit_mobile.value=""
+                        credit_amt.value=""
+                        credit_remarks.value=""
+                        it.data?.let {
+                            popup_message.value="Transaction Date : ${it.transDate}\n" +
+                                    "Card Type: ${it.network}\n"+
+                                    "Current Balance : ${it.usercurrbal}\n"+
+                                    "Amount : ${it.amount}\n"+
+                                    "Status : ${it.status}\n"
+                        }
+
+                    }
+
                     val successPopupFragment = SuccessPopupFragment(object :
                         CallBack4 {
                         override fun getValue4(
@@ -205,21 +222,26 @@ class TransactionOtpFragment : BaseFragment() {
                             s3: String,
                             s4: String
                         ) {
+                            viewModel.popup_message.value="Success"
                             findNavController().popBackStack(R.id.homeFragment2,false)
                             //findNavController().popBackStack()
-                        }
+                          }
 
                     })
                     successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
-
-
                 }
                 is ResponseState.Error -> {
                     loader?.dismiss()
+                    viewModel?.apply {
+                        credit_card.value=""
+                        credit_holder_name.value=""
+                        credit_mobile.value=""
+                        credit_mobile.value=""
+                        credit_amt.value=""
+                        credit_remarks.value=""
+                    }
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
-
-
             }
         }
        /* viewModel?.creditCardVeryfyOTPResponseLiveData?.observe(viewLifecycleOwner){

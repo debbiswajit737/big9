@@ -7,15 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.epaymark.big9.R
+import com.epaymark.big9.data.model.DTHOperatorData
+import com.epaymark.big9.data.model.DTHTranspherModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentDthReceptDialogBinding
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseCenterSheetFragment
 import com.epaymark.big9.utils.`interface`.CallBack
+import kotlinx.coroutines.launch
 
 
-class DthReceptDialogFragment(val callBack: CallBack) : BaseCenterSheetFragment() {
+class DthReceptDialogFragment(val callBack: CallBack, val dTHTranspherModel: DTHTranspherModel) : BaseCenterSheetFragment() {
     lateinit var binding: FragmentDthReceptDialogBinding
     private val viewModel: MyViewModel by activityViewModels()
 
@@ -25,7 +30,9 @@ class DthReceptDialogFragment(val callBack: CallBack) : BaseCenterSheetFragment(
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dth_recept_dialog, container, false)
         binding.viewModel = viewModel
+        binding.model = dTHTranspherModel
         binding.lifecycleOwner = this
+
         return binding.root
     }
 
@@ -71,6 +78,13 @@ class DthReceptDialogFragment(val callBack: CallBack) : BaseCenterSheetFragment(
     fun initView() {
         setCrdViewMinHeight()
 
+        lifecycleScope.launch {
+            //delay(1000)
+            Glide.with(binding.root.context)
+                .load(viewModel.selectrdOperator.value)
+                //.transition(DrawableTransitionOptions.withCrossFade())
+                .into(binding.imgOperator)
+        }
     }
 
     private fun setCrdViewMinHeight() {

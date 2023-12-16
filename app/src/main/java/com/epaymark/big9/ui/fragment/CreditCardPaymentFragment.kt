@@ -51,10 +51,6 @@ class CreditCardPaymentFragment : BaseFragment() {
         binding.apply {
 
             imgBack.back()
-
-
-
-
             btnSubmit.setOnClickListener{
                 activity?.let {act->
                     if (viewModel?.creditValidation() == true){
@@ -76,7 +72,6 @@ class CreditCardPaymentFragment : BaseFragment() {
                                     val gson= Gson()
                                     var jsonString = gson.toJson(data)
                                     loginData.AuthToken?.let {
-
                                        creditSendVerifyOtp(it,jsonString.encrypt())
                                     }
                                 }
@@ -124,10 +119,12 @@ class CreditCardPaymentFragment : BaseFragment() {
                        viewModel.fromPage="creditCard"
                        findNavController().navigate(R.id.action_creditCardPaymentFragment_to_transactionOtpFragment)
                     }
+                    viewModel?.creditCardSendOtpResponseLiveData?.value=null
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
+                    viewModel?.creditCardSendOtpResponseLiveData?.value=null
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }

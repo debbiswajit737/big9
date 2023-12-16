@@ -383,4 +383,12 @@
         android:id="@+id/walletLedgerReportFragment"
         android:name="com.epaymark.big9.ui.fragment.report.WalletLedgerReportFragment"
         android:label="WalletLedgerReportFragment" />
+    <fragment
+        android:id="@+id/changeLoginPinFragment"
+        android:name="com.epaymark.big9.ui.fragment.tablayout.ChangeLoginPinFragment"
+        android:label="ChangeLoginPinFragment" >
+        <action
+            android:id="@+id/action_changeLoginPinFragment_to_homeFragment2"
+            app:destination="@id/homeFragment2" />
+    </fragment>
 </navigation>

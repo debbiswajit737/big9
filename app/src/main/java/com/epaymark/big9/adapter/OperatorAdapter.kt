@@ -2,19 +2,19 @@ package com.epaymark.big9.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.epaymark.big9.databinding.OperatorListBinding
 import com.epaymark.big9.data.model.OperatorModel
-import com.epaymark.big9.data.viewMovel.MyViewModel
 
 import com.epaymark.big9.utils.`interface`.CallBack4
+import com.epaymark.big9.utils.`interface`.CallBack7
 
 class OperatorAdapter(
     var operatorList: ArrayList<OperatorModel>,
-    val listner: CallBack4,
-    val viewModel: MyViewModel
+
+    val listner2: CallBack7
+
 ) : RecyclerView.Adapter<OperatorAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -53,22 +53,9 @@ class OperatorAdapter(
                 //binding.imgOperatorLogo.setBackgroundResource(item.image)
             }
             binding.clHeader.setOnClickListener {
-                viewModel.apply {
-                    operatorCode.value=item.opcode
-                    try {
-                        minMobileLength.value = item.minlen?.toInt()
-                        maxMobileLength.value = item.maxlen?.toInt()
-
-                        minrecharge.value = item.minrecharge?.toInt()
-                        maxrecharge.value = item.maxrecharge?.toInt()
-                    }catch (e:Exception){}
-
-
-
-                }
-                item.title.let {
-                    listner.getValue4(it.toString(), item.image.toString(), "", "")
-                }
+                listner2.getValue7(s1=item.opcode.toString(),s2=item.minlen.toString(),s3=item.maxlen.toString(),
+                s4=item.minrecharge.toString(),s5=item.maxrecharge.toString(),item.title.toString(),item.image.toString()
+                )
 
             }
             binding.executePendingBindings()

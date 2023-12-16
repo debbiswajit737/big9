@@ -10,8 +10,10 @@ import androidx.paging.PagingConfig
 import com.epaymark.big9.R
 
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.ChangeUserPasswordModel
 import com.epaymark.big9.data.model.CreditCardSendOtpModel
 import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
+import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
@@ -1509,7 +1511,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
 
 
     //credit card send otp
-    val creditCardSendOtpResponseLiveData: LiveData<ResponseState<CreditCardSendOtpModel>>
+    val creditCardSendOtpResponseLiveData: MutableLiveData<ResponseState<CreditCardSendOtpModel>>
         get() = repository.creditCardSendOtpResponseLiveData
     fun creditSendVerifyOtp(token: String, data: String) {
         viewModelScope.launch {
@@ -1534,6 +1536,23 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             repository.epotlyTranspher(token,data)
         }
     }
+    val changePinResponseLiveData: LiveData<ResponseState<ChangeUserPasswordModel>>
+        get() = repository.changePinResponseLiveData
+    fun changePin(token: String, data: String) {
+        viewModelScope.launch {
+            repository.changePin(token,data)
+        }
+    }
+
+    val changeTPinResponseLiveData: LiveData<ResponseState<ChangeUserPasswordModel>>
+        get() = repository.changePinResponseLiveData
+    fun changeTPin(token: String, data: String) {
+        viewModelScope.launch {
+            repository.changeTPin(token,data)
+        }
+    }
+
+
 
 
 }

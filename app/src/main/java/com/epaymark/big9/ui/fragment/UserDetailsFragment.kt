@@ -32,6 +32,7 @@ import com.google.zxing.qrcode.QRCodeWriter
 class UserDetailsFragment : BaseFragment() {
     lateinit var binding: FragmentUserDetailsBinding
     private val viewModel: MyViewModel by activityViewModels()
+    var userDetailsAdapter:UserDetailsAdapter?=null
     var userDetailsList = ArrayList<UserDetails>()
     private var loader: Dialog? = null
     override fun onCreateView(
@@ -65,12 +66,15 @@ class UserDetailsFragment : BaseFragment() {
         userDetailsList.clear()
         callProfile()
         binding.recycleViewUserdetails.apply {
-            try {
+           /* try {
                 val bitmap = encodeAsBitmap("HELLO")
                 binding.imgQrcode.setImageBitmap(bitmap)
             } catch (ex: WriterException) {
                 ex.printStackTrace()
-            }
+            }*/
+            //adapter= UserDetailsAdapter(userDetailsList)
+            userDetailsAdapter= UserDetailsAdapter(ArrayList())
+            adapter=userDetailsAdapter
             /*userDetailsList.add(UserDetails("Name","Test User"))
             userDetailsList.add(UserDetails("Business Name","Test Business Name"))
             userDetailsList.add(UserDetails("Registered Mobile Number","9999999999"))
@@ -126,14 +130,9 @@ class UserDetailsFragment : BaseFragment() {
                 is ResponseState.Success -> {
                     loader?.dismiss()
                     it.data?.data?.let {
-                        binding.recycleViewUserdetails.apply {
-                            try {
-                                val bitmap = encodeAsBitmap("HELLO")
-                                binding.imgQrcode.setImageBitmap(bitmap)
-                            } catch (ex: WriterException) {
-                                ex.printStackTrace()
-                            }
+                       // binding.recycleViewUserdetails.apply {
 
+                            userDetailsList.clear()
                             //sharedPreff?.setUserInfoData(it)
                             userDetailsList.add(UserDetails("Name",it.name.toString()))
                             userDetailsList.add(UserDetails("MobileNo",it.mobileNo.toString()))
@@ -145,9 +144,27 @@ class UserDetailsFragment : BaseFragment() {
                             userDetailsList.add(UserDetails("DOB",it.dob.toString()))
                             userDetailsList.add(UserDetails("Payout Balance",it.payoutBalance.toString()))
                             userDetailsList.add(UserDetails("Payabhi Wallet",it.payabhiWallet.toString()))
-                            userDetailsList.add(UserDetails("Payabhi Wallet",it.payabhiWallet.toString()))
-                            adapter= UserDetailsAdapter(userDetailsList)
+                            //userDetailsList.add(UserDetails("Payabhi Wallet",it.payabhiWallet.toString()))
+                            userDetailsAdapter?.items=userDetailsList
+                            userDetailsAdapter?.notifyDataSetChanged()
+
+                        try {
+                            var dataUserDetails="Name ${it.name.toString()}\n"+
+                                    "MobileNo: ${it.name.toString()}\n"+
+                                    "Alternate Number: ${it.name.toString()}\n"+
+                                    "Email ID: ${it.name.toString()}\n"+
+                                    "Address: ${it.name.toString()}\n"+
+                                    "Gender: ${it.name.toString()}\n"+
+                                    "Pincode: ${it.name.toString()}\n"+
+                                    "DOB: ${it.name.toString()}\n"+
+                                    "Payout Balance: ${it.name.toString()}\n"+
+                                    "Payabhi Wallet: ${it.name.toString()}\n"
+                            val bitmap = encodeAsBitmap(dataUserDetails)
+                            binding.imgQrcode.setImageBitmap(bitmap)
+                        } catch (ex: WriterException) {
+                            ex.printStackTrace()
                         }
+                        //}
 
                     }
                     //  Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()

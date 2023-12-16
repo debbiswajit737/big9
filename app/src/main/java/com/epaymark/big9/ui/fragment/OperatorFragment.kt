@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
 
@@ -25,7 +26,9 @@ import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.isDthOperator
 import com.epaymark.big9.utils.helpers.Constants.isFirstPageOpeenPostPaidMobile
 import com.epaymark.big9.utils.`interface`.CallBack4
+import com.epaymark.big9.utils.`interface`.CallBack7
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 
 class OperatorFragment : BaseFragment() {
     lateinit var binding: OperatorFragmentLayoutBinding
@@ -46,9 +49,11 @@ class OperatorFragment : BaseFragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
-        setObserver()
-        onViewClick()
+        lifecycleScope.launch {
+            initView()
+            setObserver()
+            onViewClick()
+        }
     }
 
     private fun onViewClick() {
@@ -72,8 +77,11 @@ class OperatorFragment : BaseFragment() {
                         it.data?.data?.forEach {
                             operator.add(OperatorModel(it.imglink,it.opname,false,minrecharge=it.minrecharge,maxrecharge=it.maxrecharge,minlen=it.minlen,maxlen=it.maxlen,opcode=it.opcode))
                         }
-
-                        setRecycleView()
+                        operatorAdapter?.let {
+                            it.operatorList =operator
+                            it.notifyDataSetChanged()
+                        }
+                     //   setRecycleView()
                     }
 
                 }
@@ -98,8 +106,11 @@ class OperatorFragment : BaseFragment() {
                         it.data?.data?.forEach {
                             operator.add(OperatorModel(it.imglink,it.opname,false,minrecharge=it.minrecharge,maxrecharge=it.maxrecharge,minlen=it.minlen,maxlen=it.maxlen,opcode=it.opcode))
                         }
+                        operatorAdapter?.let {
+                            it.operatorList =operator
+                            it.notifyDataSetChanged()
+                        }
 
-                        setRecycleView()
                     }
 
                 }
@@ -115,6 +126,7 @@ class OperatorFragment : BaseFragment() {
     }
 
     private fun initView() {
+        setRecycleView()
         isFirstPageOpeenPostPaidMobile=false
         /*operatorAdapter?.let {
             it.operatorList= ArrayList()
@@ -140,7 +152,7 @@ class OperatorFragment : BaseFragment() {
                             val gson= Gson()
                             var jsonString = gson.toJson(data)
                             loginData.AuthToken?.let {
-                                if (viewModel?.prepaitOrPostPaid?.value== Constants.Postpaid) {
+                                if (viewModel?.prepaitOrPostPaid?.value== Constants.Postpaid || isDthOperator) {
                                     viewModel?.postpaid_mobile_operator_list(
                                         it,
                                         jsonString.encrypt()
@@ -162,37 +174,44 @@ class OperatorFragment : BaseFragment() {
    fun  setRecycleView(){
        binding.recycleOperator.apply {
            //
-           if (!isDthOperator) {
-               /*operator.add(OperatorModel(R.drawable.airtel_com_logo, "Airtel", false))
+          /* if (!isDthOperator) {
+               *//*operator.add(OperatorModel(R.drawable.airtel_com_logo, "Airtel", false))
                operator.add(OperatorModel(R.drawable.bharat_sanchar_logo, "BSNL Topup", false))
                operator.add(OperatorModel(R.drawable.bharat_sanchar_logo, "BSNL-Validity", false))
                operator.add(OperatorModel(R.drawable.jio, "Reliance Jio", false))
-               operator.add(OperatorModel(R.drawable.vi, "VI", false))*/
+               operator.add(OperatorModel(R.drawable.vi, "VI", false))*//*
            }
            else{
-               /*operator.add(OperatorModel(R.drawable.airtel_dth,"Airtel DTH",false))
+               *//*operator.add(OperatorModel(R.drawable.airtel_dth,"Airtel DTH",false))
                operator.add(OperatorModel(R.drawable.dish_tv_4,"Dish Tv",false))
                operator.add(OperatorModel(R.drawable.sun_direct,"Sun Direct",false))
                operator.add(OperatorModel(R.drawable.tata_sky,"TATA Sky",false))
-               operator.add(OperatorModel(R.drawable.videocon,"VideoCon D2h",false))*/
-           }
+               operator.add(OperatorModel(R.drawable.videocon,"VideoCon D2h",false))*//*
+           }*/
 
-           adapter=OperatorAdapter(operator, object : CallBack4 {
-               override fun getValue4(s1: String, s2: String, s3: String, s4: String) {
+           operatorAdapter=OperatorAdapter(ArrayList(), object:CallBack7{
+               override fun getValue7(opcodeData: String, minlenData: String, maxlenData: String, minrechargeData: String, maxrechargeData: String, titleData: String, imageData: String) {
                    viewModel?.apply {
-                       operator.value=s1
-                       dthOperator.value =s1
-                       selectrdOperator.value=s2
+                       operatorCode.value=opcodeData
+                       operator.value=titleData
+                       dthOperator.value =titleData
+                       selectrdOperator.value=imageData
+                       try {
+                           minMobileLength.value = minlenData?.toInt()
+                           maxMobileLength.value = maxlenData?.toInt()
+
+                           minrecharge.value = minrechargeData?.toInt()
+                           maxrecharge.value = maxrechargeData?.toInt()
+                       }catch (e:Exception){}
+                       findNavController().popBackStack()
                    }
 
-                   // callBack.getValue(s)
-                   findNavController().popBackStack()
                }
-
-           },viewModel)
+           })
+           adapter=operatorAdapter
        }
 
-      // adapter=
+
     }
 
 }

@@ -8,6 +8,14 @@
         <variable
             name="viewModel"
             type="com.epaymark.big9.data.viewMovel.MyViewModel" />
+        <variable
+            name="usere"
+            type="com.epaymark.big9.data.model.profile.Data" />
+        <variable
+            name="epotly_data"
+            type="com.epaymark.big9.data.model.EpotlyData" />
+
+
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -158,7 +166,7 @@
                         android:fontFamily="@font/open_sans_medium"
                         tools:text="₹100"
                         android:textColor="@color/black"
-
+                        android:text="@{`₹`+epotly_data.lastTransactionAmount}"
                         app:layout_constraintEnd_toEndOf="@+id/img_write_tick"
                         app:layout_constraintTop_toTopOf="@+id/textView26" />
 
@@ -241,6 +249,7 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:fontFamily="@font/open_sans_medium"
                         tools:text="₹100"
+                        android:text="@{`₹`+epotly_data.lastTransactionAmount}"
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_8ssp"
                         app:layout_constraintEnd_toEndOf="@+id/tv_price"
@@ -262,7 +271,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_e_bold"
-                        android:text="Available balance"
+                        android:text="@string/current_amount"
                         android:layout_marginTop="@dimen/_20sdp"
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_12ssp"
@@ -276,6 +285,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_e_bold"
                         tools:text="₹1000"
+                        android:text="@{`₹`+epotly_data.curramt}"
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_12ssp"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_total"
@@ -324,6 +334,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_medium"
                         tools:text="₹100"
+                        android:text="@{`₹`+epotly_data.lastTransactionAmount}"
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="@+id/textView30"
                         app:layout_constraintTop_toTopOf="@+id/img_bank" />

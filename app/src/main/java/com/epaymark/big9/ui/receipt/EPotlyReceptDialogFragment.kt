@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.epaymark.big9.R
-import com.epaymark.big9.data.model.epotlyData
+import com.epaymark.big9.data.model.EpotlyData
 import com.epaymark.big9.data.model.profile.Data
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentEPotlyReceptDialogBinding
@@ -22,8 +22,8 @@ import com.epaymark.big9.utils.`interface`.CallBack
 
 class EPotlyReceptDialogFragment(
     val callBack: CallBack,
-    val epotlyData: epotlyData?,
-    val userData: Data?
+    val epotlyData: EpotlyData,
+    val userData: Data
 ) : BaseCenterSheetFragment() {
     lateinit var binding: FragmentEPotlyReceptDialogBinding
     private val viewModel: MyViewModel by activityViewModels()
@@ -34,6 +34,8 @@ class EPotlyReceptDialogFragment(
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_e_potly_recept_dialog, container, false)
         binding.viewModel = viewModel
+        binding.epotlyData=epotlyData
+        binding.usere=userData
         binding.lifecycleOwner = this
         return binding.root
     }
@@ -82,11 +84,11 @@ class EPotlyReceptDialogFragment(
         }
         epotlyData?.let {
             binding.apply {
-                textView30.text=epotlyData.curramt.toString()
-                tvTransaction.text= epotlyData.id.toString()
-                tvPrice.text= epotlyData.LastTransactionAmount.toString()
-                textView29.text= epotlyData.LastTransactionAmount.toString()
-                tvBankPrice.text= epotlyData.LastTransactionAmount.toString()
+                textView30.text=epotlyData?.curramt.toString()
+                tvTransaction.text= epotlyData?.id.toString()
+                tvPrice.text= epotlyData?.LastTransactionAmount.toString()
+                textView29.text= epotlyData?.LastTransactionAmount.toString()
+                tvBankPrice.text= epotlyData?.LastTransactionAmount.toString()
             }
 
 

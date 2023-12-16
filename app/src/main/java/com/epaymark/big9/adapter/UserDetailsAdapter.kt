@@ -8,7 +8,7 @@ import com.epaymark.big9.data.model.UserDetails
 
 
 
-class UserDetailsAdapter(private val items: List<UserDetails>) : RecyclerView.Adapter<UserDetailsAdapter.MyViewHolder>() {
+class UserDetailsAdapter( var items: List<UserDetails>) : RecyclerView.Adapter<UserDetailsAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         //report_layout_item
