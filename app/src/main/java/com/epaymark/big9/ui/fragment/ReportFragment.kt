@@ -61,15 +61,17 @@ class ReportFragment : BaseFragment()  {
     lateinit var binding: FragmentReportBinding
     private val viewModel: MyViewModel by activityViewModels()
     private var lastClickTime1: Long = 0
+    private var lastClickTime2: Long = 0
     var isAsintask=true
     private val myViewModel: MyViewModel by activityViewModels()
     private var loader: Dialog? = null
     var startDate=""
     var endDate=""
-    var startIndex = 0
-    var endIndex = 10
+    var startIndex = 21
+    var endIndex = 30
+    var isTopAsink=true
     private lateinit var recyclerView: RecyclerView
-
+    var isScrollingLoaderShowing=false
 
     //private lateinit var tableViewModel: TableViewModel
 
@@ -148,7 +150,7 @@ class ReportFragment : BaseFragment()  {
 
             tvConfirm.setOnClickListener{
                 startIndex = 0
-                endIndex = 10
+                endIndex = 20
                 binding.loaderBottom.visibility = View.GONE
                 //binding.btnHasdata.visibility = View.GONE
                 reportAdapter?.let {
@@ -169,7 +171,7 @@ class ReportFragment : BaseFragment()  {
 
 
         startIndex = 0
-        endIndex = 10
+        endIndex = 20
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
 
@@ -815,7 +817,7 @@ class ReportFragment : BaseFragment()  {
                                         val items=responseData[index]
                                         items.apply {
 
-                                            reportList.add(ReportModel(refillid,amount,insdate,type,3,desc = "",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
+                                            reportList.add(ReportModel(refillid+"  index "+index,amount,insdate,type,3,desc = "",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
                                         }
 
                                     }
@@ -1298,6 +1300,9 @@ class ReportFragment : BaseFragment()  {
                 val maxScrollRange = binding.nsvTop.getChildAt(0).height - binding.nsvTop.height
                 val isAtBottom = scrollY >= maxScrollRange
 
+                Log.d("TAG_scrollY", "observer:scrollY "+scrollY)
+                Log.d("TAG_scrollY", "observer:oldScrollY "+oldScrollY)
+                val isAtTop = scrollY == 0
                 if (isAtBottom) {
 
 
@@ -1319,7 +1324,20 @@ class ReportFragment : BaseFragment()  {
                             }
                         }
                     }
-                } else {
+                }
+                else if (isAtTop){
+                    if (startIndex>0) {
+                        if (!(SystemClock.elapsedRealtime() - lastClickTime2 < 3000)) {
+                            if (isTopAsink) {
+                                val myAsyncTask2ScrollTop = MyAsyncTask2ScrollTop()
+                                myAsyncTask2ScrollTop.execute()
+                                isTopAsink=false
+                            }
+                        }
+                    }
+                }
+
+                else {
                     // NestedScrollView is not at the bottom
                 }
             }
@@ -2096,11 +2114,16 @@ class ReportFragment : BaseFragment()  {
                 }
             }*/
             val batchSize = 10
-
-
+            startIndex= reportAdapter?.itemCount?.plus(1) ?:0
+            endIndex =startIndex+10
+            isScrollingLoaderShowing=false
             // Ensure that the indices are within bounds
             if (startIndex < reportList.size && startIndex < endIndex) {
                 val newData = reportList.subList(startIndex, minOf(endIndex, reportList.size))
+                if (newReportList.size>39) {
+                    isScrollingLoaderShowing=true
+                    newReportList.clear()
+                }
                 newReportList.addAll(newData)
 
                 // Update indices for the next batch
@@ -2138,8 +2161,21 @@ class ReportFragment : BaseFragment()  {
                             }*/
                             withContext(Dispatchers.Main) {
                                 // Update the adapter on the main thread
+                                if (isScrollingLoaderShowing){
+                                    loader?.show()
+                                }
                                 delay(500)
                                 reportAdapter?.notifyDataSetChanged()
+                                if (isScrollingLoaderShowing){
+                                    binding.nsvTop.scrollTo(0, 0)
+                                }
+                                isScrollingLoaderShowing=false
+                                /*val itemCount = recyclerView.adapter?.itemCount ?: 0
+
+                                if (itemCount >= 1) {
+
+                                    binding.nsvTop.scrollTo(0, 0)
+                                }*/
                             }
 
                            // reportAdapter?.notifyDataSetChanged()
@@ -2167,5 +2203,137 @@ class ReportFragment : BaseFragment()  {
 
     }
 
-}}
+}
+
+    inner class MyAsyncTask2ScrollTop : AsyncTask<Void, Void, Unit>() {
+
+        override fun doInBackground(vararg params: Void?) {
+            // Background work (in a background thread)
+
+            /*for (index in reportList.indices) {
+                if (index >= startIndex && index <= endIndex) {
+                    var items = reportList[index]
+                    items.apply {
+                        newReportList.add(this)
+                    }
+
+                }
+            }
+
+            reportAdapter?.items = newReportList*/
+
+
+            /*if (!(endIndex >= (reportList.size - 1))) {
+               // Log.d("TAG_s2", "observer:444 ")
+                for (index in startIndex until minOf(endIndex, reportList.size)) {
+                   // Log.d("TAG_s2", "observer:555 ")
+                    if (index >= startIndex && index <= endIndex) {
+                      //  Log.d("TAG_s2", "observer:666 ")
+                        val items = Constants.reportList[index]
+                        items.apply {
+                            //reportList2.add(items)
+                            newReportList?.add(items)
+                        }
+                    }
+                }
+            }*/
+            val batchSize = 10
+
+            isScrollingLoaderShowing=false
+            if (startIndex >= batchSize) {
+                // Move back to the previous batch
+                startIndex -= batchSize
+                endIndex = minOf(startIndex + batchSize, reportList.size)
+                if (newReportList.size>39) {
+                    newReportList.clear()
+                }
+                var arrTemp=newReportList
+                newReportList.clear()
+
+
+                val newData = reportList.subList(startIndex, endIndex)
+                newReportList.addAll(newData)
+                if (newReportList.size<=39) {
+                    newReportList.addAll(arrTemp)
+                }
+                // Update UI or perform other actions as needed
+            }
+
+
+        }
+
+        override fun onPostExecute(result: Unit?) {
+            // UI-related operations (in the main thread)
+            /*activity?.let {
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (!(endIndex >= (Constants.commissionReportList.size - 1))) {
+                        reportAdapter?.notifyDataSetChanged()
+                    }
+
+                startIndex += 10
+                endIndex += 10
+                loader?.dismiss()
+            }
+
+
+        }*/
+
+            activity?.let {
+                it.runOnUiThread(){
+                    CoroutineScope(Dispatchers.IO).launch {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            //  if (!(endIndex >= (reportList.size - 1))) {
+
+                            /* withContext(Dispatchers.Default) {
+                                 reportAdapter?.items=reportList
+                             }*/
+                            withContext(Dispatchers.Main) {
+                                // Update the adapter on the main thread
+                                //if (isScrollingLoaderShowing){
+                                    loader?.show()
+                                //}
+
+                                reportAdapter?.notifyDataSetChanged()
+                                //if (isScrollingLoaderShowing){
+
+                                //}
+                                isScrollingLoaderShowing=false
+                                /*val itemCount = recyclerView.adapter?.itemCount ?: 0
+
+                                if (itemCount >= 1) {
+
+                                    binding.nsvTop.scrollTo(0, 0)
+                                }*/
+                            }
+
+                            // reportAdapter?.notifyDataSetChanged()
+                            //  }
+                            delay(1000)
+                            loader?.dismiss()
+                            binding.nsvTop.scrollTo(0, 5)
+                            isTopAsink=true
+
+
+                            CoroutineScope(Dispatchers.IO).launch {
+                                /* startIndex = endIndex + 1
+                                 endIndex += 10*/
+
+
+
+
+                                isAsintask = true
+                            }
+                            CoroutineScope(Dispatchers.Main).launch {
+                                binding.loaderBottom.visibility = View.GONE
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+
+}
 

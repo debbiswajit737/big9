@@ -1028,12 +1028,12 @@ class HomeFragment : BaseFragment() {
                                 commissionReportAdapter?.notifyDataSetChanged()
                             }
                             findNavController().navigate(R.id.action_homeFragment2_to_walletLedgerReportFragment)
-                        }
+                        }*/
 
-                        else {*/
+                        else {
                             //viewModel.reportType.value = s//.replaceFirstChar(Char::titlecase)
                             findNavController().navigate(R.id.action_homeFragment2_to_reportFragment)
-                       // }
+                        }
                        /*when(s){
 
                            getString(R.string.payment)->{}
