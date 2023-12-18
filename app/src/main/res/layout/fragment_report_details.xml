@@ -98,7 +98,7 @@
                                 android:layout_gravity="end"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Faild"
+                                tools:text="Faild"
                                 android:textColor="@color/g4"
                                 android:gravity="end"/>
                               <androidx.core.widget.NestedScrollView
@@ -117,6 +117,7 @@
                                       <ImageButton
                                           android:id="@+id/img_btn_share"
                                           android:layout_gravity="end"
+                                          android:layout_marginTop="@dimen/_10sdp"
                                           android:background="@drawable/btn_bg"
                                           android:layout_width="wrap_content"
                                           android:layout_height="wrap_content"

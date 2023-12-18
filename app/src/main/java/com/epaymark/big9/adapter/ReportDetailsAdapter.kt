@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.databinding.ReportDetailsLayoutBinding
 import com.epaymark.big9.data.model.Reportdetails
+import com.epaymark.big9.ui.activity.DashboardActivity
 
 
-
-class ReportDetailsAdapter(private val items: List<Reportdetails>) : RecyclerView.Adapter<ReportDetailsAdapter.MyViewHolder>() {
+class ReportDetailsAdapter(var items: List<Reportdetails>) : RecyclerView.Adapter<ReportDetailsAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         //report_layout_item
@@ -45,6 +45,8 @@ class ReportDetailsAdapter(private val items: List<Reportdetails>) : RecyclerVie
 
         }
     }
+
+
 
 
 }

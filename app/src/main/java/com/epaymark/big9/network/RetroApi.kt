@@ -2,16 +2,21 @@ package com.epaymark.big9.network
 
 import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.data.genericmodel.BaseResponse
+
+import com.epaymark.big9.data.model.AEPSReportModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
 import com.epaymark.big9.data.model.CreditCardSendOtpModel
 import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
+import com.epaymark.big9.data.model.DMTReportModel
 import com.epaymark.big9.data.model.DTHOperatorModel
 import com.epaymark.big9.data.model.DTHTranspherModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
+import com.epaymark.big9.data.model.MatmeportModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
+import com.epaymark.big9.data.model.TransactionReportModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
 import com.epaymark.big9.data.model.allReport.DmtReportReportModel
@@ -242,6 +247,7 @@ interface RetroApi {
     ): Response<CreditCardVerifyOtpModel>
 
 
+
     @POST("v1/services/epotly/epotly_transfer")
     suspend fun epotlyTransfer(
         @Header("Authtoken") token: String,
@@ -275,6 +281,37 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<ChangeUserPasswordModel>
+
+    @POST("v1/reports/transcation_report_receipt")
+    suspend fun transcationReportReceipt(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<TransactionReportModel>
+
+    @POST("v1/reports/dmt_report_receipt")
+    suspend fun dmtReportReceipt(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<DMTReportModel>
+
+    @POST("v1/reports/aeps_report_receipt")
+    suspend fun aepsReportReceipt(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<AEPSReportModel>
+
+    @POST("v1/check-service")
+    suspend fun checkService(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<AEPSReportModel>
+
+    @POST("v1/reports/microatm_report_receipt")
+    suspend fun matmREportRECEPT(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<MatmeportModel>
+
 
 
 }

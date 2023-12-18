@@ -10,14 +10,19 @@ import androidx.paging.PagingConfig
 import com.epaymark.big9.R
 
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.AEPSReportData
+import com.epaymark.big9.data.model.AEPSReportModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
 import com.epaymark.big9.data.model.CreditCardSendOtpModel
 import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
+import com.epaymark.big9.data.model.DMTReportModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
+import com.epaymark.big9.data.model.MatmeportModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
+import com.epaymark.big9.data.model.TransactionReportModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
 import com.epaymark.big9.data.model.allReport.DmtReportReportModel
@@ -73,6 +78,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val selectedBankMode = MutableLiveData<String>("")
     val prepaitOrPostPaid = MutableLiveData<String>("")
     val reportType = MutableLiveData<String>("")
+    val reportTypeIDRecept = MutableLiveData<String>("")
     val startDate = MutableLiveData<String>("")
     val enddate = MutableLiveData<String>("")
     val kycStatus = MutableLiveData<String>("KYC Approved")
@@ -1551,6 +1557,59 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             repository.changeTPin(token,data)
         }
     }
+
+
+    //credit card send otp
+    val transcationReportReceiptResponseLiveData: MutableLiveData<ResponseState<TransactionReportModel>>
+        get() = repository.transcationReportReceiptResponseLiveData
+    fun transcationReportReceipt(token: String, data: String) {
+        viewModelScope.launch {
+            repository.transcationReportReceipt(token,data)
+        }
+    }
+
+
+    //dmt ReportReceipt
+    val dmtReportReceiptResponseLiveData: MutableLiveData<ResponseState<DMTReportModel>>
+        get() = repository.dmtReportReceiptResponseLiveData
+    fun dmtReportReceipt(token: String, data: String) {
+        viewModelScope.launch {
+            repository.dmtReportReceipt(token,data)
+        }
+    }
+
+    //aeps ReportReceipt
+    val aepsReportReceiptReceiptResponseLiveData: MutableLiveData<ResponseState<AEPSReportModel>>
+        get() = repository.aepsReportReceiptReceiptResponseLiveData
+    fun aepsReportReceiptReceipt(token: String, data: String) {
+        viewModelScope.launch {
+            repository.aepsReportReceiptReceipt(token,data)
+        }
+    }
+
+    //Check service
+    val checkServiceReceiptResponseLiveData: MutableLiveData<ResponseState<AEPSReportModel>>
+        get() = repository.checkServiceResponseLiveData
+    fun checkService(token: String, data: String) {
+        viewModelScope.launch {
+            repository.checkService(token,data)
+        }
+    }
+
+    //matm reports
+    val microatm_report_receiptResponseReceptLiveData: MutableLiveData<ResponseState<MatmeportModel>>
+        get() = repository.microatm_report_receiptResponseReceptLiveData
+    fun microatmReportReceipt(token: String, data: String) {
+        viewModelScope.launch {
+            repository.microatmReportReceipt(token,data)
+        }
+    }
+
+
+
+
+
+
 
 
 

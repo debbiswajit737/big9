@@ -2,12 +2,14 @@ package com.epaymark.big9.utils.helpers
 
 import android.content.ContentValues
 import androidx.recyclerview.widget.RecyclerView
+import com.epaymark.big9.adapter.ReportDetailsAdapter
 import com.epaymark.big9.adapter.reportAdapter.CommissionReportAdapter
 import com.epaymark.big9.adapter.reportAdapter.ReportAdapter
 
 import com.epaymark.big9.data.model.ListIcon
 import com.epaymark.big9.data.model.ReceiptModel
 import com.epaymark.big9.data.model.ReportModel
+import com.epaymark.big9.data.model.Reportdetails
 import com.epaymark.big9.data.model.allReport.CommissionReportData
 
 object Constants {
@@ -63,4 +65,7 @@ object Constants {
     var commissionReportAdapter: CommissionReportAdapter? = null
     var commissionReportList = ArrayList<CommissionReportData>()
     var commissionReportList2 = ArrayList<CommissionReportData>()
+
+    var reportDetailsPropertyList = ArrayList<Reportdetails>()
+    var reportDetailsAdapter: ReportDetailsAdapter?=null
 }

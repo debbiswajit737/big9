@@ -24,12 +24,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.R
+import com.epaymark.big9.adapter.ReportDetailsAdapter
 import com.epaymark.big9.adapter.reportAdapter.CommissionReportAdapter
 import com.epaymark.big9.adapter.reportAdapter.PagingReportAdapter
 
 import com.epaymark.big9.adapter.reportAdapter.ReportAdapter
 import com.epaymark.big9.data.model.ReportModel
 import com.epaymark.big9.data.model.ReportPropertyModel
+import com.epaymark.big9.data.model.Reportdetails
 import com.epaymark.big9.data.model.allReport.CommissionReportData
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.data.viewMovel.TableViewModel
@@ -44,6 +46,8 @@ import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.newReportList
 import com.epaymark.big9.utils.helpers.Constants.reportAdapter
+import com.epaymark.big9.utils.helpers.Constants.reportDetailsAdapter
+import com.epaymark.big9.utils.helpers.Constants.reportDetailsPropertyList
 import com.epaymark.big9.utils.helpers.Constants.reportList
 import com.epaymark.big9.utils.helpers.Constants.reportList2
 import com.epaymark.big9.utils.`interface`.CallBack
@@ -168,7 +172,9 @@ class ReportFragment : BaseFragment()  {
 
     fun initView() {
 
-
+        reportDetailsPropertyList = ArrayList()
+        reportDetailsAdapter?.items= ArrayList()
+        reportDetailsAdapter?.notifyDataSetChanged()
 
         startIndex = 0
         endIndex = 20
@@ -200,12 +206,12 @@ class ReportFragment : BaseFragment()  {
             recyclerView = this
             reportAdapter = ReportAdapter(ReportPropertyModel(""),ArrayList(),  object : CallBack {
                 override fun getValue(s: String) {
-                    val bundle = Bundle()
-                    bundle.putString("jsonData", s)
-                    /*findNavController().navigate(
-                        R.id.action_reportFragment_to_reportDetailsFragment,
-                        bundle
-                    )*/
+                    viewModel.reportTypeIDRecept.value=s
+                    /*val bundle = Bundle()
+                    bundle.putString("jsonData", s)*/
+                    findNavController().navigate(
+                        R.id.action_reportFragment_to_reportDetailsFragment
+                    )
                 }
 
             })
@@ -608,7 +614,7 @@ class ReportFragment : BaseFragment()  {
                                                 imageInt=R.drawable.close_icon
                                             }
                                             var desc="Operator :$Operator \nReferance id - $referenceID"
-                                            reportList.add(ReportModel(TransactionID,Amount,tDate,status,statusCode,desc,imageInt))
+                                            reportList.add(ReportModel(TransactionID,Amount,tDate,status,statusCode,desc,imageInt,isClickAble=true, IDP = ID))
                                         }
 
                                     }
@@ -661,7 +667,7 @@ class ReportFragment : BaseFragment()  {
                                     imageInt = R.drawable.imps_logo,
                                     image1 = 2
                                 )*/
-                            Log.d("TAG_complain", "observeraaa: "+it.data?.Description)
+
                             if(!it.data?.data.isNullOrEmpty()){
                                 it.data?.data?.let {responseData->
                                     for (items in responseData){
@@ -682,10 +688,13 @@ class ReportFragment : BaseFragment()  {
                                             }
 
                                             var desc="$recName \nA/c No.:$recAcno\\nCustomer :$custMobno"
-                                            reportList.add(ReportModel(tranId,tranAmt,transDt,status,statusCode,desc,imageInt,image1 = 2))
+
+                                            reportList.add(ReportModel(tranId,tranAmt,transDt,status,statusCode,desc,imageInt,image1 = 2,isClickAble=true, IDP = receiptid))
+
                                         }
 
                                     }
+                                    Log.d("TAG_complain", "observeraaa:B "+reportList.size)
                                     showrecycleView(8)
                                 }
 
@@ -866,7 +875,7 @@ class ReportFragment : BaseFragment()  {
 
                                         items.apply {
                                             val desc="$responseDescription \nNo.:$aadharno  \nBank Reference Number : $BankReferenceNumber"
-                                            reportList.add(ReportModel(tranId,tranAmt,transDt,desc,imageInt = R.drawable.close_icon,isMiniStatement = true,miniStatementValue = "$type",isClickAble = true))
+                                            reportList.add(ReportModel(tranId,tranAmt,transDt,desc,imageInt = R.drawable.close_icon,isMiniStatement = true,miniStatementValue = "${type?.replace("_"," ")}",isClickAble = true, IDP = tranId))
                                         }
 
                                     }
@@ -900,7 +909,7 @@ class ReportFragment : BaseFragment()  {
 
                                         items.apply {
                                             val desc="$responseDescription   \nBank Reference Number : $BankReferenceNumber"
-                                            reportList.add(ReportModel(tranId,tranAmt,transDt,desc,imageInt = R.drawable.rounded_i))
+                                            reportList.add(ReportModel(tranId,tranAmt,transDt,desc,imageInt = R.drawable.rounded_i, IDP = tranId, isClickAble = true))
                                         }
 
                                     }
@@ -1295,7 +1304,64 @@ class ReportFragment : BaseFragment()  {
                 }
             }
         }*/
-        binding.nsvTop.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                // Get the first visible item position
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                // Get the last visible item position
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+
+                // You can use these positions as needed
+                // For example, log them
+                Log.d("RecyclerView", "First visible position: $firstVisibleItemPosition")
+                Log.d("RecyclerView", "Last visible position: $lastVisibleItemPosition")
+                Log.d("RecyclerView", "adapter position: ${reportAdapter?.items?.size}")
+
+                if (lastVisibleItemPosition>=(reportAdapter?.items?.size?.minus(1)?:0)) {
+
+
+                    if (!(SystemClock.elapsedRealtime() - lastClickTime1 < 1500)) {
+                        if (!(endIndex >= (Constants.reportList.size - 1)) && isAsintask) {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                binding.loaderBottom.visibility = View.VISIBLE
+                            }
+                            CoroutineScope(Dispatchers.IO).launch {
+
+                                val loadMoreDataTask = MyAsyncTask2()
+                                loadMoreDataTask.execute()
+                                isAsintask = false
+                            }
+                        }
+                        else{
+                            CoroutineScope(Dispatchers.Main).launch {
+                                binding.loaderBottom.visibility = View.GONE
+                            }
+                        }
+                    }
+                }
+                else if (firstVisibleItemPosition==0){
+                    if (startIndex>0) {
+                        if (!(SystemClock.elapsedRealtime() - lastClickTime2 < 3000)) {
+                            if (isTopAsink) {
+                               // val myAsyncTask2ScrollTop = MyAsyncTask2ScrollTop()
+                              //  myAsyncTask2ScrollTop.execute()
+                                isTopAsink=false
+                            }
+                        }
+                    }
+                }
+
+                else {
+                    // NestedScrollView is not at the bottom
+                }
+
+
+            }
+        })
+      /*  binding.nsvTop.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             if (scrollY != oldScrollY) {
                 val maxScrollRange = binding.nsvTop.getChildAt(0).height - binding.nsvTop.height
                 val isAtBottom = scrollY >= maxScrollRange
@@ -1341,11 +1407,11 @@ class ReportFragment : BaseFragment()  {
                     // NestedScrollView is not at the bottom
                 }
             }
-        }
+        }*/
     }
 
     fun showrecycleView(a:Int) {
-
+        Log.d("TAG_data", "showrecycleView: "+a)
         clearAllData()
         val handler = Handler(Looper.getMainLooper())
         handler.post {
@@ -1621,29 +1687,28 @@ class ReportFragment : BaseFragment()  {
                             ReportPropertyModel("Transaction id")
                         }
                     }
-
+                    Log.d("TAG_complain", "observeraaa:c "+reportList.size)
                     if (reportList.size > 0) {
                         binding.tvNoDataFound.visibility = View.GONE
                     } else {
                         binding.tvNoDataFound.visibility = View.VISIBLE
 
                     }
-                    binding.nsv.isVisible=!binding.tvNoDataFound.isVisible
+                    //binding.nsv.isVisible=!binding.tvNoDataFound.isVisible
                     reportPropertyModel=setReportPropertyModel
                     //items=reportList
                     lifecycleScope.launch {
                      //   binding.btnHasdata.visibility=View.GONE
-                        if(reportList.size>10) {
-                            getAllData2()
-
-
+                        reportList?.let {
+                            if(it.size>20) {
+                                getAllData2()
+                            }
+                            else{
+                                //binding.btnHasdata.visibility=View.GONE
+                                reportAdapter?.items = reportList
+                                reportAdapter?.notifyDataSetChanged()
+                            }
                         }
-                        else{
-                            //binding.btnHasdata.visibility=View.GONE
-                            reportAdapter?.items = reportList
-                            reportAdapter?.notifyDataSetChanged()
-                        }
-
                     }
                   /*  binding.btnHasdata.setOnClickListener {
                       //  binding.btnHasdata.visibility=View.GONE
@@ -2114,16 +2179,16 @@ class ReportFragment : BaseFragment()  {
                 }
             }*/
             val batchSize = 10
-            startIndex= reportAdapter?.itemCount?.plus(1) ?:0
+            startIndex= reportAdapter?.itemCount?:0
             endIndex =startIndex+10
             isScrollingLoaderShowing=false
             // Ensure that the indices are within bounds
             if (startIndex < reportList.size && startIndex < endIndex) {
                 val newData = reportList.subList(startIndex, minOf(endIndex, reportList.size))
-                if (newReportList.size>39) {
+                /*if (newReportList.size>39) {
                     isScrollingLoaderShowing=true
                     newReportList.clear()
-                }
+                }*/
                 newReportList.addAll(newData)
 
                 // Update indices for the next batch

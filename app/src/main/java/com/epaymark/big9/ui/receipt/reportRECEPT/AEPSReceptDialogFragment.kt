@@ -1,41 +1,30 @@
-package com.epaymark.big9.ui.receipt
+package com.epaymark.big9.ui.receipt.reportRECEPT
 
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import com.bumptech.glide.Glide
 import com.epaymark.big9.R
-import com.epaymark.big9.data.model.EpotlyData
-import com.epaymark.big9.data.model.profile.Data
 import com.epaymark.big9.data.viewMovel.MyViewModel
-import com.epaymark.big9.databinding.FragmentEPotlyReceptDialogBinding
+import com.epaymark.big9.databinding.FragmentCashWithdrawReceptDialogBinding
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseCenterSheetFragment
 import com.epaymark.big9.utils.`interface`.CallBack
 
 
-class EPotlyReceptDialogFragment(
-    val callBack: CallBack,
-    val epotlyData: EpotlyData,
-    val userData: Data
-) : BaseCenterSheetFragment() {
-    lateinit var binding: FragmentEPotlyReceptDialogBinding
+class AEPSReceptDialogFragment(val callBack: CallBack) : BaseCenterSheetFragment() {
+    lateinit var binding: FragmentCashWithdrawReceptDialogBinding
     private val viewModel: MyViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_e_potly_recept_dialog, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cash_withdraw_recept_dialog, container, false)
         binding.viewModel = viewModel
-        binding.epotlyData=epotlyData
-        binding.usere=userData
         binding.lifecycleOwner = this
         return binding.root
     }
@@ -48,7 +37,6 @@ class EPotlyReceptDialogFragment(
     }
 
     private fun onViewClick() {
-
         binding.apply {
             imgBack.back()
             imgHome.backToHome()
@@ -63,9 +51,6 @@ class EPotlyReceptDialogFragment(
             }
           }
         }
-
-
-
     private fun shareImage() {
         activity?.let {
             binding.apply {
@@ -77,20 +62,7 @@ class EPotlyReceptDialogFragment(
 
     fun initView() {
         setCrdViewMinHeight()
-        userData?.let{
-            setUserData(it)
-        }
-        epotlyData?.let {
-            binding.apply {
-                textView30.text=epotlyData?.curramt.toString()
-                tvTransaction.text= epotlyData?.id.toString()
-                tvPrice.text= epotlyData?.LastTransactionAmount.toString()
-                textView29.text= epotlyData?.LastTransactionAmount.toString()
-                tvBankPrice.text= epotlyData?.LastTransactionAmount.toString()
-            }
 
-
-        }
     }
 
     private fun setCrdViewMinHeight() {
@@ -108,21 +80,6 @@ class EPotlyReceptDialogFragment(
         }
 
     }
-    private fun setUserData(data: Data) {
-        binding.tvUtr.text=data?.name
-        data.SelfieImageData?.let {
-            val decodedString: ByteArray = Base64.decode(it, Base64.DEFAULT)
-            val decodedByte =
-                BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
 
-            Glide.with(this)
-                .asBitmap() // Use asBitmap() instead of asGif()
-                .load(decodedByte)
-                .error(R.drawable.ic_success) // Set the default image resource
-
-                .into(binding.imgBank)
-        }
-
-    }
 
 }

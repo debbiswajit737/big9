@@ -4,16 +4,21 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.epaymark.big9.data.genericmodel.BaseResponse
+import com.epaymark.big9.data.model.AEPSReportData
+import com.epaymark.big9.data.model.AEPSReportModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
 import com.epaymark.big9.data.model.CreditCardSendOtpModel
 import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
+import com.epaymark.big9.data.model.DMTReportModel
 import com.epaymark.big9.data.model.DTHOperatorModel
 import com.epaymark.big9.data.model.DTHTranspherModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
+import com.epaymark.big9.data.model.MatmeportModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
+import com.epaymark.big9.data.model.TransactionReportModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
 import com.epaymark.big9.data.model.allReport.DmtReportReportModel
@@ -846,6 +851,130 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     }
 
+    //transcation Report Receipt
+    private val _transcationReportReceiptResponseLiveData =
+        MutableLiveData<ResponseState<TransactionReportModel>>()
+    val transcationReportReceiptResponseLiveData: MutableLiveData<ResponseState<TransactionReportModel>>
+        get() = _transcationReportReceiptResponseLiveData
+
+    suspend fun transcationReportReceipt(token: String, loginModel: String) {
+        _transcationReportReceiptResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.transcationReportReceipt(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _transcationReportReceiptResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _transcationReportReceiptResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //DMT Report Receipt
+    private val _dmtReportReceiptResponseLiveData =
+        MutableLiveData<ResponseState<DMTReportModel>>()
+    val dmtReportReceiptResponseLiveData: MutableLiveData<ResponseState<DMTReportModel>>
+        get() = _dmtReportReceiptResponseLiveData
+
+    suspend fun dmtReportReceipt(token: String, loginModel: String) {
+        _dmtReportReceiptResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.dmtReportReceipt(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _dmtReportReceiptResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _dmtReportReceiptResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //AEPS Report Receipt
+    private val _aepsReportReceiptReceiptResponseLiveData =
+        MutableLiveData<ResponseState<AEPSReportModel>>()
+    val aepsReportReceiptReceiptResponseLiveData: MutableLiveData<ResponseState<AEPSReportModel>>
+        get() = _aepsReportReceiptReceiptResponseLiveData
+
+    suspend fun aepsReportReceiptReceipt(token: String, loginModel: String) {
+        _aepsReportReceiptReceiptResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.aepsReportReceipt(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _aepsReportReceiptReceiptResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _aepsReportReceiptReceiptResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //Check service
+    private val _checkServiceResponseLiveData =
+        MutableLiveData<ResponseState<AEPSReportModel>>()
+    val checkServiceResponseLiveData: MutableLiveData<ResponseState<AEPSReportModel>>
+        get() = _checkServiceResponseLiveData
+
+    suspend fun checkService(token: String, loginModel: String) {
+        _checkServiceResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.checkService(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _checkServiceResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _checkServiceResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //MATM
+    private val _microatm_report_receiptResponseReceptLiveData =
+        MutableLiveData<ResponseState<MatmeportModel>>()
+    val microatm_report_receiptResponseReceptLiveData: MutableLiveData<ResponseState<MatmeportModel>>
+        get() = _microatm_report_receiptResponseReceptLiveData
+
+    suspend fun microatmReportReceipt(token: String, loginModel: String) {
+        _microatm_report_receiptResponseReceptLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.matmREportRECEPT(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _microatm_report_receiptResponseReceptLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _microatm_report_receiptResponseReceptLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
 
 
 
