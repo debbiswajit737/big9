@@ -7,9 +7,10 @@ import com.epaymark.big9.databinding.UpiLayoutBinding
 import com.epaymark.big9.data.model.ListIcon
 
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack2
 
 
-class BankingAdapter(private val items: List<ListIcon>, val circleShape: Int, val callback: CallBack) : RecyclerView.Adapter<BankingAdapter.MyViewHolder>() {
+class BankingAdapter(private val items: List<ListIcon>, val circleShape: Int, val callback: CallBack2) : RecyclerView.Adapter<BankingAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 
@@ -39,10 +40,10 @@ class BankingAdapter(private val items: List<ListIcon>, val circleShape: Int, va
             ///*if (position!=items.size-1) {
                 binding.imgIcon.setBackgroundResource(circleShape)
             //}*/
-            item.title?.let {item->
-                binding.tvTitle.text = item
+            item.title?.let {data->
+                binding.tvTitle.text = data
                 binding.llContainer.setOnClickListener{
-                    callback.getValue(item)
+                    callback.getValue2(data,item.slag.toString())
                 }
             }
             item.image?.let {image->

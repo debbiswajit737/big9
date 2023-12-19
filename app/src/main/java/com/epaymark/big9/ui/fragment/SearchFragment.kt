@@ -18,10 +18,13 @@ import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentSearchBinding
 
 import com.epaymark.big9.ui.base.BaseFragment
+import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.isFromSearchPage
 import com.epaymark.big9.utils.helpers.Constants.searchList
 import com.epaymark.big9.utils.helpers.Constants.searchValue
+import com.epaymark.big9.utils.helpers.Constants.searchValueTag
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack2
 
 class SearchFragment : BaseFragment() {
     lateinit var binding: FragmentSearchBinding
@@ -49,9 +52,11 @@ class SearchFragment : BaseFragment() {
     fun initView() {
         binding?.apply {
             recycleViewSearchService?.apply {
-                searchAdapter= SearchAdapter(searchList,R.drawable.circle_shape2,object : CallBack {
-                override fun getValue(s: String) {
+                searchAdapter= SearchAdapter(searchList,R.drawable.circle_shape2,object :
+                    CallBack2 {
+                override fun getValue2(s: String,tag: String) {
                     searchValue =s
+                    searchValueTag=tag
                     viewModel.from_page_message.value="search"
                     findNavController().popBackStack()
                 }

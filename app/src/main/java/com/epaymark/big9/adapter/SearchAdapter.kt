@@ -8,13 +8,14 @@ import com.epaymark.big9.databinding.SearchServiceLayoutBinding
 import com.epaymark.big9.data.model.ListIcon
 
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack2
 import java.util.*
 import kotlin.collections.ArrayList
 
 class SearchAdapter(
     private var items: List<ListIcon>,
     private val circleShape: Int,
-    private val callBack: CallBack
+    private val callBack: CallBack2
 ) : RecyclerView.Adapter<SearchAdapter.MyViewHolder>(), Filterable {
 
     var filteredList: List<ListIcon> = items
@@ -41,7 +42,7 @@ class SearchAdapter(
             item.title?.let { title ->
                 binding.tvTitle.text = title
                 binding.llContainer.setOnClickListener {
-                    callBack.getValue(title)
+                    callBack.getValue2(title,item.slag.toString())
                 }
             }
             item.image?.let { image ->

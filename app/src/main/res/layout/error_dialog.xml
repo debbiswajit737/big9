@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="60dp"
-    android:background="@drawable/error_button_bg"
+    android:background="@drawable/error_button_bg_2"
    >
 
     <RelativeLayout

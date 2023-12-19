@@ -2,6 +2,7 @@ package com.epaymark.big9.ui.fragment
 
 
 
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -19,6 +20,7 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -41,10 +43,13 @@ import com.epaymark.big9.data.model.ReportModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.data.viewMovel.TableViewModel
 import com.epaymark.big9.databinding.FragmentHomeBinding
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.fragmentDialog.GasBillerListDialog
 import com.epaymark.big9.ui.popup.CustomPopup.showBalencePopup
 import com.epaymark.big9.utils.*
+import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.common.MethodClass.userLogout
 import com.epaymark.big9.utils.helpers.Constants.Postpaid
 import com.epaymark.big9.utils.helpers.Constants.Prepaid
@@ -59,9 +64,12 @@ import com.epaymark.big9.utils.helpers.Constants.reportList
 import com.epaymark.big9.utils.helpers.Constants.reportList2
 import com.epaymark.big9.utils.helpers.Constants.searchList
 import com.epaymark.big9.utils.helpers.Constants.searchValue
+import com.epaymark.big9.utils.helpers.Constants.searchValueTag
 import com.epaymark.big9.utils.helpers.PermissionUtils
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack2
 import com.epaymark.big9.utils.`interface`.PermissionsCallback
+import com.google.gson.Gson
 
 
 class HomeFragment : BaseFragment() {
@@ -83,11 +91,12 @@ class HomeFragment : BaseFragment() {
     var iconList10 = ArrayList<ListIcon>()
     var iconList11 = ArrayList<ListIcon>()
     var iconList12 = ArrayList<ListIcon>()
+    var naviGationValue=""
     lateinit var binding: FragmentHomeBinding
     private lateinit var autoScrollHandler: AutoScrollHandler
     private val viewModel: MyViewModel by activityViewModels()
     var deviceHeight:Int=0
-
+    private var loader: Dialog? = null
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -109,14 +118,39 @@ class HomeFragment : BaseFragment() {
     private fun observer() {
         viewModel.from_page_message.observe(viewLifecycleOwner) {
             if(isFromSearchPage){
-                if (searchValue.isNotEmpty()){
-                    serviceNavigation(searchValue)
+                if (searchValue.isNotEmpty() && searchValueTag.isNotEmpty()){
+                    serviceNavigation(searchValue,searchValueTag)
                     searchValue=""
+                    searchValueTag=""
                 }
 
                 isFromSearchPage=false
             }
 
+            viewModel?.checkServiceReceiptResponseLiveData?.observe(viewLifecycleOwner){
+                when (it) {
+                    is ResponseState.Loading -> {
+                        loader?.show()
+                    }
+
+                    is ResponseState.Success -> {
+                        loader?.dismiss()
+                        it?.data?.slug?.let {slug->
+                            serviceNavigation(naviGationValue,slug)
+                        }
+                        viewModel?.checkServiceReceiptResponseLiveData?.value=null
+                    }
+
+                    is ResponseState.Error -> {
+                        loader?.dismiss()
+
+                        //serviceNavigation(naviGationValue,"")
+
+                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        viewModel?.checkServiceReceiptResponseLiveData?.value=null
+                    }
+                }
+            }
             /*if(isFromUtilityPage){
                 if (utilityValue.isNotEmpty()){
                     serviceNavigation(utilityValue)
@@ -138,7 +172,33 @@ class HomeFragment : BaseFragment() {
 
     }
 
-    private fun serviceNavigation(s: String) {
+
+    fun checkService(navParameter: String,slag:String){
+        naviGationValue=navParameter
+        //Toast.makeText(requireContext(), ""+slag, Toast.LENGTH_SHORT).show()
+        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+        if (isLogin){
+            loginResponse?.let {loginData->
+                viewModel?.apply {
+
+                    val  data = mapOf(
+                        "userid" to loginData.userid,
+                        "service" to slag
+                    )
+
+                    val gson= Gson()
+                    var jsonString = gson.toJson(data)
+                    loginData.AuthToken?.let {
+                        checkService(it,jsonString.encrypt())
+                    }
+                }
+
+            }
+        }
+    }
+    private fun serviceNavigation(s: String,slag:String) {
+
+
         when(s){
             //recycleViewEpayBanking
             getString(com.epaymark.big9.R.string.scan)->{
@@ -178,11 +238,7 @@ class HomeFragment : BaseFragment() {
             getString(R.string.certificate)->{
                 findNavController().navigate(R.id.action_homeFragment2_to_certificateFragment)
             }
-            getString(R.string.logout)->{
-                context?.let { ctx->
-                    ctx.userLogout()
-                }
-            }
+
 
 
 
@@ -725,18 +781,19 @@ class HomeFragment : BaseFragment() {
 
             recycleEssential.apply {
                 iconList3.clear()
-                iconList3.add(ListIcon(getString(R.string.prepaid), R.drawable.db_mobile))
-                iconList3.add(ListIcon(getString(R.string.postpaid), R.drawable.db_mobile))
-                iconList3.add(ListIcon(getString(R.string.dth_recharge), R.drawable.ic_dth_recharge))
+                iconList3.add(ListIcon(getString(R.string.prepaid), R.drawable.db_mobile,getString(R.string.mobile_slag)))
+                iconList3.add(ListIcon(getString(R.string.postpaid), R.drawable.db_mobile,getString(R.string.mobile_slag)))
+                iconList3.add(ListIcon(getString(R.string.dth_recharge), R.drawable.ic_dth_recharge,getString(R.string.dth_recharge)))
                 /*iconList3.add(ListIcon(getString(R.string.electric), R.drawable.electric))
                 iconList3.add(ListIcon("Fast Tag", R.drawable.icons8_fastag))
                 iconList3.add(ListIcon("Google Play", R.drawable.google_play))*/
-                iconList3.add(ListIcon(getString(R.string.insurance), R.drawable.insurance))
+                iconList3.add(ListIcon(getString(R.string.insurance), R.drawable.insurance,getString(R.string.insurance_slag)))
                 /*iconList3.add(ListIcon("Water", R.drawable.water))
                 iconList3.add(ListIcon("View More", R.drawable.view_more))*/
-                adapter= EssentialAdapter(iconList3,R.drawable.circle_shape2, object : CallBack {
-                    override fun getValue(s: String) {
-                        serviceNavigation(s)
+                adapter= EssentialAdapter(iconList3,R.drawable.circle_shape2, object : CallBack2 {
+                    override fun getValue2(s: String,slag: String) {
+                        checkService(s,slag)
+                        //serviceNavigation(s)
                         /*when(s){
                             getString(R.string.prepaid)->{
                                 viewModel.prepaitOrPostPaid.value="Prepaid"
@@ -765,15 +822,16 @@ class HomeFragment : BaseFragment() {
 
             recycleFinancial.apply {
                 iconList11.clear()
-                iconList11.add(ListIcon(getString(R.string.credit_card), R.drawable.credit_card))
-                iconList11.add(ListIcon(getString(R.string.cash_collection), R.drawable.cash_collection))
-                iconList11.add(ListIcon(getString(R.string.matm), R.drawable.matm))
-                iconList11.add(ListIcon(getString(R.string.money_transfer), R.drawable.imps))
+                iconList11.add(ListIcon(getString(R.string.credit_card), R.drawable.credit_card,getString(R.string.credit_card_slag)))
+                iconList11.add(ListIcon(getString(R.string.cash_collection), R.drawable.cash_collection,getString(R.string.cash_collection_slag)))
+                iconList11.add(ListIcon(getString(R.string.matm), R.drawable.matm,getString(R.string.matm_slag)))
+                iconList11.add(ListIcon(getString(R.string.money_transfer), R.drawable.imps,getString(R.string.dmt_slag)))
                 /*iconList3.add(ListIcon("Water", R.drawable.water))
                 iconList3.add(ListIcon("View More", R.drawable.view_more))*/
-                adapter= FinancialAdapter(iconList11,R.drawable.circle_shape2, object : CallBack {
-                    override fun getValue(s: String) {
-                        serviceNavigation(s)
+                adapter= FinancialAdapter(iconList11,R.drawable.circle_shape2, object : CallBack2 {
+                    override fun getValue2(s: String,tag: String) {
+                        checkService(s,tag)
+                        //serviceNavigation(s)
                         /*when(s){
                             getString(R.string.prepaid)->{
                                 findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)
@@ -818,13 +876,20 @@ class HomeFragment : BaseFragment() {
 
             recycleUtility.apply {
                 iconList10.clear()
-                iconList10.add(ListIcon(getString(R.string.electric), R.drawable.electric))
-                iconList10.add(ListIcon(getString(R.string.gas), R.drawable.gas_ioc))
-                iconList10.add(ListIcon(getString(R.string.fast_tag), R.drawable.icons8_fastag))
-                iconList10.add(ListIcon(getString(R.string.view_more), R.drawable.view_more))
-                adapter= UtilityAdapter(iconList10,R.drawable.circle_shape2, object : CallBack {
-                    override fun getValue(s: String) {
-                        serviceNavigation(s)
+                iconList10.add(ListIcon(getString(R.string.electric), R.drawable.electric,"no slag"))
+                iconList10.add(ListIcon(getString(R.string.gas), R.drawable.gas_ioc,"no slag"))
+                iconList10.add(ListIcon(getString(R.string.fast_tag), R.drawable.icons8_fastag,getString(R.string.fast_tag_slag)))
+                iconList10.add(ListIcon(getString(R.string.view_more), R.drawable.view_more,getString(R.string.view_more)))
+                adapter= UtilityAdapter(iconList10,R.drawable.circle_shape2, object : CallBack2 {
+                    override fun getValue2(s: String,slag: String) {
+                        if(s== getString(R.string.view_more)){
+                            findNavController().navigate(R.id.action_homeFragment2_to_viewMoreFragment)
+                        }
+                        else{
+                            checkService(s,slag)
+                        }
+
+                        //serviceNavigation(s)
                         /*when(s){
 
                             getString(R.string.electric)->{
@@ -854,7 +919,7 @@ class HomeFragment : BaseFragment() {
             recycleMostUses.apply {
                 requestFocus()
                 iconList12.clear()
-                iconList12.add(ListIcon(getString(R.string.electric), R.drawable.electric))
+                iconList12.add(ListIcon(getString(R.string.electric), R.drawable.electric,"no slag"))
 
                 adapter= MostPopularAdapter(iconList12,R.drawable.circle_shape2, object : CallBack {
                     override fun getValue(s: String) {
@@ -911,15 +976,16 @@ class HomeFragment : BaseFragment() {
 
             recycleAEPS.apply {
                 iconList5.clear()
-                iconList5.add(ListIcon(getString(R.string.balance), R.drawable.transaction_history))
-                iconList5.add(ListIcon(getString(R.string.cash_withdraw), R.drawable.cashcol))
-                iconList5.add(ListIcon(getString(R.string.mini_statement), R.drawable.ministatement))
+                iconList5.add(ListIcon(getString(R.string.balance), R.drawable.transaction_history,getString(R.string.balance_slag)))
+                iconList5.add(ListIcon(getString(R.string.cash_withdraw), R.drawable.cashcol,getString(R.string.cash_withdraw_slag)))
+                iconList5.add(ListIcon(getString(R.string.mini_statement), R.drawable.ministatement,getString(R.string.mini_statement_slag)))
 
-                iconList5.add(ListIcon(getString(R.string.aadhar_pay), R.drawable.aadharpay))
+                iconList5.add(ListIcon(getString(R.string.aadhar_pay), R.drawable.aadharpay,getString(R.string.aadhar_pay_slag)))
 
-                adapter= AEPSAdapter(iconList5,R.drawable.circle_shape2,object : CallBack {
-                    override fun getValue(s: String) {
-                        serviceNavigation(s)
+                adapter= AEPSAdapter(iconList5,R.drawable.circle_shape2,object : CallBack2 {
+                    override fun getValue2(s: String,tag: String) {
+                        checkService(s,tag)
+                       // serviceNavigation(s)
                        /* when(s) {
                             getString(R.string.balance) -> {
                                 showBalencePopup(binding.root.context)
@@ -953,28 +1019,30 @@ class HomeFragment : BaseFragment() {
 
             recycleViewEpayBanking.apply {
                 iconList6.clear()
-                iconList6.add(ListIcon(getString(R.string.move_to_bank), R.drawable.bank_transfer_icon))
-                iconList6.add(ListIcon(getString(R.string.move_to_wallet), R.drawable.balance))
-                iconList6.add(ListIcon(getString(R.string.ePotly), R.drawable.epotlyinb))
-                iconList6.add(ListIcon(getString(R.string.payment_request), R.drawable.balance))
+                iconList6.add(ListIcon(getString(R.string.move_to_bank), R.drawable.bank_transfer_icon,getString(R.string.move_to_bank_slag)))
+                iconList6.add(ListIcon(getString(R.string.move_to_wallet), R.drawable.balance,getString(R.string.move_to_wallet_slag)))
+                iconList6.add(ListIcon(getString(R.string.ePotly), R.drawable.epotlyinb,getString(R.string.ePotly_slag)))
+                iconList6.add(ListIcon(getString(R.string.payment_request), R.drawable.balance,getString(R.string.payment_request_slag)))
                 //circle_shape
-                adapter= BankingAdapter(iconList6,R.drawable.circle_shape2, object : CallBack {
-                    override fun getValue(s: String) {
-                        serviceNavigation(s)
+                adapter= BankingAdapter(iconList6,R.drawable.circle_shape2, object : CallBack2 {
+                    override fun getValue2(s: String,slag: String) {
+                        checkService(s,slag)
+                       // serviceNavigation(s)
                     }
 
                 })
             }
             recycleTravel.apply {
                 iconList7.clear()
-                iconList7.add(ListIcon(getString(R.string.flight), R.drawable.ic_flight))
-                iconList7.add(ListIcon(getString(R.string.train), R.drawable.ic_train))
-                iconList7.add(ListIcon(getString(R.string.bus), R.drawable.bus))
-                iconList7.add(ListIcon(getString(R.string.hotel), R.drawable.hotel))
+                iconList7.add(ListIcon(getString(R.string.flight), R.drawable.ic_flight,getString(R.string.flight_slag)))
+                iconList7.add(ListIcon(getString(R.string.train), R.drawable.ic_train,"No Slag"))
+                iconList7.add(ListIcon(getString(R.string.bus), R.drawable.bus,"No Slag"))
+                iconList7.add(ListIcon(getString(R.string.hotel), R.drawable.hotel,"No Slag"))
 
-                adapter= TravelAdapter(iconList7, R.drawable.circle_shape2, object : CallBack {
-                    override fun getValue(s: String) {
-                        serviceNavigation(s)
+                adapter= TravelAdapter(iconList7, R.drawable.circle_shape2, object : CallBack2 {
+                    override fun getValue2(s: String,slag: String) {
+                        checkService(s,slag)
+                        //serviceNavigation(s)
                     }
 
                 })
@@ -983,22 +1051,22 @@ class HomeFragment : BaseFragment() {
 
             recycleReport.apply {
                 iconList8.clear()
-                iconList8.add(ListIcon(getString(R.string.payment), R.drawable.report))
-                iconList8.add(ListIcon(getString(R.string.transactions), R.drawable.report))
-                iconList8.add(ListIcon(getString(R.string.dmt), R.drawable.report))
-                iconList8.add(ListIcon(getString(R.string.load_Requests), R.drawable.report))
-                iconList8.add(ListIcon(getString(R.string.wallet_ledger), R.drawable.report))
-                iconList8.add(ListIcon(getString(R.string.cashout_ledger), R.drawable.report))
-                iconList8.add(ListIcon(getString(R.string.aeps), R.drawable.report))
-                iconList8.add(ListIcon(getString(R.string.micro_atm), R.drawable.report))
-                iconList8.add(ListIcon(getString(R.string.commissions), R.drawable.report))
-                iconList8.add(ListIcon(getString(R.string.bank_settle), R.drawable.report))
-                iconList8.add(ListIcon(getString(R.string.wallet_settle), R.drawable.report))
-                iconList8.add(ListIcon(getString(R.string.complaints), R.drawable.report))
+                iconList8.add(ListIcon(getString(R.string.payment), R.drawable.report,getString(R.string.payment_slag)))
+                iconList8.add(ListIcon(getString(R.string.transactions), R.drawable.report,getString(R.string.transactions_slag)))
+                iconList8.add(ListIcon(getString(R.string.dmt), R.drawable.report,getString(R.string.dmt_slag)))
+                iconList8.add(ListIcon(getString(R.string.load_Requests), R.drawable.report,getString(R.string.load_Requests_slag)))
+                iconList8.add(ListIcon(getString(R.string.wallet_ledger), R.drawable.report,getString(R.string.wallet_ledger_slag)))
+                iconList8.add(ListIcon(getString(R.string.cashout_ledger), R.drawable.report,"No slag"))
+                iconList8.add(ListIcon(getString(R.string.aeps), R.drawable.report,getString(R.string.aeps_slag)))
+                iconList8.add(ListIcon(getString(R.string.micro_atm), R.drawable.report,getString(R.string.micro_atm_slag)))
+                iconList8.add(ListIcon(getString(R.string.commissions), R.drawable.report,getString(R.string.commissions_slag)))
+                iconList8.add(ListIcon(getString(R.string.bank_settle), R.drawable.report,getString(R.string.bank_settle_slag)))
+                iconList8.add(ListIcon(getString(R.string.wallet_settle), R.drawable.report,getString(R.string.wallet_settle_slag)))
+                iconList8.add(ListIcon(getString(R.string.complaints), R.drawable.report,getString(R.string.complaints_slag)))
 
 
-                adapter= ReportAdapter(iconList8,R.drawable.circle_shape2,object : CallBack {
-                    override fun getValue(s: String) {
+                adapter= ReportAdapter(iconList8,R.drawable.circle_shape2,object : CallBack2 {
+                    override fun getValue2(s: String,tag: String) {
                         tableViewModel.deleteAllData()
                          reportList.clear()
                          reportList2.clear()
@@ -1058,19 +1126,28 @@ class HomeFragment : BaseFragment() {
             recycleAccount.apply {
 
                 iconList9.clear()
-                iconList9.add(ListIcon(getString(R.string.myaccount), R.drawable.myaccount))
-                iconList9.add(ListIcon(getString(R.string.support), R.drawable.baseline_notifications_24))
-                iconList9.add(ListIcon(getString(R.string.likeus), R.drawable.like_us))
-                iconList9.add(ListIcon(getString(R.string.usage_terms), R.drawable.baseline_assignment_24))
+                iconList9.add(ListIcon(getString(R.string.myaccount), R.drawable.myaccount,getString(R.string.myaccount_slag)))
+                iconList9.add(ListIcon(getString(R.string.support), R.drawable.baseline_notifications_24,getString(R.string.support_slag)))
+                iconList9.add(ListIcon(getString(R.string.likeus), R.drawable.like_us,getString(R.string.likeus_slag)))
+                iconList9.add(ListIcon(getString(R.string.usage_terms), R.drawable.baseline_assignment_24,getString(R.string.usage_terms_slag)))
 
-                iconList9.add(ListIcon(getString(R.string.password), R.drawable.baseline_lock_person_24))
-                iconList9.add(ListIcon(getString(R.string.certificate), R.drawable.baseline_receipt_24))
-                iconList9.add(ListIcon(getString(R.string.logout), R.drawable.baseline_logout_24))
+                iconList9.add(ListIcon(getString(R.string.password), R.drawable.baseline_lock_person_24,getString(R.string.password_slag)))
+                iconList9.add(ListIcon(getString(R.string.certificate), R.drawable.baseline_receipt_24,getString(R.string.certificate_slag)))
+                iconList9.add(ListIcon(getString(R.string.logout), R.drawable.baseline_logout_24,getString(R.string.logout)))
 
 
-                adapter= ReportAdapter(iconList9,R.drawable.circle_shape2,object : CallBack {
-                    override fun getValue(s: String) {
-                        serviceNavigation(s)
+                adapter= ReportAdapter(iconList9,R.drawable.circle_shape2,object : CallBack2 {
+                    override fun getValue2(s: String,tag: String) {
+                       if(s== getString(R.string.logout)){
+                            context?.let { ctx->
+                                ctx.userLogout()
+                            }
+                        }
+                        else{
+                            checkService(s,tag)
+                        }
+
+                       // serviceNavigation(s)
                        /* when(s){
                            getString(R.string.myaccount)->{
                             findNavController().navigate(R.id.action_homeFragment2_to_userDetailsFragment)
@@ -1110,19 +1187,22 @@ class HomeFragment : BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun init() {
+        activity?.let {
+            loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
+        }
         /**/
         viewModel.from_page_message.value="home"
         checkPermission()
         //sharedPreff.setTestData("Abcd")
         //Toast.makeText(requireActivity(), ""+sharedPreff.getTestData(), Toast.LENGTH_SHORT).show()
-        iconList.add(ListIcon("Card", R.drawable.bb1))
-        iconList.add(ListIcon("Card", R.drawable.b3))
-        iconList.add(ListIcon("Card", R.drawable.card))
-        iconList.add(ListIcon("Card", R.drawable.card2))
-        iconList.add(ListIcon("Card", R.drawable.bb1))
-        iconList.add(ListIcon("Card", R.drawable.card2))
-        iconList.add(ListIcon("Card", R.drawable.card))
-        iconList.add(ListIcon("Card", R.drawable.card2))
+        iconList.add(ListIcon("Card", R.drawable.bb1,""))
+        iconList.add(ListIcon("Card", R.drawable.b3,""))
+        iconList.add(ListIcon("Card", R.drawable.card,""))
+        iconList.add(ListIcon("Card", R.drawable.card2,""))
+        iconList.add(ListIcon("Card", R.drawable.bb1,""))
+        iconList.add(ListIcon("Card", R.drawable.card2,""))
+        iconList.add(ListIcon("Card", R.drawable.card,""))
+        iconList.add(ListIcon("Card", R.drawable.card2,""))
         binding.viewPager2.apply {
             val scaleMin = 0.32f // Minimum scale
             val scaleMax = 0.45f // Maximum scale
@@ -1158,12 +1238,12 @@ class HomeFragment : BaseFragment() {
 
 
 
-        iconList2.add(ListIcon("Card", R.drawable.sa1))
-        iconList2.add(ListIcon("Card", R.drawable.sa2))
-        iconList2.add(ListIcon("Card", R.drawable.sa3))
-        iconList2.add(ListIcon("Card", R.drawable.sa4))
-        iconList2.add(ListIcon("Card", R.drawable.sa2))
-        iconList2.add(ListIcon("Card", R.drawable.sa5))
+        iconList2.add(ListIcon("Card", R.drawable.sa1,""))
+        iconList2.add(ListIcon("Card", R.drawable.sa2,""))
+        iconList2.add(ListIcon("Card", R.drawable.sa3,""))
+        iconList2.add(ListIcon("Card", R.drawable.sa4,""))
+        iconList2.add(ListIcon("Card", R.drawable.sa2,""))
+        iconList2.add(ListIcon("Card", R.drawable.sa5,""))
         binding.viewPager3.apply {
             autoScrollHandler = AutoScrollHandler(this)
             adapter = BannerViewpagerAdapter(iconList2)
@@ -1286,5 +1366,7 @@ class HomeFragment : BaseFragment() {
             }
         }
     }
+
+
 
 }

@@ -7,9 +7,10 @@ import com.epaymark.big9.data.model.ListIcon
 import com.epaymark.big9.databinding.RechargeLayoutBinding
 
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack2
 
 
-class EssentialAdapter(private val items: List<ListIcon>, val circleShape: Int, val listner: CallBack) : RecyclerView.Adapter<EssentialAdapter.MyViewHolder>() {
+class EssentialAdapter(private val items: List<ListIcon>, val circleShape: Int, val listner: CallBack2) : RecyclerView.Adapter<EssentialAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         /*val view = LayoutInflater.from(parent.context).inflate(R.layout.banner_items, parent, false)
@@ -45,7 +46,7 @@ class EssentialAdapter(private val items: List<ListIcon>, val circleShape: Int, 
             item.title?.let { title->
                 binding.tvTitle.text = title
                 binding.llItem.setOnClickListener{
-                    listner.getValue(title)
+                    listner.getValue2(title,item.slag.toString())
                 }
             }
             item.image?.let {image->

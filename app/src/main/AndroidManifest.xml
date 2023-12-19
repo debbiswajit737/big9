@@ -54,7 +54,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.SplashActivity"
+            android:name=".ui.activity.DashboardActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -78,7 +78,7 @@
             android:exported="false"
             android:screenOrientation="portrait" /> <!-- android:theme="@style/Theme.AppCompat" -->
         <activity
-            android:name=".ui.activity.DashboardActivity"
+            android:name=".ui.activity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">

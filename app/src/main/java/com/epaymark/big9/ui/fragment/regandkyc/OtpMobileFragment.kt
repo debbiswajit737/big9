@@ -1,8 +1,5 @@
 package com.epaymark.big9.ui.fragment.regandkyc
 
-import android.location.Location
-
-
 
 import android.Manifest
 import android.animation.Animator
@@ -23,6 +20,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -56,13 +54,14 @@ class OtpMobileFragment : BaseFragment() {
     lateinit var binding: FragmentOtpMobileBinding
     var keyPad = ArrayList<Int>()
     val MY_PERMISSIONS_REQUEST_LOCATION=1
+    private  val PERMISSION_REQUEST_LOCATION = 100
     private val authViewModel: AuthViewModel by activityViewModels()
     var isForgotPinPage=false
     val jsonDataLocation=JsonObject()
     private var loader: Dialog? = null
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    //private lateinit var mFusedLocationClient: FusedLocationProviderClient
     var loadingPopup: LoadingPopup? = null
-
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -132,12 +131,100 @@ class OtpMobileFragment : BaseFragment() {
     }
 
     fun init(){
-        activity?.let {
-            loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
+        activity?.let {act->
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(act)
+            loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
+            checkPermission2(act)
         }
 
-       activity?.let {  mFusedLocationClient = LocationServices.getFusedLocationProviderClient(it)}
-        userLocation()
+       //activity?.let {  mFusedLocationClient = LocationServices.getFusedLocationProviderClient(it)}
+       // userLocation()
+    }
+
+    private fun checkPermission2(act: FragmentActivity) {
+        if (ContextCompat.checkSelfPermission(
+                binding.root.context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                act,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSION_REQUEST_LOCATION
+            )
+        } else {
+            // Permission already granted, start location updates
+            startLocationUpdates()
+        }
+    }
+
+
+    private fun startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(
+                binding.root.context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                binding.root.context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            activity?.let {act->
+                checkPermission2(act)
+           }
+
+        }
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location ->
+                // Got last known location. In some rare situations this can be null.
+                if (location != null) {
+                    // Use the location object to retrieve the location data
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    val geocoder = Geocoder(binding.root.context, Locale.getDefault())
+                    val addresses: List<Address>? =
+                        geocoder.getFromLocation(latitude, longitude, 1)
+
+                    // Process the addresses if available
+                    addresses?.let {
+                        if (it.isNotEmpty()) {
+                            val address: Address = it[0]
+                           /* val subAdminArea = address.subAdminArea
+                            val continentName = address.countryName
+                            val city = address.locality
+                            val state = address.adminArea
+                            val postalCode = address.postalCode
+                            val knownName = address.featureName
+                            val subLocality = address.subLocality
+                            val addressLine1 = address.getAddressLine(0)
+                            val addressLine2 = address.getAddressLine(1)*/
+
+
+                            address?.let {
+                                jsonDataLocation.addProperty("subAdminArea",it.subAdminArea)
+                                jsonDataLocation.addProperty("continentName",it.countryName)
+
+                                jsonDataLocation.addProperty("city",it.locality)
+                                jsonDataLocation.addProperty("state",it.adminArea)
+
+                                jsonDataLocation.addProperty("postalCode",it.postalCode)
+                                jsonDataLocation.addProperty("knownName",it.featureName)
+                                jsonDataLocation.addProperty("latitude",it.latitude)
+                                jsonDataLocation.addProperty("longitude",it.longitude)
+
+                                jsonDataLocation.addProperty("subLocality",it.subLocality)
+                                jsonDataLocation.addProperty("address1",it.getAddressLine(1))
+                                jsonDataLocation.addProperty("address2",it.getAddressLine(2))
+                            }
+
+
+
+
+                            // Now you have the location data, you can use it as needed
+                            // For example, update UI with the location details
+                        }
+                    }
+                }
+            }
     }
 
     private fun userLocation() {
@@ -261,7 +348,7 @@ class OtpMobileFragment : BaseFragment() {
 
     }
 
-    override fun onRequestPermissionsResult(
+   /* override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
@@ -277,7 +364,7 @@ class OtpMobileFragment : BaseFragment() {
                 }
             }
         }
-    }
+    }*/
 
     private fun onViewClick() {
 
@@ -398,7 +485,21 @@ class OtpMobileFragment : BaseFragment() {
             })
     }
 
-
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_LOCATION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, start location updates
+                startLocationUpdates()
+            } else {
+                // Permission denied, handle accordingly (e.g., show a message or request again)
+            }
+        }
+    }
     }
 
 

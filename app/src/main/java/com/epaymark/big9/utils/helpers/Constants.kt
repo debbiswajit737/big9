@@ -40,6 +40,7 @@ object Constants {
     var isRecept = "isRecept"
     var isAfterReg = "isAfterReg"
     var searchValue = ""
+    var searchValueTag = ""
     var utilityValue = ""
     var recycleViewReceiptList = ArrayList<ReceiptModel>()
     const val AES_ALGORITHM = "AES"
