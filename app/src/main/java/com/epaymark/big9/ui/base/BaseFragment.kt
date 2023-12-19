@@ -2,6 +2,7 @@ package com.epaymark.big9.ui.base
 
 import android.animation.ObjectAnimator
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -16,6 +17,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.text.InputFilter
 import android.util.Base64
+import android.util.Log
 
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -29,6 +31,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.epaymark.big9.R
+import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants.AES_ALGORITHM
 import com.epaymark.big9.utils.helpers.Constants.AES_IV
 import com.epaymark.big9.utils.helpers.Constants.AES_KEY
@@ -451,8 +454,31 @@ open class BaseFragment: Fragment(){
         return Base64.encodeToString(encryptedBytes, Base64.DEFAULT)
     }
 
+    fun showLogDcriptData( s:String?){
+        s?.let {
+            Log.e("dcriptData",s.decrypt())
+        }
+    }
+    fun showLogDcriptData( s:String?,tag:String){
+        s?.let {
+            Log.e(tag,s.decrypt())
+        }
+    }
+    fun showLog( s:String?){
+        s?.let {
+            Log.e("dcriptData",s.decrypt())
+        }
+    }
+    fun showLog( s:String?,tag:String){
+        s?.let {
+            Log.e(tag,s.decrypt())
+        }
+    }
+
+
+
     fun String.decrypt(): String {
-        val fixedIV = if (AES_IV.length < 13) AES_IV + " ".repeat(13 - AES_IV.length) else AES_IV.substring(0, 13)
+        val fixedIV = if (AES_IV.length < 16) AES_IV + " ".repeat(16 - AES_IV.length) else AES_IV.substring(0, 16)
 
         val keySpec = SecretKeySpec(AES_KEY.toByteArray(Charsets.UTF_8),
             AES_ALGORITHM

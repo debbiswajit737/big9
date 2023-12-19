@@ -7,6 +7,8 @@ import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.AEPSReportData
 import com.epaymark.big9.data.model.AEPSReportModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
+import com.epaymark.big9.data.model.ChangeUserTPINPasswordModel
+import com.epaymark.big9.data.model.CheckServiceModel
 import com.epaymark.big9.data.model.CreditCardSendOtpModel
 import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
 import com.epaymark.big9.data.model.DMTReportModel
@@ -18,6 +20,7 @@ import com.epaymark.big9.data.model.MatmeportModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
+import com.epaymark.big9.data.model.ResetTPINModel
 import com.epaymark.big9.data.model.TransactionReportModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
@@ -804,7 +807,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     //Change Passdord
     private val _changePinResponseLiveData =
         MutableLiveData<ResponseState<ChangeUserPasswordModel>>()
-    val changePinResponseLiveData: LiveData<ResponseState<ChangeUserPasswordModel>>
+    val changePinResponseLiveData: MutableLiveData<ResponseState<ChangeUserPasswordModel>>
         get() = _changePinResponseLiveData
 
     suspend fun changePin(token: String, loginModel: String) {
@@ -828,14 +831,14 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     //Change changeTpin
     private val _changeTPinResponseLiveData =
-        MutableLiveData<ResponseState<ChangeUserPasswordModel>>()
-    val changeTPinResponseLiveData: LiveData<ResponseState<ChangeUserPasswordModel>>
+        MutableLiveData<ResponseState<ChangeUserTPINPasswordModel>>()
+    val changeTPinResponseLiveData: MutableLiveData<ResponseState<ChangeUserTPINPasswordModel>>
         get() = _changeTPinResponseLiveData
 
     suspend fun changeTPin(token: String, loginModel: String) {
         _changeTPinResponseLiveData.postValue(ResponseState.Loading())
         try {
-            val response = api.changePin(
+            val response = api.changeTpin(
                 token,
                 loginModel.replace("\n", "").replace("\r", "")
             )
@@ -928,8 +931,8 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     //Check service
     private val _checkServiceResponseLiveData =
-        MutableLiveData<ResponseState<AEPSReportModel>>()
-    val checkServiceResponseLiveData: MutableLiveData<ResponseState<AEPSReportModel>>
+        MutableLiveData<ResponseState<CheckServiceModel>>()
+    val checkServiceResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
         get() = _checkServiceResponseLiveData
 
     suspend fun checkService(token: String, loginModel: String) {
@@ -975,6 +978,33 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         }
 
     }
+
+
+    //ResetTPIN
+    private val _resetTPINResponseReceptLiveData =
+        MutableLiveData<ResponseState<ResetTPINModel>>()
+    val resetTPINResponseReceptLiveData: MutableLiveData<ResponseState<ResetTPINModel>>
+        get() = _resetTPINResponseReceptLiveData
+
+    suspend fun resetTPIN(token: String, loginModel: String) {
+        _resetTPINResponseReceptLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.resetTPIN(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _resetTPINResponseReceptLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _resetTPINResponseReceptLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
 
 
 

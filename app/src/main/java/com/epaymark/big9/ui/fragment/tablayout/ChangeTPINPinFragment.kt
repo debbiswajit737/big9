@@ -3,6 +3,7 @@ package com.epaymark.big9.ui.fragment.tablayout
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.epaymark.big9.network.RetrofitHelper.handleApiError
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.popup.SuccessPopupFragment
 import com.epaymark.big9.utils.common.MethodClass
+import com.epaymark.big9.utils.common.MethodClass.custom_loader
 import com.epaymark.big9.utils.`interface`.CallBack4
 import com.google.gson.Gson
 
@@ -27,8 +29,8 @@ import com.google.gson.Gson
 class ChangeTPINPinFragment : BaseFragment() {
     lateinit var binding: FragmentChangeTpinBinding
     private val viewModel: MyViewModel by activityViewModels()
-
     private var loader: Dialog? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,31 +49,27 @@ class ChangeTPINPinFragment : BaseFragment() {
         onViewClick()
     }
 
-    private fun onViewClick() {
-
-        binding.apply {
-            btnSubmit.setOnClickListener{
-                if (viewModel?.changeLoginTPinValidation() == true){
-                    changePassword()
-                }
-            }
-          }
-        }
 
 
-    fun initView() {
+    private fun initView() {
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
         }
     }
 
-    fun setObserver() {
-        binding.apply {
+    private fun onViewClick() {
 
+        binding.apply {
+            btnSubmit.setOnClickListener{
+                if (viewModel?.changeLoginTPinValidation() == true){
+                    changeTpinPassword()
+                }
+            }
         }
 
     }
-    private fun changePassword() {
+
+    private fun changeTpinPassword() {
         val (isLogin, loginResponse) =sharedPreff.getLoginData()
         if (isLogin){
             loginResponse?.let {loginData->
@@ -86,13 +84,14 @@ class ChangeTPINPinFragment : BaseFragment() {
 
                 var jsonString = gson.toJson(data)
                 loginData.AuthToken?.let {
+
+
                     viewModel?.changeTPin(it, jsonString.encrypt())
                 }
 
             }
         }
     }
-
 
     private fun observer() {
         viewModel.changeTPinResponseLiveData.observe(viewLifecycleOwner){
@@ -102,12 +101,9 @@ class ChangeTPINPinFragment : BaseFragment() {
                 }
                 is ResponseState.Success->{
                     loader?.dismiss()
-
-
-
-                    viewModel?.newTPin?.value=""
-                    viewModel?.confirmTPin?.value=""
-                    viewModel?.oldTPin?.value=""
+                    viewModel?.newPin?.value=""
+                    viewModel?.confirmPin?.value=""
+                    viewModel?.oldPin?.value=""
                     it.data?.let {
                         viewModel.popup_message.value=it.Description
                         val successPopupFragment = SuccessPopupFragment(object :
@@ -118,18 +114,25 @@ class ChangeTPINPinFragment : BaseFragment() {
                                 s3: String,
                                 s4: String
                             ) {
+                                viewModel?.newTPin?.value=""
+                                viewModel?.confirmTPin?.value=""
+                                viewModel?.oldTPin?.value=""
                                 findNavController().popBackStack()
                             }
                         })
                         successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
                     }
+                    loader?.dismiss()
+                    viewModel.changeTPinResponseLiveData.value=null
                 }
                 is ResponseState.Error->{
+                    loader?.dismiss()
                     viewModel?.newTPin?.value=""
                     viewModel?.confirmTPin?.value=""
                     viewModel?.oldTPin?.value=""
-                    loader?.dismiss()
+
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    viewModel.changeTPinResponseLiveData.value=null
                 }
             }
         }

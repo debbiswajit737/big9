@@ -21,5 +21,6 @@ data class MatmeportData(
     @SerializedName("masked_pan") var maskedPan: String? = null,
     @SerializedName("avbalance") var avbalance: String? = null,
     @SerializedName("trans_dt") var transDt: String? = null,
-    @SerializedName("response_description") var responseDescription: String? = null
+    @SerializedName("response_description") var responseDescription: String? = null,
+
 )

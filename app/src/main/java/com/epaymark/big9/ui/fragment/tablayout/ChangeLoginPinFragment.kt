@@ -49,13 +49,13 @@ class ChangeLoginPinFragment : BaseFragment() {
 
 
     private fun initView() {
-
-    }
-
-    private fun onViewClick() {
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
         }
+    }
+
+    private fun onViewClick() {
+
         binding.apply {
             btnSubmit.setOnClickListener{
                 if (viewModel?.changeLoginPinValidation() == true){
@@ -114,13 +114,17 @@ class ChangeLoginPinFragment : BaseFragment() {
                         })
                         successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
                     }
+                    loader?.dismiss()
+                    viewModel.changePinResponseLiveData.value=null
                 }
                 is ResponseState.Error->{
+                    loader?.dismiss()
                     viewModel?.newPin?.value=""
                     viewModel?.confirmPin?.value=""
                     viewModel?.oldPin?.value=""
-                    loader?.dismiss()
+
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    viewModel.changePinResponseLiveData.value=null
                 }
             }
         }

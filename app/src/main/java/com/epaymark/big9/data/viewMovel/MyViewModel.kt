@@ -13,6 +13,8 @@ import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.AEPSReportData
 import com.epaymark.big9.data.model.AEPSReportModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
+import com.epaymark.big9.data.model.ChangeUserTPINPasswordModel
+import com.epaymark.big9.data.model.CheckServiceModel
 import com.epaymark.big9.data.model.CreditCardSendOtpModel
 import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
 import com.epaymark.big9.data.model.DMTReportModel
@@ -22,6 +24,7 @@ import com.epaymark.big9.data.model.MatmeportModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
+import com.epaymark.big9.data.model.ResetTPINModel
 import com.epaymark.big9.data.model.TransactionReportModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
@@ -1542,7 +1545,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             repository.epotlyTranspher(token,data)
         }
     }
-    val changePinResponseLiveData: LiveData<ResponseState<ChangeUserPasswordModel>>
+    val changePinResponseLiveData: MutableLiveData<ResponseState<ChangeUserPasswordModel>>
         get() = repository.changePinResponseLiveData
     fun changePin(token: String, data: String) {
         viewModelScope.launch {
@@ -1550,8 +1553,8 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         }
     }
 
-    val changeTPinResponseLiveData: LiveData<ResponseState<ChangeUserPasswordModel>>
-        get() = repository.changePinResponseLiveData
+    val changeTPinResponseLiveData: MutableLiveData<ResponseState<ChangeUserTPINPasswordModel>>
+        get() = repository.changeTPinResponseLiveData
     fun changeTPin(token: String, data: String) {
         viewModelScope.launch {
             repository.changeTPin(token,data)
@@ -1588,7 +1591,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     }
 
     //Check service
-    val checkServiceReceiptResponseLiveData: MutableLiveData<ResponseState<AEPSReportModel>>
+    val checkServiceReceiptResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
         get() = repository.checkServiceResponseLiveData
     fun checkService(token: String, data: String) {
         viewModelScope.launch {
@@ -1604,6 +1607,17 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             repository.microatmReportReceipt(token,data)
         }
     }
+
+    //reset TPIN
+    val resetTPINResponseReceptLiveData: MutableLiveData<ResponseState<ResetTPINModel>>
+        get() = repository.resetTPINResponseReceptLiveData
+    fun resetTPINResponse(token: String, data: String) {
+        viewModelScope.launch {
+            repository.resetTPIN(token,data)
+        }
+    }
+
+
 
 
 

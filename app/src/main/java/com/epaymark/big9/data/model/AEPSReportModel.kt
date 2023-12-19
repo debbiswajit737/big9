@@ -17,5 +17,7 @@ data class AEPSReportData(
     @SerializedName("amount") var amount: String? = null,
     @SerializedName("balance") var balance: String? = null,
     @SerializedName("operator") var operator: String? = null,
-    @SerializedName("operatorID") var operatorID: String? = null
+    @SerializedName("operatorID") var operatorID: String? = null,
+    @SerializedName("current_balance") var currentBalance: String? = null,
+    @SerializedName("TransactionDate") var TransactionDate: String? = null
 )

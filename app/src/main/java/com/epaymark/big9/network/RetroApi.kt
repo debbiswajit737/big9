@@ -5,6 +5,8 @@ import com.epaymark.big9.data.genericmodel.BaseResponse
 
 import com.epaymark.big9.data.model.AEPSReportModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
+import com.epaymark.big9.data.model.ChangeUserTPINPasswordModel
+import com.epaymark.big9.data.model.CheckServiceModel
 import com.epaymark.big9.data.model.CreditCardSendOtpModel
 import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
 import com.epaymark.big9.data.model.DMTReportModel
@@ -16,6 +18,7 @@ import com.epaymark.big9.data.model.MatmeportModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
+import com.epaymark.big9.data.model.ResetTPINModel
 import com.epaymark.big9.data.model.TransactionReportModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
@@ -280,7 +283,7 @@ interface RetroApi {
     suspend fun changeTpin(
         @Header("Authtoken") token: String,
         @Body data: String
-    ): Response<ChangeUserPasswordModel>
+    ): Response<ChangeUserTPINPasswordModel>
 
     @POST("v1/reports/transcation_report_receipt")
     suspend fun transcationReportReceipt(
@@ -304,13 +307,23 @@ interface RetroApi {
     suspend fun checkService(
         @Header("Authtoken") token: String,
         @Body data: String
-    ): Response<AEPSReportModel>
+    ): Response<CheckServiceModel>
 
     @POST("v1/reports/microatm_report_receipt")
     suspend fun matmREportRECEPT(
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<MatmeportModel>
+
+
+    @POST("v1/password/reset_tpin")
+    suspend fun resetTPIN(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<ResetTPINModel>
+
+
+
 
 
 

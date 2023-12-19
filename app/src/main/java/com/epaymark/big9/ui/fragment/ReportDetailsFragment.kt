@@ -22,6 +22,7 @@ import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants.reportDetailsAdapter
 import com.epaymark.big9.utils.helpers.Constants.reportDetailsPropertyList
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import java.lang.reflect.Field
 import java.util.Locale
 
@@ -56,9 +57,12 @@ class ReportDetailsFragment : BaseFragment() {
     private fun onViewClick() {
 
         binding.apply {
-            imgBtnShare.setOnClickListener{
+            fabShare.setOnClickListener{
                 shareImage()
             }
+           /* imgBtnShare.setOnClickListener{
+
+            }*/
           imgBack.back()
 
           }
@@ -200,19 +204,50 @@ class ReportDetailsFragment : BaseFragment() {
                         //reportDetailsPropertyList.clear()
                         it.data.data?.let { dataList ->
                             for (transactionData in dataList) {
-                                val fields: Array<Field> = transactionData.javaClass.declaredFields
+                               // val fields: Array<Field> = transactionData.javaClass.declaredFields
 
-                                for (field in fields) {
-                                    field.isAccessible = true
+                             //   for (field in fields) {
+                                    /*field.isAccessible = true
                                     val key = field.name
                                     var value =""
                                     field.get(transactionData)?.let {
                                          value = field.get(transactionData) as String
-                                    }
-
-                                    reportDetailsPropertyList.add(Reportdetails(property=key.addSpaceBeforeUppercase(),reportValue=value))
-
+                                    }*/
+                                    //@/*SerializedName("transaction_id") var transactionId: String? = null,
+                                   /* @SerializedName("customer_number") var customerNumber: String? = null,
+                                    @SerializedName("status") var status: String? = null,
+                                    @SerializedName("amount") var amount: String? = null,
+                                    @SerializedName("balance") var balance: String? = null,
+                                    @SerializedName("operator") var operator: String? = null,
+                                    @SerializedName("operatorID") var operatorID: String? = null*/
+                                    //reportDetailsPropertyList.add(Reportdetails(property=key.addSpaceBeforeUppercase(),reportValue=value))
+                                if(!transactionData.transactionId.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Transaction Id",reportValue=transactionData.transactionId))
                                 }
+                                if(!transactionData.customerNumber.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Customer Number",reportValue=transactionData.customerNumber))
+                                }
+                                if(!transactionData.status.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Status",reportValue=transactionData.status))
+                                }
+                                if(!transactionData.amount.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Amount",reportValue=transactionData.amount))
+                                }
+                                if(!transactionData.balance.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Balance",reportValue=transactionData.balance))
+                                }
+                                if(!transactionData.operator.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Operator",reportValue=transactionData.operator))
+                                }
+                                /*if(!transactionData.operator.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Operator",reportValue=transactionData.operator))
+                                }*/
+
+
+
+
+
+                               // }
                             }
                         }
 
@@ -265,9 +300,46 @@ class ReportDetailsFragment : BaseFragment() {
                         reportDetailsPropertyList.clear()
                         it.data.data?.let { dataList ->
                             for (transactionData in dataList) {
-                                val fields: Array<Field> = transactionData.javaClass.declaredFields
 
-                                for (field in fields) {
+
+
+
+                                if(!transactionData.tranId.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Transaction Id",reportValue=transactionData.tranId))
+                                }
+                                if(!transactionData.tranAmt.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Transaction Amount",reportValue=transactionData.tranAmt))
+                                }
+                                if(!transactionData.recName.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Receiver Name",reportValue=transactionData.recName))
+                                }
+                                if(!transactionData.tranStatus.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Status",reportValue=transactionData.tranStatus))
+                                }
+                                if(!transactionData.transDt.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Transaction Date",reportValue=transactionData.transDt))
+                                }
+                                if(!transactionData.utr.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="UTR",reportValue=transactionData.utr))
+                                }
+                                if(!transactionData.recAcno.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Receiver Account Number",reportValue=transactionData.recAcno))
+                                }
+                                if(!transactionData.totalTranAmt.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Total Transaction Amount",reportValue=transactionData.totalTranAmt))
+                                }
+                                if(!transactionData.bankName.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Bank Name",reportValue=transactionData.bankName))
+                                }
+                                if(!transactionData.custMobno.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Customer Mobile Number",reportValue=transactionData.custMobno))
+                                }
+
+
+
+                                //val fields: Array<Field> = transactionData.javaClass.declaredFields
+
+                               /* for (field in fields) {
                                     field.isAccessible = true
                                     val key = field.name
                                     var value =""
@@ -276,7 +348,7 @@ class ReportDetailsFragment : BaseFragment() {
                                     }
                                     reportDetailsPropertyList.add(Reportdetails(property=key.addSpaceBeforeUppercase(),reportValue=value))
 
-                                       /* var  key2=if (key=="tran_amt"){
+                                    */   /* var  key2=if (key=="tran_amt"){
                                             "Transaction Id"
                                         }
                                         else if (key=="tran_status"){
@@ -313,7 +385,7 @@ class ReportDetailsFragment : BaseFragment() {
                                     }*/
 
 
-                                }
+                               // }
                             }
                         }
 
@@ -347,9 +419,39 @@ class ReportDetailsFragment : BaseFragment() {
                         reportDetailsPropertyList.clear()
                         it.data?.data?.let { dataList ->
                             for (transactionData in dataList) {
-                                val fields: Array<Field> = transactionData.javaClass.declaredFields
 
-                                for (field in fields) {
+                                if(!transactionData.transactionId.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Transaction Id",reportValue=transactionData.transactionId))
+                                }
+                                if(!transactionData.customerNumber.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Customer Number",reportValue=transactionData.customerNumber))
+                                }
+                                if(!transactionData.status.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Status",reportValue=transactionData.status))
+                                }
+                                if(!transactionData.amount.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Amount",reportValue=transactionData.amount))
+                                }
+                                if(!transactionData.balance.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Balance",reportValue=transactionData.balance))
+                                }
+                                if(!transactionData.operator.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Operator",reportValue=transactionData.operator))
+                                }
+                                if(!transactionData.operatorID.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Operator ID",reportValue=transactionData.operatorID))
+                                }
+                                if(!transactionData.currentBalance.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Current Balance",reportValue=transactionData.currentBalance))
+                                }
+                                if(!transactionData.TransactionDate.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Transaction Date",reportValue=transactionData.TransactionDate))
+                                }
+
+
+                                //val fields: Array<Field> = transactionData.javaClass.declaredFields
+
+                                /*for (field in fields) {
                                     field.isAccessible = true
                                     var key = field.name
 
@@ -358,7 +460,8 @@ class ReportDetailsFragment : BaseFragment() {
                                         value = field.get(transactionData) as String
                                     }
                                     reportDetailsPropertyList.add(Reportdetails(property=key.addSpaceBeforeUppercase(),reportValue=value.replace("_"," ")))
-                                  /*  Log.d("TAG_key", "setObserver: "+key+" value:"+value)
+                                  */
+                                    /*  Log.d("TAG_key", "setObserver: "+key+" value:"+value)
                                    if (key=="transaction_id"){
 
 
@@ -386,13 +489,9 @@ class ReportDetailsFragment : BaseFragment() {
 
 */
 
-                                }
+                                //}
                             }
                         }
-
-
-
-
 
                         reportDetailsAdapter?.items=reportDetailsPropertyList
                         reportDetailsAdapter?.notifyDataSetChanged()
@@ -422,7 +521,51 @@ class ReportDetailsFragment : BaseFragment() {
                         //reportDetailsPropertyList.clear()
                         it.data?.data?.let { dataList ->
                             for (transactionData in dataList) {
-                                val fields: Array<Field> = transactionData.javaClass.declaredFields
+/*
+    @SerializedName("transaction_id") var transactionId: String? = null,
+    @SerializedName("customer_number") var customerNumber: String? = null,
+    @SerializedName("amount") var amount: String? = null,
+    @SerializedName("operator") var operator: String? = null,
+    @SerializedName("operatorID") var operatorID: String? = null,
+    @SerializedName("BankReferenceNumber") var BankReferenceNumber: String? = null,
+    @SerializedName("masked_pan") var maskedPan: String? = null,
+    @SerializedName("avbalance") var avbalance: String? = null,
+    @SerializedName("trans_dt") var transDt: String? = null,
+    @SerializedName("response_description") var responseDescription: String? = null
+ */
+
+                                if(!transactionData.transactionId.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Transaction Id",reportValue=transactionData.transactionId))
+                                }
+                                if(!transactionData.customerNumber.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Customer Number",reportValue=transactionData.customerNumber))
+                                }
+
+                                if(!transactionData.amount.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Amount",reportValue=transactionData.amount))
+                                }
+
+                                if(!transactionData.operator.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Operator",reportValue=transactionData.operator))
+                                }
+                                if(!transactionData.BankReferenceNumber.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Bank Reference Number",reportValue=transactionData.BankReferenceNumber))
+                                }
+                                if(!transactionData.maskedPan.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Pancard Number",reportValue=transactionData.maskedPan))
+                                }
+                                if(!transactionData.avbalance.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Available Balance",reportValue=transactionData.avbalance))
+                                }
+                                if(!transactionData.responseDescription.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="",reportValue=transactionData.responseDescription))
+                                }
+                                if(!transactionData.transDt.isNullOrEmpty()){
+                                    reportDetailsPropertyList.add(Reportdetails(property="Transaction Date",reportValue=transactionData.transDt))
+                                }
+
+
+                                /*val fields: Array<Field> = transactionData.javaClass.declaredFields
 
                                 for (field in fields) {
                                     field.isAccessible = true
@@ -477,7 +620,7 @@ class ReportDetailsFragment : BaseFragment() {
                                         )
                                     }
 
-                                }
+                                }*/
                             }
                         }
 
