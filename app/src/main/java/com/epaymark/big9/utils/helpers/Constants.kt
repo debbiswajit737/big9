@@ -39,6 +39,7 @@ object Constants {
     var isFromUtilityPage = false
     var isRecept = "isRecept"
     var isAfterReg = "isAfterReg"
+    var stape = "stape"
     var searchValue = ""
     var searchValueTag = ""
     var utilityValue = ""

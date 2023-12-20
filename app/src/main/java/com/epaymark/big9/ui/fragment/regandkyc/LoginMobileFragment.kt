@@ -31,15 +31,19 @@ import com.epaymark.big9.ui.activity.AuthenticationActivity
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.popup.LoadingPopup
+import com.epaymark.big9.ui.receipt.AgreementPageFragment
+import com.epaymark.big9.ui.receipt.DthReceptDialogFragment
 import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants.API_KEY
 import com.epaymark.big9.utils.helpers.Constants.CLIENT_ID
 import com.epaymark.big9.utils.helpers.PermissionUtils
+import com.epaymark.big9.utils.`interface`.CallBack
 
 import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
 import com.epaymark.big9.utils.`interface`.PermissionsCallback
 
 import com.google.gson.Gson
+import java.util.Objects
 import kotlin.random.Random
 
 
@@ -63,6 +67,7 @@ class LoginMobileFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let { loader = MethodClass.custom_loader(it, getString(R.string.please_wait)) }
+
         checkPermission()
         setKeyPad(binding.recyclePhonePad)
         onViewClick()
@@ -99,7 +104,7 @@ class LoginMobileFragment : BaseFragment() {
 
                     it?.data?.data?.let {loginResponse->
                         try {
-                            //if (loginResponse.UserType!=null && (loginResponse.UserType=="R" || loginResponse.UserType=="D" || loginResponse.UserType=="SD" )) {
+
 
                                 loginResponse.beforeLogin?.let {
                                     if (it.toInt() > 6) {
@@ -130,6 +135,7 @@ class LoginMobileFragment : BaseFragment() {
                                                 )
                                             }
                                         } else if (loginResponse.userStatus?.trim() == "ACTIVE") {
+                                           // if (loginResponse.UserType!=null && (loginResponse.UserType=="R" || loginResponse.UserType=="D" || loginResponse.UserType=="SD" )) {
                                             sharedPreff?.setLoginData(loginResponse, true, "ACTIVE")
                                             startActivity(
                                                 Intent(
@@ -137,25 +143,28 @@ class LoginMobileFragment : BaseFragment() {
                                                     DashboardActivity::class.java
                                                 )
                                             )
-                                        } else {
+                                        /*} else {
                                             Toast.makeText(
                                                 requireContext(),
                                                 "You are not valid user",
                                                 Toast.LENGTH_SHORT
                                             ).show()
+                                        }*/
                                         }
+                                        else{
+                                            Toast.makeText(requireContext(), "You are not valid user", Toast.LENGTH_SHORT).show()
+                                        }
+
                                     }
                                 }
-                            /*}
-                            else{
-                                Toast.makeText(requireContext(), "You are not valid user", Toast.LENGTH_SHORT).show()
-                            }*/
+
 
                         }catch (e:Exception){
                             Toast.makeText(requireContext(), ""+e.message, Toast.LENGTH_SHORT).show()
                         }
 
                     }
+                    authViewModel?.authLogin?.value=null
 
                 }
 
@@ -163,6 +172,7 @@ class LoginMobileFragment : BaseFragment() {
                  //   loadingPopup?.dismiss()
                     loader?.let { it.dismiss() }
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    authViewModel?.authLogin?.value=null
                 }
             }
         }

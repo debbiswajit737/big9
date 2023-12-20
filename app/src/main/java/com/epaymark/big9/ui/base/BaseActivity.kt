@@ -1,12 +1,17 @@
 package com.epaymark.big9.ui.base
 
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.epaymark.big9.ui.activity.NetworkActivity
 import com.epaymark.big9.utils.helpers.NoNetworkReceiver
+import com.epaymark.big9.utils.helpers.PermissionUtils
+import com.epaymark.big9.utils.`interface`.PermissionsCallback
 import com.epaymark.big9.utils.interfaces.NetworkCallBack
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -54,4 +59,7 @@ open class BaseActivity: AppCompatActivity()/*, NetworkConnectionListener */{
          if (!MethodClass.check_networkconnection(this))
              startActivity(Intent(this, NetworkActivity::class.java))
      }*/
+
+
+
 }

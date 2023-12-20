@@ -1,5 +1,6 @@
 package com.epaymark.big9.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -45,15 +46,18 @@ class EssentialAdapter(private val items: List<ListIcon>, val circleShape: Int, 
            // }
             item.title?.let { title->
                 binding.tvTitle.text = title
-                binding.llItem.setOnClickListener{
+                /*binding.llItem.setOnClickListener{
+                    Log.d("TAG_checkuser", "bind: user check")
                     listner.getValue2(title,item.slag.toString())
-                }
+                }*/
             }
             item.image?.let {image->
                 binding.imgIcon.setImageResource(image)
             }
 
-
+            binding.llItems2.setOnClickListener{
+                listner.getValue2(item.title.toString(),item.slag.toString())
+            }
 
 
         }

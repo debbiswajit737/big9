@@ -1,14 +1,18 @@
 package com.epaymark.big9.ui.fragment.regandkyc
-
+import android.provider.Settings
 
 import android.Manifest
 import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -17,12 +21,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.R
 import com.epaymark.big9.adapter.PhonePadAdapter
@@ -30,6 +36,7 @@ import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentOtpMobileBinding
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetrofitHelper.handleApiError
+import com.epaymark.big9.ui.activity.AuthenticationActivity
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.activity.RegActivity
 import com.epaymark.big9.ui.base.BaseFragment
@@ -39,6 +46,7 @@ import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.common.MethodClass.getCurrentTimestamp
 import com.epaymark.big9.utils.common.MethodClass.getLocalIPAddress
 import com.epaymark.big9.utils.helpers.Constants
+import com.epaymark.big9.utils.helpers.Constants.stape
 import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -59,9 +67,9 @@ class OtpMobileFragment : BaseFragment() {
     var isForgotPinPage=false
     val jsonDataLocation=JsonObject()
     private var loader: Dialog? = null
-    //private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
     var loadingPopup: LoadingPopup? = null
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    //private lateinit var fusedLocationClient: FusedLocationProviderClient
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -91,6 +99,7 @@ class OtpMobileFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
+                    authViewModel.otp.value=""
                     Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                     if (it.data?.step==null){
                         (activity as? RegActivity)?.let {
@@ -120,10 +129,23 @@ class OtpMobileFragment : BaseFragment() {
                                     // Toast.makeText(requireContext(), "match", Toast.LENGTH_SHORT).show()
                               //  }
                     }
+                    else  {
+                        (activity as? RegActivity)?.let {act->
+                            val intent=Intent(act, AuthenticationActivity::class.java)
+                            intent.putExtra(stape,it.data?.step)
+                            startActivity(intent)
+                            act.finish()
+                        }
+
+
+                    }
+
+
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
+                    authViewModel.otp.value=""
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }
@@ -132,13 +154,14 @@ class OtpMobileFragment : BaseFragment() {
 
     fun init(){
         activity?.let {act->
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(act)
+            //fusedLocationClient = LocationServices.getFusedLocationProviderClient(act)
+            activity?.let {  mFusedLocationClient = LocationServices.getFusedLocationProviderClient(it)}
             loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
             checkPermission2(act)
         }
 
        //activity?.let {  mFusedLocationClient = LocationServices.getFusedLocationProviderClient(it)}
-       // userLocation()
+
     }
 
     private fun checkPermission2(act: FragmentActivity) {
@@ -154,7 +177,13 @@ class OtpMobileFragment : BaseFragment() {
             )
         } else {
             // Permission already granted, start location updates
-            startLocationUpdates()
+            if (isGpsEnabled()==true) {
+                startLocationUpdates()
+                //userLocation()
+            }
+            else{
+                showEnableGPSDialog()
+            }
         }
     }
 
@@ -170,25 +199,26 @@ class OtpMobileFragment : BaseFragment() {
         ) {
             activity?.let {act->
                 checkPermission2(act)
-           }
-
+          }
         }
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location ->
-                // Got last known location. In some rare situations this can be null.
-                if (location != null) {
-                    // Use the location object to retrieve the location data
-                    val latitude = location.latitude
-                    val longitude = location.longitude
-                    val geocoder = Geocoder(binding.root.context, Locale.getDefault())
-                    val addresses: List<Address>? =
-                        geocoder.getFromLocation(latitude, longitude, 1)
+        else {
+            getLocation()
+            /*fusedLocationClient.lastLocation
+                .addOnSuccessListener { location ->
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        // Use the location object to retrieve the location data
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+                        val geocoder = Geocoder(binding.root.context, Locale.getDefault())
+                        val addresses: List<Address>? =
+                            geocoder.getFromLocation(latitude, longitude, 1)
 
-                    // Process the addresses if available
-                    addresses?.let {
-                        if (it.isNotEmpty()) {
-                            val address: Address = it[0]
-                           /* val subAdminArea = address.subAdminArea
+                        // Process the addresses if available
+                        addresses?.let {
+                            if (it.isNotEmpty()) {
+                                val address: Address = it[0]
+                                *//* val subAdminArea = address.subAdminArea
                             val continentName = address.countryName
                             val city = address.locality
                             val state = address.adminArea
@@ -196,35 +226,34 @@ class OtpMobileFragment : BaseFragment() {
                             val knownName = address.featureName
                             val subLocality = address.subLocality
                             val addressLine1 = address.getAddressLine(0)
-                            val addressLine2 = address.getAddressLine(1)*/
+                            val addressLine2 = address.getAddressLine(1)*//*
 
 
-                            address?.let {
-                                jsonDataLocation.addProperty("subAdminArea",it.subAdminArea)
-                                jsonDataLocation.addProperty("continentName",it.countryName)
+                                address?.let {
+                                    jsonDataLocation.addProperty("subAdminArea", it.subAdminArea)
+                                    jsonDataLocation.addProperty("continentName", it.countryName)
 
-                                jsonDataLocation.addProperty("city",it.locality)
-                                jsonDataLocation.addProperty("state",it.adminArea)
+                                    jsonDataLocation.addProperty("city", it.locality)
+                                    jsonDataLocation.addProperty("state", it.adminArea)
 
-                                jsonDataLocation.addProperty("postalCode",it.postalCode)
-                                jsonDataLocation.addProperty("knownName",it.featureName)
-                                jsonDataLocation.addProperty("latitude",it.latitude)
-                                jsonDataLocation.addProperty("longitude",it.longitude)
+                                    jsonDataLocation.addProperty("postalCode", it.postalCode)
+                                    jsonDataLocation.addProperty("knownName", it.featureName)
+                                    jsonDataLocation.addProperty("latitude", it.latitude)
+                                    jsonDataLocation.addProperty("longitude", it.longitude)
 
-                                jsonDataLocation.addProperty("subLocality",it.subLocality)
-                                jsonDataLocation.addProperty("address1",it.getAddressLine(1))
-                                jsonDataLocation.addProperty("address2",it.getAddressLine(2))
+                                    jsonDataLocation.addProperty("subLocality", it.subLocality)
+                                    jsonDataLocation.addProperty("address1", it.getAddressLine(1))
+                                    jsonDataLocation.addProperty("address2", it.getAddressLine(2))
+                                }
+
+
+                                // Now you have the location data, you can use it as needed
+                                // For example, update UI with the location details
                             }
-
-
-
-
-                            // Now you have the location data, you can use it as needed
-                            // For example, update UI with the location details
                         }
                     }
-                }
-            }
+                }*/
+        }
     }
 
     private fun userLocation() {
@@ -285,9 +314,7 @@ class OtpMobileFragment : BaseFragment() {
 
     }
 
-    private fun getCurrency() {
 
-    }
 
 
 
@@ -367,7 +394,40 @@ class OtpMobileFragment : BaseFragment() {
     }*/
 
     private fun onViewClick() {
+        binding?.apply {
+            tvSwitchAcc.setOnClickListener{
+              findNavController().popBackStack()
+            }
+            btnConfirmOtp.setOnClickListener {
+                authViewModel?.otp?.value?.apply {
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    loginResponse?.let {loginData->
 
+
+                        val data = mapOf(
+                            "otp" to authViewModel.otp.value,
+                            "userid" to loginData.userid,
+
+                            "deviceid" to MethodClass.deviceUid(binding.root.context),
+                            "ipaddress" to getLocalIPAddress(),
+                            "location" to jsonDataLocation.toString(),
+                            "referenceid" to "123",
+                            "Timestamp" to getCurrentTimestamp()
+                        )
+                        /*"referenceid" to loginData.,*/
+                        val gson= Gson()
+                        var jsonString = gson.toJson(data)
+                        if (this.length==6) {
+                        loginData.AuthToken?.let {
+                            authViewModel?.sendOtp(it,jsonString.encrypt())
+                        }
+                    }
+
+                    }
+                }
+
+            }
+        }
 
         }
     fun setKeyPad(PhonePad: RecyclerView) {
@@ -391,32 +451,12 @@ class OtpMobileFragment : BaseFragment() {
                 override fun onClick(item: Int) {
                     authViewModel.otp.value?.apply {
                         if (item<=9 ) {
-                            if (this.length!=6) {
+                            if (!isGpsEnabled()) {
+                                showEnableGPSDialog()
+                            }
+                            else if (this.length!=6) {
                                 authViewModel.otp.value = "${this}${item}"
-                                val (isLogin, loginResponse) =sharedPreff.getLoginData()
-                                loginResponse?.let {loginData->
 
-
-                                    val data = mapOf(
-                                        "otp" to authViewModel.otp.value,
-                                        "userid" to loginData.userid,
-
-                                        "deviceid" to MethodClass.deviceUid(binding.root.context),
-                                        "ipaddress" to getLocalIPAddress(),
-                                        "location" to jsonDataLocation.toString(),
-                                        "referenceid" to "123",
-                                         "Timestamp" to getCurrentTimestamp()
-                                    )
-                                    /*"referenceid" to loginData.,*/
-                                    val gson= Gson()
-                                    var jsonString = gson.toJson(data)
-                                    if (this.length==5) {
-                                        loginData.AuthToken?.let {
-                                        authViewModel?.sendOtp(it,jsonString.encrypt())
-                                        }
-                                    }
-
-                                }
                                 // binding.firstPinView.text=this
 
                                 /*if(authViewModel.otp.value=="123456"){
@@ -497,9 +537,46 @@ class OtpMobileFragment : BaseFragment() {
                 startLocationUpdates()
             } else {
                 // Permission denied, handle accordingly (e.g., show a message or request again)
+                if(!isGpsEnabled()) {
+                    showEnableGPSDialog()
+
+                }
+
             }
         }
     }
+    /*private fun openAppSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", binding.root.context.packageName, null)
+        intent.data = uri
+        startActivity(intent)
+    }*/
+    fun isGpsEnabled(): Boolean {
+        binding.root.context?.let {context->
+            val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        }
+       return false
+    }
+
+    fun showEnableGPSDialog() {
+        val alertDialog = AlertDialog.Builder(binding.root.context)
+        alertDialog.apply {
+            setTitle("Enable GPS")
+            setMessage("GPS is required for this app. Please enable GPS.")
+            setPositiveButton("Enable GPS") { dialog: DialogInterface, which: Int ->
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent)
+            }
+            setNegativeButton("Cancel") { dialog: DialogInterface, which: Int ->
+                dialog.dismiss()
+            }
+            setCancelable(false) // Prevent dismissing dialog on outside touch or back press
+            create()
+            show()
+        }
+    }
+
     }
 
 

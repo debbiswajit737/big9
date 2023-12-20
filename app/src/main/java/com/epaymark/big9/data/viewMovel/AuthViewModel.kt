@@ -668,7 +668,7 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
 
 
 
-    val authLogin: LiveData<ResponseState<BaseResponse<LoginResponse>>>
+    val authLogin: MutableLiveData<ResponseState<BaseResponse<LoginResponse>>>
         get() = repository.loginResponseLiveData
     fun authLoginRegistration(loginModel: String) {
         viewModelScope.launch {

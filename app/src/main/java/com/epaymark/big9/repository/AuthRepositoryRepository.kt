@@ -99,7 +99,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     private val _loginResponseLiveData =
         MutableLiveData<ResponseState<BaseResponse<LoginResponse>>>()
-    val loginResponseLiveData: LiveData<ResponseState<BaseResponse<LoginResponse>>>
+    val loginResponseLiveData: MutableLiveData<ResponseState<BaseResponse<LoginResponse>>>
         get() = _loginResponseLiveData
 
 

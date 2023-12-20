@@ -27,6 +27,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -40,8 +41,10 @@ import com.epaymark.big9.utils.helpers.Constants.INPUT_FILTER_MAX_VALUE
 import com.epaymark.big9.utils.helpers.Constants.INPUT_FILTER_POINTER_LENGTH
 
 import com.epaymark.big9.utils.helpers.DecimalDigitsInputFilter
+import com.epaymark.big9.utils.helpers.PermissionUtils
 import com.epaymark.big9.utils.helpers.SharedPreff
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.PermissionsCallback
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -491,6 +494,33 @@ open class BaseFragment: Fragment(){
         val encryptedBytes = Base64.decode(this, Base64.DEFAULT)
         val decryptedBytes = cipher.doFinal(encryptedBytes)
         return String(decryptedBytes, Charsets.UTF_8)
+    }
+
+
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun checkBasePermission(context:Context):Boolean {
+        var hasPermission=false
+        if (!PermissionUtils.hasVideoRecordingPermissions(context)) {
+
+
+            PermissionUtils.requestVideoRecordingPermission(context, object :
+                PermissionsCallback {
+                override fun onPermissionRequest(granted: Boolean) {
+                    if (!granted) {
+                        hasPermission= false
+
+                    } else {
+
+                        hasPermission= true
+                    }
+
+                }
+
+            })
+
+        }
+        return hasPermission
     }
 }
 

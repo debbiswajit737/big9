@@ -1,6 +1,9 @@
 package com.epaymark.big9.ui.fragment
 
 
+import android.content.Context
+import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Spannable
@@ -9,6 +12,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -43,6 +47,7 @@ class OtpFragment : BaseFragment() {
        // setObserver()
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun initView() {
 
         cownDown()
@@ -162,4 +167,7 @@ class OtpFragment : BaseFragment() {
         // Set the SpannableStringBuilder as the text for the TextView
         binding.tdResendOtp.text = spannableString
     }
+
+
+
 }

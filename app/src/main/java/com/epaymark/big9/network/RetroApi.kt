@@ -87,13 +87,13 @@ interface RetroApi {
     ): Response<profileResponse>
 
 
-    @POST("https://big9.payabhi.net/restapi/v1/users/profile")
+    @POST("v1/users/profile")
     suspend fun profile(
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<profileResponse>
 
-    @POST("https://big9.payabhi.net/restapi/v1/users/profile")
+    @POST("v1/users/profile")
     suspend fun testing(
         @Header("Authtoken") token: String,
         @Body data: String
