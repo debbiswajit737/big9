@@ -15,6 +15,7 @@ import com.epaymark.big9.data.model.DTHTranspherModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.MatmeportModel
+import com.epaymark.big9.data.model.PatternLoginModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
@@ -321,6 +322,12 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<ResetTPINModel>
+
+    @POST("v1/password/patternlogin")
+    suspend fun patternlogin(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<PatternLoginModel>
 
 
 

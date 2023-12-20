@@ -17,6 +17,7 @@ import com.epaymark.big9.data.model.DTHTranspherModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.MatmeportModel
+import com.epaymark.big9.data.model.PatternLoginModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
@@ -1004,6 +1005,37 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         }
 
     }
+
+
+
+    //patternlogin
+    private val _patternLoginModelReceptLiveData =
+        MutableLiveData<ResponseState<PatternLoginModel>>()
+    val patternLoginModelReceptLiveData: MutableLiveData<ResponseState<PatternLoginModel>>
+        get() = _patternLoginModelReceptLiveData
+
+    suspend fun patternLogin(token: String, loginModel: String) {
+        _patternLoginModelReceptLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.patternlogin(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _patternLoginModelReceptLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _patternLoginModelReceptLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+
+
 
 
 

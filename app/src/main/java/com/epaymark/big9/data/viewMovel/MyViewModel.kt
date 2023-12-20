@@ -21,6 +21,7 @@ import com.epaymark.big9.data.model.DMTReportModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.MatmeportModel
+import com.epaymark.big9.data.model.PatternLoginModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
@@ -1617,12 +1618,14 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         }
     }
 
-
-
-
-
-
-
+    //pattern Login
+    val patternLoginReceptLiveData: MutableLiveData<ResponseState<PatternLoginModel>>
+        get() = repository.patternLoginModelReceptLiveData
+    fun patternLogin(token: String, data: String) {
+        viewModelScope.launch {
+            repository.patternLogin(token,data)
+        }
+    }
 
 
 

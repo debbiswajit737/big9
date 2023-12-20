@@ -79,6 +79,9 @@ class LoginPinfragment : BaseFragment() {
                 findNavController().navigate(R.id.action_loginPinfragment_to_forgotPasswordOtpFragment)
             }
 
+
+
+
         }
 
     }
@@ -238,9 +241,29 @@ class LoginPinfragment : BaseFragment() {
                                 val loginPin="${myViewModel.loginPin.value}$item"
                                 myViewModel.loginPin.value= loginPin
                                 if(myViewModel.loginPin.value?.length==6){
-                                    if (myViewModel.loginPin.value=="123456") {
-                                        findNavController().navigate(com.epaymark.big9.R.id.action_loginPinfragment_to_homeFragment2)
+
+
+
+                                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                                    loginResponse?.let {loginData->
+
+
+                                        val data = mapOf(
+                                            "userid" to loginData.userid,
+                                            "mpin" to myViewModel.loginPin.value
+                                        )
+
+                                        val gson= Gson()
+                                        var jsonString = gson.toJson(data)
+
+
+                                        loginData.AuthToken?.let {
+                                            myViewModel?.patternLogin(it,jsonString.encrypt())
+                                        }
                                     }
+                                   /* if (myViewModel.loginPin.value=="123456") {
+                                        findNavController().navigate(com.epaymark.big9.R.id.action_loginPinfragment_to_homeFragment2)
+                                    }*/
                                 }
 
                             }
@@ -347,6 +370,24 @@ class LoginPinfragment : BaseFragment() {
                 }
             }
         }
+
+        myViewModel?.patternLoginReceptLiveData?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    // loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    findNavController().navigate(com.epaymark.big9.R.id.action_loginPinfragment_to_homeFragment2)
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
+
     }
 
     private fun setUserData(data: Data) {
