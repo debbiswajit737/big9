@@ -6,32 +6,28 @@ class Cashout_ledger_reportModel {
 
     @SerializedName("Description")
     var Description: String? = null
+
     @SerializedName("response_code")
     var responseCode: Int? = null
+
     @SerializedName("data")
-    var data: ArrayList<DataValue10> = arrayListOf()
+    var data: ArrayList<Cashout_ledger_reportData> = arrayListOf()
+
     @SerializedName("timestamp")
     var timestamp: String? = null
 
 
 }
 
-data class DataValue10(
+data class Cashout_ledger_reportData(
 
-    @SerializedName("AccountID") var AccountID: String? = null,
-    @SerializedName("LastTransactionAmount") var LastTransactionAmount: String? = null,
-    @SerializedName("LastTransactionTime") var LastTransactionTime: String? = null,
-    @SerializedName("AmountMode") var AmountMode: String? = null,
-    @SerializedName("PaymentBYId") var PaymentBYId: String? = null,
-    @SerializedName("ReceiveById") var ReceiveById: String? = null,
-    @SerializedName("curBal_sender") var curBalSender: String? = null,
-    @SerializedName("curBal_receiver") var curBalReceiver: String? = null,
-    @SerializedName("senderID") var senderID: String? = null,
-    @SerializedName("senderMobileNo") var senderMobileNo: String? = null,
-    @SerializedName("senderName") var senderName: String? = null,
-    @SerializedName("receiverID") var receiverID: String? = null,
-    @SerializedName("receiverMobileNo") var receiverMobileNo: String? = null,
-    @SerializedName("receiverName") var receiverName: String? = null
+    @SerializedName("refillid") var refillid: String? = null,
+    @SerializedName("iid") var iid: String? = null,
+    @SerializedName("insdate") var insdate: String? = null,
+    @SerializedName("type") var type: String? = null,
+    @SerializedName("status") var status: String? = null,
+    @SerializedName("amount") var amount: String? = null,
+    @SerializedName("curramt") var curramt: String? = null
 
 )
 

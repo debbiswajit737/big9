@@ -66,6 +66,7 @@ class ReportFragment : BaseFragment()  {
     private val viewModel: MyViewModel by activityViewModels()
     private var lastClickTime1: Long = 0
     private var lastClickTime2: Long = 0
+    private var lastClickTime3: Long = 0
     var isAsintask=true
     private val myViewModel: MyViewModel by activityViewModels()
     private var loader: Dialog? = null
@@ -76,7 +77,7 @@ class ReportFragment : BaseFragment()  {
     var isTopAsink=true
     private lateinit var recyclerView: RecyclerView
     var isScrollingLoaderShowing=false
-
+    var isConfirmCall=true
     //private lateinit var tableViewModel: TableViewModel
 
 
@@ -153,17 +154,23 @@ class ReportFragment : BaseFragment()  {
             }
 
             tvConfirm.setOnClickListener{
-                startIndex = 0
-                endIndex = 20
-                binding.loaderBottom.visibility = View.GONE
-                //binding.btnHasdata.visibility = View.GONE
-                reportAdapter?.let {
-                    reportList.clear()
-                    newReportList.clear()
-                    it.items=ArrayList()
-                    it.notifyDataSetChanged()
-                }
-                getAllData()
+                /*if(isConfirmCall){
+                    isConfirmCall=false*/
+
+
+                    startIndex = 0
+                    endIndex = 20
+                    binding.loaderBottom.visibility = View.GONE
+                    //binding.btnHasdata.visibility = View.GONE
+                    reportAdapter?.let {
+                        reportList.clear()
+                        newReportList.clear()
+                        it.items=ArrayList()
+                        it.notifyDataSetChanged()
+                    }
+                    getAllData()
+                //}
+
             }
 
 
@@ -221,6 +228,7 @@ class ReportFragment : BaseFragment()  {
     }
 
     private fun getAllData() {
+
         reportList.clear()
         reportAdapter?.let {
             reportList.clear()
@@ -229,6 +237,7 @@ class ReportFragment : BaseFragment()  {
             it.notifyDataSetChanged()
         }
         viewModel?.reportType?.value?.let { type ->
+            isConfirmCall=true
             when (type) {
 
 
@@ -812,21 +821,21 @@ class ReportFragment : BaseFragment()  {
                             )*/
 
                             if(!it.data?.data.isNullOrEmpty()){
-                                val size=if (it.data?.data?.size?:0 >=60){
+                               /* val size=if (it.data?.data?.size?:0 >=60){
                                     60
                                 }
                                 else{
                                     it.data?.data?.size?.minus(1)?:0
-                                }
+                                }*/
 
-                                Log.d("TAG_size", "observer: "+it.data?.data?.size)
+                               // Log.d("TAG_size", "observer: "+it.data?.data?.size)
                                 it.data?.data?.let {responseData->
                                     for (index in responseData.indices){
                                     //for (index in 0 until minOf(responseData.size, size)) {
                                         val items=responseData[index]
                                         items.apply {
 
-                                            reportList.add(ReportModel(refillid+"  index "+index,amount,insdate,type,3,desc = "",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
+                                            reportList.add(ReportModel(refillid,amount,insdate,type,3,desc = "",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
                                         }
 
                                     }
@@ -1103,7 +1112,25 @@ class ReportFragment : BaseFragment()  {
                         }
 
                         is ResponseState.Success -> {
-                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+                            if(!it.data?.data.isNullOrEmpty()){
+                                it.data?.data?.let {responseData->
+                                    for (items in responseData){
+
+                                        items.apply {
+
+
+                                            //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+                                            var desc="$transDt \nUTR :$utr"
+                                            reportList.add(ReportModel(tranId,tranAmt,"",desc=desc))
+                                        }
+
+                                    }
+                                    showrecycleView(10)
+                                }
+
+
+                            }
+
 
                         }
 
@@ -1118,16 +1145,35 @@ class ReportFragment : BaseFragment()  {
         myViewModel?.bank_settle_reportResponseLiveData?.observe(viewLifecycleOwner){
                     when (it) {
                         is ResponseState.Loading -> {
-                           // loader?.show()
+                            loader?.show()
                         }
 
                         is ResponseState.Success -> {
-                            Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+                            loader?.dismiss()
+                            //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+                            if(!it.data?.data.isNullOrEmpty()){
+                                it.data?.data?.let {responseData->
+                                    for (items in responseData){
+
+                                        items.apply {
+
+
+                                            //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+                                            var desc="$transDt \nUTR :$utr"
+                                            reportList.add(ReportModel(tranId,tranAmt,"",desc=desc))
+                                        }
+
+                                    }
+                                    showrecycleView(11)
+                                }
+
+
+                            }
 
                         }
 
                         is ResponseState.Error -> {
-                            //   loadingPopup?.dismiss()
+                            loader?.dismiss()
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -1142,7 +1188,7 @@ class ReportFragment : BaseFragment()  {
 
                         is ResponseState.Success -> {
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
-                            reportList.add(
+                           /* reportList.add(
                                 ReportModel(
                                     "001",
                                     "-778.00",
@@ -1157,7 +1203,7 @@ class ReportFragment : BaseFragment()  {
                                     proce1TextColor = 2,
                                     isMiniStatement = false
                                 )
-                            )
+                            )*/
 
                             if(!it.data?.data.isNullOrEmpty()){
                                 it.data?.data?.let {responseData->
@@ -1165,7 +1211,7 @@ class ReportFragment : BaseFragment()  {
 
                                         items.apply {
 
-                                           // reportList.add(ReportModel(AccountID,amount,insdate,"",3,desc = "",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
+                                           reportList.add(ReportModel(refillid,amount,insdate,"",3,desc = "Type $type\n Status $status",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
                                         }
 
                                     }
