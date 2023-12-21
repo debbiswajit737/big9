@@ -150,15 +150,15 @@ class UserDetailsFragment : BaseFragment() {
 
                         try {
                             var dataUserDetails="Name ${it.name.toString()}\n"+
-                                    "MobileNo: ${it.name.toString()}\n"+
-                                    "Alternate Number: ${it.name.toString()}\n"+
-                                    "Email ID: ${it.name.toString()}\n"+
-                                    "Address: ${it.name.toString()}\n"+
-                                    "Gender: ${it.name.toString()}\n"+
-                                    "Pincode: ${it.name.toString()}\n"+
-                                    "DOB: ${it.name.toString()}\n"+
-                                    "Payout Balance: ${it.name.toString()}\n"+
-                                    "Payabhi Wallet: ${it.name.toString()}\n"
+                                    "MobileNo: ${it.mobileNo.toString()}\n"+
+                                    "Alternate Number: ${it.AlternateNumber.toString()}\n"+
+                                    "Email ID: ${it.emailId.toString()}\n"+
+                                    "Address: ${it.address.toString()}\n"+
+                                    "Gender: ${it.gender.toString()}\n"+
+                                    "Pincode: ${it.pincode.toString()}\n"+
+                                    "DOB: ${it.dob.toString()}\n"+
+                                    "Payout Balance: ${it.payoutBalance.toString()}\n"+
+                                    "Payabhi Wallet: ${it.payabhiWallet.toString()}\n"
                             val bitmap = encodeAsBitmap(dataUserDetails)
                             binding.imgQrcode.setImageBitmap(bitmap)
                         } catch (ex: WriterException) {

@@ -997,8 +997,26 @@ class ReportFragment : BaseFragment()  {
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             if(!it.data?.data.isNullOrEmpty()){
                                 it.data?.data?.let { responseData ->
+                                    for (items in responseData){
 
-                                    CoroutineScope(Main).launch {
+                                        items.apply {
+                                            var comm_data:String=""
+
+                                            comm_data=if (type=="rs"){
+                                                "₹$comm"
+                                            }
+                                            else if (type=="%"){
+                                                "$comm%"
+                                            }
+                                            else{
+                                                comm.toString()
+                                            }
+                                            reportList.add(ReportModel(comm_data, reporyStatus = opname,imageInt = R.drawable.rounded_i))
+                                        }
+
+                                    }
+                                    showrecycleView(12)
+                                    /*CoroutineScope(Main).launch {
 
                                     for (index in responseData.indices) {
 
@@ -1017,18 +1035,18 @@ class ReportFragment : BaseFragment()  {
                                                              )
                                                          )
                                                      }
-                                                         /*Log.d("TAG_table", "observer: "+tableViewModel.insertData(DataEntity(responseId="",
+                                                         *//*Log.d("TAG_table", "observer: "+tableViewModel.insertData(DataEntity(responseId="",
                                                              desc = desc,
                                                              price = comm,
-                                                             imageInt = R.drawable.rounded_i)))*/
-                                                             /*reportList2.add(
+                                                             imageInt = R.drawable.rounded_i)))*//*
+                                                             *//*reportList2.add(
                                                                  ReportModel(
                                                                      "",
                                                                      desc = desc,
                                                                      price = comm,
                                                                      imageInt = R.drawable.rounded_i
                                                                  )
-                                                             )*/
+                                                             )*//*
 
                                                      }
                                                     // showPagingRecycleView()
@@ -1037,7 +1055,7 @@ class ReportFragment : BaseFragment()  {
 
                                             }
 
-                                            /*for (index in responseData.indices) {
+                                            *//*for (index in responseData.indices) {
                                                // paging++
                                              if (index<=20) {
                                                  if (responseData.isNotEmpty()) {
@@ -1055,17 +1073,17 @@ class ReportFragment : BaseFragment()  {
                                                      showrecycleView()
                                                  }
                                              }
-                                            }*/
-                                        /*if (commissionReportList.size>10){
+                                            }*//*
+                                        *//*if (commissionReportList.size>10){
                                             for(index in commissionReportList.indices){
                                                 i
                                             }
                                             reportList
-                                        }*/
+                                        }*//*
 
 
 
-                                    }
+                                    }*/
                                 }
                             }
 

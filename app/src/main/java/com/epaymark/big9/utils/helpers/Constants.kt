@@ -43,6 +43,7 @@ object Constants {
     var searchValue = ""
     var searchValueTag = ""
     var utilityValue = ""
+    var FCMTOKEN: String="FCMTOKEN"
     var recycleViewReceiptList = ArrayList<ReceiptModel>()
     const val AES_ALGORITHM = "AES"
     const val AES_TRANSFORMATION = "AES/CBC/PKCS5Padding"
@@ -70,4 +71,6 @@ object Constants {
 
     var reportDetailsPropertyList = ArrayList<Reportdetails>()
     var reportDetailsAdapter: ReportDetailsAdapter?=null
+    var loginMobileNumber: String?=null
+    var loginMobileReferanceNumber: String?=null
 }

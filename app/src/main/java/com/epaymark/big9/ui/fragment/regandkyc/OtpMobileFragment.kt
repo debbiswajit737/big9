@@ -15,6 +15,10 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -46,6 +50,10 @@ import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.common.MethodClass.getCurrentTimestamp
 import com.epaymark.big9.utils.common.MethodClass.getLocalIPAddress
 import com.epaymark.big9.utils.helpers.Constants
+import com.epaymark.big9.utils.helpers.Constants.API_KEY
+import com.epaymark.big9.utils.helpers.Constants.CLIENT_ID
+import com.epaymark.big9.utils.helpers.Constants.loginMobileNumber
+import com.epaymark.big9.utils.helpers.Constants.loginMobileReferanceNumber
 import com.epaymark.big9.utils.helpers.Constants.stape
 import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -56,6 +64,7 @@ import kotlinx.coroutines.launch
 import java.util.Currency
 import java.util.Locale
 import java.util.TimeZone
+import java.util.concurrent.TimeUnit
 
 
 class OtpMobileFragment : BaseFragment() {
@@ -147,6 +156,33 @@ class OtpMobileFragment : BaseFragment() {
                     loader?.dismiss()
                     authViewModel.otp.value=""
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
+
+
+        authViewModel?.authLogin?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    //loadingPopup?.show()
+                    loader?.let { it.show() }
+                }
+
+                is ResponseState.Success -> {
+                    //  loadingPopup?.dismiss()
+                    loader?.let { it.dismiss() }
+                    cownDown()
+                    Toast.makeText(requireContext(), ""+it?.data?.Description, Toast.LENGTH_SHORT).show()
+
+                    authViewModel?.authLogin?.value=null
+
+                }
+
+                is ResponseState.Error -> {
+                    //   loadingPopup?.dismiss()
+                    loader?.let { it.dismiss() }
+
+                    authViewModel?.authLogin?.value=null
                 }
             }
         }
@@ -307,7 +343,7 @@ class OtpMobileFragment : BaseFragment() {
                 }
                 .addOnFailureListener { e ->
                     // Handle errors that may occur while retrieving the location
-                    Log.e("Location", "Error getting location", e)
+                    //Log.e("Location", "Error getting location", e)
                 }
         }
 
@@ -395,6 +431,21 @@ class OtpMobileFragment : BaseFragment() {
 
     private fun onViewClick() {
         binding?.apply {
+            binding.tdResendOtp.setOnClickListener {
+
+               if (binding.tdResendOtp.text.toString().trim()=="Resend OTP"){
+                   val data = mapOf(
+                       "clientid" to CLIENT_ID,
+                       "secretkey" to API_KEY,
+                       "mobile" to loginMobileNumber,
+                       "refid" to loginMobileReferanceNumber
+                   )
+                   val gson= Gson()
+                   var jsonString = gson.toJson(data)
+                   viewModel?.authLoginRegistration(jsonString.encrypt())
+               }
+            }
+
             tvSwitchAcc.setOnClickListener{
               findNavController().popBackStack()
             }
@@ -411,7 +462,7 @@ class OtpMobileFragment : BaseFragment() {
                             "deviceid" to MethodClass.deviceUid(binding.root.context),
                             "ipaddress" to getLocalIPAddress(),
                             "location" to jsonDataLocation.toString(),
-                            "referenceid" to "123",
+                            "referenceid" to loginMobileReferanceNumber,
                             "Timestamp" to getCurrentTimestamp()
                         )
                         /*"referenceid" to loginData.,*/
@@ -432,6 +483,7 @@ class OtpMobileFragment : BaseFragment() {
         }
     fun setKeyPad(PhonePad: RecyclerView) {
         authViewModel.mobError.value=""
+        cownDown()
         keyPad.clear()
         keyPad.add(1)
         keyPad.add(2)
@@ -576,6 +628,69 @@ class OtpMobileFragment : BaseFragment() {
             show()
         }
     }
+    fun cownDown() {
+
+
+        val totalTimeInMillis: Long = TimeUnit.SECONDS.toMillis(120) // 60 seconds countdown
+
+        var countDownTimer= object : CountDownTimer(totalTimeInMillis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
+                //authViewModel.timingValue.value = getString(R.string.resend_otp,secondsRemaining)/*"Resend OTP after <font color='#B80A13'>$secondsRemaining</font> second"*/
+                //binding.tdResendOtp.text = getString(R.string.resend_otp,secondsRemaining)/*"Resend OTP after <font color='#B80A13'>$secondsRemaining</font> second"*/
+                setTimerValue(secondsRemaining)
+            }
+
+            override fun onFinish() {
+                val spannableString = SpannableStringBuilder()
+                //authViewModel.timingValue.value =  "Resend OTP"
+                //binding.tdResendOtp.text =  "Resend OTP"
+                val firstPart = "Resend OTP"
+                spannableString.append(firstPart)
+                spannableString.setSpan(
+                    ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.pink2)),
+                    spannableString.length - firstPart.length,
+                    spannableString.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                binding.tdResendOtp.text =spannableString
+            }
+        }
+
+
+        countDownTimer.start()
+
+    }
+    private fun setTimerValue(secondsRemaining: Long) {
+        // Create a SpannableStringBuilder
+        val spannableString = SpannableStringBuilder()
+
+        // Add the first part of the text with one color
+        val firstPart = "Resend OTP after "
+        spannableString.append(firstPart)
+        spannableString.setSpan(
+            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.black)),
+            spannableString.length - firstPart.length,
+            spannableString.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        // Add the second part of the text with a different color
+        val secondPart = "$secondsRemaining"
+        spannableString.append(secondPart)
+        spannableString.setSpan(
+            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.pink2)),
+            spannableString.length - secondPart.length,
+            spannableString.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannableString.append(" second")
+        // Set the SpannableStringBuilder as the text for the TextView
+        binding.tdResendOtp.text = spannableString
+    }
+
+
+
 
     }
 

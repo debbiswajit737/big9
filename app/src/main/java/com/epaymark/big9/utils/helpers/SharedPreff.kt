@@ -4,6 +4,7 @@ import android.content.Context
 import com.epaymark.big9.data.model.login.LoginResponse
 import com.epaymark.big9.data.model.profile.Data
 import com.epaymark.big9.utils.helpers.Constants.EPAY_SHAREDFREFFRENCE
+import com.epaymark.big9.utils.helpers.Constants.FCMTOKEN
 import com.epaymark.big9.utils.helpers.Constants.ISLogin
 import com.epaymark.big9.utils.helpers.Constants.TEST
 import com.epaymark.big9.utils.helpers.Constants.USER_DATA
@@ -140,7 +141,17 @@ class SharedPreff @Inject constructor(@ApplicationContext private val context: C
 
     }*/
 
+    fun setfirebase_token(token : String?){
+        context?.let {
+            val settings = context.getSharedPreferences(EPAY_SHAREDFREFFRENCE, Context.MODE_PRIVATE)
+            val editor = settings.edit()
+            token?.let {
+                editor.putString(FCMTOKEN, it)
+            }
+            editor.apply()
+        }
 
+    }
 
     fun clearUserData() {
         context?.let {

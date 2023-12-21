@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -36,6 +37,8 @@ import com.epaymark.big9.ui.receipt.DthReceptDialogFragment
 import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants.API_KEY
 import com.epaymark.big9.utils.helpers.Constants.CLIENT_ID
+import com.epaymark.big9.utils.helpers.Constants.loginMobileNumber
+import com.epaymark.big9.utils.helpers.Constants.loginMobileReferanceNumber
 import com.epaymark.big9.utils.helpers.PermissionUtils
 import com.epaymark.big9.utils.`interface`.CallBack
 
@@ -106,8 +109,12 @@ class LoginMobileFragment : BaseFragment() {
                         try {
 
 
-                                loginResponse.beforeLogin?.let {
-                                    if (it.toInt() > 6) {
+                                loginResponse.beforeLogin?.let {beforeLoginData->
+                                    var beforeLoginDataValue=beforeLoginData
+                                    if (beforeLoginDataValue.isNullOrBlank()){
+                                        beforeLoginDataValue="-1"
+                                    }
+                                    if (beforeLoginDataValue.toInt() > 6) {
 
                                         sharedPreff?.setLoginData(loginResponse, true, "INACTIVE")
                                         findNavController().navigate(
@@ -160,7 +167,7 @@ class LoginMobileFragment : BaseFragment() {
 
 
                         }catch (e:Exception){
-                            Toast.makeText(requireContext(), ""+e.message, Toast.LENGTH_SHORT).show()
+
                         }
 
                     }
@@ -186,18 +193,17 @@ class LoginMobileFragment : BaseFragment() {
 
                     viewModel?.keyPadValue?.value?.let {
                         loadingPopup?.show()
-
+                        loginMobileNumber=it
+                        loginMobileReferanceNumber="big9"+generateRandomNumberInRange().toString()
                         //"9356561988"
                         val data = mapOf(
                             "clientid" to CLIENT_ID,
                             "secretkey" to API_KEY,
-                            "mobile" to it,
-                            "refid" to "big9"+generateRandomNumberInRange().toString()
+                            "mobile" to loginMobileNumber,
+                            "refid" to loginMobileReferanceNumber
                         )
                         val gson= Gson()
                         var jsonString = gson.toJson(data)
-                        Log.d("TAG_p", "AUTHcallProfile:json "+jsonString)
-                        Log.d("TAG_p", "AUTHcallProfile:e \n"+jsonString.encrypt())
                         viewModel?.authLoginRegistration(jsonString.encrypt())
                     }
 

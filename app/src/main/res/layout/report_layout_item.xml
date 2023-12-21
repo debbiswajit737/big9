@@ -122,10 +122,13 @@
                 <TextView
                     android:id="@+id/textView15"
                     android:layout_width="0dp"
+                    android:gravity="start"
+                    android:paddingEnd="@dimen/_5sdp"
                     android:layout_height="wrap_content"
                     android:text="@{model.reporyStatus}"
                     android:textColor="@{model.reporyStatusFlag==1?@color/g5:model.reporyStatusFlag==0?@color/g4:model.reporyStatusFlag==2?@color/gray:@color/title_container  }"
                     android:visibility="@{model.reporyStatus==``?View.GONE:View.VISIBLE}"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView6"
                     app:layout_constraintStart_toStartOf="@+id/linearLayout5"
                     app:layout_constraintTop_toBottomOf="@+id/tv_date"
                     tools:text="success" />

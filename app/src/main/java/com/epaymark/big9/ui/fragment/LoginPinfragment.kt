@@ -262,6 +262,8 @@ class LoginPinfragment : BaseFragment() {
                                             myViewModel?.patternLogin(it,jsonString.encrypt())
                                         }
                                     }
+                                    //This code need to delete.
+                                    //After testing remove this code
                                     if (myViewModel.loginPin.value=="123456") {
                                         findNavController().navigate(com.epaymark.big9.R.id.action_loginPinfragment_to_homeFragment2)
                                     }

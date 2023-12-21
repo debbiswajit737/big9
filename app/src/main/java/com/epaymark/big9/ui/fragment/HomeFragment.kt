@@ -144,7 +144,9 @@ class HomeFragment : BaseFragment() {
                     is ResponseState.Error -> {
                         loader?.dismiss()
 
-                        //serviceNavigation(naviGationValue,"")
+
+                        //this code need to remove
+                        serviceNavigation(naviGationValue,"")
 
                         handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         viewModel?.checkServiceReceiptResponseLiveData?.value=null
@@ -168,7 +170,7 @@ class HomeFragment : BaseFragment() {
         //var width = displayMetrics.widthPixels
         deviceHeight = displayMetrics.heightPixels
 
-        Log.d("TAG_deviceHeight", "getDeviceWIDTHandHeight: $deviceHeight")
+       // Log.d("TAG_deviceHeight", "getDeviceWIDTHandHeight: $deviceHeight")
 
     }
 
@@ -1078,16 +1080,18 @@ class HomeFragment : BaseFragment() {
                         it.items=ArrayList()
                         it.notifyDataSetChanged()
                         }
-                        viewModel.reportType.value = s
-                        if (s==getString(R.string.commissions)){
-                            commissionReportAdapter?.let {
-                                commissionReportList.clear()
-                                commissionReportList2.clear()
-                                commissionReportAdapter?.items= ArrayList()
-                                commissionReportAdapter?.notifyDataSetChanged()
-                            }
-                            findNavController().navigate(R.id.action_homeFragment2_to_commissionReportFragment)
+                        commissionReportAdapter?.let {
+                            commissionReportList.clear()
+                            commissionReportList2.clear()
+                            commissionReportAdapter?.items= ArrayList()
+                            commissionReportAdapter?.notifyDataSetChanged()
                         }
+
+                        viewModel.reportType.value = s
+                        /*if (s==getString(R.string.commissions)){
+
+                            findNavController().navigate(R.id.action_homeFragment2_to_commissionReportFragment)
+                        }*/
                        /* if (s==getString(R.string.wallet_ledger)){
                             commissionReportAdapter?.let {
                                 commissionReportList.clear()
@@ -1098,10 +1102,10 @@ class HomeFragment : BaseFragment() {
                             findNavController().navigate(R.id.action_homeFragment2_to_walletLedgerReportFragment)
                         }*/
 
-                        else {
+                        //else {
                             //viewModel.reportType.value = s//.replaceFirstChar(Char::titlecase)
                             findNavController().navigate(R.id.action_homeFragment2_to_reportFragment)
-                        }
+                        //}
                        /*when(s){
 
                            getString(R.string.payment)->{}

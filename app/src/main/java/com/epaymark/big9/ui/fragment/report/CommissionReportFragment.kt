@@ -136,6 +136,7 @@ class CommissionReportFragment : BaseFragment() {
             }
 
             tvConfirm.setOnClickListener {
+                tvConfirm.setBottonLoader(false,llLoader)
                 commissionReportAdapter?.let {
                     commissionReportList.clear()
                     commissionReportList2.clear()
@@ -300,6 +301,7 @@ class CommissionReportFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
+                    binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                     //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                     if (!it.data?.data.isNullOrEmpty()) {
                         it.data?.data?.let { responseData ->
@@ -358,6 +360,7 @@ class CommissionReportFragment : BaseFragment() {
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
+                    binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }
