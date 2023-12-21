@@ -28,6 +28,7 @@ import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -521,6 +522,11 @@ open class BaseFragment: Fragment(){
 
         }
         return hasPermission
+    }
+
+    fun View.setBottonLoader(isVisible:Boolean,view:View){
+        this.isVisible=isVisible
+        view.isVisible=!this.isVisible
     }
 }
 

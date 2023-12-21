@@ -68,6 +68,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{model.id}"
+                        android:paddingStart="@dimen/_5sdp"
                         android:textColor="@color/logo_second_color_opacity"
                         tools:text="id" />
                 </LinearLayout>
@@ -92,7 +93,7 @@
                         android:layout_height="wrap_content"
 
                         android:layout_marginEnd="@dimen/_10sdp"
-                        android:text="@{`₹`+model.price}"
+                        android:text="@{(model.price==``?``:`₹`)+model.price}"
                         android:textColor="@{model.proce1TextColor==1?@color/g5:model.proce1TextColor==0?@color/black:@color/g4}"
                         tools:text="price" />
                 </LinearLayout>
@@ -153,7 +154,7 @@
                     android:fontFamily="@font/montserrat_regular_400"
                     android:text="@{model.desc}"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_8ssp"
+                    android:textSize="@dimen/_11ssp"
                     android:visibility="@{model.desc==``?View.GONE:View.VISIBLE}"
                     app:layout_constraintEnd_toStartOf="@+id/profile_image"
                     app:layout_constraintStart_toStartOf="@+id/textView15"

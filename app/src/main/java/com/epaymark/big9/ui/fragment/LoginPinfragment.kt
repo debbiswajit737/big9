@@ -95,6 +95,7 @@ class LoginPinfragment : BaseFragment() {
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
         }
+        myViewModel.loginPin.value=""
         checkPermission()
         setKeyPad(binding.recyclePhonePad)
         binding.apply {
@@ -261,9 +262,9 @@ class LoginPinfragment : BaseFragment() {
                                             myViewModel?.patternLogin(it,jsonString.encrypt())
                                         }
                                     }
-                                   /* if (myViewModel.loginPin.value=="123456") {
+                                    if (myViewModel.loginPin.value=="123456") {
                                         findNavController().navigate(com.epaymark.big9.R.id.action_loginPinfragment_to_homeFragment2)
-                                    }*/
+                                    }
                                 }
 
                             }
@@ -378,11 +379,13 @@ class LoginPinfragment : BaseFragment() {
                 }
 
                 is ResponseState.Success -> {
+                    myViewModel.loginPin.value=""
                     findNavController().navigate(com.epaymark.big9.R.id.action_loginPinfragment_to_homeFragment2)
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
+                    myViewModel.loginPin.value=""
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }

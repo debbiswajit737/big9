@@ -156,7 +156,7 @@ class ReportFragment : BaseFragment()  {
             tvConfirm.setOnClickListener{
                 /*if(isConfirmCall){
                     isConfirmCall=false*/
-
+                tvConfirm.setBottonLoader(false,llLoader)
 
                     startIndex = 0
                     endIndex = 20
@@ -537,10 +537,12 @@ class ReportFragment : BaseFragment()  {
             when (it) {
                 is ResponseState.Loading -> {
                     loader?.show()
+
                 }
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
+                    binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                     //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
 
                     //reportList.add(ReportModel("001","778.00","10-10-2023","Payment send",0, desc = "AEPS-MINI_STATEMENT -9163265863\nReferance id - 30000018",imageInt = R.drawable.send_logo))
@@ -550,8 +552,13 @@ class ReportFragment : BaseFragment()  {
                             for (index in responseData.indices){
                                 val items=responseData[index]
                                 items.apply {
-                                    var desc="Referance id - $receiverID"
-                                    reportList.add(ReportModel(PaymentBYId+" index $index",LastTransactionAmount,LastTransactionTime,AmountMode,0,desc,imageInt = R.drawable.send_logo))
+                                    var desc="Receiver Name:$receiverName\nReferance id - $receiverID\nSender Current Balance : $curBalSender\nSender ID : $senderID\nSender Mobile No.:$senderMobileNo"+
+                                            "\nReceiver ID: $receiverID"+
+                                            "\nReceiver Mobile No.: $receiverMobileNo"
+
+                                    reportList.add(ReportModel(PaymentBYId,LastTransactionAmount,LastTransactionTime,AmountMode,0,desc,imageInt = R.drawable.send_logo))
+
+
                                 }
 
                             }
@@ -565,6 +572,7 @@ class ReportFragment : BaseFragment()  {
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
+                    binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }
@@ -575,10 +583,12 @@ class ReportFragment : BaseFragment()  {
                     when (it) {
                         is ResponseState.Loading -> {
                             loader?.show()
+
                         }
 
                         is ResponseState.Success -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             reportList.clear()
                             /*reportList.add(
@@ -622,7 +632,7 @@ class ReportFragment : BaseFragment()  {
                                                 statusCode=0
                                                 imageInt=R.drawable.close_icon
                                             }
-                                            var desc="Operator :$Operator \nReferance id - $referenceID"
+                                            var desc="Operator :$Operator \nReferance id - $referenceID\nCustomer Mobile No.:$CustNo"
                                             reportList.add(ReportModel(TransactionID,Amount,tDate,status,statusCode,desc,imageInt,isClickAble=true, IDP = ID))
                                         }
 
@@ -637,6 +647,7 @@ class ReportFragment : BaseFragment()  {
 
                         is ResponseState.Error -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -647,10 +658,12 @@ class ReportFragment : BaseFragment()  {
                     when (it) {
                         is ResponseState.Loading -> {
                             loader?.show()
+
                         }
 
                         is ResponseState.Success -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             /*reportList.add(
                                 ReportModel(
@@ -696,14 +709,13 @@ class ReportFragment : BaseFragment()  {
                                                 imageInt=R.drawable.close_icon
                                             }
 
-                                            var desc="$recName \nA/c No.:$recAcno\\nCustomer :$custMobno"
+                                            var desc="$recName \nA/c No.:$recAcno\nCustomer Mobile No.:$custMobno\nUTR: $utr\nReceipt Id: $receiptid\nType: $type"
 
                                             reportList.add(ReportModel(tranId,tranAmt,transDt,status,statusCode,desc,imageInt,image1 = 2,isClickAble=true, IDP = receiptid))
 
                                         }
 
                                     }
-                                    Log.d("TAG_complain", "observeraaa:B "+reportList.size)
                                     showrecycleView(8)
                                 }
 
@@ -714,6 +726,7 @@ class ReportFragment : BaseFragment()  {
 
                         is ResponseState.Error -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -724,10 +737,12 @@ class ReportFragment : BaseFragment()  {
                     when (it) {
                         is ResponseState.Loading -> {
                             loader?.show()
+
                         }
 
                         is ResponseState.Success -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             /*reportList.add(
                             ReportModel(
@@ -757,8 +772,19 @@ class ReportFragment : BaseFragment()  {
                                     for (items in responseData){
 
                                         items.apply {
-                                            var desc="Bankname $bankname\nApproved on$isdonedate"
-                                            reportList.add(ReportModel(purchaseid,Amount,insdate,"Credit/Sales Supports",2,desc,imageInt = R.drawable.rounded_i))
+                                            var donedate=""
+                                            donedate="\nApproved on: $isdonedate"
+                                            if (isdonedate.isNullOrEmpty()){
+                                                donedate=""
+                                            }
+                                            var image=if (isdone=="rejected"){
+                                                R.drawable.close_icon
+                                            }
+                                            else{
+                                                R.drawable.rounded_i
+                                            }
+                                            var desc="Bankname $bankname\n$donedate Completed: $isdone"
+                                            reportList.add(ReportModel(purchaseid,Amount,insdate,"Credit/Sales Supports",2,desc,imageInt = image))
                                         }
 
                                     }
@@ -772,6 +798,7 @@ class ReportFragment : BaseFragment()  {
 
                         is ResponseState.Error -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -782,10 +809,12 @@ class ReportFragment : BaseFragment()  {
                     when (it) {
                         is ResponseState.Loading -> {
                             loader?.show()
+
                         }
 
                         is ResponseState.Success -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             /*reportList.add(
                                 ReportModel(
@@ -835,7 +864,7 @@ class ReportFragment : BaseFragment()  {
                                         val items=responseData[index]
                                         items.apply {
 
-                                            reportList.add(ReportModel(refillid,amount,insdate,type,3,desc = "",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
+                                            reportList.add(ReportModel(refillid,amount,insdate,type,3,desc = "Status: $status",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
                                         }
 
                                     }
@@ -849,6 +878,7 @@ class ReportFragment : BaseFragment()  {
 
                         is ResponseState.Error -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -859,10 +889,12 @@ class ReportFragment : BaseFragment()  {
                     when (it) {
                         is ResponseState.Loading -> {
                             loader?.show()
+
                         }
 
                         is ResponseState.Success -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                          /*   reportList.add(
                             ReportModel(
@@ -883,7 +915,13 @@ class ReportFragment : BaseFragment()  {
                                     for (items in responseData){
 
                                         items.apply {
-                                            val desc="$responseDescription \nNo.:$aadharno  \nBank Reference Number : $BankReferenceNumber"
+                                            val desc="$responseDescription " +
+
+                                                    "\nBank Reference Number : $BankReferenceNumber"+
+                                                    "\nTransaction Status  : $tranStatus"+
+                                                    "\nAadhar No  : $aadharno"+
+                                                    "\nBank Reference Number  : $BankReferenceNumber"+
+                                                    "\nAvailable Balance  : $avbalance"
                                             reportList.add(ReportModel(tranId,tranAmt,transDt,desc,imageInt = R.drawable.close_icon,isMiniStatement = true,miniStatementValue = "${type?.replace("_"," ")}",isClickAble = true, IDP = tranId))
                                         }
 
@@ -898,6 +936,7 @@ class ReportFragment : BaseFragment()  {
 
                         is ResponseState.Error -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -908,16 +947,22 @@ class ReportFragment : BaseFragment()  {
                     when (it) {
                         is ResponseState.Loading -> {
                             loader?.show()
+
                         }
 
                         is ResponseState.Success -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             if(!it.data?.data.isNullOrEmpty()){
                                 it.data?.data?.let {responseData->
                                     for (items in responseData){
 
                                         items.apply {
-                                            val desc="$responseDescription   \nBank Reference Number : $BankReferenceNumber"
+                                            val desc="$responseDescription   " +
+                                                    "\nBank Reference Number : $BankReferenceNumber" +
+                                                    "\ntype : $type" +
+                                                    "\nTransaction Status: $tranStatus"+
+                                                    "\nPancard: $maskedPan"
                                             reportList.add(ReportModel(tranId,tranAmt,transDt,desc,imageInt = R.drawable.rounded_i, IDP = tranId, isClickAble = true))
                                         }
 
@@ -932,6 +977,7 @@ class ReportFragment : BaseFragment()  {
 
                         is ResponseState.Error -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -941,10 +987,13 @@ class ReportFragment : BaseFragment()  {
         myViewModel?.commissionReportResponseLiveData?.observe(viewLifecycleOwner){
                     when (it) {
                         is ResponseState.Loading -> {
-                           // loader?.show()
+                            loader?.show()
+
                         }
 
                         is ResponseState.Success -> {
+                            loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             if(!it.data?.data.isNullOrEmpty()){
                                 it.data?.data?.let { responseData ->
@@ -1023,7 +1072,8 @@ class ReportFragment : BaseFragment()  {
                         }
 
                         is ResponseState.Error -> {
-                            //   loadingPopup?.dismiss()
+                            loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -1070,21 +1120,37 @@ class ReportFragment : BaseFragment()  {
             when (it) {
                 is ResponseState.Loading -> {
                      loader?.show()
+
                 }
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
-
+                    binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                     //Log.d("TAG_complain", "observeraaa: "+it.data?.Description)
                     if(!it.data?.data.isNullOrEmpty()){
                         it.data?.data?.let {responseData->
                             for (items in responseData){
 
                                 items.apply {
+                                /*
+                                {
+                                      "ddlComplaintCategory": "1",
+                                      "ddlComplaintType": "1",
+                                      "ticketID": "28",
+                                      "ticketDate": "2023-10-10 11:21:44",
+                                      "txtTransactionId": "300000029",
+                                      "ticketFlag": "0",
+                                      "status": "0",
+                                      "complaintCategoryName": "BDNR",
+                                      "complaintTypeName": "Recharges and Bills"
+                                    }
+                                 */
 
-
-                                    var desc="$complaintTypeName \nTransaction Id :$txtTransactionId"
-                                    reportList.add(ReportModel(txtTransactionId,"","Booked on $ticketDate",desc=desc))
+                                    var desc="Complaint Type $complaintTypeName " +
+                                            "\nTransaction Id :$txtTransactionId"+
+                                            "\nTicket ID :$ticketID"+
+                                            "\nComplaint Category Name :$complaintCategoryName"
+                                    reportList.add(ReportModel(txtTransactionId,"","Complaint Date $ticketDate",desc=desc))
                                 }
 
                             }
@@ -1098,6 +1164,7 @@ class ReportFragment : BaseFragment()  {
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
+                    binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }
@@ -1108,10 +1175,13 @@ class ReportFragment : BaseFragment()  {
         myViewModel?.walletSettleReportResponseLiveData?.observe(viewLifecycleOwner){
                     when (it) {
                         is ResponseState.Loading -> {
-                          //  loader?.show()
+                          loader?.show()
+
                         }
 
                         is ResponseState.Success -> {
+                            loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             if(!it.data?.data.isNullOrEmpty()){
                                 it.data?.data?.let {responseData->
                                     for (items in responseData){
@@ -1121,7 +1191,7 @@ class ReportFragment : BaseFragment()  {
 
                                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                                             var desc="$transDt \nUTR :$utr"
-                                            reportList.add(ReportModel(tranId,tranAmt,"",desc=desc))
+                                            reportList.add(ReportModel(tranId,tranAmt,"",reporyStatus=desc))
                                         }
 
                                     }
@@ -1135,7 +1205,8 @@ class ReportFragment : BaseFragment()  {
                         }
 
                         is ResponseState.Error -> {
-                            //   loadingPopup?.dismiss()
+                            loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -1146,10 +1217,12 @@ class ReportFragment : BaseFragment()  {
                     when (it) {
                         is ResponseState.Loading -> {
                             loader?.show()
+
                         }
 
                         is ResponseState.Success -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             if(!it.data?.data.isNullOrEmpty()){
                                 it.data?.data?.let {responseData->
@@ -1174,6 +1247,7 @@ class ReportFragment : BaseFragment()  {
 
                         is ResponseState.Error -> {
                             loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -1183,10 +1257,13 @@ class ReportFragment : BaseFragment()  {
         myViewModel?.cashout_ledger_reportResponseLiveData?.observe(viewLifecycleOwner){
                     when (it) {
                         is ResponseState.Loading -> {
-                           // loader?.show()
+                           loader?.show()
+
                         }
 
                         is ResponseState.Success -> {
+                            loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                            /* reportList.add(
                                 ReportModel(
@@ -1211,7 +1288,7 @@ class ReportFragment : BaseFragment()  {
 
                                         items.apply {
 
-                                           reportList.add(ReportModel(refillid,amount,insdate,"",3,desc = "Type $type\n Status $status",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
+                                           reportList.add(ReportModel(refillid,amount,insdate,"",3,desc = "Type: $type\n Status: $status",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
                                         }
 
                                     }
@@ -1224,7 +1301,8 @@ class ReportFragment : BaseFragment()  {
                         }
 
                         is ResponseState.Error -> {
-                            //   loadingPopup?.dismiss()
+                            loader?.dismiss()
+                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         }
                     }
@@ -1362,10 +1440,10 @@ class ReportFragment : BaseFragment()  {
 
                 // You can use these positions as needed
                 // For example, log them
-                Log.d("RecyclerView", "First visible position: $firstVisibleItemPosition")
+               /* Log.d("RecyclerView", "First visible position: $firstVisibleItemPosition")
                 Log.d("RecyclerView", "Last visible position: $lastVisibleItemPosition")
                 Log.d("RecyclerView", "adapter position: ${reportAdapter?.items?.size}")
-
+*/
                 if (lastVisibleItemPosition>=(reportAdapter?.items?.size?.minus(1)?:0)) {
 
 
@@ -1457,7 +1535,7 @@ class ReportFragment : BaseFragment()  {
     }
 
     fun showrecycleView(a:Int) {
-        Log.d("TAG_data", "showrecycleView: "+a)
+       // Log.d("TAG_data", "showrecycleView: "+a)
         clearAllData()
         val handler = Handler(Looper.getMainLooper())
         handler.post {
@@ -1694,7 +1772,7 @@ class ReportFragment : BaseFragment()  {
                         }
 
                         getString(R.string.load_Requests) -> {
-                            ReportPropertyModel("Transaction id")
+                            ReportPropertyModel("Purchased Id")
                         }
 
                         getString(R.string.wallet_ledger) -> {
@@ -1733,7 +1811,7 @@ class ReportFragment : BaseFragment()  {
                             ReportPropertyModel("Transaction id")
                         }
                     }
-                    Log.d("TAG_complain", "observeraaa:c "+reportList.size)
+                    //Log.d("TAG_complain", "observeraaa:c "+reportList.size)
                     if (reportList.size > 0) {
                         binding.tvNoDataFound.visibility = View.GONE
                     } else {
