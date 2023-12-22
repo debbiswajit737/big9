@@ -4,6 +4,7 @@ import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.data.genericmodel.BaseResponse
 
 import com.epaymark.big9.data.model.AEPSReportModel
+import com.epaymark.big9.data.model.AddBankModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
 import com.epaymark.big9.data.model.ChangeUserTPINPasswordModel
 import com.epaymark.big9.data.model.CheckServiceModel
@@ -343,6 +344,13 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<SubmitMoveToBankBankListModel>
+
+
+    @POST("addbank")
+    suspend fun addBank(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<AddBankModel>
 
 
 

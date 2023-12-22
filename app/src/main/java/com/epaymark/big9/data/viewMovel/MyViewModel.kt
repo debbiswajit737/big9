@@ -12,6 +12,7 @@ import com.epaymark.big9.R
 import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.AEPSReportData
 import com.epaymark.big9.data.model.AEPSReportModel
+import com.epaymark.big9.data.model.AddBankModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
 import com.epaymark.big9.data.model.ChangeUserTPINPasswordModel
 import com.epaymark.big9.data.model.CheckServiceModel
@@ -89,6 +90,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val enddate = MutableLiveData<String>("")
     val kycStatus = MutableLiveData<String>("KYC Approved")
 
+    val bankSlipDocumentImageBase64 = MutableLiveData<String>()
 
     val tPin = MutableLiveData<String>("")
     val state = MutableLiveData<String>()
@@ -1645,6 +1647,15 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     fun submitMovetobank(token: String, data: String) {
         viewModelScope.launch {
             repository.moveToBank(token,data)
+        }
+    }
+
+    //add Bank
+    val addToBankReceptLiveData: MutableLiveData<ResponseState<AddBankModel>>
+        get() = repository.addToBankReceptLiveData
+    fun addToBank(token: String, data: String) {
+        viewModelScope.launch {
+            repository.addToBank(token,data)
         }
     }
 
