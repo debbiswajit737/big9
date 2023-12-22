@@ -153,6 +153,16 @@ class SharedPreff @Inject constructor(@ApplicationContext private val context: C
 
     }
 
+    fun getFcnToken():String?{
+        var token: String? = null
+        context?.let {
+            settings =
+                it.getSharedPreferences(EPAY_SHAREDFREFFRENCE, Context.MODE_PRIVATE)
+            token = settings?.getString(FCMTOKEN, "")
+        }
+        return token ?: ""
+    }
+
     fun clearUserData() {
         context?.let {
             settings =

@@ -200,7 +200,8 @@ class LoginMobileFragment : BaseFragment() {
                             "clientid" to CLIENT_ID,
                             "secretkey" to API_KEY,
                             "mobile" to loginMobileNumber,
-                            "refid" to loginMobileReferanceNumber
+                            "refid" to loginMobileReferanceNumber,
+                            "token" to sharedPreff.getFcnToken().toString()
                         )
                         val gson= Gson()
                         var jsonString = gson.toJson(data)

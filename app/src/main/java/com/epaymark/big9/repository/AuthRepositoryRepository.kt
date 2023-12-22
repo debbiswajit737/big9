@@ -17,11 +17,13 @@ import com.epaymark.big9.data.model.DTHTranspherModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.MatmeportModel
+import com.epaymark.big9.data.model.MoveToBankBankListModel
 import com.epaymark.big9.data.model.PatternLoginModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
 import com.epaymark.big9.data.model.ResetTPINModel
+import com.epaymark.big9.data.model.SubmitMoveToBankBankListModel
 import com.epaymark.big9.data.model.TransactionReportModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
@@ -1034,12 +1036,55 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     }
 
 
+    //move To Bank
+    private val _moveToBankReceptLiveData =
+        MutableLiveData<ResponseState<MoveToBankBankListModel>>()
+    val moveToBankReceptLiveData: MutableLiveData<ResponseState<MoveToBankBankListModel>>
+        get() = _moveToBankReceptLiveData
 
+    suspend fun moveToBank(token: String, loginModel: String) {
+        _moveToBankReceptLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.moveToBank(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _moveToBankReceptLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _moveToBankReceptLiveData.postValue(ResponseState.create(throwable))
+        }
 
+    }
 
+    //submit move To Bank
+    private val _submit_moveToBankReceptLiveData =
+        MutableLiveData<ResponseState<SubmitMoveToBankBankListModel>>()
+    val submit_moveToBankReceptLiveData: MutableLiveData<ResponseState<SubmitMoveToBankBankListModel>>
+        get() = _submit_moveToBankReceptLiveData
 
+    suspend fun submitMovetobank(token: String, loginModel: String) {
+        _submit_moveToBankReceptLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.submitMovetobank(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _submit_moveToBankReceptLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _submit_moveToBankReceptLiveData.postValue(ResponseState.create(throwable))
+        }
 
-
+    }
 
 }
 

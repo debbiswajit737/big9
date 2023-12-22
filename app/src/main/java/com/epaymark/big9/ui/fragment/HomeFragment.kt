@@ -145,8 +145,7 @@ class HomeFragment : BaseFragment() {
                         loader?.dismiss()
 
 
-                        //this code need to remove
-                        serviceNavigation(naviGationValue,"")
+
 
                         handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         viewModel?.checkServiceReceiptResponseLiveData?.value=null
@@ -1087,7 +1086,8 @@ class HomeFragment : BaseFragment() {
                             commissionReportAdapter?.notifyDataSetChanged()
                         }
 
-                        viewModel.reportType.value = s
+                        viewModel?.reportType?.value = s
+
                         /*if (s==getString(R.string.commissions)){
 
                             findNavController().navigate(R.id.action_homeFragment2_to_commissionReportFragment)
@@ -1191,6 +1191,7 @@ class HomeFragment : BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun init() {
+        Log.d("TAG_token", "init: "+sharedPreff.getFcnToken().toString())
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
         }

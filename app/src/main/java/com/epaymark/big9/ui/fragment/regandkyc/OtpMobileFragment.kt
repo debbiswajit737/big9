@@ -4,10 +4,12 @@ import android.provider.Settings
 import android.Manifest
 import android.animation.Animator
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -24,10 +26,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
@@ -52,10 +58,14 @@ import com.epaymark.big9.utils.common.MethodClass.getLocalIPAddress
 import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.API_KEY
 import com.epaymark.big9.utils.helpers.Constants.CLIENT_ID
+import com.epaymark.big9.utils.helpers.Constants.SMS_SENDER_NUMBER
 import com.epaymark.big9.utils.helpers.Constants.loginMobileNumber
 import com.epaymark.big9.utils.helpers.Constants.loginMobileReferanceNumber
 import com.epaymark.big9.utils.helpers.Constants.stape
+import com.epaymark.big9.utils.helpers.OtpRetriever
 import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
+import com.epaymark.big9.utils.`interface`.SmsBroadcastReceiverListener
+import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
@@ -65,17 +75,24 @@ import java.util.Currency
 import java.util.Locale
 import java.util.TimeZone
 import java.util.concurrent.TimeUnit
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
-class OtpMobileFragment : BaseFragment() {
+class OtpMobileFragment : BaseFragment()  {
     lateinit var binding: FragmentOtpMobileBinding
     var keyPad = ArrayList<Int>()
+    private lateinit var oTORetriever: OtpRetriever
     val MY_PERMISSIONS_REQUEST_LOCATION=1
     private  val PERMISSION_REQUEST_LOCATION = 100
     private val authViewModel: AuthViewModel by activityViewModels()
     var isForgotPinPage=false
     val jsonDataLocation=JsonObject()
     private var loader: Dialog? = null
+    var resultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) { result ->
+        getActivityResult(result)
+    }
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     var loadingPopup: LoadingPopup? = null
     //private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -92,10 +109,13 @@ class OtpMobileFragment : BaseFragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        oTORetriever=OtpRetriever()
+
         init()
         setKeyPad(binding.recyclePhonePad2)
         onViewClick()
         observer()
+        startSmartUserConsent()
         isForgotPinPage= arguments?.getBoolean("isForgotPin") == true
     }
 
@@ -145,8 +165,6 @@ class OtpMobileFragment : BaseFragment() {
                             startActivity(intent)
                             act.finish()
                         }
-
-
                     }
 
 
@@ -190,6 +208,7 @@ class OtpMobileFragment : BaseFragment() {
 
     fun init(){
         activity?.let {act->
+
             //fusedLocationClient = LocationServices.getFusedLocationProviderClient(act)
             activity?.let {  mFusedLocationClient = LocationServices.getFusedLocationProviderClient(it)}
             loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
@@ -438,7 +457,8 @@ class OtpMobileFragment : BaseFragment() {
                        "clientid" to CLIENT_ID,
                        "secretkey" to API_KEY,
                        "mobile" to loginMobileNumber,
-                       "refid" to loginMobileReferanceNumber
+                       "refid" to loginMobileReferanceNumber,
+                       "token" to sharedPreff.getFcnToken().toString()
                    )
                    val gson= Gson()
                    var jsonString = gson.toJson(data)
@@ -463,7 +483,8 @@ class OtpMobileFragment : BaseFragment() {
                             "ipaddress" to getLocalIPAddress(),
                             "location" to jsonDataLocation.toString(),
                             "referenceid" to loginMobileReferanceNumber,
-                            "Timestamp" to getCurrentTimestamp()
+                            "Timestamp" to getCurrentTimestamp(),
+                            "token" to sharedPreff.getFcnToken().toString()
                         )
                         /*"referenceid" to loginData.,*/
                         val gson= Gson()
@@ -690,8 +711,49 @@ class OtpMobileFragment : BaseFragment() {
     }
 
 
-
+    override fun onStart() {
+        super.onStart()
+        activity?.let {
+            val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
+            it.registerReceiver(oTORetriever, intentFilter)
+        }
 
     }
+
+    override fun onStop() {
+        super.onStop()
+        activity?.let {
+            it.unregisterReceiver(oTORetriever)
+        }
+    }
+
+
+    private fun startSmartUserConsent() {
+        activity?.let {
+            val client = SmsRetriever.getClient(it)
+            client.startSmsUserConsent(SMS_SENDER_NUMBER)
+        }
+
+    }
+    private fun getActivityResult(result: ActivityResult?) {
+        if (result?.resultCode == RESULT_OK) {
+            val message: String? = result.data?.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE)
+            message?.let{getOtpFromMessage(it)}
+        }
+    }
+    /*override fun onSuccess(intent: Intent?) {
+        resultLauncher.launch(intent)
+    }*/
+    private fun getOtpFromMessage(message: String) {
+        val otpPattern: Pattern = Pattern.compile("(|^)\\d{4}")
+        val matcher: Matcher = otpPattern.matcher(message)
+        if (matcher.find()) {
+            try {
+
+            }catch (e:Exception){}
+
+        }
+    }
+}
 
 

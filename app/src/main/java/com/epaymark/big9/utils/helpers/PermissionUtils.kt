@@ -30,7 +30,8 @@ object PermissionUtils {
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.CALL_PHONE
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.POST_NOTIFICATIONS
             ).apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     add(Manifest.permission.ACCESS_MEDIA_LOCATION)
@@ -48,6 +49,7 @@ object PermissionUtils {
                 Manifest.permission.CALL_PHONE,
 
                 Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.POST_NOTIFICATIONS
             ).apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     add(Manifest.permission.ACCESS_MEDIA_LOCATION)

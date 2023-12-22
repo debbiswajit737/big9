@@ -15,11 +15,13 @@ import com.epaymark.big9.data.model.DTHTranspherModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.MatmeportModel
+import com.epaymark.big9.data.model.MoveToBankBankListModel
 import com.epaymark.big9.data.model.PatternLoginModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
 import com.epaymark.big9.data.model.ResetTPINModel
+import com.epaymark.big9.data.model.SubmitMoveToBankBankListModel
 import com.epaymark.big9.data.model.TransactionReportModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
@@ -328,6 +330,19 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<PatternLoginModel>
+
+
+    @POST("movetobank")
+    suspend fun moveToBank(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<MoveToBankBankListModel>
+
+    @POST("submit_movetobank")
+    suspend fun submitMovetobank(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<SubmitMoveToBankBankListModel>
 
 
 

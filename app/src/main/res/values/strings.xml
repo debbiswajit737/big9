@@ -280,4 +280,6 @@
     <string name="institute_type">Institute Type</string>
     <string name="current_amount">Current amount</string>
     <string name="current_amount_a">Current amount</string>
+    <string name="msg_token_fmt" />
+    <string name="channel_id" >big9</string>
 </resources>

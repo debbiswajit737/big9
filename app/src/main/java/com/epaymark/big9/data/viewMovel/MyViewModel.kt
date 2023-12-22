@@ -21,11 +21,13 @@ import com.epaymark.big9.data.model.DMTReportModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.MatmeportModel
+import com.epaymark.big9.data.model.MoveToBankBankListModel
 import com.epaymark.big9.data.model.PatternLoginModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
 import com.epaymark.big9.data.model.ResetTPINModel
+import com.epaymark.big9.data.model.SubmitMoveToBankBankListModel
 import com.epaymark.big9.data.model.TransactionReportModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
@@ -1627,6 +1629,24 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         }
     }
 
+
+    //move to bank
+    val moveToBankReceptLiveData: MutableLiveData<ResponseState<MoveToBankBankListModel>>
+        get() = repository.moveToBankReceptLiveData
+    fun moveToBank(token: String, data: String) {
+        viewModelScope.launch {
+            repository.moveToBank(token,data)
+        }
+    }
+
+    //submit move to bank
+    val submit_moveToBankReceptLiveData: MutableLiveData<ResponseState<SubmitMoveToBankBankListModel>>
+        get() = repository.submit_moveToBankReceptLiveData
+    fun submitMovetobank(token: String, data: String) {
+        viewModelScope.launch {
+            repository.moveToBank(token,data)
+        }
+    }
 
 
 

@@ -1,6 +1,7 @@
 package com.epaymark.big9.ui.fragment
 
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,14 +13,20 @@ import com.epaymark.big9.R
 
 import com.epaymark.big9.adapter.AccountDetailsAdapter
 import com.epaymark.big9.data.model.AccountDetailsModel
+import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMoveToBankBinding
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.popup.SuccessPopupFragment
+import com.epaymark.big9.ui.receipt.MobileReceptDialogFragment
 import com.epaymark.big9.ui.receipt.MoveToBankReceptDialogFragment
+import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.`interface`.CallBack
 import com.epaymark.big9.utils.`interface`.CallBack4
+import com.google.gson.Gson
 import java.util.Objects
 
 
@@ -27,6 +34,7 @@ class MoveToBankFragment : BaseFragment() {
     lateinit var binding: FragmentMoveToBankBinding
     private val viewModel: MyViewModel by activityViewModels()
     var accountDetailsList = ArrayList<AccountDetailsModel>()
+    private var loader: Dialog? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,6 +65,10 @@ class MoveToBankFragment : BaseFragment() {
 
 
     fun initView() {
+        activity?.let {
+            loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
+            getBankList()
+        }
 
         binding.recycleViewBankDetails.apply {
             accountDetailsList.clear()
@@ -89,6 +101,28 @@ class MoveToBankFragment : BaseFragment() {
                                                                 s3: String,
                                                                 s4: String
                                                             ) {
+                                                                val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                                                                if (isLogin){
+                                                                    loginResponse?.let {loginData->
+                                                                        viewModel?.apply {
+
+                                                                            val  data = mapOf(
+                                                                                "userid" to loginData.userid,
+                                                                                "tpin" to s,
+                                                                                "custno" to epotly_mobile.value,
+                                                                                "amt" to epotly_amt.value
+                                                                            )
+
+                                                                            val gson= Gson()
+                                                                            var jsonString = gson.toJson(data)
+                                                                            loginData.AuthToken?.let {
+                                                                                submitMovetobank(it,jsonString.encrypt())
+                                                                            }
+                                                                        }
+
+                                                                    }
+                                                                }
+
                                                                 val dialogFragment = MoveToBankReceptDialogFragment(object:
                                                                     CallBack {
                                                                     override fun getValue(s: String) {
@@ -140,9 +174,78 @@ class MoveToBankFragment : BaseFragment() {
             })
         }
     }
+    fun getBankList(){
 
+
+        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+        if (isLogin){
+            loginResponse?.let {loginData->
+                viewModel?.apply {
+
+                    val  data = mapOf(
+                        "userid" to loginData.userid,
+                    )
+
+                    val gson= Gson()
+                    var jsonString = gson.toJson(data)
+                    loginData.AuthToken?.let {
+                        moveToBank(it,jsonString.encrypt())
+                    }
+                }
+
+            }
+        }
+    }
     fun setObserver() {
-        binding.apply {
+        viewModel.apply {
+            moveToBankReceptLiveData?.observe(viewLifecycleOwner){
+                when (it) {
+                    is ResponseState.Loading -> {
+                        loader?.show()
+                    }
+
+                    is ResponseState.Success -> {
+                        loader?.dismiss()
+
+
+                        moveToBankReceptLiveData?.value=null
+                    }
+
+                    is ResponseState.Error -> {
+
+                        loader?.dismiss()
+
+                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        moveToBankReceptLiveData?.value=null
+
+                    }
+                }
+            }
+
+            submit_moveToBankReceptLiveData?.observe(viewLifecycleOwner){
+                when (it) {
+                    is ResponseState.Loading -> {
+                        loader?.show()
+                    }
+
+                    is ResponseState.Success -> {
+                        loader?.dismiss()
+
+
+                        moveToBankReceptLiveData?.value=null
+                    }
+
+                    is ResponseState.Error -> {
+
+                        loader?.dismiss()
+
+                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        moveToBankReceptLiveData?.value=null
+
+                    }
+                }
+            }
+
 
         }
 

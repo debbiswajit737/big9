@@ -73,4 +73,5 @@ object Constants {
     var reportDetailsAdapter: ReportDetailsAdapter?=null
     var loginMobileNumber: String?=null
     var loginMobileReferanceNumber: String?=null
+    var SMS_SENDER_NUMBER: String="9674375433"
 }

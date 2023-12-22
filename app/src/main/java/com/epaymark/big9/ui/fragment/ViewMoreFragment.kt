@@ -1,6 +1,7 @@
 package com.epaymark.big9.ui.fragment
 
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +16,17 @@ import com.epaymark.big9.data.model.ListIcon
 import com.epaymark.big9.data.model.UserDetails
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentViewMoreBinding
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.fragmentDialog.GasBillerListDialog
+import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants.isFromUtilityPage
 import com.epaymark.big9.utils.helpers.Constants.utilityValue
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack2
+import com.google.gson.Gson
 
 
 class ViewMoreFragment : BaseFragment() {
@@ -28,6 +34,8 @@ class ViewMoreFragment : BaseFragment() {
     private val viewModel: MyViewModel by activityViewModels()
     var userDetailsList = ArrayList<UserDetails>()
     var utilityBillList = ArrayList<ListIcon>()
+    private var loader: Dialog? = null
+    var naviGationValue=""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,7 +68,9 @@ class ViewMoreFragment : BaseFragment() {
 
 
     fun initView() {
-
+        activity?.let {
+            loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
+        }
             binding.recycleUtility.apply {
             utilityBillList.clear()
             utilityBillList.add(ListIcon(getString(R.string.education_fees), R.drawable.ioc_tuition_fees,"no slag"))
@@ -69,11 +79,12 @@ class ViewMoreFragment : BaseFragment() {
             utilityBillList.add(ListIcon(getString(R.string.loan_payment), R.drawable.loan_ioc_new,"no slag"))
 
             //utilityBillList.add(ListIcon(getString(R.string.view_more), R.drawable.view_more))
-            adapter= ViewMoreAdapter(utilityBillList,R.drawable.circle_shape2, object : CallBack {
-                override fun getValue(s: String) {
+            adapter= ViewMoreAdapter(utilityBillList,R.drawable.circle_shape2, object : CallBack2 {
+                override fun getValue2(s: String,slag: String) {
                     utilityValue=s
                     viewModel.from_page_message.value="view_more"
-                    serviceNavigation(s)
+                    checkService(navParameter = s,slag)
+                   // serviceNavigation(s)
                     //findNavController().popBackStack()
 
                     /*when(s){
@@ -102,12 +113,36 @@ class ViewMoreFragment : BaseFragment() {
 
     fun setObserver() {
         binding.apply {
+            viewModel?.checkServiceReceiptResponseLiveData?.observe(viewLifecycleOwner){
+                when (it) {
+                    is ResponseState.Loading -> {
+                        loader?.show()
+                    }
 
+                    is ResponseState.Success -> {
+                        loader?.dismiss()
+                        it?.data?.slug?.let {slug->
+                            serviceNavigation(naviGationValue,slug)
+                        }
+                        viewModel?.checkServiceReceiptResponseLiveData?.value=null
+                    }
+
+                    is ResponseState.Error -> {
+                        loader?.dismiss()
+
+
+
+
+                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        viewModel?.checkServiceReceiptResponseLiveData?.value=null
+                    }
+                }
+            }
         }
 
     }
 
-    private fun serviceNavigation(s: String) {
+    private fun serviceNavigation(s: String, slug: String) {
         when(s){
             //findNavController().navigate(R.id.action_viewMoreFragment_to_formFragment)
             getString(R.string.education_fees)->{
@@ -136,11 +171,29 @@ class ViewMoreFragment : BaseFragment() {
             getString(R.string.loan_payment)->{
                 findNavController().navigate(R.id.action_viewMoreFragment_to_loanPaymentFragment)
             }
-
-
-
         }
+    }
+    fun checkService(navParameter: String,slag:String){
+        naviGationValue=navParameter
+        //Toast.makeText(requireContext(), ""+slag, Toast.LENGTH_SHORT).show()
+        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+        if (isLogin){
+            loginResponse?.let {loginData->
+                viewModel?.apply {
 
+                    val  data = mapOf(
+                        "userid" to loginData.userid,
+                        "service" to slag
+                    )
 
+                    val gson= Gson()
+                    var jsonString = gson.toJson(data)
+                    loginData.AuthToken?.let {
+                        checkService(it,jsonString.encrypt())
+                    }
+                }
+
+            }
+        }
     }
 }
