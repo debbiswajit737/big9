@@ -103,6 +103,7 @@ class DTHRechargeFragment : BaseFragment() {
 
             btnSubmit.setOnClickListener{
                 if (viewModel?.dthValidation() == true){
+                    btnSubmit.setBottonLoader(false,llSubmitLoader)
                     val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
                         override fun getValue(s: String) {
                             submit(s)
@@ -110,6 +111,7 @@ class DTHRechargeFragment : BaseFragment() {
                         }
                     })
                     activity?.let {act->
+                        tpinBottomSheetDialog.isCancelable = false
                         tpinBottomSheetDialog.show(act.supportFragmentManager, tpinBottomSheetDialog.tag)
                     }
                 }
@@ -175,6 +177,7 @@ class DTHRechargeFragment : BaseFragment() {
                 }
 
                 is ResponseState.Success -> {
+                    binding.btnSubmit.setBottonLoader(true,binding.llSubmitLoader)
                     loader?.dismiss()
                     viewModel?.popup_message?.value="Success"
                     val successPopupFragment = SuccessPopupFragment(object :
@@ -210,6 +213,7 @@ class DTHRechargeFragment : BaseFragment() {
                 }
 
                 is ResponseState.Error -> {
+                    binding.btnSubmit.setBottonLoader(true,binding.llSubmitLoader)
                     loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                     dthViewModel?.dthTransferResponseLiveData?.value=null

@@ -101,6 +101,9 @@
         <action
             android:id="@+id/action_homeFragment2_to_walletLedgerReportFragment"
             app:destination="@id/walletLedgerReportFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_forgotPasswordOtpFragment"
+            app:destination="@id/forgotPasswordOtpFragment" />
     </fragment>
     <fragment
         android:id="@+id/mobileRechargeFragment"

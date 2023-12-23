@@ -17,6 +17,7 @@ import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.MatmeportModel
 import com.epaymark.big9.data.model.MoveToBankBankListModel
+import com.epaymark.big9.data.model.MoveToWalletModel
 import com.epaymark.big9.data.model.PatternLoginModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
@@ -352,7 +353,17 @@ interface RetroApi {
         @Body data: String
     ): Response<AddBankModel>
 
+    @POST("move_to_wallet")
+    suspend fun moveToWallet(
+            @Header("Authtoken") token: String,
+            @Body data: String
+    ): Response<MoveToWalletModel>
 
+    @POST("submit_move_to_eallet")
+    suspend fun submitMoveToWallet(
+            @Header("Authtoken") token: String,
+            @Body data: String
+    ): Response<SubmitMoveToBankBankListModel>
 
 
 

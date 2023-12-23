@@ -1,32 +1,45 @@
 package com.epaymark.big9.ui.fragment
 
 
+import android.app.Dialog
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
 
 import com.epaymark.big9.adapter.PhonePadAdapter3
 import com.epaymark.big9.data.viewMovel.AuthViewModel
+import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentOtpForgotPasswordBinding
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
 import com.epaymark.big9.ui.base.BaseFragment
+import com.epaymark.big9.ui.popup.SuccessPopupFragment
+import com.epaymark.big9.utils.common.MethodClass
+import com.epaymark.big9.utils.`interface`.CallBack4
 import com.epaymark.big9.utils.`interface`.KeyPadOnClickListner
+import com.google.gson.Gson
 import java.util.concurrent.TimeUnit
 
 class ForgotPasswordOtpFragment : BaseFragment() {
     lateinit var binding: FragmentOtpForgotPasswordBinding
     var keyPad = ArrayList<Int>()
+    private var loader: Dialog? = null
     private val authViewModel: AuthViewModel by activityViewModels()
+    private val myViewModel: MyViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,11 +53,53 @@ class ForgotPasswordOtpFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-       // setObserver()
+        observer()
+    }
+
+    private fun observer() {
+        authViewModel?.resetTPINResponseReceptLiveData?.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+
+                    it?.data?.Description?.let { msg ->
+                        myViewModel.popup_message.value =msg
+                    }
+
+                    val successPopupFragment = SuccessPopupFragment(object :
+                        CallBack4 {
+                        override fun getValue4(
+                            s1: String,
+                            s2: String,
+                            s3: String,
+                            s4: String
+                        ) {
+                            findNavController().popBackStack()
+                        }
+
+                    })
+                    successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
+
+                    authViewModel?.resetTPINResponseReceptLiveData?.value = null
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    authViewModel?.resetTPINResponseReceptLiveData?.value = null
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
     }
 
     fun initView() {
-
+        activity?.let {
+            loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
+        }
         cownDown()
         keyPad.add(1)
         keyPad.add(2)
@@ -70,7 +125,25 @@ class ForgotPasswordOtpFragment : BaseFragment() {
                                 // binding.firstPinView.text=this
                                 authViewModel.otp.value = "${this}${item}"
                                 if(authViewModel.otp.value=="123456"){
-                                    findNavController().popBackStack()
+                                    val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                                    if (isLogin) {
+                                        loginResponse?.let { loginData ->
+                                            authViewModel?.apply {
+
+                                                val data = mapOf(
+                                                    "userid" to loginData.userid
+                                                )
+
+                                                val gson = Gson()
+                                                var jsonString = gson.toJson(data)
+                                                loginData.AuthToken?.let {
+                                                    authViewModel.resetTPINResponse(it, jsonString.encrypt())
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                    //findNavController().popBackStack()
                                    // Toast.makeText(requireContext(), "match", Toast.LENGTH_SHORT).show()
                                 }
 

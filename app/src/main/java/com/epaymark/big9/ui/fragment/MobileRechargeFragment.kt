@@ -3,6 +3,7 @@ package com.epaymark.big9.ui.fragment
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -104,13 +105,14 @@ class MobileRechargeFragment : BaseFragment() {
             btnSubmit.setOnClickListener{
                 activity?.let {act->
                     if (viewModel?.regValidation() == true){
-
+                        btnSubmit.setBottonLoader(false,llSubmitLoader)
                             val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
                                 override fun getValue(s: String) {
                                     submit(s)
 
                                 }
                             })
+                            tpinBottomSheetDialog.isCancelable=false
                             tpinBottomSheetDialog.show(act.supportFragmentManager, tpinBottomSheetDialog.tag)
 
                     }
@@ -195,6 +197,7 @@ class MobileRechargeFragment : BaseFragment() {
                 }
 
                 is ResponseState.Success -> {
+                    binding.btnSubmit.setBottonLoader(true,binding.llSubmitLoader)
                     loader?.dismiss()
 
                     val data= PostPaidMobileTranspherModel()
@@ -218,6 +221,7 @@ class MobileRechargeFragment : BaseFragment() {
                 }
 
                 is ResponseState.Error -> {
+                    binding.btnSubmit.setBottonLoader(true,binding.llSubmitLoader)
                     loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                     mobileRechargeViewModel?.postPaidMobileTranspherResponseLiveData?.value=null
@@ -231,13 +235,14 @@ class MobileRechargeFragment : BaseFragment() {
                 }
 
                 is ResponseState.Success -> {
+                    binding.btnSubmit.setBottonLoader(true,binding.llSubmitLoader)
                     loader?.dismiss()
 
                         val data= PrepaidMoboleTranspherModel()
                         it.data?.let {
                             data?.amount=it.amount
                             data?.mobileno=it.mobileno
-                            data?.curramt=it.curramt
+                            data?.curramt="${it.curramt}"
                             data?.refillid=it.refillid
                             data.image=viewModel?.selectrdOperator?.value
                         }
@@ -256,7 +261,7 @@ class MobileRechargeFragment : BaseFragment() {
                 }
 
                 is ResponseState.Error -> {
-
+                    binding.btnSubmit.setBottonLoader(true,binding.llSubmitLoader)
                     loader?.dismiss()
 
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)

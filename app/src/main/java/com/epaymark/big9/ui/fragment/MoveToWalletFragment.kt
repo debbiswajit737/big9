@@ -1,6 +1,7 @@
 package com.epaymark.big9.ui.fragment
 
 
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -16,13 +17,18 @@ import com.epaymark.big9.R
 
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentMoveToWalletBinding
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.popup.SuccessPopupFragment
 import com.epaymark.big9.ui.receipt.MoveToWalletPayabhiReceptDialogFragment
 import com.epaymark.big9.ui.receipt.MoveToWalletReceptDialogFragment
+import com.epaymark.big9.utils.common.MethodClass
+import com.epaymark.big9.utils.helpers.Constants.loginData
 import com.epaymark.big9.utils.`interface`.CallBack
 import com.epaymark.big9.utils.`interface`.CallBack4
+import com.google.gson.Gson
 import java.util.Objects
 
 
@@ -31,6 +37,7 @@ class MoveToWalletFragment : BaseFragment() {
     private val viewModel: MyViewModel by activityViewModels()
     private var isRotatedWallet = true
     private var isRotatedPayabhi = true
+    private var loader: Dialog? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -128,6 +135,27 @@ class MoveToWalletFragment : BaseFragment() {
                     if (viewModel?.settleWalletValidation() == true) {
                         val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
                             override fun getValue(s: String) {
+                                val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                                if (isLogin){
+                                loginResponse?.let {loginData->
+                                viewModel?.apply {
+
+                                val  data = mapOf(
+                                "userid" to loginData.userid,
+                                "tpin" to s,
+                                "custno" to epotly_mobile.value,
+                                "amt" to epotly_amt.value
+                                )
+
+                                val gson= Gson()
+                                var jsonString = gson.toJson(data)
+                                loginData.AuthToken?.let {
+                                epotlyTranspher(it,jsonString.encrypt())
+                                }
+                                }
+
+                                }
+                                }
                                 val successPopupFragment = SuccessPopupFragment(object :
                                     CallBack4 {
                                     override fun getValue4(
@@ -220,17 +248,95 @@ class MoveToWalletFragment : BaseFragment() {
 
 
     fun initView() {
-
+        activity?.let {act->
+          loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
+        }
+        apiCall()
        binding?.apply {
            etAmtWallet.setupAmount()
            etAmtPayabhi.setupAmount()
        }
     }
 
-    fun setObserver() {
-        binding.apply {
+    private fun apiCall() {
+        viewModel?.apply {
+            val (isLogin, loginResponse) =sharedPreff.getLoginData()
+            if (isLogin){
+            loginResponse?.let {loginData->
+            viewModel?.apply {
 
+            val  data = mapOf(
+            "userid" to loginData.userid,
+
+            "custno" to epotly_mobile.value,
+            "amt" to epotly_amt.value
+            )
+
+            val gson= Gson()
+            var jsonString = gson.toJson(data)
+            loginData.AuthToken?.let {
+            moveToWallet(it,jsonString.encrypt())
+            }
+            }
+
+            }
+            }
         }
+    }
+
+    fun setObserver() {
+        viewModel.apply {
+
+            moveToWalletLiveData?.observe(viewLifecycleOwner){
+                when (it) {
+                    is ResponseState.Loading -> {
+                        loader?.show()
+                    }
+            
+                    is ResponseState.Success -> {
+                        loader?.dismiss()
+            
+            
+                        moveToWalletLiveData?.value=null
+                    }
+            
+                    is ResponseState.Error -> {
+            
+                        loader?.dismiss()
+            
+                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        moveToWalletLiveData?.value=null
+            
+                    }
+                }
+            }
+            submitMoveToWalletLiveData?.observe(viewLifecycleOwner){
+                when (it) {
+                    is ResponseState.Loading -> {
+                        loader?.show()
+                    }
+
+                    is ResponseState.Success -> {
+                        loader?.dismiss()
+
+
+                        submitMoveToWalletLiveData?.value=null
+                    }
+
+                    is ResponseState.Error -> {
+
+                        loader?.dismiss()
+
+                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        submitMoveToWalletLiveData?.value=null
+
+                    }
+                }
+            }
+        }
+
+
+
 
     }
 

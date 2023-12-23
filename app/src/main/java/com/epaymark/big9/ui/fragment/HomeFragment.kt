@@ -92,6 +92,7 @@ class HomeFragment : BaseFragment() {
     var iconList11 = ArrayList<ListIcon>()
     var iconList12 = ArrayList<ListIcon>()
     var naviGationValue=""
+    var isReport=false
     lateinit var binding: FragmentHomeBinding
     private lateinit var autoScrollHandler: AutoScrollHandler
     private val viewModel: MyViewModel by activityViewModels()
@@ -119,6 +120,7 @@ class HomeFragment : BaseFragment() {
         viewModel.from_page_message.observe(viewLifecycleOwner) {
             if(isFromSearchPage){
                 if (searchValue.isNotEmpty() && searchValueTag.isNotEmpty()){
+
                     serviceNavigation(searchValue,searchValueTag)
                     searchValue=""
                     searchValueTag=""
@@ -143,10 +145,7 @@ class HomeFragment : BaseFragment() {
 
                     is ResponseState.Error -> {
                         loader?.dismiss()
-
-
-
-
+                        serviceNavigation(naviGationValue,"slug")
                         handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         viewModel?.checkServiceReceiptResponseLiveData?.value=null
                     }
@@ -199,295 +198,319 @@ class HomeFragment : BaseFragment() {
     }
     private fun serviceNavigation(s: String,slag:String) {
 
+        if (isReport){
+            viewModel.reportType.value = s//.replaceFirstChar(Char::titlecase)
+            isReport=false
+            findNavController().navigate(R.id.action_homeFragment2_to_reportFragment)
 
-        when(s){
-            //recycleViewEpayBanking
-            getString(com.epaymark.big9.R.string.scan)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_QRCodeFragment)
-            }
+        }
+        else {
+            when (s) {
+                //recycleViewEpayBanking
+                getString(com.epaymark.big9.R.string.scan) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_QRCodeFragment)
+                }
 
-            getString(R.string.ePotly)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_epotlyFragment)
-            }
+                getString(R.string.ePotly) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_epotlyFragment)
+                }
 
-            getString(R.string.payment_request)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_paymentRequestFragment)
-            }
-            getString(R.string.move_to_wallet)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_moveToWalletFragment)
-            }
-            getString(R.string.move_to_bank)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_moveToBankFragment)
-            }
+                getString(R.string.payment_request) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_paymentRequestFragment)
+                }
 
+                getString(R.string.move_to_wallet) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_moveToWalletFragment)
+                }
 
-            //recycleAccount
-
-            getString(R.string.myaccount)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_userDetailsFragment)
-            }
-            getString(R.string.support)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_supportFragment)
-            }
-            getString(R.string.likeus)->{}
-            getString(R.string.usage_terms)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_termsAndConditionFragment)
-            }
-            getString(R.string.password)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_changePasswordFragment)
-            }
-            getString(R.string.certificate)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_certificateFragment)
-            }
-
-
-
-
-            //recycleViewEpayBanking
-
-            getString(R.string.balance) -> {
-              //  showBalencePopup(binding.root.context)
-                activity?.let {act->
-                    val aadharAuthBottomSheetDialog =
-                        AadharAuthBottomSheetDialog(object : CallBack {
-                            override fun getValue(s: String) {
-                                findNavController().navigate(R.id.action_homeFragment2_to_balenceAEPSFragment)
-                            }
-                        })
-                    aadharAuthBottomSheetDialog.show(
-                        act.supportFragmentManager,
-                        aadharAuthBottomSheetDialog.tag
-                    )
+                getString(R.string.move_to_bank) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_moveToBankFragment)
                 }
 
 
-            }
+                //recycleAccount
 
-            getString(R.string.cash_withdraw) -> {
-                isCashWithdraw=false
-                activity?.let {act->
-                    val aadharAuthBottomSheetDialog =
-                        AadharAuthBottomSheetDialog(object : CallBack {
-                            override fun getValue(s: String) {
-                                findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
-                            }
-                        })
-                    aadharAuthBottomSheetDialog.show(
-                        act.supportFragmentManager,
-                        aadharAuthBottomSheetDialog.tag
-                    )
+                getString(R.string.myaccount) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_userDetailsFragment)
                 }
 
-            }
-
-
-            getString(R.string.mini_statement) -> {
-                viewModel.reportType.value=getString(R.string.dmt)
-                activity?.let {act->
-                    val aadharAuthBottomSheetDialog =
-                        AadharAuthBottomSheetDialog(object : CallBack {
-                            override fun getValue(s: String) {
-                                findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFormFragment)
-                                //findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFragment)
-                                // findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
-
-                            }
-                        })
-                    aadharAuthBottomSheetDialog.show(
-                        act.supportFragmentManager,
-                        aadharAuthBottomSheetDialog.tag
-                    )
-                }
+                getString(R.string.support) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_supportFragment)
                 }
 
-            getString(R.string.aadhar_pay) -> {
-                isCashWithdraw=false
-                activity?.let {act->
-                    val aadharAuthBottomSheetDialog =
-                        AadharAuthBottomSheetDialog(object : CallBack {
-                            override fun getValue(s: String) {
-                                findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
-                            }
-                        })
-                    aadharAuthBottomSheetDialog.show(
-                        act.supportFragmentManager,
-                        aadharAuthBottomSheetDialog.tag
-                    )
+                getString(R.string.likeus) -> {}
+                getString(R.string.usage_terms) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_termsAndConditionFragment)
                 }
 
-            }
-
-
-
-            //recycleEssential
-            getString(R.string.prepaid)->{
-                viewModel.prepaitOrPostPaid.value=Prepaid
-                viewModel.mobile.value=""
-                viewModel.operator.value=""
-                viewModel.amt.value=""
-                findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)
-
-            }
-            getString(R.string.postpaid)->{
-                viewModel.prepaitOrPostPaid.value=Postpaid
-                viewModel.mobile.value=""
-                viewModel.operator.value=""
-                viewModel.amt.value=""
-                findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)
-            }
-
-            getString(R.string.dth_recharge)->{
-                viewModel.subId.value=""
-                viewModel.dthOperator.value=""
-                viewModel.dthAmt.value=""
-                findNavController().navigate(R.id.action_homeFragment2_to_DTHRechargeFragment)
-            }
-
-            getString(R.string.insurance)->{
-               WebView(binding.root.context).set("https://www.gibl.in/wallet/validate2/","ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0=")
-            }
-
-
-
-
-            //recycleUtility
-
-            getString(R.string.electric)->{
-                activity?.let {act->
-                    val stateListDialog = StateListDialog(object : CallBack {
-                        override fun getValue(s: String) {
-                            viewModel?.state?.value=s
-                            findNavController().navigate(R.id.action_homeFragment2_to_electricRechargeFragment)
-                        }
-
-                    })
-                    stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
-
+                getString(R.string.password) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_changePasswordFragment)
                 }
-            }
 
-             getString(R.string.gas)->{
-                activity?.let {act->
-                    val stateListDialog = StateListDialog(object : CallBack {
-                        override fun getValue(s: String) {
-                            viewModel?.state?.value=s
-                            val gasBillerListDialog = GasBillerListDialog(object : CallBack {
+                getString(R.string.certificate) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_certificateFragment)
+                }
+
+
+                //recycleViewEpayBanking
+
+                getString(R.string.balance) -> {
+                    //  showBalencePopup(binding.root.context)
+                    activity?.let { act ->
+                        val aadharAuthBottomSheetDialog =
+                            AadharAuthBottomSheetDialog(object : CallBack {
                                 override fun getValue(s: String) {
-                                    viewModel?.gasBiller?.value=s
-                                    findNavController().navigate(R.id.action_homeFragment2_to_gasBookingFragment)
+                                    findNavController().navigate(R.id.action_homeFragment2_to_balenceAEPSFragment)
                                 }
-
                             })
-                            gasBillerListDialog.show(act.supportFragmentManager, gasBillerListDialog.tag)
+                        aadharAuthBottomSheetDialog.show(
+                            act.supportFragmentManager,
+                            aadharAuthBottomSheetDialog.tag
+                        )
+                    }
 
-                        }
-
-                    })
-                    stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
 
                 }
-            }
+
+                getString(R.string.cash_withdraw) -> {
+                    isCashWithdraw = false
+                    activity?.let { act ->
+                        val aadharAuthBottomSheetDialog =
+                            AadharAuthBottomSheetDialog(object : CallBack {
+                                override fun getValue(s: String) {
+                                    findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+                                }
+                            })
+                        aadharAuthBottomSheetDialog.show(
+                            act.supportFragmentManager,
+                            aadharAuthBottomSheetDialog.tag
+                        )
+                    }
+
+                }
 
 
-            getString(R.string.view_more)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_viewMoreFragment)
-            }
+                getString(R.string.mini_statement) -> {
+                    viewModel.reportType.value = getString(R.string.dmt)
+                    activity?.let { act ->
+                        val aadharAuthBottomSheetDialog =
+                            AadharAuthBottomSheetDialog(object : CallBack {
+                                override fun getValue(s: String) {
+                                    findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFormFragment)
+                                    //findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFragment)
+                                    // findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
 
-            //recycleFinancial
+                                }
+                            })
+                        aadharAuthBottomSheetDialog.show(
+                            act.supportFragmentManager,
+                            aadharAuthBottomSheetDialog.tag
+                        )
+                    }
+                }
+
+                getString(R.string.aadhar_pay) -> {
+                    isCashWithdraw = false
+                    activity?.let { act ->
+                        val aadharAuthBottomSheetDialog =
+                            AadharAuthBottomSheetDialog(object : CallBack {
+                                override fun getValue(s: String) {
+                                    findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+                                }
+                            })
+                        aadharAuthBottomSheetDialog.show(
+                            act.supportFragmentManager,
+                            aadharAuthBottomSheetDialog.tag
+                        )
+                    }
+
+                }
 
 
+                //recycleEssential
+                getString(R.string.prepaid) -> {
+                    viewModel.prepaitOrPostPaid.value = Prepaid
+                    viewModel.mobile.value = ""
+                    viewModel.operator.value = ""
+                    viewModel.amt.value = ""
+                    findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)
 
-            getString(R.string.prepaid)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)
-            }
-            getString(R.string.postpaid)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)
-            }
+                }
 
-            getString(R.string.dth_recharge)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_DTHRechargeFragment)
-            }
-            getString(R.string.money_transfer)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_moneyTranspherFragment)
-            }
-            getString(R.string.credit_card)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_creditCardPaymentFragment)
-            }
+                getString(R.string.postpaid) -> {
+                    viewModel.prepaitOrPostPaid.value = Postpaid
+                    viewModel.mobile.value = ""
+                    viewModel.operator.value = ""
+                    viewModel.amt.value = ""
+                    findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)
+                }
 
-            getString(R.string.matm)->{
-                activity?.let {act->
-                    val microATMBottomSheetDialog = MicroATMBottomSheetDialog(object : CallBack {
-                        override fun getValue(microAtmTitle: String) {
+                getString(R.string.dth_recharge) -> {
+                    viewModel.subId.value = ""
+                    viewModel.dthOperator.value = ""
+                    viewModel.dthAmt.value = ""
+                    findNavController().navigate(R.id.action_homeFragment2_to_DTHRechargeFragment)
+                }
+
+                getString(R.string.insurance) -> {
+                    WebView(binding.root.context).set(
+                        "https://www.gibl.in/wallet/validate2/",
+                        "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
+                    )
+                }
 
 
-                                    val selectTransactionTypeBottomSheetDialog = SelectTransactionTypeBottomSheetDialog(object :
-                                        CallBack {
+                //recycleUtility
+
+                getString(R.string.electric) -> {
+                    activity?.let { act ->
+                        val stateListDialog = StateListDialog(object : CallBack {
+                            override fun getValue(s: String) {
+                                viewModel?.state?.value = s
+                                findNavController().navigate(R.id.action_homeFragment2_to_electricRechargeFragment)
+                            }
+
+                        })
+                        stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
+
+                    }
+                }
+
+                getString(R.string.gas) -> {
+                    activity?.let { act ->
+                        val stateListDialog = StateListDialog(object : CallBack {
+                            override fun getValue(s: String) {
+                                viewModel?.state?.value = s
+                                val gasBillerListDialog = GasBillerListDialog(object : CallBack {
                                     override fun getValue(s: String) {
+                                        viewModel?.gasBiller?.value = s
+                                        findNavController().navigate(R.id.action_homeFragment2_to_gasBookingFragment)
+                                    }
 
-                                        val tpinBottomSheetDialog = TpinBottomSheetDialog(object :
+                                })
+                                gasBillerListDialog.show(
+                                    act.supportFragmentManager,
+                                    gasBillerListDialog.tag
+                                )
+
+                            }
+
+                        })
+                        stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
+
+                    }
+                }
+
+
+                getString(R.string.view_more) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_viewMoreFragment)
+                }
+
+                //recycleFinancial
+
+
+                getString(R.string.prepaid) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)
+                }
+
+                getString(R.string.postpaid) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)
+                }
+
+                getString(R.string.dth_recharge) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_DTHRechargeFragment)
+                }
+
+                getString(R.string.money_transfer) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_moneyTranspherFragment)
+                }
+
+                getString(R.string.credit_card) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_creditCardPaymentFragment)
+                }
+
+                getString(R.string.matm) -> {
+                    activity?.let { act ->
+                        val microATMBottomSheetDialog =
+                            MicroATMBottomSheetDialog(object : CallBack {
+                                override fun getValue(microAtmTitle: String) {
+
+
+                                    val selectTransactionTypeBottomSheetDialog =
+                                        SelectTransactionTypeBottomSheetDialog(object :
                                             CallBack {
                                             override fun getValue(s: String) {
-                                                when(microAtmTitle) {
-                                                    "balence_enquery"->{
-                                                        Toast.makeText(requireActivity(), "$s "+"balence_enquery", Toast.LENGTH_SHORT).show()
-                                                    }
-                                                    "balence_withdraw"->{
-                                                        Toast.makeText(requireActivity(), "$s "+"balence_withdraw", Toast.LENGTH_SHORT).show()
-                                                    }
-                                                }
+
+                                                val tpinBottomSheetDialog =
+                                                    TpinBottomSheetDialog(object :
+                                                        CallBack {
+                                                        override fun getValue(s: String) {
+                                                            when (microAtmTitle) {
+                                                                "balence_enquery" -> {
+                                                                    Toast.makeText(
+                                                                        requireActivity(),
+                                                                        "$s " + "balence_enquery",
+                                                                        Toast.LENGTH_SHORT
+                                                                    ).show()
+                                                                }
+
+                                                                "balence_withdraw" -> {
+                                                                    Toast.makeText(
+                                                                        requireActivity(),
+                                                                        "$s " + "balence_withdraw",
+                                                                        Toast.LENGTH_SHORT
+                                                                    ).show()
+                                                                }
+                                                            }
+
+                                                        }
+                                                    })
+                                                tpinBottomSheetDialog.show(
+                                                    act.supportFragmentManager,
+                                                    tpinBottomSheetDialog.tag
+                                                )
+
 
                                             }
                                         })
-                                        tpinBottomSheetDialog.show(
-                                            act.supportFragmentManager,
-                                            tpinBottomSheetDialog.tag
-                                        )
 
+                                    selectTransactionTypeBottomSheetDialog.show(
+                                        act.supportFragmentManager,
+                                        selectTransactionTypeBottomSheetDialog.tag
+                                    )
 
-                                    }
-                                })
-
-                            selectTransactionTypeBottomSheetDialog.show(
-                                act.supportFragmentManager,
-                                selectTransactionTypeBottomSheetDialog.tag
-                            )
-
-                        }
-                    })
-                    microATMBottomSheetDialog.show(
-                        act.supportFragmentManager,
-                        microATMBottomSheetDialog.tag
-                    )
+                                }
+                            })
+                        microATMBottomSheetDialog.show(
+                            act.supportFragmentManager,
+                            microATMBottomSheetDialog.tag
+                        )
+                    }
                 }
-            }
 
 
+                getString(R.string.electric) -> {
+                    activity?.let { act ->
+                        val stateListDialog = StateListDialog(object : CallBack {
+                            override fun getValue(s: String) {
+                                viewModel?.state?.value = s
+                                findNavController().navigate(R.id.action_homeFragment2_to_electricRechargeFragment)
+                            }
 
+                        })
+                        stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
 
-
-
-            getString(R.string.electric)->{
-                activity?.let {act->
-                    val stateListDialog = StateListDialog(object : CallBack {
-                        override fun getValue(s: String) {
-                            viewModel?.state?.value=s
-                            findNavController().navigate(R.id.action_homeFragment2_to_electricRechargeFragment)
-                        }
-
-                    })
-                    stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
-
+                    }
                 }
-            }
 
-            //recycleUtility
-            getString(R.string.fast_tag)->{
-                findNavController().navigate(R.id.action_homeFragment2_to_fastTagFragment)
+                //recycleUtility
+                getString(R.string.fast_tag) -> {
+                    findNavController().navigate(R.id.action_homeFragment2_to_fastTagFragment)
+                }
+
             }
 
         }
-
-
     }
 
     private fun viewOnClick() {
@@ -1085,9 +1108,9 @@ class HomeFragment : BaseFragment() {
                             commissionReportAdapter?.items= ArrayList()
                             commissionReportAdapter?.notifyDataSetChanged()
                         }
-
+                        isReport=true
                         viewModel?.reportType?.value = s
-
+                        checkService(s,tag)
                         /*if (s==getString(R.string.commissions)){
 
                             findNavController().navigate(R.id.action_homeFragment2_to_commissionReportFragment)
@@ -1104,7 +1127,7 @@ class HomeFragment : BaseFragment() {
 
                         //else {
                             //viewModel.reportType.value = s//.replaceFirstChar(Char::titlecase)
-                            findNavController().navigate(R.id.action_homeFragment2_to_reportFragment)
+                           // findNavController().navigate(R.id.action_homeFragment2_to_reportFragment)
                         //}
                        /*when(s){
 

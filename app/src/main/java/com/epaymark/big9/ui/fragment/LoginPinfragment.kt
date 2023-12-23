@@ -69,13 +69,19 @@ class LoginPinfragment : BaseFragment() {
             tvSwitchAcc.setOnClickListener {
                 activity?.let {act->
                     val intent = Intent(act, RegActivity::class.java)
-                    intent.putExtra("isForgotPin",true)
+                    intent.putExtra("isForgotPin",false)
                     startActivity(intent)
                     act.finish()
                 }
 
             }
             tvForgotPassword.setOnClickListener{
+                /*activity?.let {act->
+                    val intent = Intent(act, RegActivity::class.java)
+                    intent.putExtra("isForgotPin",true)
+                    startActivity(intent)
+                    act.finish()
+                }*/
                 findNavController().navigate(R.id.action_loginPinfragment_to_forgotPasswordOtpFragment)
             }
 

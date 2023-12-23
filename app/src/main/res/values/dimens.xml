@@ -19,4 +19,5 @@
     <dimen name="btn_vertical_padding">12dp</dimen>
     <dimen name="btn_horizontal_padding">16dp</dimen>
     <dimen name="margin_standard">16dp</dimen>
+    <dimen name="btn_height">@dimen/_40sdp</dimen>
 </resources>

@@ -281,7 +281,7 @@ class CameraFragment : BaseFragment() {
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
                 } else {
                     // For versions prior to Nougat, use a hardcoded path
-                    File(Environment.getExternalStorageDirectory(), "epay/image")
+                    File(Environment.getExternalStorageDirectory(), "big9/image")
                 }
 
                 // Ensure the directory exists, and create it if necessary
@@ -355,7 +355,7 @@ class CameraFragment : BaseFragment() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     // For Android 10 and higher, use RELATIVE_PATH
                   //  put(MediaStore.Video.Media.RELATIVE_PATH, "epay/video")
-                    put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + "/epay")
+                    put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + "/big9")
                 } else {
                     // For versions prior to Android 10, manage the file operations manually
                     val directoryPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -363,7 +363,7 @@ class CameraFragment : BaseFragment() {
                         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
                     } else {
                         // For versions prior to Nougat, use a hardcoded path
-                        File(Environment.getExternalStorageDirectory(), "epay/video")
+                        File(Environment.getExternalStorageDirectory(), "big9/video")
                     }
 
                     // Ensure the directory exists, and create it if necessary

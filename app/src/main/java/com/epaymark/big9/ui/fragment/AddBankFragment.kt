@@ -129,7 +129,6 @@ class AddBankFragment : BaseFragment() {
                         override fun getValue(s: String) {
                             getImage(s)
                         }
-
                     })
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
 
@@ -147,9 +146,6 @@ class AddBankFragment : BaseFragment() {
         if (isLogin){
             loginResponse?.let {loginData->
                 viewModel?.apply {
-
-
-
                     val  data = mapOf(
                         "userid" to loginData.userid,
                         "image" to bankSlipDocumentImageBase64?.value,

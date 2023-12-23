@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.FileModel
+import com.epaymark.big9.data.model.ResetTPINModel
 import com.epaymark.big9.data.model.login.LoginResponse
 import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.model.onBoading.RegForm
@@ -686,6 +687,14 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
 
 
 
+    //reset TPIN
+    val resetTPINResponseReceptLiveData: MutableLiveData<ResponseState<ResetTPINModel>>
+        get() = repository.resetTPINResponseReceptLiveData
+    fun resetTPINResponse(token: String, data: String) {
+        viewModelScope.launch {
+            repository.resetTPIN(token,data)
+        }
+    }
 
 
 

@@ -19,6 +19,7 @@ import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.MatmeportModel
 import com.epaymark.big9.data.model.MoveToBankBankListModel
+import com.epaymark.big9.data.model.MoveToWalletModel
 import com.epaymark.big9.data.model.PatternLoginModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
@@ -1111,5 +1112,57 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         }
 
     }
+
+    //Move to wallet
+    private val _moveToWalletLiveData =
+            MutableLiveData<ResponseState<MoveToWalletModel>>()
+    val moveToWalletLiveData: MutableLiveData<ResponseState<MoveToWalletModel>>
+    get() = _moveToWalletLiveData
+
+    suspend fun moveToWallet(token: String, loginModel: String) {
+        _moveToWalletLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.moveToWallet(
+                    token,
+                    loginModel.replace("\n", "").replace("\r", "")
+            )
+            _moveToWalletLiveData.postValue(
+                    ResponseState.create(
+                            response,
+                            "aa"
+                    )
+            )
+        } catch (throwable: Throwable) {
+            _moveToWalletLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //Submit Move to wallet
+    private val _submitMoveToWalletLiveData =
+            MutableLiveData<ResponseState<SubmitMoveToBankBankListModel>>()
+    val submitMoveToWalletLiveData: MutableLiveData<ResponseState<SubmitMoveToBankBankListModel>>
+    get() = _submitMoveToWalletLiveData
+
+    suspend fun submitMoveToWallet(token: String, loginModel: String) {
+        _submitMoveToWalletLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.submitMoveToWallet(
+                    token,
+                    loginModel.replace("\n", "").replace("\r", "")
+            )
+            _submitMoveToWalletLiveData.postValue(
+                    ResponseState.create(
+                            response,
+                            "aa"
+                    )
+            )
+        } catch (throwable: Throwable) {
+            _submitMoveToWalletLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+    
+    
 }
 

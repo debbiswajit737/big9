@@ -75,7 +75,6 @@ class FastTagFragment : BaseFragment() {
         binding.apply {
             etAmt.setupAmount()
         }
-
     }
 
     fun setObserver() {

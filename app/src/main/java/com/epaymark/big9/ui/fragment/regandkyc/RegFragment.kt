@@ -219,10 +219,6 @@ class RegFragment : BaseFragment() {
             it.isVisible=!binding.recycleCity.isVisible
         }
 
-
-
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)

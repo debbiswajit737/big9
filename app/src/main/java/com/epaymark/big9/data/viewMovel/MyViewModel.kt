@@ -23,6 +23,7 @@ import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
 import com.epaymark.big9.data.model.MatmeportModel
 import com.epaymark.big9.data.model.MoveToBankBankListModel
+import com.epaymark.big9.data.model.MoveToWalletModel
 import com.epaymark.big9.data.model.PatternLoginModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
@@ -1659,7 +1660,21 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         }
     }
 
+    // Move To wallet
+    val moveToWalletLiveData: MutableLiveData<ResponseState<MoveToWalletModel>>
+    get() = repository.moveToWalletLiveData
+    fun moveToWallet(token: String, data: String) {
+        viewModelScope.launch {
+            repository.moveToWallet(token,data)
+        }
+    }
 
-
-
+    // $Move To wallet$
+    val submitMoveToWalletLiveData: MutableLiveData<ResponseState<SubmitMoveToBankBankListModel>>
+    get() = repository.submitMoveToWalletLiveData
+    fun submitMoveToWallet(token: String, data: String) {
+        viewModelScope.launch {
+            repository.submitMoveToWallet(token,data)
+        }
+    }
 }

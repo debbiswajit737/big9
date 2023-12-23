@@ -1,5 +1,7 @@
 package com.epaymark.big9.ui.base
 
+import android.app.Dialog
+import android.os.Bundle
 import android.text.InputFilter
 import android.widget.EditText
 import com.epaymark.big9.utils.helpers.Constants

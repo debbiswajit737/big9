@@ -68,6 +68,7 @@ class MoveToBankFragment : BaseFragment() {
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
             getBankList()
+
         }
 
         binding.recycleViewBankDetails.apply {
@@ -175,8 +176,6 @@ class MoveToBankFragment : BaseFragment() {
         }
     }
     fun getBankList(){
-
-
         val (isLogin, loginResponse) =sharedPreff.getLoginData()
         if (isLogin){
             loginResponse?.let {loginData->
