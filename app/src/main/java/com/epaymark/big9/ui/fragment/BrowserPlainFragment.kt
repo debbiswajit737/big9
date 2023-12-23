@@ -158,4 +158,9 @@ class BrowserPlainFragment : BaseFragment() {
             }
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        loader?.dismiss()
+    }
 }

@@ -145,7 +145,7 @@ class HomeFragment : BaseFragment() {
 
                     is ResponseState.Error -> {
                         loader?.dismiss()
-                        serviceNavigation(naviGationValue,"slug")
+                        //serviceNavigation(naviGationValue,"slug")
                         handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         viewModel?.checkServiceReceiptResponseLiveData?.value=null
                     }
