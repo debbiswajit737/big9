@@ -100,6 +100,8 @@
 
                     <EditText
                         android:id="@+id/et_mob"
+                        android:focusable="false"
+                        android:clickable="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/edit_text_height"
                         android:layout_marginTop="@dimen/edit_text_margin_top"
@@ -299,7 +301,7 @@
                     <!--Date of Birth End-->
 
 
-                    <!--State start-->
+
                     <TextView
                         android:id="@+id/tv_dob"
                         android:layout_width="match_parent"
@@ -324,7 +326,7 @@
                         android:textColor="@color/pink2"
                         android:textSize="@dimen/_9ssp"
                         android:visibility="gone" />
-
+                    <!--State start-->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -495,6 +497,10 @@
                             android:visibility="gone" />
                     </LinearLayout>
                     <!--City/District* End-->
+
+
+
+
 
 
                     <!--Area start-->

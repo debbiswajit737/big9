@@ -78,6 +78,7 @@ class AuthActivity : AppCompatActivity() {
             pinView.setOnClickListener {
 
             }
+
             btnConfirmLocation.setOnClickListener {
                 authViewModel.mobError.value=""
                 if (viewModel?.keyPadValue?.value?.length==10){

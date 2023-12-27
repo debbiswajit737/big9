@@ -2,6 +2,7 @@ package com.epaymark.big9.ui.fragment.regandkyc
 
 
 
+import android.app.Dialog
 import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
@@ -30,10 +31,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.window.layout.WindowMetricsCalculator
 import com.epaymark.big9.R
-import com.epaymark.big9.data.model.onBoading.RegForm
+import com.epaymark.big9.adapter.CityListAdapter
 
 import com.epaymark.big9.adapter.StateListAdapter
 import com.epaymark.big9.data.model.StateCityModel
+import com.epaymark.big9.data.model.onBoardindPackage.CityData
+import com.epaymark.big9.data.model.onBoardindPackage.StateData
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentRegBinding
 
@@ -43,22 +46,30 @@ import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
 import com.epaymark.big9.ui.popup.ErrorPopUp
 import com.epaymark.big9.ui.popup.LoadingPopup
+import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.isBackCamera
 import com.epaymark.big9.utils.helpers.PermissionUtils
 import com.epaymark.big9.utils.helpers.PermissionUtils.createAlertDialog
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack2
 import com.epaymark.big9.utils.`interface`.PermissionsCallback
+import com.google.gson.Gson
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.net.URLEncoder
 
 
 class RegFragment : BaseFragment() {
     lateinit var binding: FragmentRegBinding
-    var stateList = ArrayList<StateCityModel>()
+    var stateList = ArrayList<StateData>()
     var cityList = ArrayList<StateCityModel>()
     var stateListAdapter: StateListAdapter?=null
-    var cityListAdapter: StateListAdapter?=null
+    var cityListAdapter: CityListAdapter?=null
     var type=""
+    var isNext:Boolean=true
+    private var loader: Dialog? = null
     var loadingPopup: LoadingPopup? = null
     var errorPopUp: ErrorPopUp? = null
     private val authViewModel: AuthViewModel by activityViewModels()
@@ -106,35 +117,13 @@ class RegFragment : BaseFragment() {
 
                 })
             }
+            btnConfirmLocation.setOnClickListener {
+                isNext=false
+                saveUserInfoApiCall()
+            }
             btnNext.setOnClickListener {
-
-                if (authViewModel?.regValidation()==true) {
-                        val regModel = RegForm(
-                            name = authViewModel.name.value,
-                            mobile = authViewModel.mobile.value,
-                            alternativeMobile = authViewModel.alternativeMobile.value,
-                            email = authViewModel.email.value,
-                            address = authViewModel.address.value,
-                            pinCode = authViewModel.pinCode.value,
-                            dateOfBirth = authViewModel.dateOfBirth.value,
-                            state = authViewModel.state.value,
-                            city = authViewModel.city.value,
-                            area = authViewModel.area.value,
-                            aadhar = authViewModel.aadhar.value,
-                            panCardNo = authViewModel.panCardNo.value,
-                            llPanBase64 = authViewModel.llPanBase64.value,
-                            llCpanBase64 = authViewModel.llCpanBase64.value,
-                            llBpanBase64 = authViewModel.llBpanBase64.value,
-                            gender=authViewModel.genderReg.value
-                        )
-
-                       // val gson = Gson()
-                       // val json: JsonObject = gson.toJsonTree(regModel).asJsonObject
-
-                       // viewModel?.formRegistration(regModel)
-                        //json.toString().testDataFile()
-                   findNavController().navigate(R.id.action_regFragment_to_kycDetailsFragment)
-                }
+                isNext=true
+                saveUserInfoApiCall()
             }
 
             activity?.let {act->
@@ -191,6 +180,30 @@ class RegFragment : BaseFragment() {
 
 
 
+
+            binding.tvState.setOnClickListener {
+                authViewModel.state.value=""
+                //authViewModel.stateErrorVisible.value=true
+                //binding.etState.setText("")
+                if (binding.recycleState.isVisible){
+                    binding.recycleState.visibility = View.GONE
+                    binding.etState.visibility = View.GONE
+                }
+                else {
+                    binding.recycleState.visibility = View.VISIBLE
+                    binding.etState.visibility = View.VISIBLE
+                }
+
+                binding.tvStateListSearch.isVisible=binding.recycleState.isVisible
+                binding.tvState.isVisible=!binding.recycleState.isVisible
+            }
+            binding.tvStateListSearch.setOnClickListener {
+                binding.recycleState.visibility=View.GONE
+                binding.etState.visibility = View.GONE
+                binding.tvState.isVisible=!binding.recycleState.isVisible
+                binding.tvStateListSearch.isVisible=binding.recycleState.isVisible
+            }
+
         }
 
         /*binding.btnNext.setOnClickListener {
@@ -221,8 +234,83 @@ class RegFragment : BaseFragment() {
 
     }
 
+    private fun saveUserInfoApiCall() {
+        if (authViewModel?.regValidation()==true) {
+            val (isLogin, loginResponse) =sharedPreff.getLoginData()
+            authViewModel?.apply {
+                val data = mapOf(
+                    "userid" to loginResponse?.userid?.toString(),
+                    "name" to  name.value,
+                    "mobileno" to  mobile.value,
+                    "altmobileno" to  alternativeMobile.value,
+                    "emailid" to  email.value,
+                    "address" to  address.value,
+                    "pinCode" to  pinCode.value,
+                    "dob" to  dateOfBirth.value,
+                    "state" to  state.value,
+                    "city" to  city.value,
+                    "area" to  area.value,
+                    "gender" to  genderReg.value,
+                    "aadhaarno" to  aadhar.value,
+                    "pancardno" to  panCardNo.value,
+                    "panimagename" to authViewModel.llPan.value,
+                    "panimagetype" to authViewModel.llPanType.value,
+
+                     "panimagedata" to  authViewModel.llPanBase64.value,
+                    "aadharfrontimagename" to authViewModel.llCpan.value,
+                    "aadharfrontimagetype" to authViewModel.llCpanType.value,
+
+                    "aadharfrontimagedata" to  authViewModel.llCpanBase64.value,
+                    "aadharbackimagename" to authViewModel.llBpan.value,
+                    "aadharbackimagetype" to authViewModel.llBpanType.value,
+
+                    "aadharbackimagedata" to  authViewModel.llBpanBase64.value
+                )
+
+
+                val gson= Gson()
+                var jsonString = gson.toJson(data)
+                loginResponse?.AuthToken?.let {
+
+                    authViewModel?.onboardingBasicinfo(it,jsonString.encrypt())
+                }
+                /*
+                                        val regModel = RegForm(
+                                            name = authViewModel.name.value,
+                                            mobile = authViewModel.mobile.value,
+                                            alternativeMobile = authViewModel.alternativeMobile.value,
+                                            email = authViewModel.email.value,
+                                            address = authViewModel.address.value,
+                                            pinCode = authViewModel.pinCode.value,
+                                            dateOfBirth = authViewModel.dateOfBirth.value,
+                                            state = authViewModel.state.value,
+                                            city = authViewModel.city.value,
+                                            area = authViewModel.area.value,
+                                            aadhar = authViewModel.aadhar.value,
+                                            panCardNo = authViewModel.panCardNo.value,
+                                            llPanBase64 = authViewModel.llPanBase64.value,
+                                            llCpanBase64 = authViewModel.llCpanBase64.value,
+                                            llBpanBase64 = authViewModel.llBpanBase64.value,
+                                            gender=authViewModel.genderReg.value
+                                        )*/
+            }
+
+
+            // val gson = Gson()
+            // val json: JsonObject = gson.toJsonTree(regModel).asJsonObject
+
+            // viewModel?.formRegistration(regModel)
+            //json.toString().testDataFile()
+            // findNavController().navigate(R.id.action_regFragment_to_kycDetailsFragment)
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun initView() {
+
+        activity?.let {act->
+                    loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
+        }
         getScreenSize()
         setFocus()
         /*binding.llAadhar.setOnClickListener{
@@ -237,10 +325,18 @@ class RegFragment : BaseFragment() {
             myFocusCheck(binding.llAadhar)
 
         }*/
+        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+        loginResponse?.let { loginData ->
+            loginData.mobileNo?.let {
+               authViewModel.mobile.value=it
+                defaultAPICall()
+            }
+        }
 
         checkPermission()
+
         // Add all the states
-        stateList.add(StateCityModel(false,"Andhra Pradesh"))
+        /*stateList.add(StateCityModel(false,"Andhra Pradesh"))
         stateList.add(StateCityModel(false,"Arunachal Pradesh"))
         stateList.add(StateCityModel(false,"Assam"))
         stateList.add(StateCityModel(false,"Bihar"))
@@ -277,105 +373,46 @@ class RegFragment : BaseFragment() {
         stateList.add(StateCityModel(false,"Delhi (National Capital Territory of Delhi)"))
         stateList.add(StateCityModel(false,"Puducherry"))
         stateList.add(StateCityModel(false,"Ladakh"))
-        stateList.add(StateCityModel(false,"Jammu and Kashmir"))
-        binding.recycleState.apply {
-            binding.tvState.setOnClickListener {
-                authViewModel.state.value="A"
-                //authViewModel.stateErrorVisible.value=true
-                //binding.etState.setText("")
-                if (binding.recycleState.isVisible){
-                    binding.recycleState.visibility = View.GONE
-                    binding.etState.visibility = View.GONE
-                }
-                else {
-                    binding.recycleState.visibility = View.VISIBLE
-                    binding.etState.visibility = View.VISIBLE
-                }
+        stateList.add(StateCityModel(false,"Jammu and Kashmir"))*/
 
-                binding.tvStateListSearch.isVisible=binding.recycleState.isVisible
-                binding.tvState.isVisible=!binding.recycleState.isVisible
+
+
+
+        /*cityList.add(StateCityModel(false,"Kolkata"))
+        cityList.add(StateCityModel(false,"Asansol"))
+        cityList.add(StateCityModel(false,"Siliguri"))
+        cityList.add(StateCityModel(false,"Kolkata"))
+        cityList.add(StateCityModel(false,"Asansol"))
+        cityList.add(StateCityModel(false,"Siliguri"))
+        cityList.add(StateCityModel(false,"Kolkata"))
+        cityList.add(StateCityModel(false,"Asansol"))
+        cityList.add(StateCityModel(false,"Siliguri"))*/
+
+
+
+
+
+
+    }
+
+    private fun defaultAPICall() {
+        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+        loginResponse?.let { loginData ->
+            loginData.userid?.let {
+                val data = mapOf(
+                    "userid" to it,
+                    )
+
+
+                val gson =  Gson();
+                var jsonString = gson.toJson(data);
+                loginData.AuthToken?.let {
+                    authViewModel?.StateList(it,jsonString.encrypt())
+                }
             }
-            binding.tvStateListSearch.setOnClickListener {
-                binding.recycleState.visibility=View.GONE
-                binding.etState.visibility = View.GONE
-                binding.tvState.isVisible=!binding.recycleState.isVisible
-                binding.tvStateListSearch.isVisible=binding.recycleState.isVisible
-            }
-            stateListAdapter= StateListAdapter(stateList,object : CallBack {
-                override fun getValue(s: String) {
-                    //binding.tvState.text = s
-                    authViewModel.state.value=s
-                    authViewModel.stateErrorVisible.value=false
-                    binding.recycleState.visibility=View.GONE
-                    binding.etState.visibility = View.GONE
-                    binding.tvState.isVisible=!binding.recycleState.isVisible
-                    binding.tvStateListSearch.isVisible=binding.recycleState.isVisible
-                }
-
-            })
-        adapter=stateListAdapter
 
 
-        binding.etState.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    stateListAdapter?.filter?.filter(s)
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                }
-            })
         }
-
-
-
-        cityList.add(StateCityModel(false,"Kolkata"))
-        cityList.add(StateCityModel(false,"Asansol"))
-        cityList.add(StateCityModel(false,"Siliguri"))
-        cityList.add(StateCityModel(false,"Kolkata"))
-        cityList.add(StateCityModel(false,"Asansol"))
-        cityList.add(StateCityModel(false,"Siliguri"))
-        cityList.add(StateCityModel(false,"Kolkata"))
-        cityList.add(StateCityModel(false,"Asansol"))
-        cityList.add(StateCityModel(false,"Siliguri"))
-
-
-
-        binding.recycleCity.apply {
-
-            cityListAdapter= StateListAdapter(cityList,object : CallBack {
-                override fun getValue(s: String) {
-
-
-                    authViewModel.cityErrorVisible.value=false
-                    binding.recycleCity.visibility=View.GONE
-                    binding.etCity.visibility = View.GONE
-                    binding.tvCity.visibility = View.GONE
-                    binding.tvCityListSearch.visibility = View.GONE
-                    binding.tvCity.isVisible=!binding.recycleCity.isVisible
-                    //binding.tvCity.text = s
-                    authViewModel.city.value=s
-                }
-
-            })
-        adapter=cityListAdapter
-
-
-        binding.etCity.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    cityListAdapter?.filter?.filter(s)
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                }
-            })
-        }
-
 
     }
 
@@ -424,15 +461,25 @@ class RegFragment : BaseFragment() {
             when(type){
                 "llPan"->{
                     authViewModel.llPanBase64.value=it.uriToBase64(binding.root.context.contentResolver)
-                    authViewModel.llPan.value=it.getFileNameFromUri()
+                    //authViewModel.llPan.value=it.getFileNameFromUri()
+                    val (fileName, fileType) = it.getFileNameAndTypeFromUri(binding.root.context)
+                    authViewModel.llPan.value=fileName
+                    authViewModel.llPanType.value=fileType
                 }
                 "llCpan"->{
                     authViewModel.llCpanBase64.value=it.uriToBase64(binding.root.context.contentResolver)
-                    authViewModel.llCpan.value=it.getFileNameFromUri()
+                    //authViewModel.llCpan.value=it.getFileNameFromUri()
+
+                    val (fileName, fileType) = it.getFileNameAndTypeFromUri(binding.root.context)
+                    authViewModel.llCpan.value=fileName
+                    authViewModel.llCpanType.value=fileType
                 }
                 "llBpan"->{
                     authViewModel.llBpanBase64.value=it.uriToBase64(binding.root.context.contentResolver)
-                    authViewModel.llBpan.value=it.getFileNameFromUri()
+                    //authViewModel.llBpan.value=it.getFileNameFromUri()
+                    val (fileName, fileType) = it.getFileNameAndTypeFromUri(binding.root.context)
+                    authViewModel.llBpan.value=fileName
+                    authViewModel.llBpanType.value=fileType
                 }
             }
 
@@ -459,6 +506,76 @@ class RegFragment : BaseFragment() {
                                   }
                               }
                           }
+
+                  authViewModel?.StateListResponseLiveData?.observe(viewLifecycleOwner){
+                    when (it) {
+                        is ResponseState.Loading -> {
+                            loader?.show()
+                        }
+
+                        is ResponseState.Success -> {
+                            loader?.dismiss()
+
+                            /*stateList.add(StateData("1","a",false))
+                            stateList.add(StateData("2","b",false))
+                            stateList.add(StateData("3","c",false))
+                            stateList.add(StateData("4","d",false))
+                            stateList.add(StateData("5","e",false))*/
+                            stateList(stateList)
+
+                            stateListAdapter?.let {stateAdapter->
+
+                                    it.data?.data?.let {stateData->
+                                        //stateList(stateData)
+                                        //stateAdapter.items=  stateData
+                                        //stateAdapter?.notifyDataSetChanged()
+
+                                        /*stateList.add(StateData("1","a",false))
+                                        stateList.add(StateData("2","b",false))
+                                        stateList.add(StateData("3","c",false))
+                                        stateList.add(StateData("4","d",false))
+                                        stateList.add(StateData("5","e",false))*/
+
+                                        stateList(stateData)
+                                    }
+
+                            }
+
+                        }
+
+                        is ResponseState.Error -> {
+                            loader?.dismiss()
+                            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        }
+                    }
+                  }
+
+        authViewModel?.CityListResponseLiveData?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+
+
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+                    it.data?.data?.let {
+                        setCityListData(it)
+                    }
+                    /*if(!it.data?.data.isNullOrEmpty()){
+                        //cityListAdapter?.items= it.data?.data!!
+
+                    }*/
+
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
 
 
         /*authViewModel.formResponseLiveData.observe(viewLifecycleOwner) {
@@ -491,7 +608,64 @@ class RegFragment : BaseFragment() {
             }
         }*/
 
+        authViewModel?.onboardingBasicinfoResponseLiveData?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
 
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+                    if (isNext)
+                    findNavController().navigate(R.id.action_regFragment_to_kycDetailsFragment)
+                    else
+                        findNavController().popBackStack()
+
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
+
+    }
+
+    private fun setCityListData(cityData: ArrayList<CityData>) {
+        binding.recycleCity.apply {
+
+            cityListAdapter= CityListAdapter(cityData,object : CallBack {
+                override fun getValue(s: String) {
+
+
+                    authViewModel.cityErrorVisible.value=false
+                    binding.recycleCity.visibility=View.GONE
+                    binding.etCity.visibility = View.GONE
+                    binding.tvCity.visibility = View.GONE
+                    binding.tvCityListSearch.visibility = View.GONE
+                    binding.tvCity.isVisible=!binding.recycleCity.isVisible
+                    //binding.tvCity.text = s
+                    authViewModel.city.value=s
+                }
+
+            })
+
+            adapter=cityListAdapter
+
+
+            binding.etCity.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    cityListAdapter?.filter?.filter(s)
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+            })
+        }
     }
 
     private fun checkFocus() {
@@ -697,8 +871,58 @@ class RegFragment : BaseFragment() {
 
     }
 
-    fun observer(){
+    fun stateList(stateData: ArrayList<StateData>) {
+        binding.recycleState.apply {
+
+            stateListAdapter= StateListAdapter(stateData,object : CallBack2 {
+                override fun getValue2(s: String,id: String) {
+                    //binding.tvState.text = s
+                    authViewModel.state.value=s
+                    authViewModel.stateErrorVisible.value=false
+                    binding.recycleState.visibility=View.GONE
+                    binding.etState.visibility = View.GONE
+                    binding.tvState.isVisible=!binding.recycleState.isVisible
+                    binding.tvStateListSearch.isVisible=binding.recycleState.isVisible
 
 
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+
+                    loginResponse?.let {loginData->
+                        val data = mapOf(
+                            "userid" to loginData.userid,
+                            "stateid" to id
+
+                        )
+                        val  gson =  Gson();
+                        var jsonString = gson.toJson(data);
+                        loginData.AuthToken?.let {
+                            cityListAdapter?.items=ArrayList()
+                            cityListAdapter?.notifyDataSetChanged()
+                            authViewModel?.CityList(it,jsonString.encrypt())
+                            //    loader?.show()
+                        }
+                    }
+
+
+                }
+
+            })
+            adapter=stateListAdapter
+
+
+
+            binding.etState.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    stateListAdapter?.filter?.filter(s)
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+            })
+        }
     }
+
 }

@@ -47,6 +47,7 @@ import com.epaymark.big9.data.model.allReport.complaints_reportMode
 import com.epaymark.big9.data.model.allReport.loadRequestModel
 import com.epaymark.big9.data.model.allReport.receipt.Microatm_report_receipt
 import com.epaymark.big9.data.model.login.LoginResponse
+import com.epaymark.big9.data.model.onBoardindPackage.BasicInfo
 import com.epaymark.big9.data.model.otp.OtpResponse
 import com.epaymark.big9.data.model.paymentReport.PaymentReportResponse
 import com.epaymark.big9.data.model.profile.profileResponse
@@ -1677,4 +1678,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             repository.submitMoveToWallet(token,data)
         }
     }
+
+
+
 }

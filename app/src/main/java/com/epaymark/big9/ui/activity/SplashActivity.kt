@@ -23,6 +23,7 @@ import com.epaymark.big9.R
 import com.epaymark.big9.databinding.ActivitySplashBinding
 import com.epaymark.big9.ui.base.BaseActivity
 import com.epaymark.big9.ui.receipt.AgreementPageFragment
+import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.PermissionUtils
 
 import com.epaymark.big9.utils.helpers.SharedPreff

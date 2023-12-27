@@ -1,6 +1,5 @@
 package com.epaymark.big9.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,20 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epaymark.big9.utils.`interface`.CallBack
 import android.widget.Filter
 import android.widget.Filterable
-import com.epaymark.big9.databinding.StateListBinding
-import com.epaymark.big9.data.model.StateCityModel
-import com.epaymark.big9.data.model.onBoardindPackage.StateData
-import com.epaymark.big9.data.model.onBoardindPackage.StateListModel
-import com.epaymark.big9.utils.`interface`.CallBack2
+import com.epaymark.big9.data.model.onBoardindPackage.CityData
+import com.epaymark.big9.databinding.CityListBinding
 
-class StateListAdapter(var items: List<StateData>, private val callBack2: CallBack2) :
-    RecyclerView.Adapter<StateListAdapter.MyViewHolder>(), Filterable {
+class CityListAdapter(var items: List<CityData>, private val callBack: CallBack) :
+    RecyclerView.Adapter<CityListAdapter.MyViewHolder>(), Filterable {
 
-    private var filteredItems: List<StateData> = items
+    private var filteredItems: List<CityData> = items
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding: StateListBinding = StateListBinding.inflate(layoutInflater, parent, false)
+        val binding: CityListBinding = CityListBinding.inflate(layoutInflater, parent, false)
         return MyViewHolder(binding)
     }
 
@@ -34,9 +30,9 @@ class StateListAdapter(var items: List<StateData>, private val callBack2: CallBa
         return filteredItems.size
     }
 
-    inner class MyViewHolder(val binding: StateListBinding) :
+    inner class MyViewHolder(val binding: CityListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: StateData, position: Int) {
+        fun bind(item: CityData, position: Int) {
             //binding.tvState.text = item.stateCity
             binding.model = item
             binding.tvState.setOnClickListener {
@@ -45,7 +41,7 @@ class StateListAdapter(var items: List<StateData>, private val callBack2: CallBa
                     item.isSelecetd=false
                 }
                 filteredItems[position].isSelecetd=true
-                callBack2.getValue2(item.title.toString(),item.id.toString())
+                callBack.getValue(item.district.toString())
 
                 binding.executePendingBindings()
                 //Log.d("TAG_filteredItems", "bind: "+filteredItems)
@@ -65,7 +61,7 @@ class StateListAdapter(var items: List<StateData>, private val callBack2: CallBa
                     items
                 } else {
                     items.filter { item ->
-                        item.title?.lowercase()?.contains(charSequence)?:false
+                        item.district?.lowercase()?.contains(charSequence)?:false
                     }
                 }
                 val results = FilterResults()
@@ -74,14 +70,14 @@ class StateListAdapter(var items: List<StateData>, private val callBack2: CallBa
             }
 
             override fun publishResults(constraint: CharSequence, results: FilterResults) {
-                filteredItems = results.values as List<StateData>
+                filteredItems = results.values as List<CityData>
                 notifyDataSetChanged()
             }
         }
     }
 
     // Update the list of items
-    fun updateData(newItems: List<StateData>) {
+    fun updateData(newItems: List<CityData>) {
         items = newItems
         filteredItems = newItems
         notifyDataSetChanged()

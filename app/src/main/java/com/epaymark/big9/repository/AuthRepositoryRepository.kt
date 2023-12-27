@@ -45,6 +45,9 @@ import com.epaymark.big9.data.model.allReport.receipt.Microatm_report_receipt
 import com.epaymark.big9.data.model.login.LoginResponse
 import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.model.onBoading.RegForm
+import com.epaymark.big9.data.model.onBoardindPackage.BasicInfo
+import com.epaymark.big9.data.model.onBoardindPackage.CityListModel
+import com.epaymark.big9.data.model.onBoardindPackage.StateListModel
 import com.epaymark.big9.data.model.otp.OtpResponse
 import com.epaymark.big9.data.model.paymentReport.PaymentReportResponse
 import com.epaymark.big9.data.model.profile.profileResponse
@@ -1162,7 +1165,66 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         }
 
     }
-    
-    
+
+
+    //onboarding Basicinfo
+    private val _onboardingBasicinfoResponseLiveData =
+        MutableLiveData<ResponseState<BasicInfo>>()
+    val onboardingBasicinfoResponseLiveData: LiveData<ResponseState<BasicInfo>>
+        get() = _onboardingBasicinfoResponseLiveData
+
+
+    suspend fun onboardingBasicinfo(token: String, loginModel: String) {
+        _onboardingBasicinfoResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.onboardingBasicinfo(token, loginModel.replace("\n", "").replace("\r", ""))
+            _onboardingBasicinfoResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _onboardingBasicinfoResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //StateList
+    private val _StateListResponseLiveData =
+        MutableLiveData<ResponseState<StateListModel>>()
+    val StateListResponseLiveData: LiveData<ResponseState<StateListModel>>
+        get() = _StateListResponseLiveData
+
+
+    suspend fun StateList(token: String, loginModel: String) {
+        _StateListResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.StateList(token, loginModel.replace("\n", "").replace("\r", ""))
+            _StateListResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _StateListResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //CityList
+    private val _CityListResponseLiveData =
+        MutableLiveData<ResponseState<CityListModel>>()
+    val CityListResponseLiveData: LiveData<ResponseState<CityListModel>>
+        get() = _CityListResponseLiveData
+
+
+    suspend fun CityList(token: String, loginModel: String) {
+        _CityListResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.CityList(token, loginModel.replace("\n", "").replace("\r", ""))
+            _CityListResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _CityListResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
 }
 

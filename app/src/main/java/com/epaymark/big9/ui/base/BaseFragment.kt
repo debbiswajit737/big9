@@ -255,7 +255,8 @@ open class BaseFragment: Fragment(){
             this.context,
             R.style.MyDatePickerDialogTheme,
             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                val selectedDate = "$dayOfMonth-${month + 1}-$year" // +1 because months are zero-based
+                //val selectedDate = "$dayOfMonth-${month + 1}-$year" // +1 because months are zero-based
+                val selectedDate = "$year-${month + 1}-$dayOfMonth" // +1 because months are zero-based
                 callBack.getValue(selectedDate)
             },
             year,
@@ -386,6 +387,27 @@ open class BaseFragment: Fragment(){
             }
         }
         return fileName
+    }
+
+    fun Uri.getFileNameAndTypeFromUri(context: Context): Pair<String?, String?> {
+        var fileName: String? = null
+        var fileType: String? = null
+
+        context.contentResolver.query(this, null, null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val displayNameIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
+                val mimeTypeIndex = cursor.getColumnIndex(MediaStore.MediaColumns.MIME_TYPE)
+
+                fileName = cursor.getString(displayNameIndex)
+                fileType = cursor.getString(mimeTypeIndex)
+            }
+        }
+
+        if (fileName.isNullOrEmpty()) {
+            fileName = this.lastPathSegment
+        }
+
+        return Pair(fileName, fileType)
     }
 
     fun Fragment.hideKeyBoard(view:View){

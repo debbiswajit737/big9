@@ -128,6 +128,8 @@ class OtpMobileFragment : BaseFragment()  {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
+
+
                     authViewModel.otp.value=""
                     Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                     if (it.data?.step==null){

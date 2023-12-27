@@ -6,7 +6,7 @@
     <data>
         <variable
             name="model"
-            type="com.epaymark.big9.data.model.onBoardindPackage.StateData" />
+            type="com.epaymark.big9.data.model.onBoardindPackage.CityData" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:hint="state"
-        android:text="@{model.title}"
+        android:text="@{model.district}"
         android:background="@{model.isSelecetd==true?@color/c2:@color/white}"
         android:textColorHint="@color/black"
         android:padding="@dimen/_5sdp"

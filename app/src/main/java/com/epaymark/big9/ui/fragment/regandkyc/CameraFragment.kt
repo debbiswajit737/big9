@@ -318,7 +318,9 @@ class CameraFragment : BaseFragment() {
                     output.savedUri?.let { authViewModel.filePath.value = it
 
                         authViewModel?.filePath?.value = it
-                        findNavController().popBackStack()
+                        try {
+                            findNavController().popBackStack()
+                        }catch (e:Exception){}
                     }
                     //findNavController().navigate(R.id.action_cameraFragment_to_docuploadFragment)
                     //findNavController().popBackStack()

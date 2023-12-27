@@ -44,6 +44,9 @@ import com.epaymark.big9.data.model.allReport.receipt.Microatm_report_receipt
 import com.epaymark.big9.data.model.login.LoginResponse
 import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.model.onBoading.RegForm
+import com.epaymark.big9.data.model.onBoardindPackage.BasicInfo
+import com.epaymark.big9.data.model.onBoardindPackage.CityListModel
+import com.epaymark.big9.data.model.onBoardindPackage.StateListModel
 import com.epaymark.big9.data.model.otp.OtpResponse
 import com.epaymark.big9.data.model.paymentReport.PaymentReportResponse
 import com.epaymark.big9.data.model.profile.profileResponse
@@ -366,6 +369,22 @@ interface RetroApi {
     ): Response<SubmitMoveToBankBankListModel>
 
 
+    @POST("v1/onboarding/basicinfo")
+    suspend fun onboardingBasicinfo(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<BasicInfo>
 
 
+    @POST("v1/services/statelist")
+    suspend fun StateList(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<StateListModel>
+
+    @POST("v1/services/districtlist")
+    suspend fun CityList(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<CityListModel>
 }

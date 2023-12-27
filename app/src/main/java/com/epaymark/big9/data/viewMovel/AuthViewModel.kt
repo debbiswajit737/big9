@@ -12,6 +12,9 @@ import com.epaymark.big9.data.model.ResetTPINModel
 import com.epaymark.big9.data.model.login.LoginResponse
 import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.model.onBoading.RegForm
+import com.epaymark.big9.data.model.onBoardindPackage.BasicInfo
+import com.epaymark.big9.data.model.onBoardindPackage.CityListModel
+import com.epaymark.big9.data.model.onBoardindPackage.StateListModel
 import com.epaymark.big9.data.model.otp.OtpResponse
 import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.network.ResponseState
@@ -106,6 +109,14 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
     val llPan = MutableLiveData<String>()
     val llCpan = MutableLiveData<String>()
     val llBpan = MutableLiveData<String>()
+
+
+    val llPanType = MutableLiveData<String>()
+    val llCpanType = MutableLiveData<String>()
+    val llBpanType = MutableLiveData<String>()
+
+
+
 
 
     val genderReg = MutableLiveData<String>()
@@ -696,7 +707,32 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
         }
     }
 
+    //onboardingBasicinfo
+    val onboardingBasicinfoResponseLiveData: LiveData<ResponseState<BasicInfo>>
+        get() = repository.onboardingBasicinfoResponseLiveData
+    fun onboardingBasicinfo(token: String, data: String) {
+        viewModelScope.launch {
+            repository.onboardingBasicinfo(token,data)
+        }
+    }
 
 
+    //StateList
+    val StateListResponseLiveData: LiveData<ResponseState<StateListModel>>
+        get() = repository.StateListResponseLiveData
+    fun StateList(token: String, data: String) {
+        viewModelScope.launch {
+            repository.StateList(token,data)
+        }
+    }
+
+    //CityList
+    val CityListResponseLiveData: LiveData<ResponseState<CityListModel>>
+        get() = repository.CityListResponseLiveData
+    fun CityList(token: String, data: String) {
+        viewModelScope.launch {
+            repository.CityList(token,data)
+        }
+    }
 
 }
