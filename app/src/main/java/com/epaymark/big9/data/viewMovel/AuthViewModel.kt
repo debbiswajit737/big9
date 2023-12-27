@@ -23,6 +23,7 @@ import com.epaymark.big9.repository.AuthRepositoryRepository
 import com.epaymark.big9.utils.helpers.helper.validate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import javax.inject.Inject
 
 @HiltViewModel
@@ -114,6 +115,16 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
     val llPanType = MutableLiveData<String>()
     val llCpanType = MutableLiveData<String>()
     val llBpanType = MutableLiveData<String>()
+
+
+
+    val llPanSize = MutableLiveData<String>()
+    val llCpanSize = MutableLiveData<String>()
+    val llBpanSize = MutableLiveData<String>()
+
+
+
+
 
 
 
@@ -713,8 +724,24 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
     fun onboardingBasicinfo(token: String, data: String) {
         viewModelScope.launch {
             repository.onboardingBasicinfo(token,data)
+            //repository.onboardingBasicinfo(token,data)
         }
     }
+    //onboardingBasicinfo
+
+    fun onboardingBasicinfo2(
+        token: String,
+        data: String,
+        panimagedata: MultipartBody.Part,
+        aadharfrontimagedata: MultipartBody.Part?,
+        aadharbackimagedata: MultipartBody.Part?
+    ) {
+        viewModelScope.launch {
+            repository.onboardingBasicinfo2(token,data,panimagedata,aadharfrontimagedata,aadharbackimagedata)
+            //repository.onboardingBasicinfo(token,data)
+        }
+    }
+
 
 
     //StateList

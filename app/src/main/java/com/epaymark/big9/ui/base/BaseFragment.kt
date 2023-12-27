@@ -550,6 +550,23 @@ open class BaseFragment: Fragment(){
         this.isVisible=isVisible
         view.isVisible=!this.isVisible
     }
+
+    fun Uri.getImageSizeInMb(contentResolver: ContentResolver): Double? {
+        contentResolver.openInputStream(this)?.use { inputStream ->
+            val options = BitmapFactory.Options()
+            options.inJustDecodeBounds = true
+            BitmapFactory.decodeStream(inputStream, null, options)
+            val fileSizeInBytes = inputStream.available().toDouble()
+            val fileSizeInMb = fileSizeInBytes / (1024.0 * 1024.0) // Convert bytes to megabytes
+            return fileSizeInMb
+        }
+        return null
+        /*
+        val contentResolver: ContentResolver = // Your ContentResolver instance
+
+        val imageSizeInMb = uri.getImageSizeInMb(contentResolver)
+         */
+    }
 }
 
 

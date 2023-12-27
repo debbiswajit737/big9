@@ -1679,6 +1679,10 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         }
     }
 
+    private val _onboardingBasicinfoResponseLiveData =
+        MutableLiveData<ResponseState<BasicInfo>>()
+    val onboardingBasicinfoResponseLiveData: LiveData<ResponseState<BasicInfo>>
+        get() = _onboardingBasicinfoResponseLiveData
 
 
 }

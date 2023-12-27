@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.epaymark.big9.data.genericmodel.BaseResponse
-import com.epaymark.big9.data.model.AEPSReportData
 import com.epaymark.big9.data.model.AEPSReportModel
 import com.epaymark.big9.data.model.AddBankModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
@@ -13,7 +12,6 @@ import com.epaymark.big9.data.model.CheckServiceModel
 import com.epaymark.big9.data.model.CreditCardSendOtpModel
 import com.epaymark.big9.data.model.CreditCardVerifyOtpModel
 import com.epaymark.big9.data.model.DMTReportModel
-import com.epaymark.big9.data.model.DTHOperatorModel
 import com.epaymark.big9.data.model.DTHTranspherModel
 import com.epaymark.big9.data.model.DTHUserInfoModel
 import com.epaymark.big9.data.model.EPotlyTranspherModel
@@ -54,6 +52,9 @@ import com.epaymark.big9.data.model.profile.profileResponse
 import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetroApi
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
@@ -1184,6 +1185,68 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
             _onboardingBasicinfoResponseLiveData.postValue(ResponseState.create(throwable))
         }
 
+    }
+
+    //onboarding Basicinfo22
+    /*private val _onboardingBasicinfoResponseLiveData =
+        MutableLiveData<ResponseState<BasicInfo>>()
+    val onboardingBasicinfoResponseLiveData: LiveData<ResponseState<BasicInfo>>
+        get() = _onboardingBasicinfoResponseLiveData*/
+
+
+    suspend fun onboardingBasicinfo2(
+        token: String,
+        loginModel: String,
+        panimagedata: MultipartBody.Part,
+        aadharfrontimagedata: MultipartBody.Part?,
+        aadharbackimagedata: MultipartBody.Part?
+    ) {
+        _onboardingBasicinfoResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.onboardingBasicinfo2(token, loginModel.replace("\n", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull()),
+                    panimagedata,aadharfrontimagedata,aadharbackimagedata
+                    )
+            _onboardingBasicinfoResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _onboardingBasicinfoResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+
+
+    suspend fun onboardingBasicinfo(
+        token: String,
+        jsonData: String,
+        image1Base64: String?,
+        image2Base64: String?,
+        image3Base64: String?
+    ) {
+        try {
+            val jsonRequestBody = jsonData.toRequestBody("application/json".toMediaTypeOrNull())
+
+            val image1Part = image1Base64?.let {
+                val requestBody = it.toRequestBody("image/jpeg".toMediaTypeOrNull())
+                MultipartBody.Part.createFormData("image1", "image1.jpg", requestBody)
+            }
+
+            val image2Part = image2Base64?.let {
+                val requestBody = it.toRequestBody("image/jpeg".toMediaTypeOrNull())
+                MultipartBody.Part.createFormData("image2", "image2.jpg", requestBody)
+            }
+
+            val image3Part = image3Base64?.let {
+                val requestBody = it.toRequestBody("image/jpeg".toMediaTypeOrNull())
+                MultipartBody.Part.createFormData("image3", "image3.jpg", requestBody)
+            }
+
+            val response = api.onboardingBasicinfo(token, jsonRequestBody, image1Part, image2Part, image3Part)
+            // Handle response
+        } catch (throwable: Throwable) {
+            // Handle error
+        }
     }
 
     //StateList

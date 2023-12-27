@@ -55,9 +55,9 @@ import com.epaymark.big9.utils.`interface`.CallBack
 import com.epaymark.big9.utils.`interface`.CallBack2
 import com.epaymark.big9.utils.`interface`.PermissionsCallback
 import com.google.gson.Gson
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.net.URLEncoder
 
 
@@ -233,7 +233,11 @@ class RegFragment : BaseFragment() {
         }
 
     }
-
+    fun createImagePart(name: String, base64String: String): MultipartBody.Part {
+        val bytes = android.util.Base64.decode(base64String, android.util.Base64.DEFAULT)
+        val requestBody = bytes.toRequestBody("image/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(name, "image.jpg", requestBody)
+    }
     private fun saveUserInfoApiCall() {
         if (authViewModel?.regValidation()==true) {
             val (isLogin, loginResponse) =sharedPreff.getLoginData()
@@ -256,16 +260,23 @@ class RegFragment : BaseFragment() {
                     "panimagename" to authViewModel.llPan.value,
                     "panimagetype" to authViewModel.llPanType.value,
 
-                     "panimagedata" to  authViewModel.llPanBase64.value,
+                   /*  "panimagedata" to  authViewModel.llPanBase64.value,*/
                     "aadharfrontimagename" to authViewModel.llCpan.value,
                     "aadharfrontimagetype" to authViewModel.llCpanType.value,
 
-                    "aadharfrontimagedata" to  authViewModel.llCpanBase64.value,
+                    /*"aadharfrontimagedata" to  authViewModel.llCpanBase64.value,*/
                     "aadharbackimagename" to authViewModel.llBpan.value,
                     "aadharbackimagetype" to authViewModel.llBpanType.value,
 
-                    "aadharbackimagedata" to  authViewModel.llBpanBase64.value
+                    /*"aadharbackimagedata" to  authViewModel.llBpanBase64.value*/
                 )
+                var panimagedata=
+                    authViewModel.llPanBase64.value?.let { createImagePart("panimagedata", it) }
+                var aadharfrontimagedata=
+                    authViewModel.llCpanBase64.value?.let { createImagePart("panimagedata", it) }
+
+                var aadharbackimagedata=
+                    authViewModel.llBpanBase64.value?.let { createImagePart("panimagedata", it) }
 
 
                 val gson= Gson()
@@ -273,6 +284,9 @@ class RegFragment : BaseFragment() {
                 loginResponse?.AuthToken?.let {
 
                     authViewModel?.onboardingBasicinfo(it,jsonString.encrypt())
+                    if (panimagedata != null) {
+                       // authViewModel?.onboardingBasicinfo2(it,jsonString.encrypt(),panimagedata,aadharfrontimagedata,aadharbackimagedata)
+                    }
                 }
                 /*
                                         val regModel = RegForm(

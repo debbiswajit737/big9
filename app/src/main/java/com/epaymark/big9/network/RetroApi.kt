@@ -51,12 +51,16 @@ import com.epaymark.big9.data.model.otp.OtpResponse
 import com.epaymark.big9.data.model.paymentReport.PaymentReportResponse
 import com.epaymark.big9.data.model.profile.profileResponse
 import com.google.gson.JsonObject
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 
 interface RetroApi {
 
@@ -373,6 +377,28 @@ interface RetroApi {
     suspend fun onboardingBasicinfo(
         @Header("Authtoken") token: String,
         @Body data: String
+    ): Response<BasicInfo>
+    @Multipart
+    @POST("v1/onboarding/basicinfo")
+    suspend fun onboardingBasicinfo2(
+        @Header("Authtoken") token: String,
+        @Part("data") data: RequestBody,
+        @Part image1: MultipartBody.Part?,
+        @Part image2: MultipartBody.Part?,
+        @Part image3: MultipartBody.Part?
+    ): Response<BasicInfo>
+
+
+
+
+    @Multipart
+    @POST("v1/onboarding/basicinfo")
+    suspend fun onboardingBasicinfo(
+        @Header("Authtoken") token: String,
+        @Part("data") data: RequestBody,
+        @Part image1: MultipartBody.Part?,
+        @Part image2: MultipartBody.Part?,
+        @Part image3: MultipartBody.Part?
     ): Response<BasicInfo>
 
 
