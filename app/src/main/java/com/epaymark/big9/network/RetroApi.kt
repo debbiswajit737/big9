@@ -450,11 +450,38 @@ interface RetroApi {
         @Body data: String
     ): Response<banknameModel>
 
-    @POST("v1/onboarding/bank_details")
+    /*@POST("v1/onboarding/bank_details")
     suspend fun bankDetails(
         @Header("Authtoken") token: String,
         @Body data: String
+    ): Response<bankDetailsModel>*/
+
+
+    @Multipart
+    @POST("v1/onboarding/bank_details")
+    suspend fun bankDetails(
+        @Header("Authtoken") token: String,
+        @Part("data") data: RequestBody,
+        @Part image1: MultipartBody.Part?
     ): Response<bankDetailsModel>
 
+
+    @Multipart
+    @POST("v1/onboarding/document_upload")
+    suspend fun documentUpload(
+    @Header("Authtoken") token: String,
+    @Part("data") data: RequestBody,
+    @Part partnerPanCard: MultipartBody.Part?,
+    @Part companyPanCard: MultipartBody.Part?,
+    @Part partnerAadhaarFront: MultipartBody.Part?,
+    @Part partnerAadhaarBack: MultipartBody.Part?,
+    @Part gstin: MultipartBody.Part?,
+    @Part coi: MultipartBody.Part?,
+    @Part boardResolution: MultipartBody.Part?,
+    @Part tradeLicense: MultipartBody.Part?,
+    @Part userSelfi: MultipartBody.Part?,
+    @Part userScp: MultipartBody.Part?,
+    @Part videoKyc: MultipartBody.Part?,
+    ): Response<BasicInfo>
 
 }

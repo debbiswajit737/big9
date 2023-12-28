@@ -1428,11 +1428,17 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         get() = _bankDetailsResponseLiveData
 
 
-    suspend fun bankDetails(token: String, loginModel: String) {
+    suspend fun bankDetails(token: String, loginModel: String,panimagedata: MultipartBody.Part?) {
         _bankDetailsResponseLiveData.postValue(ResponseState.Loading())
         try {
+           /* val response =
+                api.bankDetails(token, loginModel.replace("\n", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull(),panimagedata))*/
+
             val response =
-                api.bankDetails(token, loginModel.replace("\n", "").replace("\r", ""))
+                api.bankDetails(token, loginModel.replace("\n", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull()),
+                    panimagedata
+                )
+
             _bankDetailsResponseLiveData.postValue(ResponseState.create(response, "aa"))
         } catch (throwable: Throwable) {
             _bankDetailsResponseLiveData.postValue(ResponseState.create(throwable))
@@ -1441,5 +1447,37 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     }
 
 
+    //onboarding Basicinfo
+    private val _documentUploadResponseLiveData =
+        MutableLiveData<ResponseState<BasicInfo>>()
+    val documentUploadResponseLiveData: LiveData<ResponseState<BasicInfo>>
+        get() = _documentUploadResponseLiveData
+    suspend fun documentUpload(
+        token: String,
+        loginModel: String,
+        partnerPanCard: MultipartBody.Part?,
+        companyPanCard: MultipartBody.Part?,
+        partnerAadhaarFront: MultipartBody.Part?,
+        partnerAadhaarBack: MultipartBody.Part?,
+        gstin: MultipartBody.Part?,
+        coi: MultipartBody.Part?,
+        boardResolution: MultipartBody.Part?,
+        tradeLicense: MultipartBody.Part?,
+        userSelfi: MultipartBody.Part?,
+        userScp: MultipartBody.Part?,
+        videoKyc: MultipartBody.Part?,
+    ) {
+        _documentUploadResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.documentUpload(token, loginModel.replace("\n", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull()),
+                    partnerPanCard,companyPanCard,partnerAadhaarFront,partnerAadhaarBack,gstin,coi,boardResolution,tradeLicense,userSelfi,userScp,videoKyc
+                )
+            _documentUploadResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _documentUploadResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
 }
 

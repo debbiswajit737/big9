@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,8 +16,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.epaymark.big9.R
+import com.epaymark.big9.adapter.spinnerAdapter.CustomSpinnerAdapter
 
-import com.epaymark.big9.data.model.onBoading.BankDetails
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.BankDetailsFragmentBinding
 import com.epaymark.big9.network.ResponseState
@@ -30,6 +29,9 @@ import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.`interface`.CallBack
 import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class BankDetailsFragment : BaseFragment() {
     lateinit var binding: BankDetailsFragmentBinding
@@ -55,35 +57,44 @@ class BankDetailsFragment : BaseFragment() {
     private fun onViewClick() {
         binding.btnSaveContinue.setOnClickListener {
             if (authViewModel.bankDetailsValidation()) {
-                val bankDetails = BankDetails(
+                /*val bankDetails = BankDetails(
                     beneficiaryName= authViewModel?.beneficiaryName?.value,
                     accountNumber= authViewModel?.accountNumber?.value,
                     confirmAccountNumber= authViewModel?.confirmAccountNumber?.value,
+
                     ifscCode= authViewModel?.ifscCode?.value,
                     employeeCode= authViewModel?.employeeCode?.value,
                     cancleCheckBase64= authViewModel?.cancleCheckBase64?.value,
                     bankName= authViewModel?.bankName?.value
-                )
+                )*/
 
-                val gson = Gson()
-                val json = gson.toJson(bankDetails)
-                //json.toString().testDataFile()
-                //findNavController().navigate(R.id.action_bankDetailsFragment_to_docuploadFragment)
 
-                val (isLogin, loginResponse) =sharedPreff.getLoginData()
-                if (isLogin){
-                    loginResponse?.let {loginData->
-                        val data = mapOf(
-                            "userid" to loginData.userid,
-                            "startdate" to "01-12-2023",
-                            "enddate" to "15-12-2023",
+
+                val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                loginResponse?.let { loginData ->
+                    loginData.userid?.let {
+
+
+
+                        val data2 = mapOf(
+                         "userid" to it,
+                        "baccountname" to authViewModel?.beneficiaryName?.value,
+                        "baccountno" to authViewModel?.accountNumber?.value,
+                        "confirm_acno" to authViewModel?.confirmAccountNumber?.value,
+                        "bank_name" to authViewModel?.bankName?.value,
+                        "ifsc_code" to authViewModel?.ifscCode?.value,
+                        "sm_mobile_no" to authViewModel?.beneficiaryName?.value,
+                       /* "cancelled_cheque" to authViewModel?.cancleCheckBase64?.value,*/
                         )
-                        val gson =  Gson();
-                        var jsonString = gson.toJson(data);
+                        var cancelled_cheque=
+                            authViewModel.cancleCheckBase64.value?.let { createImagePart("cancelled_cheque", it) }
+                        val gson = Gson()
+                        var jsonString2 = gson.toJson(data2);
                         loginData.AuthToken?.let {
-                            authViewModel?.bankDetails(it,jsonString.encrypt())
-                            //    loader?.show()
+                            authViewModel?.bankDetails(it, jsonString2.encrypt(),cancelled_cheque)
+
                         }
+
                     }
                 }
 
@@ -147,13 +158,37 @@ class BankDetailsFragment : BaseFragment() {
     fun setObserver() {
         authViewModel?.filePath?.observe(viewLifecycleOwner){
             it?.let {uti->
-                authViewModel?.cancleCheck?.value = uti.toString()
+               //authViewModel?.cancleCheck?.value = uti.toString()
                 authViewModel.cancleCheckBase64.value= Uri.parse(uti.toString()).uriToBase64(binding.root.context.contentResolver)
                 //authViewModel.pancardImage3.value=it.getFileNameFromUri()
                 //Log.d("TAG_file", "true setObserver: "+it.uriToBase64(binding.root.context.contentResolver))
-                 }
-        }
 
+                val (fileName, fileType) = it.getFileNameAndTypeFromUri(binding.root.context)
+                authViewModel?.cancleCheck?.value = fileName
+                 }
+
+
+        }
+        authViewModel?.bankDetailsResponseLiveData?.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+                    it.data?.data?.let {
+
+                    }
+
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
         authViewModel?.banknameResponseLiveData?.observe(viewLifecycleOwner){
             when (it) {
                 is ResponseState.Loading -> {
@@ -222,7 +257,15 @@ class BankDetailsFragment : BaseFragment() {
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
 
         if (uri != null) {
-            authViewModel?.cancleCheck?.value = uri.toString()
+
+
+            authViewModel.cancleCheckBase64.value= Uri.parse(uri.toString()).uriToBase64(binding.root.context.contentResolver)
+
+            val (fileName, fileType) = uri.getFileNameAndTypeFromUri(binding.root.context)
+            authViewModel?.cancleCheck?.value = fileName
+
+
+            //authViewModel?.cancleCheck?.value = uri.toString()
 
             //findNavController().navigate(R.id.action_homeFragment_to_previewFragment)
         } else {
@@ -236,8 +279,8 @@ class BankDetailsFragment : BaseFragment() {
     private fun setBusnessTypeSpinner(businesstypeData: Array<String>) {
         binding.apply {
             spinnerBank.apply {
-
-                adapter = ArrayAdapter<String>(this.context, R.layout.custom_spinner_item, businesstypeData)
+                adapter= CustomSpinnerAdapter(binding.root.context, businesstypeData)
+                //adapter = ArrayAdapter<String>(this.context, R.layout.custom_spinner_item, businesstypeData)
                 setSpinner(object : CallBack {
                     override fun getValue(s: String) {
                         authViewModel.bankName.value=s
@@ -250,5 +293,11 @@ class BankDetailsFragment : BaseFragment() {
         }
 
 
+    }
+
+    fun createImagePart(name: String, base64String: String): MultipartBody.Part {
+        val bytes = android.util.Base64.decode(base64String, android.util.Base64.DEFAULT)
+        val requestBody = bytes.toRequestBody("image/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(name, "image.jpg", requestBody)
     }
 }

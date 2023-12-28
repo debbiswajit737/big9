@@ -77,7 +77,7 @@ open class BaseFragment: Fragment(){
             if (inputStream != null) {
                 val bitmap = BitmapFactory.decodeStream(inputStream)
                 val byteArrayOutputStream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream)
                 val byteArray = byteArrayOutputStream.toByteArray()
                 return Base64.encodeToString(byteArray, Base64.DEFAULT)
             }
@@ -92,7 +92,21 @@ open class BaseFragment: Fragment(){
         }
         return null
     }
+    fun String.convertImageToBase64_2(): String? {
+        try {
+            val file = File(this)
+            val inputStream = FileInputStream(file)
+            val buffer = ByteArray(file.length().toInt())
+            inputStream.read(buffer)
+            inputStream.close()
 
+            val encodedString = Base64.encodeToString(buffer, Base64.DEFAULT)
+            return encodedString
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return null
+        }
+    }
     fun String.videoToBase64(): String? {
 
         try {

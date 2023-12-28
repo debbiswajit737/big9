@@ -809,10 +809,33 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
     //bankDetails
     val bankDetailsResponseLiveData: LiveData<ResponseState<bankDetailsModel>>
         get() = repository.bankDetailsResponseLiveData
-    fun bankDetails(token: String, data: String) {
+    fun bankDetails(token: String, data: String,panimagedata: MultipartBody.Part?) {
         viewModelScope.launch {
-            repository.bankDetails(token,data)
+            repository.bankDetails(token,data,panimagedata)
         }
     }
 
+    val documentUploadResponseLiveData: LiveData<ResponseState<BasicInfo>>
+        get() = repository.documentUploadResponseLiveData
+    fun documentUpload(
+        token: String,
+        data: String,
+        partnerPanCard: MultipartBody.Part?,
+        companyPanCard: MultipartBody.Part?,
+        partnerAadhaarFront: MultipartBody.Part?,
+        partnerAadhaarBack: MultipartBody.Part?,
+        gstin: MultipartBody.Part?,
+        coi: MultipartBody.Part?,
+        boardResolution: MultipartBody.Part?,
+        tradeLicense: MultipartBody.Part?,
+        userSelfi: MultipartBody.Part?,
+        userScp: MultipartBody.Part?,
+        videoKyc: MultipartBody.Part?,
+    ) {
+        viewModelScope.launch {
+            repository.documentUpload(token,data,partnerPanCard,companyPanCard,partnerAadhaarFront,
+                partnerAadhaarBack, gstin,coi,boardResolution,tradeLicense,userSelfi,userScp,videoKyc)
+            //repository.onboardingBasicinfo(token,data)
+        }
+    }
 }

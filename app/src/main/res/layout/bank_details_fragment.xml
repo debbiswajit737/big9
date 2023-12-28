@@ -261,7 +261,7 @@
                         android:inputType="textCapWords"
                         android:paddingVertical="@dimen/_5sdp"
                         android:paddingEnd="@dimen/_5sdp"
-                        android:paddingStart="@dimen/_2sdp"
+
                         android:textSize="@dimen/edit_text_size"
                         android:textColor="@color/black"
                         android:textColorHint="@color/gray"

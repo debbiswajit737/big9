@@ -474,7 +474,9 @@ class RegFragment : BaseFragment() {
         authViewModel?.filePath?.observe(viewLifecycleOwner){
             when(type){
                 "llPan"->{
+                    Log.d("TAG_tag", "setObserver: "+it)
                     authViewModel.llPanBase64.value=it.uriToBase64(binding.root.context.contentResolver)
+                    //authViewModel.llPanBase64.value=it.toString().convertImageToBase64_2()
 
                     //authViewModel.llPan.value=it.getFileNameFromUri()
                     val (fileName, fileType) = it.getFileNameAndTypeFromUri(binding.root.context)

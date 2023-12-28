@@ -27,6 +27,8 @@ import com.epaymark.big9.R
 import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.FragmentDocuploadBinding
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
 import com.epaymark.big9.ui.activity.DashboardActivity
 import com.epaymark.big9.ui.base.BaseFragment
@@ -39,6 +41,10 @@ import com.epaymark.big9.utils.helpers.Constants.isPdf
 import com.epaymark.big9.utils.helpers.Constants.isVideo
 import com.epaymark.big9.utils.helpers.SharedPreff
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import javax.inject.Inject
@@ -256,19 +262,91 @@ class DocuploadFragment : BaseFragment() {
                         if (docValidation()) {
                           //  sharedPreff?.setLoginData()
 
-                            val documentUploadModel = DocumentUploadModel(
-                                panPathBase64= panPathBase64.value/*?.encrypt()*/,
-                                cpanPathBase64=cpanPathBase64.value/*?.encrypt()*/,
-                                paadharBase64=paadharBase64.value/*?.encrypt()*/,
+                            /*val documentUploadModel = DocumentUploadModel(
+                                panPathBase64= panPathBase64.value*//*?.encrypt()*//*,
+                                cpanPathBase64=cpanPathBase64.value*//*?.encrypt()*//*,
+                                paadharBase64=paadharBase64.value*//*?.encrypt()*//*,
                                 partnerAadharBackBase64=PartnerAadharBackBase64.value?.encrypt(),
-                                llGstBase64=llGstBase64.value/*?.encrypt()*/,
-                                llCertificateOfIncorporationBase64=llCertificateOfIncorporationBase64.value/*?.encrypt()*/,
-                                llBoardResolutionBase64=llBoardResolutionBase64.value/*?.encrypt()*/,
-                                llTradeBase64=llTradeBase64 . value/*?.encrypt()*/,
-                                llUserSelfiBase64=llUserSelfiBase64.value/*?.encrypt()*/,
-                                llCselfiBase64=llCselfiBase64 . value/*?.encrypt()*/,
-                                videokycBase64=videokycBase64.value/*?.encrypt()*/,
-                            )
+                                llGstBase64=llGstBase64.value*//*?.encrypt()*//*,
+                                llCertificateOfIncorporationBase64=llCertificateOfIncorporationBase64.value*//*?.encrypt()*//*,
+                                llBoardResolutionBase64=llBoardResolutionBase64.value*//*?.encrypt()*//*,
+                                llTradeBase64=llTradeBase64 . value*//*?.encrypt()*//*,
+                                llUserSelfiBase64=llUserSelfiBase64.value*//*?.encrypt()*//*,
+                                llCselfiBase64=llCselfiBase64 . value*//*?.encrypt()*//*,
+                                videokycBase64=videokycBase64.value*//*?.encrypt()*//*,
+                            )*/
+
+                            val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                            authViewModel?.apply {
+                                val data = mapOf(
+                                    "userid" to loginResponse?.userid?.toString(),
+
+                                    )
+                               /* var panimagedata=
+                                    authViewModel.panPathBase64.value?.let { createImagePart("panimagedata", it) }
+                                var aadharfrontimagedata=
+                                    authViewModel.paadharBase64.value?.let { createImagePart("aadharfrontimagedata", it) }
+
+                                var aadharbackimagedata=
+                                    authViewModel.PartnerAadharBackBase64.value?.let { createImagePart("aadharbackimagedata", it) }
+*/
+
+                                var partnerPanCard=
+                                    authViewModel.panPathBase64.value?.let { createImagePart("partnerPanCard", it) }
+                                var companyPanCard=
+                                    authViewModel.cpanPathBase64.value?.let { createImagePart("companyPanCard", it) }
+                                var partnerAadhaarFront=
+                                    authViewModel.paadharBase64.value?.let { createImagePart("partnerAadhaarFront", it) }
+                                var partnerAadhaarBack=
+                                    authViewModel.PartnerAadharBackBase64.value?.let { createImagePart("partnerAadhaarBack", it) }
+                                var gstin=
+                                    authViewModel.llGstBase64.value?.let { createImagePart("gstin", it) }
+                                var coi=
+                                    authViewModel.llCertificateOfIncorporationBase64.value?.let { createImagePart("coi", it) }
+                                var boardResolution=
+                                    authViewModel.llBoardResolutionBase64.value?.let { createImagePart("boardResolution", it) }
+                                var tradeLicense=
+                                    authViewModel.llTradeBase64.value?.let { createImagePart("tradeLicense", it) }
+                                var userSelfi=
+                                    authViewModel.llUserSelfiBase64.value?.let { createImagePart("userSelfi", it) }
+                                var userScp=
+                                    authViewModel.llCselfiBase64.value?.let { createImagePart("userScp", it) }
+                                var videoKyc=
+                                    authViewModel.videokycBase64.value?.let { createVideoPart("videoKyc", it) }
+
+
+                                val gson= Gson()
+                                var jsonString = gson.toJson(data)
+                                loginResponse?.AuthToken?.let {
+                                    var encriptData=jsonString.encrypt()
+                                    //authViewModel?.onboardingBasicinfo(it,jsonString.encrypt())
+                                    //if (panimagedata != null) {
+                                    authViewModel?.documentUpload(it,encriptData,partnerPanCard,companyPanCard,partnerAadhaarFront,partnerAadhaarBack,gstin,
+                                        coi,boardResolution,userSelfi,tradeLicense,userScp,videoKyc)
+                                    //}
+                                }
+                                /*
+                                                        val regModel = RegForm(
+                                                            name = authViewModel.name.value,
+                                                            mobile = authViewModel.mobile.value,
+                                                            alternativeMobile = authViewModel.alternativeMobile.value,
+                                                            email = authViewModel.email.value,
+                                                            address = authViewModel.address.value,
+                                                            pinCode = authViewModel.pinCode.value,
+                                                            dateOfBirth = authViewModel.dateOfBirth.value,
+                                                            state = authViewModel.state.value,
+                                                            city = authViewModel.city.value,
+                                                            area = authViewModel.area.value,
+                                                            aadhar = authViewModel.aadhar.value,
+                                                            panCardNo = authViewModel.panCardNo.value,
+                                                            llPanBase64 = authViewModel.llPanBase64.value,
+                                                            llCpanBase64 = authViewModel.llCpanBase64.value,
+                                                            llBpanBase64 = authViewModel.llBpanBase64.value,
+                                                            gender=authViewModel.genderReg.value
+                                                        )*/
+                            }
+
+
 
                             //json.toString().testDataFile()
                             /*val regModel = DocumentUploadModel(
@@ -293,10 +371,13 @@ class DocuploadFragment : BaseFragment() {
                              */
 
                             //startActivity(Intent(requireActivity(), DashboardActivity::class.java))
-                            val intent = Intent(requireActivity(), DashboardActivity::class.java)
+                            //***
+                           /* val intent = Intent(requireActivity(), DashboardActivity::class.java)
                             intent.putExtra(isAfterReg,true)
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            requireActivity().startActivity(intent)
+                            requireActivity().startActivity(intent)*/
+
+                            //****
                              //authViewModel.documentRegistration(documentUploadModel)
 
                             //Toast.makeText(binding.root.context, "Ok", Toast.LENGTH_SHORT).show()
@@ -369,8 +450,8 @@ class DocuploadFragment : BaseFragment() {
 
     fun setObserver() {
 
-        authViewModel.apply {
-            authViewModel.filePath.observe(viewLifecycleOwner){
+        authViewModel?.apply {
+            filePath.observe(viewLifecycleOwner){
 
                 when(type){
                     "pan"->{
@@ -419,6 +500,27 @@ class DocuploadFragment : BaseFragment() {
 
                 //Log.d("TAG_file", "true setObserver: "+it.uriToBase64(binding.root.context.contentResolver))
             }
+            documentUploadResponseLiveData?.observe(viewLifecycleOwner){
+                when (it) {
+                    is ResponseState.Loading -> {
+                        loader?.show()
+                    }
+
+                    is ResponseState.Success -> {
+                        loader?.dismiss()
+                        val intent = Intent(requireActivity(), DashboardActivity::class.java)
+                        intent.putExtra(isAfterReg,true)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        requireActivity().startActivity(intent)
+
+                    }
+
+                    is ResponseState.Error -> {
+                        loader?.dismiss()
+                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    }
+                }
+            }
         }
 
     }
@@ -453,5 +555,16 @@ class DocuploadFragment : BaseFragment() {
             Log.d("PhotoPicker", "No media selected")
         }
 
+    }
+
+    fun createImagePart(name: String, base64String: String): MultipartBody.Part {
+        val bytes = android.util.Base64.decode(base64String, android.util.Base64.DEFAULT)
+        val requestBody = bytes.toRequestBody("image/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(name, "image.jpg", requestBody)
+    }
+    fun createVideoPart(name: String, base64String: String): MultipartBody.Part {
+        val bytes = android.util.Base64.decode(base64String, android.util.Base64.DEFAULT)
+        val requestBody = bytes.toRequestBody("video/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(name, "video.mp4", requestBody)
     }
 }
