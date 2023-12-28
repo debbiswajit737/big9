@@ -189,7 +189,7 @@ class HomeFragment : BaseFragment() {
                     val gson= Gson()
                     var jsonString = gson.toJson(data)
                     loginData.AuthToken?.let {
-                        checkService(it,jsonString.encrypt())
+                        checkHomePageService(it,jsonString.encrypt())
                     }
                 }
 

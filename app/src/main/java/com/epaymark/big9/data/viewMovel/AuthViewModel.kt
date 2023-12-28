@@ -9,6 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.FileModel
 import com.epaymark.big9.data.model.ResetTPINModel
+import com.epaymark.big9.data.model.bankDetailsModel
+import com.epaymark.big9.data.model.banknameModel
+import com.epaymark.big9.data.model.businessCategoryModel
+import com.epaymark.big9.data.model.businesstypeMethod
+import com.epaymark.big9.data.model.companyDetailsModel
 import com.epaymark.big9.data.model.login.LoginResponse
 import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.model.onBoading.RegForm
@@ -64,7 +69,9 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
     val aadharFontImage = MutableLiveData<String>()
     val aadharbackImage = MutableLiveData<String>()
     val businessType = MutableLiveData<String>()
+    val businessId = MutableLiveData<String>()
     val businessCategory = MutableLiveData<String>()
+    val businessCategoryId = MutableLiveData<String>()
     val businessName = MutableLiveData<String>()
     val businessAddress = MutableLiveData<String>()
     val partnerNameName = MutableLiveData<String>("")
@@ -732,7 +739,7 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
     fun onboardingBasicinfo2(
         token: String,
         data: String,
-        panimagedata: MultipartBody.Part,
+        panimagedata: MultipartBody.Part?,
         aadharfrontimagedata: MultipartBody.Part?,
         aadharbackimagedata: MultipartBody.Part?
     ) {
@@ -759,6 +766,52 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
     fun CityList(token: String, data: String) {
         viewModelScope.launch {
             repository.CityList(token,data)
+        }
+    }
+
+    //businesstype
+    val businesstypeResponseLiveData: LiveData<ResponseState<businesstypeMethod>>
+        get() = repository.businesstypeResponseLiveData
+    fun businesstype(token: String, data: String) {
+        viewModelScope.launch {
+            repository.businesstype(token,data)
+        }
+    }
+
+
+    //businesscategoryMethod
+    val businesscategoryMethodResponseLiveData: LiveData<ResponseState<businessCategoryModel>>
+        get() = repository.businesscategoryMethodResponseLiveData
+    fun businesscategoryMethod(token: String, data: String) {
+        viewModelScope.launch {
+            repository.businesscategoryMethod(token,data)
+        }
+    }
+
+
+    //companyDetailsMethod
+    val companyDetailsMethodResponseLiveData: LiveData<ResponseState<companyDetailsModel>>
+        get() = repository.companyDetailsMethodResponseLiveData
+    fun companyDetailsMethod(token: String, data: String) {
+        viewModelScope.launch {
+            repository.companyDetailsMethod(token,data)
+        }
+    }
+    //bankname
+    val banknameResponseLiveData: LiveData<ResponseState<banknameModel>>
+        get() = repository.banknameResponseLiveData
+    fun bankname(token: String, data: String) {
+        viewModelScope.launch {
+            repository.bankname(token,data)
+        }
+    }
+
+    //bankDetails
+    val bankDetailsResponseLiveData: LiveData<ResponseState<bankDetailsModel>>
+        get() = repository.bankDetailsResponseLiveData
+    fun bankDetails(token: String, data: String) {
+        viewModelScope.launch {
+            repository.bankDetails(token,data)
         }
     }
 

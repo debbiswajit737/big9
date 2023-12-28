@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/authentication_nav"
-    app:startDestination="@id/regFragment">
-
+    app:startDestination="@id/bankDetailsFragment">
+    <!--regFragment-->
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.epaymark.big9.ui.fragment.LoginFragment"

@@ -41,6 +41,11 @@ import com.epaymark.big9.data.model.allReport.complaints_reportMode
 import com.epaymark.big9.data.model.allReport.loadRequestModel
 import com.epaymark.big9.data.model.allReport.receipt.Dmt_report_receiptModel
 import com.epaymark.big9.data.model.allReport.receipt.Microatm_report_receipt
+import com.epaymark.big9.data.model.bankDetailsModel
+import com.epaymark.big9.data.model.banknameModel
+import com.epaymark.big9.data.model.businessCategoryModel
+import com.epaymark.big9.data.model.businesstypeMethod
+import com.epaymark.big9.data.model.companyDetailsModel
 import com.epaymark.big9.data.model.login.LoginResponse
 import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.model.onBoading.RegForm
@@ -413,4 +418,43 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<CityListModel>
+
+    @POST("v1/services/businesstype")
+    suspend fun businesstype(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<businesstypeMethod>
+
+    @POST("v1/services/businesscategory")
+    suspend fun businesstypeMethod(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<businessCategoryModel>
+
+    @POST("v1/services/businesscategory")
+    suspend fun businesscategoryMethod(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<businessCategoryModel>
+
+    @POST("v1/onboarding/company_details")
+    suspend fun companyDetailsMethod(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<companyDetailsModel>
+
+
+    @POST("v1/services/bankname")
+    suspend fun bankname(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<banknameModel>
+
+    @POST("v1/onboarding/bank_details")
+    suspend fun bankDetails(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<bankDetailsModel>
+
+
 }

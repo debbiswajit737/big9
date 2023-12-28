@@ -1606,6 +1606,17 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         }
     }
 
+    //Check service
+    val checkServiceReceiptHomePageResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
+        get() = repository.checkServiceHomeResponseLiveData
+    fun checkHomePageService(token: String, data: String) {
+        viewModelScope.launch {
+            repository.checkServiceHome(token,data)
+        }
+    }
+
+
+
     //matm reports
     val microatm_report_receiptResponseReceptLiveData: MutableLiveData<ResponseState<MatmeportModel>>
         get() = repository.microatm_report_receiptResponseReceptLiveData

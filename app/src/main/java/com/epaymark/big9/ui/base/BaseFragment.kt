@@ -15,6 +15,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.text.InputFilter
 import android.util.Base64
 import android.util.Log
@@ -60,6 +61,7 @@ import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 open class BaseFragment: Fragment(){
@@ -566,6 +568,34 @@ open class BaseFragment: Fragment(){
 
         val imageSizeInMb = uri.getImageSizeInMb(contentResolver)
          */
+    }
+
+
+    fun Uri.getImageSize(context: Context): String {
+        val contentResolver: ContentResolver = context.contentResolver
+
+        // Get the file's display name and size
+        contentResolver.query(this, null, null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val displayNameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+
+                val displayName = cursor.getString(displayNameIndex)
+                val size = cursor.getLong(sizeIndex)
+
+                // Convert the size to appropriate units
+                val sizeString = when {
+                    size >= 1e9 -> "${(size / 1e9).roundToInt()} GB"
+                    size >= 1e6 -> "${(size / 1e6).roundToInt()} MB"
+                    size >= 1e3 -> "${(size / 1e3).roundToInt()} KB"
+                    else -> "$size bytes"
+                }
+
+                return "File: $displayName\nSize: $sizeString"
+            }
+        }
+
+        return "File not found"
     }
 }
 

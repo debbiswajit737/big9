@@ -40,6 +40,11 @@ import com.epaymark.big9.data.model.allReport.commissionReportModel
 import com.epaymark.big9.data.model.allReport.complaints_reportMode
 import com.epaymark.big9.data.model.allReport.loadRequestModel
 import com.epaymark.big9.data.model.allReport.receipt.Microatm_report_receipt
+import com.epaymark.big9.data.model.bankDetailsModel
+import com.epaymark.big9.data.model.banknameModel
+import com.epaymark.big9.data.model.businessCategoryModel
+import com.epaymark.big9.data.model.businesstypeMethod
+import com.epaymark.big9.data.model.companyDetailsModel
 import com.epaymark.big9.data.model.login.LoginResponse
 import com.epaymark.big9.data.model.onBoading.DocumentUploadModel
 import com.epaymark.big9.data.model.onBoading.RegForm
@@ -963,6 +968,35 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     }
 
+
+    //Check service home
+    private val _checkServiceHomeResponseLiveData =
+        MutableLiveData<ResponseState<CheckServiceModel>>()
+    val checkServiceHomeResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
+        get() = _checkServiceHomeResponseLiveData
+
+    suspend fun checkServiceHome(token: String, loginModel: String) {
+        _checkServiceHomeResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response = api.checkService(
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
+            )
+            _checkServiceHomeResponseLiveData.postValue(
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
+            )
+        } catch (throwable: Throwable) {
+            _checkServiceHomeResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+
+
     //MATM
     private val _microatm_report_receiptResponseReceptLiveData =
         MutableLiveData<ResponseState<MatmeportModel>>()
@@ -1197,7 +1231,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     suspend fun onboardingBasicinfo2(
         token: String,
         loginModel: String,
-        panimagedata: MultipartBody.Part,
+        panimagedata: MultipartBody.Part?,
         aadharfrontimagedata: MultipartBody.Part?,
         aadharbackimagedata: MultipartBody.Part?
     ) {
@@ -1284,6 +1318,124 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
             _CityListResponseLiveData.postValue(ResponseState.create(response, "aa"))
         } catch (throwable: Throwable) {
             _CityListResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //businesstype
+    private val _businesstypeResponseLiveData =
+        MutableLiveData<ResponseState<businesstypeMethod>>()
+    val businesstypeResponseLiveData: LiveData<ResponseState<businesstypeMethod>>
+        get() = _businesstypeResponseLiveData
+
+
+    suspend fun businesstype(token: String, loginModel: String) {
+        _businesstypeResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.businesstype(token, loginModel.replace("\n", "").replace("\r", ""))
+            _businesstypeResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _businesstypeResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+
+    //businesstypeMethod
+    private val _businesstypeMethodResponseLiveData =
+        MutableLiveData<ResponseState<businessCategoryModel>>()
+    val businesstypeMethodResponseLiveData: LiveData<ResponseState<businessCategoryModel>>
+        get() = _businesstypeMethodResponseLiveData
+
+
+    suspend fun businesstypeMethod(token: String, loginModel: String) {
+        _businesstypeMethodResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.businesstypeMethod(token, loginModel.replace("\n", "").replace("\r", ""))
+            _businesstypeMethodResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _businesstypeMethodResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //businesscategoryMethod
+    private val _businesscategoryMethodResponseLiveData =
+        MutableLiveData<ResponseState<businessCategoryModel>>()
+    val businesscategoryMethodResponseLiveData: LiveData<ResponseState<businessCategoryModel>>
+        get() = _businesscategoryMethodResponseLiveData
+
+
+    suspend fun businesscategoryMethod(token: String, loginModel: String) {
+        _businesscategoryMethodResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.businesscategoryMethod(token, loginModel.replace("\n", "").replace("\r", ""))
+            _businesscategoryMethodResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _businesscategoryMethodResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //companyDetailsMethod
+    private val _companyDetailsMethodResponseLiveData =
+        MutableLiveData<ResponseState<companyDetailsModel>>()
+    val companyDetailsMethodResponseLiveData: LiveData<ResponseState<companyDetailsModel>>
+        get() = _companyDetailsMethodResponseLiveData
+
+
+    suspend fun companyDetailsMethod(token: String, loginModel: String) {
+        _companyDetailsMethodResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.companyDetailsMethod(token, loginModel.replace("\n", "").replace("\r", ""))
+            _companyDetailsMethodResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _companyDetailsMethodResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //bankname
+    private val _banknameResponseLiveData =
+        MutableLiveData<ResponseState<banknameModel>>()
+    val banknameResponseLiveData: LiveData<ResponseState<banknameModel>>
+        get() = _banknameResponseLiveData
+
+
+    suspend fun bankname(token: String, loginModel: String) {
+        _banknameResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.bankname(token, loginModel.replace("\n", "").replace("\r", ""))
+            _banknameResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _banknameResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //bankDetails
+    private val _bankDetailsResponseLiveData =
+        MutableLiveData<ResponseState<bankDetailsModel>>()
+    val bankDetailsResponseLiveData: LiveData<ResponseState<bankDetailsModel>>
+        get() = _bankDetailsResponseLiveData
+
+
+    suspend fun bankDetails(token: String, loginModel: String) {
+        _bankDetailsResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.bankDetails(token, loginModel.replace("\n", "").replace("\r", ""))
+            _bankDetailsResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _bankDetailsResponseLiveData.postValue(ResponseState.create(throwable))
         }
 
     }

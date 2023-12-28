@@ -131,7 +131,7 @@ class OtpMobileFragment : BaseFragment()  {
 
 
                     authViewModel.otp.value=""
-                    Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                     if (it.data?.step==null){
                         (activity as? RegActivity)?.let {
                             val intent=Intent(requireActivity(), DashboardActivity::class.java)

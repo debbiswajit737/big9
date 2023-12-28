@@ -113,7 +113,7 @@ class ViewMoreFragment : BaseFragment() {
 
     fun setObserver() {
         binding.apply {
-            viewModel?.checkServiceReceiptResponseLiveData?.observe(viewLifecycleOwner){
+            viewModel?.checkServiceReceiptHomePageResponseLiveData?.observe(viewLifecycleOwner){
                 when (it) {
                     is ResponseState.Loading -> {
                         loader?.show()
@@ -130,7 +130,8 @@ class ViewMoreFragment : BaseFragment() {
                     is ResponseState.Error -> {
                         loader?.dismiss()
 
-
+                        //delete this code. it is for testing
+                        serviceNavigation(naviGationValue,"slug")
 
 
                         handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)

@@ -273,20 +273,20 @@ class RegFragment : BaseFragment() {
                 var panimagedata=
                     authViewModel.llPanBase64.value?.let { createImagePart("panimagedata", it) }
                 var aadharfrontimagedata=
-                    authViewModel.llCpanBase64.value?.let { createImagePart("panimagedata", it) }
+                    authViewModel.llCpanBase64.value?.let { createImagePart("aadharfrontimagedata", it) }
 
                 var aadharbackimagedata=
-                    authViewModel.llBpanBase64.value?.let { createImagePart("panimagedata", it) }
+                    authViewModel.llBpanBase64.value?.let { createImagePart("aadharbackimagedata", it) }
 
 
                 val gson= Gson()
                 var jsonString = gson.toJson(data)
                 loginResponse?.AuthToken?.let {
-
-                    authViewModel?.onboardingBasicinfo(it,jsonString.encrypt())
-                    if (panimagedata != null) {
-                       // authViewModel?.onboardingBasicinfo2(it,jsonString.encrypt(),panimagedata,aadharfrontimagedata,aadharbackimagedata)
-                    }
+                    var encriptData=jsonString.encrypt()
+                    //authViewModel?.onboardingBasicinfo(it,jsonString.encrypt())
+                    //if (panimagedata != null) {
+                        authViewModel?.onboardingBasicinfo2(it,encriptData,panimagedata,aadharfrontimagedata,aadharbackimagedata)
+                    //}
                 }
                 /*
                                         val regModel = RegForm(
@@ -475,10 +475,12 @@ class RegFragment : BaseFragment() {
             when(type){
                 "llPan"->{
                     authViewModel.llPanBase64.value=it.uriToBase64(binding.root.context.contentResolver)
+
                     //authViewModel.llPan.value=it.getFileNameFromUri()
                     val (fileName, fileType) = it.getFileNameAndTypeFromUri(binding.root.context)
                     authViewModel.llPan.value=fileName
                     authViewModel.llPanType.value=fileType
+                    Log.d("TAG_imagesize", "setObserver:pan "+it.getImageSize(binding.root.context))
                 }
                 "llCpan"->{
                     authViewModel.llCpanBase64.value=it.uriToBase64(binding.root.context.contentResolver)
@@ -487,6 +489,7 @@ class RegFragment : BaseFragment() {
                     val (fileName, fileType) = it.getFileNameAndTypeFromUri(binding.root.context)
                     authViewModel.llCpan.value=fileName
                     authViewModel.llCpanType.value=fileType
+                    Log.d("TAG_imagesize", "setObserver:aadhar font "+it.getImageSize(binding.root.context))
                 }
                 "llBpan"->{
                     authViewModel.llBpanBase64.value=it.uriToBase64(binding.root.context.contentResolver)
@@ -494,6 +497,7 @@ class RegFragment : BaseFragment() {
                     val (fileName, fileType) = it.getFileNameAndTypeFromUri(binding.root.context)
                     authViewModel.llBpan.value=fileName
                     authViewModel.llBpanType.value=fileType
+                    Log.d("TAG_imagesize", "setObserver:aadhar back "+it.getImageSize(binding.root.context))
                 }
             }
 

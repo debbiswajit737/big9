@@ -1,6 +1,7 @@
 package com.epaymark.big9.ui.fragment.regandkyc
 
 
+import android.app.Dialog
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -20,9 +21,12 @@ import com.epaymark.big9.R
 import com.epaymark.big9.data.model.onBoading.BankDetails
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.databinding.BankDetailsFragmentBinding
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
+import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.`interface`.CallBack
 import com.google.gson.Gson
@@ -30,6 +34,7 @@ import com.google.gson.Gson
 class BankDetailsFragment : BaseFragment() {
     lateinit var binding: BankDetailsFragmentBinding
     private val authViewModel: AuthViewModel by activityViewModels()
+    private var loader: Dialog? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,8 +68,26 @@ class BankDetailsFragment : BaseFragment() {
                 val gson = Gson()
                 val json = gson.toJson(bankDetails)
                 //json.toString().testDataFile()
-                findNavController().navigate(R.id.action_bankDetailsFragment_to_docuploadFragment)
-             }
+                //findNavController().navigate(R.id.action_bankDetailsFragment_to_docuploadFragment)
+
+                val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                if (isLogin){
+                    loginResponse?.let {loginData->
+                        val data = mapOf(
+                            "userid" to loginData.userid,
+                            "startdate" to "01-12-2023",
+                            "enddate" to "15-12-2023",
+                        )
+                        val gson =  Gson();
+                        var jsonString = gson.toJson(data);
+                        loginData.AuthToken?.let {
+                            authViewModel?.bankDetails(it,jsonString.encrypt())
+                            //    loader?.show()
+                        }
+                    }
+                }
+
+            }
             }
 
         binding.llCheck.setOnClickListener{
@@ -83,21 +106,42 @@ class BankDetailsFragment : BaseFragment() {
     }
 
     fun initView() {
-        binding.apply {
-            spinnerBank.apply {
-                val bankArray = arrayOf("Select Bank", "A B Bank Limited","Andhra Bank")
-                adapter = ArrayAdapter<String>(this.context, R.layout.custom_spinner_item, bankArray)
-                setSpinner(object : CallBack {
-                    override fun getValue(s: String) {
-                        authViewModel.bankName.value=s
-                        viewModel?.bankNameErrorVisible?.value = s.equals("Select Bank")
 
-                        // Toast.makeText(binding.root.context, "$s", Toast.LENGTH_SHORT).show()
-                    }
-                },bankArray)
-            }
+        activity?.let {act->
+                    loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
         }
 
+        defaultApiCall()
+
+    }
+
+    private fun defaultApiCall() {
+        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+        loginResponse?.let { loginData ->
+            loginData.userid?.let {
+                val data = mapOf(
+                    "userid" to it
+                )
+                val gson =  Gson()
+                var jsonString = gson.toJson(data);
+                loginData.AuthToken?.let {
+                    authViewModel?.businesstype(it,jsonString.encrypt())
+                }
+
+
+
+                val data2 = mapOf(
+                    "userid" to it
+                )
+
+                var jsonString2 = gson.toJson(data2);
+                loginData.AuthToken?.let {
+                    authViewModel?.bankname(it,jsonString2.encrypt())
+
+                }
+
+            }
+        }
     }
 
     fun setObserver() {
@@ -109,6 +153,38 @@ class BankDetailsFragment : BaseFragment() {
                 //Log.d("TAG_file", "true setObserver: "+it.uriToBase64(binding.root.context.contentResolver))
                  }
         }
+
+        authViewModel?.banknameResponseLiveData?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+                    it.data?.data?.let {
+
+
+                        var dataArray = Array<String>(it.size) { "" }
+
+                        for (index in it.indices){
+                            dataArray[index]= it[index].title.toString()
+
+                        }
+                        setBusnessTypeSpinner(dataArray)
+                    }
+
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
+
+
+
     }
 
     fun Spinner.setSpinner(callBack: CallBack, genderArray: Array<String>){
@@ -154,6 +230,25 @@ class BankDetailsFragment : BaseFragment() {
 
             Log.d("PhotoPicker", "No media selected")
         }
+
+    }
+
+    private fun setBusnessTypeSpinner(businesstypeData: Array<String>) {
+        binding.apply {
+            spinnerBank.apply {
+
+                adapter = ArrayAdapter<String>(this.context, R.layout.custom_spinner_item, businesstypeData)
+                setSpinner(object : CallBack {
+                    override fun getValue(s: String) {
+                        authViewModel.bankName.value=s
+                        viewModel?.bankNameErrorVisible?.value = s.equals("Select Bank")
+
+                        // Toast.makeText(binding.root.context, "$s", Toast.LENGTH_SHORT).show()
+                    }
+                },businesstypeData)
+            }
+        }
+
 
     }
 }
