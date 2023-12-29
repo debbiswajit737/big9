@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.AEPSReportModel
 import com.epaymark.big9.data.model.AddBankModel
+import com.epaymark.big9.data.model.AllBankListModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
 import com.epaymark.big9.data.model.ChangeUserTPINPasswordModel
 import com.epaymark.big9.data.model.CheckServiceModel
@@ -19,6 +20,8 @@ import com.epaymark.big9.data.model.MatmeportModel
 import com.epaymark.big9.data.model.MoveToBankBankListModel
 import com.epaymark.big9.data.model.MoveToWalletModel
 import com.epaymark.big9.data.model.PatternLoginModel
+import com.epaymark.big9.data.model.PaymentREquistModeModel
+import com.epaymark.big9.data.model.PaymentRequistModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
@@ -1479,5 +1482,69 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         }
 
     }
+
+    //bankList
+    private val _bankListResponseLiveData =
+        MutableLiveData<ResponseState<AllBankListModel>>()
+    val bankListResponseLiveData: LiveData<ResponseState<AllBankListModel>>
+        get() = _bankListResponseLiveData
+
+
+    suspend fun bankList(token: String, loginModel: String) {
+        _bankListResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.bankList(token, loginModel.replace("\n", "").replace("\r", ""))
+            _bankListResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _bankListResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //PaymentREquistMode
+    private val _PaymentREquistModeResponseLiveData =
+        MutableLiveData<ResponseState<PaymentREquistModeModel>>()
+    val PaymentREquistModeResponseLiveData: LiveData<ResponseState<PaymentREquistModeModel>>
+        get() = _PaymentREquistModeResponseLiveData
+
+
+    suspend fun PaymentREquistMode(token: String, loginModel: String) {
+        _PaymentREquistModeResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.PaymentREquistMode(token, loginModel.replace("\n", "").replace("\r", ""))
+            _PaymentREquistModeResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _PaymentREquistModeResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //PaymentRequist
+    private val _PaymentRequistResponseLiveData =
+        MutableLiveData<ResponseState<PaymentRequistModel>>()
+    val PaymentRequistResponseLiveData: LiveData<ResponseState<PaymentRequistModel>>
+        get() = _PaymentRequistResponseLiveData
+
+
+    suspend fun PaymentRequist(token: String, loginModel: String,paymentSlip: MultipartBody.Part?,denomSlip: MultipartBody.Part?) {
+        _PaymentRequistResponseLiveData.postValue(ResponseState.Loading())
+        try {
+           /* val response =
+                api.PaymentRequist(token, loginModel.replace("\n", "").replace("\r", ""))*/
+            val response =
+                api.PaymentRequist(token, loginModel.replace("\n", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull()),
+                    paymentSlip,denomSlip
+                )
+            _PaymentRequistResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _PaymentRequistResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
 }
 

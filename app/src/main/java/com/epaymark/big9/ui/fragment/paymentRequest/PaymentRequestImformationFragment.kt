@@ -1,6 +1,8 @@
 package com.epaymark.big9.ui.fragment.paymentRequest
 
 
+import android.app.Dialog
+import android.content.ContentResolver
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -19,19 +21,35 @@ import com.epaymark.big9.R
 import com.epaymark.big9.data.viewMovel.AuthViewModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.FragmentPaymentRequestImformationBinding
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
+import com.epaymark.big9.ui.popup.SuccessPopupFragment
+import com.epaymark.big9.ui.receipt.EPotlyReceptDialogFragment
+import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.isGallary
 import com.epaymark.big9.utils.helpers.Constants.isIsPaySlip
 import com.epaymark.big9.utils.helpers.Constants.isVideo
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack4
+import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
+import java.util.Objects
 
 class PaymentRequestImformationFragment : BaseFragment() {
     lateinit var binding: FragmentPaymentRequestImformationBinding
     private val viewModel: MyViewModel by activityViewModels()
     private var authViewModel: AuthViewModel?=null
+    private var loader: Dialog? = null
+    var paySleeyUri:String?=""
+    var denomSlipUri:Uri?=null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,17 +65,24 @@ class PaymentRequestImformationFragment : BaseFragment() {
         initView()
         setObserver()
         onViewClick()
+        Log.d("TAG_payment", "onViewCreated: 1")
     }
 
     override fun onResume() {
         super.onResume()
         if (isIsPaySlip){
             authViewModel?.filePath?.observe(viewLifecycleOwner){
+
+                paySleeyUri=it.uriToBase64(binding.root.context.contentResolver)
+
+                Log.d("TAG_payment", "onViewCreated: 2 "+paySleeyUri)
+                //denomSlipUri=it
                 binding.imgPlaySlip.setImage(it)
             }
 
             isIsPaySlip=false
         }
+        Log.d("TAG_payment", "onViewCreated: 3 ")
     }
     private fun onViewClick() {
         binding.apply {
@@ -92,7 +117,46 @@ class PaymentRequestImformationFragment : BaseFragment() {
             }
             btnSubmit.setOnClickListener{
                 if (viewModel?.PaymentrequestValidation() == true){
-                    Toast.makeText(requireActivity(), "Ok", Toast.LENGTH_SHORT).show()
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    loginResponse?.let { loginData ->
+                        loginData.userid?.let {
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+
+                            "bankid" to viewModel?.selectedBankId?.value,
+                            "ftype" to "F1",
+                            "prmode" to "",
+                            "depositamount" to viewModel?.paymentAmt?.value,
+                            "depositdate" to viewModel?.depositeDate?.value,
+                            "bankreference" to "1",//viewModel?.transActionId?.value,
+                            "remarks" to viewModel?.particular?.value,
+                            "txtquantity10" to "",
+                            "txtquantity20" to "",
+                            "txtquantity50" to "",
+                            "txtquantity100" to "",
+                            "txtquantity200" to "",
+                            "txtquantity500" to "",
+                            "txtquantity2000" to ""
+
+                            )
+
+                            var PaymentSlip=
+                                //paySleeyUri?.let { it.createImagePart("paymentSlip") }
+                            paySleeyUri?.let { createImagePart("paymentSlip", it) }
+                            var denomSlip=
+                                denomSlipUri?.let { it.createImagePart("denomSlip")  }
+
+
+                            val gson =  Gson()
+                            var jsonString = gson.toJson(data);
+                            loginData.AuthToken?.let {
+                                val data=jsonString.encrypt()
+                                showLog(data)
+                                viewModel?.PaymentRequist(it,data,PaymentSlip,denomSlip)
+                            }
+                        }
+                    }
+                    //Toast.makeText(requireActivity(), "Ok", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -120,6 +184,10 @@ class PaymentRequestImformationFragment : BaseFragment() {
     }
 
     fun initView() {
+
+        activity?.let {act->
+                    loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
+        }
         authViewModel = ViewModelProvider(requireActivity())[AuthViewModel::class.java]
         binding.apply {
             etAmt.setupAmount()
@@ -127,6 +195,38 @@ class PaymentRequestImformationFragment : BaseFragment() {
     }
 
     fun setObserver() {
+        viewModel?.PaymentRequistResponseLiveData?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+                    viewModel.popup_message.value=it?.data?.Description.toString()
+                    val successPopupFragment = SuccessPopupFragment(object :
+                        CallBack4 {
+                        override fun getValue4(
+                            s1: String,
+                            s2: String,
+                            s3: String,
+                            s4: String
+                        ) {
+                            findNavController().popBackStack()
+
+                        }
+                    })
+
+                    successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
+
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
 
     }
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -134,6 +234,7 @@ class PaymentRequestImformationFragment : BaseFragment() {
         if (uri != null) {
             authViewModel?.filePath?.value = uri
             binding.imgPlaySlip.setImage(uri)
+            paySleeyUri=uri.uriToBase64(binding.root.context.contentResolver)
             /*Glide.with(binding.tvUploadPayslip.context)
                 .load(uri)
                 .into(binding.imgPlaySlip)*/
@@ -146,5 +247,20 @@ class PaymentRequestImformationFragment : BaseFragment() {
 
     }
 
+    fun Uri.createImagePart(partName: String): MultipartBody.Part? {
+        val contentResolver: ContentResolver = binding.root.context.contentResolver
+        val file: File = File(this.path) // Assuming the URI is a file URI
 
+        // Create a request body from the file
+        val requestBody = file.asRequestBody(contentResolver.getType(this)?.toMediaTypeOrNull())
+
+        // Create a multipart body part from the request body
+        return MultipartBody.Part.createFormData(partName, file.name, requestBody)
+    }
+
+    fun createImagePart(name: String, base64String: String): MultipartBody.Part {
+        val bytes = android.util.Base64.decode(base64String, android.util.Base64.DEFAULT)
+        val requestBody = bytes.toRequestBody("image/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(name, "image.jpg", requestBody)
+    }
 }

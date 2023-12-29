@@ -13,7 +13,7 @@
         android:layout_height="@dimen/_30sdp"
 
         android:layout_marginStart="@dimen/_10sdp"
-        tools:src="@drawable/axix_bank_logo"
+        tools:src="@drawable/default_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

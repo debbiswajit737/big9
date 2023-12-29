@@ -5,6 +5,7 @@ import com.epaymark.big9.data.genericmodel.BaseResponse
 
 import com.epaymark.big9.data.model.AEPSReportModel
 import com.epaymark.big9.data.model.AddBankModel
+import com.epaymark.big9.data.model.AllBankListModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
 import com.epaymark.big9.data.model.ChangeUserTPINPasswordModel
 import com.epaymark.big9.data.model.CheckServiceModel
@@ -19,6 +20,8 @@ import com.epaymark.big9.data.model.MatmeportModel
 import com.epaymark.big9.data.model.MoveToBankBankListModel
 import com.epaymark.big9.data.model.MoveToWalletModel
 import com.epaymark.big9.data.model.PatternLoginModel
+import com.epaymark.big9.data.model.PaymentREquistModeModel
+import com.epaymark.big9.data.model.PaymentRequistModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
@@ -483,5 +486,28 @@ interface RetroApi {
     @Part userScp: MultipartBody.Part?,
     @Part videoKyc: MultipartBody.Part?,
     ): Response<BasicInfo>
+
+
+    @POST("v1/services/pr/list")
+    suspend fun bankList(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<AllBankListModel>
+
+    @POST("v1/services/pr/mode")
+    suspend fun PaymentREquistMode(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<PaymentREquistModeModel>
+
+    @Multipart
+    @POST("v1/services/pr/form")
+    suspend fun PaymentRequist(
+        @Header("Authtoken") token: String,
+        @Part("data") data: RequestBody,
+        @Part image1: MultipartBody.Part?,
+        @Part image2: MultipartBody.Part?,
+    ): Response<PaymentRequistModel>
+
 
 }

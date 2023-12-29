@@ -189,8 +189,7 @@ class ViewMoreFragment : BaseFragment() {
 
                     val gson= Gson()
                     var jsonString = gson.toJson(data)
-                    loginData.AuthToken?.let {
-                        checkService(it,jsonString.encrypt())
+                    loginData.AuthToken?.let {checkService(it,jsonString.encrypt())
                     }
                 }
 

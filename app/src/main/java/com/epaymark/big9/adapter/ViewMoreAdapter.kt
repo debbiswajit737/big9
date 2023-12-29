@@ -34,9 +34,6 @@ class ViewMoreAdapter(private val items: List<ListIcon>, val circleShape: Int, v
         return items.size
     }
 
-
-
-
     inner class MyViewHolder(val binding: RechargeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ListIcon, position: Int) {
@@ -62,12 +59,6 @@ class ViewMoreAdapter(private val items: List<ListIcon>, val circleShape: Int, v
             item.image?.let {image->
                 binding.imgIcon.setImageResource(image)
             }
-
-
-
-
         }
     }
-
-
 }

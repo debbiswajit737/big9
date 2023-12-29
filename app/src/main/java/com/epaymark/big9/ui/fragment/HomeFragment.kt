@@ -176,6 +176,7 @@ class HomeFragment : BaseFragment() {
     fun checkService(navParameter: String,slag:String){
         naviGationValue=navParameter
         //Toast.makeText(requireContext(), ""+slag, Toast.LENGTH_SHORT).show()
+        serviceNavigation(naviGationValue,"slug")
         val (isLogin, loginResponse) =sharedPreff.getLoginData()
         if (isLogin){
             loginResponse?.let {loginData->
@@ -189,7 +190,7 @@ class HomeFragment : BaseFragment() {
                     val gson= Gson()
                     var jsonString = gson.toJson(data)
                     loginData.AuthToken?.let {
-                        checkHomePageService(it,jsonString.encrypt())
+                     //   checkHomePageService(it,jsonString.encrypt())
                     }
                 }
 

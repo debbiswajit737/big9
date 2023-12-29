@@ -13,6 +13,7 @@ import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.AEPSReportData
 import com.epaymark.big9.data.model.AEPSReportModel
 import com.epaymark.big9.data.model.AddBankModel
+import com.epaymark.big9.data.model.AllBankListModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
 import com.epaymark.big9.data.model.ChangeUserTPINPasswordModel
 import com.epaymark.big9.data.model.CheckServiceModel
@@ -25,6 +26,8 @@ import com.epaymark.big9.data.model.MatmeportModel
 import com.epaymark.big9.data.model.MoveToBankBankListModel
 import com.epaymark.big9.data.model.MoveToWalletModel
 import com.epaymark.big9.data.model.PatternLoginModel
+import com.epaymark.big9.data.model.PaymentREquistModeModel
+import com.epaymark.big9.data.model.PaymentRequistModel
 import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
@@ -58,6 +61,7 @@ import com.epaymark.big9.repository.TableRepository
 import com.epaymark.big9.utils.helpers.helper.validate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import javax.inject.Inject
 
 @HiltViewModel
@@ -84,6 +88,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     var sendMoneyVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     var filePath: MutableLiveData<Uri> = MutableLiveData()
     val selectedBank = MutableLiveData<String>("")
+    val selectedBankId = MutableLiveData<String>("")
     val selectedBankMode = MutableLiveData<String>("")
     val prepaitOrPostPaid = MutableLiveData<String>("")
     val reportType = MutableLiveData<String>("")
@@ -152,6 +157,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val cash_withdraw_pin_code = MutableLiveData<String>()
     val cash_withdraw_pan = MutableLiveData<String>()
     val paymentAmt = MutableLiveData<String>()
+    val transActionId = MutableLiveData<String>()
     val particular = MutableLiveData<String>()
     val amtMoveToWallet = MutableLiveData<String>()
     val amtMoveToPayabhi = MutableLiveData<String>()
@@ -234,6 +240,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val depositeDate = MutableLiveData<String>()
     val depositeDateError = MutableLiveData<String>()
     val particularError = MutableLiveData<String>()
+    val transActionIdError = MutableLiveData<String>()
     val amtMoveToWalletError = MutableLiveData<String>()
     val amtMoveToPayabhiError = MutableLiveData<String>()
     val amtMoveToBankError = MutableLiveData<String>()
@@ -309,6 +316,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val paymentAmtErrorVisible = MutableLiveData<Boolean>()
     val depositeDateErrorVisible = MutableLiveData<Boolean>()
     val particularErrorVisible = MutableLiveData<Boolean>()
+    val transActionIdErrorVisible = MutableLiveData<Boolean>()
     val amtMoveToWalletErrorVisible = MutableLiveData<Boolean>()
     val amtMoveToPayabhiErrorVisible = MutableLiveData<Boolean>()
     val amtMoveToBankErrorVisible = MutableLiveData<Boolean>()
@@ -718,6 +726,17 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             particularError.value = ""
             particularErrorVisible.value = false
         }
+
+        if (transActionId.value?.trim().isNullOrBlank()) {
+            transActionIdError.value = "This field is required"
+            transActionIdErrorVisible.value = true
+            isValid = false
+        } else {
+            transActionIdError.value = ""
+            transActionIdErrorVisible.value = false
+        }
+
+
 
         return isValid
     }
@@ -1695,5 +1714,31 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val onboardingBasicinfoResponseLiveData: LiveData<ResponseState<BasicInfo>>
         get() = _onboardingBasicinfoResponseLiveData
 
+    //bankList
+    val bankListResponseLiveData: LiveData<ResponseState<AllBankListModel>>
+        get() = repository.bankListResponseLiveData
+    fun bankList(token: String, data: String) {
+        viewModelScope.launch {
+            repository.bankList(token,data)
+        }
+    }
+
+    //PaymentREquistMode
+    val PaymentREquistModeResponseLiveData: LiveData<ResponseState<PaymentREquistModeModel>>
+        get() = repository.PaymentREquistModeResponseLiveData
+    fun PaymentREquistMode(token: String, data: String) {
+        viewModelScope.launch {
+            repository.PaymentREquistMode(token,data)
+        }
+    }
+
+    //PaymentRequist
+    val PaymentRequistResponseLiveData: LiveData<ResponseState<PaymentRequistModel>>
+        get() = repository.PaymentRequistResponseLiveData
+    fun PaymentRequist(token: String, data: String, paymentSlip: MultipartBody.Part?, denomSlip: MultipartBody.Part?) {
+        viewModelScope.launch {
+            repository.PaymentRequist(token,data,paymentSlip,denomSlip)
+        }
+    }
 
 }
