@@ -32,6 +32,7 @@ import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
 import com.epaymark.big9.data.model.ResetTPINModel
+import com.epaymark.big9.data.model.ServiceCheckModel
 import com.epaymark.big9.data.model.SubmitMoveToBankBankListModel
 import com.epaymark.big9.data.model.TransactionReportModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
@@ -161,6 +162,15 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val particular = MutableLiveData<String>()
     val amtMoveToWallet = MutableLiveData<String>()
     val amtMoveToPayabhi = MutableLiveData<String>()
+
+
+    val denomination_10 = MutableLiveData<String>("0")
+    val denomination_20 = MutableLiveData<String>("0")
+    val denomination_50 = MutableLiveData<String>("0")
+    val denomination_100 = MutableLiveData<String>("0")
+    val denomination_200 = MutableLiveData<String>("0")
+    val denomination_500 = MutableLiveData<String>("0")
+    val denomination_2000 = MutableLiveData<String>("0")
 
     val amtMoveToBank = MutableLiveData<String>()
     val mobileSendMoney = MutableLiveData<String>()
@@ -1615,6 +1625,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             repository.aepsReportReceiptReceipt(token,data)
         }
     }
+/*
 
     //Check service
     val checkServiceReceiptResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
@@ -1634,6 +1645,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         }
     }
 
+*/
 
 
     //matm reports
@@ -1738,6 +1750,23 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     fun PaymentRequist(token: String, data: String, paymentSlip: MultipartBody.Part?, denomSlip: MultipartBody.Part?) {
         viewModelScope.launch {
             repository.PaymentRequist(token,data,paymentSlip,denomSlip)
+        }
+    }
+    //ServiceCheck
+    val ServiceCheckResponseLiveData: MutableLiveData<ResponseState<ServiceCheckModel>>
+        get() = repository.ServiceCheckResponseLiveData
+    fun ServiceCheck(token: String, data: String) {
+        viewModelScope.launch {
+            repository.ServiceCheck(token,data)
+        }
+    }
+
+    //ServiceCheckViewMore
+    val ServiceCheckViewMoreResponseLiveData: MutableLiveData<ResponseState<ServiceCheckModel>>
+        get() = repository.ServiceCheckViewMoreResponseLiveData
+    fun ServiceCheckViewMore(token: String, data: String) {
+        viewModelScope.launch {
+            repository.ServiceCheckViewMore(token,data)
         }
     }
 

@@ -26,6 +26,7 @@ import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
 import com.epaymark.big9.data.model.ResetTPINModel
+import com.epaymark.big9.data.model.ServiceCheckModel
 import com.epaymark.big9.data.model.SubmitMoveToBankBankListModel
 import com.epaymark.big9.data.model.TransactionReportModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
@@ -946,7 +947,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     }
 
-    //Check service
+    /*//Check service
     private val _checkServiceResponseLiveData =
         MutableLiveData<ResponseState<CheckServiceModel>>()
     val checkServiceResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
@@ -969,21 +970,21 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
             _checkServiceResponseLiveData.postValue(ResponseState.create(throwable))
         }
 
-    }
+    }*/
 
 
-    //Check service home
+   /* //Check service home
     private val _checkServiceHomeResponseLiveData =
         MutableLiveData<ResponseState<CheckServiceModel>>()
     val checkServiceHomeResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
         get() = _checkServiceHomeResponseLiveData
 
     suspend fun checkServiceHome(token: String, loginModel: String) {
-        _checkServiceHomeResponseLiveData.postValue(ResponseState.Loading())
+      //  _checkServiceHomeResponseLiveData.postValue(ResponseState.Loading())
         try {
-            val response = api.checkService(
-                token,
-                loginModel.replace("\n", "").replace("\r", "")
+       //     val response = api.checkServiceHomePage(
+         //       token,
+         //       loginModel.replace("\n", "").replace("\r", "")
             )
             _checkServiceHomeResponseLiveData.postValue(
                 ResponseState.create(
@@ -992,11 +993,12 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
                 )
             )
         } catch (throwable: Throwable) {
+            Log.d("TAG_service", "checkServiceHome: "+throwable.message)
             _checkServiceHomeResponseLiveData.postValue(ResponseState.create(throwable))
         }
 
     }
-
+*/
 
 
 
@@ -1541,6 +1543,44 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
             _PaymentRequistResponseLiveData.postValue(ResponseState.create(response, "aa"))
         } catch (throwable: Throwable) {
             _PaymentRequistResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //ServiceCheck
+    private val _ServiceCheckResponseLiveData =
+        MutableLiveData<ResponseState<ServiceCheckModel>>()
+    val ServiceCheckResponseLiveData: MutableLiveData<ResponseState<ServiceCheckModel>>
+        get() = _ServiceCheckResponseLiveData
+
+
+    suspend fun ServiceCheck(token: String, loginModel: String) {
+        _ServiceCheckResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.ServiceCheck(token, loginModel.replace("\n", "").replace("\r", ""))
+            _ServiceCheckResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _ServiceCheckResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //ServiceCheckViewMore
+    private val _ServiceCheckViewMoreResponseLiveData =
+        MutableLiveData<ResponseState<ServiceCheckModel>>()
+    val ServiceCheckViewMoreResponseLiveData: MutableLiveData<ResponseState<ServiceCheckModel>>
+        get() = _ServiceCheckViewMoreResponseLiveData
+
+
+    suspend fun ServiceCheckViewMore(token: String, loginModel: String) {
+        _ServiceCheckViewMoreResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.ServiceCheckViewMore(token, loginModel.replace("\n", "").replace("\r", ""))
+            _ServiceCheckViewMoreResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _ServiceCheckViewMoreResponseLiveData.postValue(ResponseState.create(throwable))
         }
 
     }

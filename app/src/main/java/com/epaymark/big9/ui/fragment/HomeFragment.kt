@@ -129,7 +129,7 @@ class HomeFragment : BaseFragment() {
                 isFromSearchPage=false
             }
 
-            viewModel?.checkServiceReceiptResponseLiveData?.observe(viewLifecycleOwner){
+            viewModel?.ServiceCheckResponseLiveData?.observe(viewLifecycleOwner){
                 when (it) {
                     is ResponseState.Loading -> {
                         loader?.show()
@@ -140,14 +140,14 @@ class HomeFragment : BaseFragment() {
                         it?.data?.slug?.let {slug->
                             serviceNavigation(naviGationValue,slug)
                         }
-                        viewModel?.checkServiceReceiptResponseLiveData?.value=null
+                        viewModel?.ServiceCheckResponseLiveData?.value=null
                     }
 
                     is ResponseState.Error -> {
                         loader?.dismiss()
                         //serviceNavigation(naviGationValue,"slug")
                         handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-                        viewModel?.checkServiceReceiptResponseLiveData?.value=null
+                        viewModel?.ServiceCheckResponseLiveData?.value=null
                     }
                 }
             }
@@ -176,7 +176,7 @@ class HomeFragment : BaseFragment() {
     fun checkService(navParameter: String,slag:String){
         naviGationValue=navParameter
         //Toast.makeText(requireContext(), ""+slag, Toast.LENGTH_SHORT).show()
-        serviceNavigation(naviGationValue,"slug")
+        //serviceNavigation(naviGationValue,"slug")
         val (isLogin, loginResponse) =sharedPreff.getLoginData()
         if (isLogin){
             loginResponse?.let {loginData->
@@ -190,7 +190,7 @@ class HomeFragment : BaseFragment() {
                     val gson= Gson()
                     var jsonString = gson.toJson(data)
                     loginData.AuthToken?.let {
-                     //   checkHomePageService(it,jsonString.encrypt())
+                        ServiceCheck(it,jsonString.encrypt())
                     }
                 }
 

@@ -26,6 +26,7 @@ import com.epaymark.big9.data.model.PrePaidMobileOperatorListModel
 import com.epaymark.big9.data.model.PrepaidMobolePlainModel
 import com.epaymark.big9.data.model.PrepaidMoboleTranspherModel
 import com.epaymark.big9.data.model.ResetTPINModel
+import com.epaymark.big9.data.model.ServiceCheckModel
 import com.epaymark.big9.data.model.SubmitMoveToBankBankListModel
 import com.epaymark.big9.data.model.TransactionReportModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
@@ -323,12 +324,30 @@ interface RetroApi {
         @Body data: String
     ): Response<AEPSReportModel>
 
-    @POST("v1/check-service")
+   /* @POST("v1/check-service")
     suspend fun checkService(
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<CheckServiceModel>
 
+    @POST("v1/check-service")
+    suspend fun checkServiceHomePage(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<CheckServiceModel>
+*/
+
+    @POST("v1/check-service")
+    suspend fun ServiceCheck(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<ServiceCheckModel>
+
+    @POST("v1/check-service")
+    suspend fun ServiceCheckViewMore(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<ServiceCheckModel>
     @POST("v1/reports/microatm_report_receipt")
     suspend fun matmREportRECEPT(
         @Header("Authtoken") token: String,

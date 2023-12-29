@@ -73,6 +73,7 @@ class PaymentRequestImformationFragment : BaseFragment() {
         if (isIsPaySlip){
             authViewModel?.filePath?.observe(viewLifecycleOwner){
 
+
                 paySleeyUri=it.uriToBase64(binding.root.context.contentResolver)
 
                 Log.d("TAG_payment", "onViewCreated: 2 "+paySleeyUri)
@@ -128,15 +129,15 @@ class PaymentRequestImformationFragment : BaseFragment() {
                             "prmode" to "",
                             "depositamount" to viewModel?.paymentAmt?.value,
                             "depositdate" to viewModel?.depositeDate?.value,
-                            "bankreference" to "1",//viewModel?.transActionId?.value,
+                            "bankreference" to viewModel?.transActionId?.value,
                             "remarks" to viewModel?.particular?.value,
-                            "txtquantity10" to "",
-                            "txtquantity20" to "",
-                            "txtquantity50" to "",
-                            "txtquantity100" to "",
-                            "txtquantity200" to "",
-                            "txtquantity500" to "",
-                            "txtquantity2000" to ""
+                            "txtquantity10" to viewModel?.denomination_10?.value,
+                            "txtquantity20" to viewModel?.denomination_20?.value,
+                            "txtquantity50" to viewModel?.denomination_50?.value,
+                            "txtquantity100" to viewModel?.denomination_100?.value,
+                            "txtquantity200" to viewModel?.denomination_200?.value,
+                            "txtquantity500" to viewModel?.denomination_500?.value,
+                            "txtquantity2000" to viewModel?.denomination_2000?.value,
 
                             )
 
@@ -184,7 +185,27 @@ class PaymentRequestImformationFragment : BaseFragment() {
     }
 
     fun initView() {
+        viewModel?.selectedBankMode?.observe(viewLifecycleOwner){
+            binding.apply {
+                if (it.trim()=="CASH CDM" || it.trim()=="CASH - COUNTER DEPOSIT" ){
+                    imgDoc.visibility=View.VISIBLE
+                    tvUploadDoc.visibility=View.VISIBLE
+                    llDnomination1.visibility=View.VISIBLE
+                    llDnomination2.visibility=View.VISIBLE
+                    llDnomination3.visibility=View.VISIBLE
+                    llDnomination0.visibility=View.VISIBLE
+                }
+                else{
+                    imgDoc.visibility=View.GONE
+                    tvUploadDoc.visibility=View.GONE
+                    llDnomination1.visibility=View.GONE
+                    llDnomination2.visibility=View.GONE
+                    llDnomination3.visibility=View.GONE
+                    llDnomination0.visibility=View.GONE
+                }
+            }
 
+        }
         activity?.let {act->
                     loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
         }

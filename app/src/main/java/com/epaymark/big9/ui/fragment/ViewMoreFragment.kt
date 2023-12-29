@@ -113,7 +113,7 @@ class ViewMoreFragment : BaseFragment() {
 
     fun setObserver() {
         binding.apply {
-            viewModel?.checkServiceReceiptHomePageResponseLiveData?.observe(viewLifecycleOwner){
+            viewModel?.ServiceCheckViewMoreResponseLiveData?.observe(viewLifecycleOwner){
                 when (it) {
                     is ResponseState.Loading -> {
                         loader?.show()
@@ -124,18 +124,18 @@ class ViewMoreFragment : BaseFragment() {
                         it?.data?.slug?.let {slug->
                             serviceNavigation(naviGationValue,slug)
                         }
-                        viewModel?.checkServiceReceiptResponseLiveData?.value=null
+                        //viewModel?.checkServiceReceiptResponseLiveData?.value=null
                     }
 
                     is ResponseState.Error -> {
                         loader?.dismiss()
 
                         //delete this code. it is for testing
-                        serviceNavigation(naviGationValue,"slug")
+                       // serviceNavigation(naviGationValue,"slug")
 
 
                         handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-                        viewModel?.checkServiceReceiptResponseLiveData?.value=null
+                        //viewModel?.checkServiceReceiptResponseLiveData?.value=null
                     }
                 }
             }
@@ -189,7 +189,7 @@ class ViewMoreFragment : BaseFragment() {
 
                     val gson= Gson()
                     var jsonString = gson.toJson(data)
-                    loginData.AuthToken?.let {checkService(it,jsonString.encrypt())
+                    loginData.AuthToken?.let {ServiceCheckViewMore(it,jsonString.encrypt())
                     }
                 }
 

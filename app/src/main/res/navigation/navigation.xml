@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/loginPinfragment">
+    app:startDestination="@id/paymentRequestFragment">
     <!--homeFragment2-->
+    <!--loginPinfragment-->
     <fragment
         android:id="@+id/dashBoardFragment"
         android:name="com.epaymark.big9.ui.fragment.DashBoardFragment"

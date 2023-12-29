@@ -376,23 +376,423 @@
                             android:text="@{viewModel.particularError}"
                             app:hideErrorTextView="@{viewModel.particularErrorVisible}"
                             />
-                        <ImageView
-                            android:id="@+id/img_play_slip"
-                            android:layout_width="@dimen/_100sdp"
-                            android:layout_height="100dp"
-                            android:src="@drawable/payslip"
-                            android:adjustViewBounds="true"
-                            android:scaleType="centerCrop"
-                            />
-                        <TextView
-                            android:id="@+id/tv_upload_payslip"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:id="@+id/ll_dnomination_0"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawablePadding="@dimen/_5sdp"
-                            android:drawableEnd="@drawable/photo_camera_icon"
-                            android:textColor="@color/black"
-                            android:fontFamily="@font/open_sans_medium"
-                            android:text="@string/upload_slip"/>
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight=".1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/edit_text_title_margin_top"
+                                    android:fontFamily="@font/montserrat_medium_500"
+                                    android:text="DENOMINATION 10"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size" />
+
+                                <EditText
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/edit_text_height"
+                                    android:layout_marginTop="@dimen/edit_text_margin_top"
+                                    android:background="@drawable/field_bg"
+                                    android:hint="@string/particulars_hint"
+                                    android:text="@={viewModel.denomination_10}"
+                                    android:inputType="text"
+                                    android:longClickable="false"
+                                    android:maxLength="10"
+                                    android:padding="@dimen/_5sdp"
+                                    android:drawablePadding="@dimen/_5sdp"
+
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/gray"
+                                    android:textSize="@dimen/edit_text_size" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/montserrat_regular_400"
+                                    android:textColor="@color/pink2"
+                                    android:textSize="@dimen/_9ssp"
+                                    android:text="@{viewModel.particularError}"
+                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
+                                    />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight=".1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/edit_text_title_margin_top"
+                                    android:fontFamily="@font/montserrat_medium_500"
+                                    android:text="DENOMINATION 20"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size" />
+
+                                <EditText
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/edit_text_height"
+                                    android:layout_marginTop="@dimen/edit_text_margin_top"
+                                    android:background="@drawable/field_bg"
+                                    android:hint="@string/particulars_hint"
+                                    android:text="@={viewModel.denomination_20}"
+                                    android:inputType="text"
+                                    android:longClickable="false"
+                                    android:maxLength="10"
+                                    android:padding="@dimen/_5sdp"
+                                    android:drawablePadding="@dimen/_5sdp"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/gray"
+                                    android:textSize="@dimen/edit_text_size" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/montserrat_regular_400"
+                                    android:textColor="@color/pink2"
+                                    android:textSize="@dimen/_9ssp"
+                                    android:text="@{viewModel.particularError}"
+                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/ll_dnomination_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight=".1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/edit_text_title_margin_top"
+                                    android:fontFamily="@font/montserrat_medium_500"
+                                    android:text="DENOMINATION 50"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size" />
+
+                                <EditText
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/edit_text_height"
+                                    android:layout_marginTop="@dimen/edit_text_margin_top"
+                                    android:background="@drawable/field_bg"
+                                    android:hint="@string/particulars_hint"
+                                    android:text="@={viewModel.denomination_50}"
+                                    android:inputType="text"
+                                    android:longClickable="false"
+                                    android:maxLength="10"
+                                    android:padding="@dimen/_5sdp"
+                                    android:drawablePadding="@dimen/_5sdp"
+
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/gray"
+                                    android:textSize="@dimen/edit_text_size" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/montserrat_regular_400"
+                                    android:textColor="@color/pink2"
+                                    android:textSize="@dimen/_9ssp"
+                                    android:text="@{viewModel.particularError}"
+                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
+                                    />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight=".1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/edit_text_title_margin_top"
+                                    android:fontFamily="@font/montserrat_medium_500"
+                                    android:text="DENOMINATION 100"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size" />
+
+                                <EditText
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/edit_text_height"
+                                    android:layout_marginTop="@dimen/edit_text_margin_top"
+                                    android:background="@drawable/field_bg"
+                                    android:hint="@string/particulars_hint"
+                                    android:text="@={viewModel.denomination_20}"
+                                    android:inputType="text"
+                                    android:longClickable="false"
+                                    android:maxLength="10"
+                                    android:padding="@dimen/_5sdp"
+                                    android:drawablePadding="@dimen/_5sdp"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/gray"
+                                    android:textSize="@dimen/edit_text_size" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/montserrat_regular_400"
+                                    android:textColor="@color/pink2"
+                                    android:textSize="@dimen/_9ssp"
+                                    android:text="@{viewModel.particularError}"
+                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_dnomination_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight=".1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/edit_text_title_margin_top"
+                                    android:fontFamily="@font/montserrat_medium_500"
+                                    android:text="DENOMINATION 200"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size" />
+
+                                <EditText
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/edit_text_height"
+                                    android:layout_marginTop="@dimen/edit_text_margin_top"
+                                    android:background="@drawable/field_bg"
+                                    android:hint="@string/particulars_hint"
+                                    android:text="@={viewModel.denomination_200}"
+                                    android:inputType="text"
+                                    android:longClickable="false"
+                                    android:maxLength="10"
+                                    android:padding="@dimen/_5sdp"
+                                    android:drawablePadding="@dimen/_5sdp"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/gray"
+                                    android:textSize="@dimen/edit_text_size" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/montserrat_regular_400"
+                                    android:textColor="@color/pink2"
+                                    android:textSize="@dimen/_9ssp"
+                                    android:text="@{viewModel.particularError}"
+                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
+                                    />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight=".1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/edit_text_title_margin_top"
+                                    android:fontFamily="@font/montserrat_medium_500"
+                                    android:text="DENOMINATION 500"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size" />
+
+                                <EditText
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/edit_text_height"
+                                    android:layout_marginTop="@dimen/edit_text_margin_top"
+                                    android:background="@drawable/field_bg"
+                                    android:hint="@string/particulars_hint"
+                                    android:text="@={viewModel.denomination_500}"
+                                    app:requestFocus="@{viewModel.particularErrorVisible}"
+                                    android:inputType="text"
+                                    android:longClickable="false"
+                                    android:maxLength="10"
+                                    android:padding="@dimen/_5sdp"
+                                    android:drawablePadding="@dimen/_5sdp"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/gray"
+                                    android:textSize="@dimen/edit_text_size" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/montserrat_regular_400"
+                                    android:textColor="@color/pink2"
+                                    android:textSize="@dimen/_9ssp"
+                                    android:text="@{viewModel.particularError}"
+                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_dnomination_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight=".1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/edit_text_title_margin_top"
+                                    android:fontFamily="@font/montserrat_medium_500"
+                                    android:text="DENOMINATION 2000"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size" />
+
+                                <EditText
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/edit_text_height"
+                                    android:layout_marginTop="@dimen/edit_text_margin_top"
+                                    android:background="@drawable/field_bg"
+                                    android:hint="@string/particulars_hint"
+                                    android:text="@={viewModel.denomination_2000}"
+                                    android:inputType="text"
+                                    android:longClickable="false"
+                                    android:maxLength="10"
+                                    android:padding="@dimen/_5sdp"
+                                    android:drawablePadding="@dimen/_5sdp"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/gray"
+                                    android:textSize="@dimen/edit_text_size" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/montserrat_regular_400"
+                                    android:textColor="@color/pink2"
+                                    android:textSize="@dimen/_9ssp"
+                                    android:text="@{viewModel.particularError}"
+                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
+                                    />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:visibility="invisible"
+                                android:layout_width="0dp"
+                                android:layout_weight=".1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/edit_text_title_margin_top"
+                                    android:fontFamily="@font/montserrat_medium_500"
+                                    android:text="@string/particulars"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size" />
+
+                                <EditText
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/edit_text_height"
+                                    android:layout_marginTop="@dimen/edit_text_margin_top"
+                                    android:background="@drawable/field_bg"
+                                    android:hint="@string/particulars_hint"
+                                    android:text="@={viewModel.particular}"
+                                    app:requestFocus="@{viewModel.particularErrorVisible}"
+                                    android:inputType="text"
+                                    android:longClickable="false"
+                                    android:maxLength="10"
+                                    android:padding="@dimen/_5sdp"
+                                    android:drawablePadding="@dimen/_5sdp"
+                                    android:drawableStart="@drawable/sub_id_icon"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/gray"
+                                    android:textSize="@dimen/edit_text_size" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/montserrat_regular_400"
+                                    android:textColor="@color/pink2"
+                                    android:textSize="@dimen/_9ssp"
+                                    android:text="@{viewModel.particularError}"
+                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/img_play_slip"
+                                android:layout_width="@dimen/_100sdp"
+                                android:layout_height="100dp"
+                                android:adjustViewBounds="true"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/payslip"
+                                app:layout_constraintBottom_toTopOf="@+id/tv_upload_payslip"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/img_doc"
+                                android:layout_width="@dimen/_100sdp"
+                                android:layout_height="100dp"
+                                android:adjustViewBounds="true"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/payslip"
+                                app:layout_constraintBottom_toTopOf="@+id/tv_upload_payslip"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                            <TextView
+                                android:id="@+id/tv_upload_payslip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableEnd="@drawable/photo_camera_icon"
+                                android:drawablePadding="@dimen/_5sdp"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:text="@string/upload_slip"
+                                android:textColor="@color/black"
+
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/img_play_slip" />
+
+                            <TextView
+                                android:id="@+id/tv_upload_doc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableEnd="@drawable/photo_camera_icon"
+                                android:drawablePadding="@dimen/_5sdp"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:text="Upload Denomination"
+                                android:textColor="@color/black"
+
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/img_play_slip" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                     </LinearLayout>
 
