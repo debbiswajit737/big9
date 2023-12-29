@@ -44,8 +44,13 @@ import com.epaymark.big9.utils.`interface`.CallBack
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.FileWriter
+import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
 
@@ -120,7 +125,7 @@ class DocuploadFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
 
@@ -134,7 +139,7 @@ class DocuploadFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
 
@@ -148,7 +153,7 @@ class DocuploadFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
                 llPartnerAadharBack.setOnClickListener{
@@ -161,7 +166,7 @@ class DocuploadFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
                 llGst.setOnClickListener{
@@ -174,7 +179,7 @@ class DocuploadFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
 
@@ -188,7 +193,7 @@ class DocuploadFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
                 llBoardResolution.setOnClickListener{
@@ -201,7 +206,7 @@ class DocuploadFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
                 llTrade.setOnClickListener{
@@ -214,7 +219,7 @@ class DocuploadFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
 
@@ -228,7 +233,7 @@ class DocuploadFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },true)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
 
@@ -242,21 +247,21 @@ class DocuploadFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },true)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
 
                 btnNext.setOnClickListener {
                     authViewModel.apply {
                     try {
-                        binding.tvPancardVideoKycImage.setText(authViewModel.filePath.toString())
+                        //binding.tvPancardVideoKycImage.setText(authViewModel.filePath.toString())
                         /*videoFile.value?.file =
                             filePath.value?.toString()
                                 ?.videoToBase64(binding.root.context)
                                 .toString()*/
-                        authViewModel.videokycBase64.value=filePath.value?.getVideoPathFromContentUri(binding.root.context)?.
+                      /*  authViewModel.videokycBase64.value=filePath.value?.getVideoPathFromContentUri(binding.root.context)?.
                             videoToBase64()
-                            .toString()
+                            .toString()*/
 
 
                         if (docValidation()) {
@@ -300,19 +305,44 @@ class DocuploadFragment : BaseFragment() {
                                 var partnerAadhaarBack=
                                     authViewModel.PartnerAadharBackBase64.value?.let { createImagePart("partnerAadhaarBack", it) }
                                 var gstin=
-                                    authViewModel.llGstBase64.value?.let { createImagePart("gstin", it) }
+                                    authViewModel.llGstBase64.value?.let { createPdfPart("gstin", it) }
                                 var coi=
-                                    authViewModel.llCertificateOfIncorporationBase64.value?.let { createImagePart("coi", it) }
+                                    authViewModel.llCertificateOfIncorporationBase64.value?.let { createPdfPart("coi", it) }
                                 var boardResolution=
-                                    authViewModel.llBoardResolutionBase64.value?.let { createImagePart("boardResolution", it) }
+                                    authViewModel.llBoardResolutionBase64.value?.let { createPdfPart("boardResolution", it) }
                                 var tradeLicense=
-                                    authViewModel.llTradeBase64.value?.let { createImagePart("tradeLicense", it) }
+                                    authViewModel.llTradeBase64.value?.let { createPdfPart("tradeLicense", it) }
                                 var userSelfi=
                                     authViewModel.llUserSelfiBase64.value?.let { createImagePart("userSelfi", it) }
                                 var userScp=
                                     authViewModel.llCselfiBase64.value?.let { createImagePart("userScp", it) }
+                               /* var videoKyc=
+                                    authViewModel.videokycBase64.value?.let { createVideoPart("videoKyc", it) }*/
                                 var videoKyc=
-                                    authViewModel.videokycBase64.value?.let { createVideoPart("videoKyc", it) }
+                                    authViewModel.videokycBase64.value?.let { it.toMultipartRequestBody() }
+/*
+
+                                try {
+                                    val file = File(context?.filesDir, "testingabc.txt")
+                                    val fileOutputStream = FileOutputStream(file)
+                                    fileOutputStream.write(authViewModel.videokycBase64.value?.toByteArray())
+                                    fileOutputStream.close()
+                                    println("Data has been written to ${file.absolutePath}")
+                                } catch (e: IOException) {
+                                    println("An error occurred: $e")
+                                }
+
+                                try {
+                                    val decodedBytes = Base64.decode(authViewModel.videokycBase64.value, Base64.DEFAULT)
+                                    val file = File(context?.filesDir, "fileName.mp4")
+                                    val fileOutputStream = FileOutputStream(file)
+                                    fileOutputStream.write(decodedBytes)
+                                    fileOutputStream.close()
+                                    println("Video file saved as ${file.absolutePath}")
+                                } catch (e: IOException) {
+                                    println("An error occurred: $e")
+                                }
+*/
 
 
                                 val gson= Gson()
@@ -446,6 +476,7 @@ class DocuploadFragment : BaseFragment() {
             sharedPreff = SharedPreff(context)
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
         }
+
     }
 
     fun setObserver() {
@@ -562,9 +593,48 @@ class DocuploadFragment : BaseFragment() {
         val requestBody = bytes.toRequestBody("image/*".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData(name, "image.jpg", requestBody)
     }
+    fun createPdfPart(name: String, base64String: String): MultipartBody.Part {
+        val bytes = android.util.Base64.decode(base64String, android.util.Base64.DEFAULT)
+        val requestBody = bytes.toRequestBody("application/pdf".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(name, "document.pdf", requestBody)
+    }
+
     fun createVideoPart(name: String, base64String: String): MultipartBody.Part {
         val bytes = android.util.Base64.decode(base64String, android.util.Base64.DEFAULT)
         val requestBody = bytes.toRequestBody("video/*".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData(name, "video.mp4", requestBody)
     }
+
+
+    fun String.sendMultipartRequest(): MultipartBody {
+
+
+        // Convert Base64 string to bytes
+        val decodedBytes = android.util.Base64.decode(this, android.util.Base64.DEFAULT)
+
+        // Create a request body from the decoded bytes
+        val requestBody = decodedBytes.toRequestBody("video/mp4".toMediaTypeOrNull())
+
+        // Create a multipart body with the video part
+        val multipartBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("videoKyc", "video.mp4", requestBody)
+            .build()
+
+        return multipartBody
+
+
+    }
+
+    fun String.toMultipartRequestBody(): MultipartBody.Part {
+        // Convert Base64 string to bytes
+        val decodedBytes = android.util.Base64.decode(this, android.util.Base64.DEFAULT)
+
+        // Create a request body from the decoded bytes
+        val requestBody = decodedBytes.toRequestBody("video/mp4".toMediaTypeOrNull())
+
+        // Create a multipart body part with the video data
+        return MultipartBody.Part.createFormData("videoKyc", "video.mp4", requestBody)
+    }
+
 }

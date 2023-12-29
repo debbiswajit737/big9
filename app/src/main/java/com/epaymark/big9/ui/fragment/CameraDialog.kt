@@ -22,7 +22,7 @@ import com.epaymark.big9.ui.base.BaseBottomSheetFragment
 import com.epaymark.big9.utils.helpers.Constants.isPdf
 import com.epaymark.big9.utils.`interface`.CallBack
 
-class CameraDialog(val callBack: CallBack) : BaseBottomSheetFragment() {
+class CameraDialog(val callBack: CallBack,val isSelfi:Boolean) : BaseBottomSheetFragment() {
     lateinit var binding: CameraBottomsheetLayoutBinding
     private val authViewModel: AuthViewModel by activityViewModels()
 
@@ -62,6 +62,14 @@ class CameraDialog(val callBack: CallBack) : BaseBottomSheetFragment() {
 
     private fun onViewClick() {
         binding.apply {
+            if (isSelfi){
+                imgGallary.visibility=View.GONE
+                tvGallery.visibility=View.GONE
+            }
+            else{
+                imgGallary.visibility=View.VISIBLE
+                tvGallery.visibility=View.VISIBLE
+            }
             imgGallary.setOnClickListener{
                 callBack.getValue("g")
                 dismiss()

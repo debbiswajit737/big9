@@ -32,6 +32,9 @@ import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class BankDetailsFragment : BaseFragment() {
     lateinit var binding: BankDetailsFragmentBinding
@@ -87,9 +90,22 @@ class BankDetailsFragment : BaseFragment() {
                        /* "cancelled_cheque" to authViewModel?.cancleCheckBase64?.value,*/
                         )
                         var cancelled_cheque=
-                            authViewModel.cancleCheckBase64.value?.let { createImagePart("cancelled_cheque", it) }
+                            authViewModel.cancleCheckBase64.value?.let { createImagePart("chequeimagedata", it) }
                         val gson = Gson()
                         var jsonString2 = gson.toJson(data2);
+
+                        /*try {
+                            val file = File(context?.filesDir, "bank.txt")
+                            val fileOutputStream = FileOutputStream(file)
+                            fileOutputStream.write(authViewModel.cancleCheckBase64.value?.toByteArray())
+                            fileOutputStream.close()
+                            showLogDcriptData("bankCheck","${file.absolutePath}")
+
+                        } catch (e: IOException) {
+                           showLogDcriptData("bankCheck","Error "+e.message)
+                        }*/
+
+
                         loginData.AuthToken?.let {
                             authViewModel?.bankDetails(it, jsonString2.encrypt(),cancelled_cheque)
 
@@ -111,7 +127,7 @@ class BankDetailsFragment : BaseFragment() {
                     getImage(s)
                 }
 
-            })
+            },false)
            activity?.let { act->  cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)}
         }
     }
@@ -177,6 +193,7 @@ class BankDetailsFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
+                    findNavController().navigate(R.id.action_bankDetailsFragment_to_docuploadFragment)
                     it.data?.data?.let {
 
                     }

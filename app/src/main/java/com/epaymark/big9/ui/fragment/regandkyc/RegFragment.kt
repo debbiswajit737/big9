@@ -136,7 +136,7 @@ class RegFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
 
@@ -153,7 +153,7 @@ class RegFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
 
@@ -173,7 +173,7 @@ class RegFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
                 }
             }

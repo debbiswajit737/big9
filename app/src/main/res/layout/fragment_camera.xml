@@ -129,6 +129,37 @@
                 android:shadowRadius="3.0"
 
                 />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mobile Numver"
+                android:textColor="@color/g3"
+                android:fontFamily="@font/montserrat_medium_500"
+                android:textSize="@dimen/_16ssp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:shadowColor="@color/gray"
+                android:shadowDx="2.0"
+                android:shadowDy="2.0"
+                android:shadowRadius="3.0"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.videoKycUserMobileNo}"
+                android:textColor="@color/g3"
+                android:fontFamily="@font/montserrat_medium_500"
+                android:textSize="@dimen/_18ssp"
+                android:layout_gravity="center_horizontal"
+
+                android:shadowColor="@color/g5"
+                android:shadowDx="2.0"
+                android:shadowDy="2.0"
+                android:shadowRadius="3.0"
+
+                />
+
         </LinearLayout>
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCaptureImg"

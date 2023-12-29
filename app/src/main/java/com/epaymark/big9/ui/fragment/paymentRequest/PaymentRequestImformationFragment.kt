@@ -74,7 +74,7 @@ class PaymentRequestImformationFragment : BaseFragment() {
                             getImage(s)
                         }
 
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
 
                 }

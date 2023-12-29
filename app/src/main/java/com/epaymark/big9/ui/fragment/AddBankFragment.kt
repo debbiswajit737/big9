@@ -129,7 +129,7 @@ class AddBankFragment : BaseFragment() {
                         override fun getValue(s: String) {
                             getImage(s)
                         }
-                    })
+                    },false)
                     cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
 
                 }

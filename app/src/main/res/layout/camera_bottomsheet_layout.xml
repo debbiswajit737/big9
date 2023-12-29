@@ -71,12 +71,12 @@
             android:id="@+id/tv_take_photo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/_10sdp"
             android:fontFamily="@font/open_sans_e_bold"
+            android:paddingHorizontal="@dimen/_10sdp"
             android:text="Take photo"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/img_gallary"
+            app:layout_constraintStart_toEndOf="@+id/img_takephoto"
             app:layout_constraintTop_toTopOf="@+id/img_takephoto" />
 
         <View

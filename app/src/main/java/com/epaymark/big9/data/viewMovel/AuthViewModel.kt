@@ -43,9 +43,10 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
     val otp: MutableLiveData<String> = MutableLiveData("")
 
     //Video kyc user details
-    val videoKycUserName = MutableLiveData<String>("User Name")
-    val videoKycUserPancard = MutableLiveData<String>("ABCDE1234A")
-    val videoKycUserAadharCard = MutableLiveData<String>("1234567879012")
+    val videoKycUserName = MutableLiveData<String>("")
+    val videoKycUserPancard = MutableLiveData<String>("")
+    val videoKycUserAadharCard = MutableLiveData<String>("")
+    val videoKycUserMobileNo = MutableLiveData<String>("")
 
     val videoFile = MutableLiveData<FileModel>()
 
