@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/paymentRequestFragment">
+    app:startDestination="@id/homeFragment2">
     <!--homeFragment2-->
     <!--loginPinfragment-->
+    <!--paymentRequestFragment-->
     <fragment
         android:id="@+id/dashBoardFragment"
         android:name="com.epaymark.big9.ui.fragment.DashBoardFragment"
@@ -227,6 +228,9 @@
         <action
             android:id="@+id/action_paymentRequestModeFragment_to_paymentRequestImformationFragment"
             app:destination="@id/paymentRequestImformationFragment" />
+        <action
+            android:id="@+id/action_paymentRequestModeFragment_to_homeFragment2"
+            app:destination="@id/homeFragment2" />
     </fragment>
     <fragment
         android:id="@+id/paymentRequestImformationFragment"
@@ -235,6 +239,9 @@
         <action
             android:id="@+id/action_paymentRequestImformationFragment_to_cameraFragment2"
             app:destination="@id/cameraFragment2" />
+        <action
+            android:id="@+id/action_paymentRequestImformationFragment_to_homeFragment2"
+            app:destination="@id/homeFragment2" />
     </fragment>
     <fragment
         android:id="@+id/cameraFragment2"

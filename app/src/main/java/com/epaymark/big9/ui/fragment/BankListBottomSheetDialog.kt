@@ -1,5 +1,6 @@
 package com.epaymark.big9.ui.fragment
 
+import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,16 +15,20 @@ import com.epaymark.big9.adapter.BankListAdapter
 import com.epaymark.big9.data.model.BankListModel
 import com.epaymark.big9.data.viewMovel.MyViewModel
 import com.epaymark.big9.databinding.BankListBottomsheetLayoutBinding
+import com.epaymark.big9.network.ResponseState
+import com.epaymark.big9.network.RetrofitHelper.handleApiError
 
 import com.epaymark.big9.ui.base.BaseBottomSheetFragment
+import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.`interface`.CallBack
 import com.epaymark.big9.utils.`interface`.CallBack4
+import com.google.gson.Gson
 
 class BankListBottomSheetDialog(val callBack: CallBack) : BaseBottomSheetFragment() {
     lateinit var binding: BankListBottomsheetLayoutBinding
     private val myViewModel: MyViewModel by activityViewModels()
     var bankList = ArrayList<BankListModel>()
-
+    private var loader: Dialog? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,6 +59,10 @@ class BankListBottomSheetDialog(val callBack: CallBack) : BaseBottomSheetFragmen
     }
 
     private fun initView() {
+
+        activity?.let {act->
+         loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
+        }
         binding.apply {
             binding.apply {
                 recycleViewPaymentRequest.apply {
@@ -69,10 +78,6 @@ class BankListBottomSheetDialog(val callBack: CallBack) : BaseBottomSheetFragmen
                             viewModel?.beneficiary_ifsc?.value=s2
                             dismiss()
                         }
-
-
-
-
                     })
                 }
             }

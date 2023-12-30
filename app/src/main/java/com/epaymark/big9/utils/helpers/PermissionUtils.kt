@@ -18,7 +18,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 
 object PermissionUtils {
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+
     private val CAMERA_PERMISSIONS:MutableList<String> =
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -57,7 +57,7 @@ object PermissionUtils {
             }
         }
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+
     private val BLUETOOTH_PERMISSIONS:MutableList<String> =
             mutableListOf(
                 Manifest.permission.BLUETOOTH_CONNECT,
@@ -65,7 +65,7 @@ object PermissionUtils {
                 Manifest.permission.BLUETOOTH_SCAN,
             )
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+
     fun requestVideoRecordingPermission(context: Context, callback: PermissionsCallback) {
 
         Dexter.withContext(context)
@@ -91,7 +91,7 @@ object PermissionUtils {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+
     fun requestBluetoothPermission(context: Context, callback: PermissionsCallback) {
 
         Dexter.withContext(context)

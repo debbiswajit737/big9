@@ -245,7 +245,7 @@ class KycDetailsFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
-
+                    authViewModel?.filePath?.value=null
                     findNavController().navigate(R.id.action_kycDetailsFragment_to_bankDetailsFragment)
                 }
 

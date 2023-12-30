@@ -9,13 +9,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.epaymark.big9.R
 
 import com.epaymark.big9.data.viewMovel.AuthViewModel
@@ -27,9 +27,9 @@ import com.epaymark.big9.network.RetrofitHelper.handleApiError
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.fragment.CameraDialog
 import com.epaymark.big9.ui.popup.SuccessPopupFragment
-import com.epaymark.big9.ui.receipt.EPotlyReceptDialogFragment
 import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.helpers.Constants
+import com.epaymark.big9.utils.helpers.Constants.isDenomination
 import com.epaymark.big9.utils.helpers.Constants.isGallary
 import com.epaymark.big9.utils.helpers.Constants.isIsPaySlip
 import com.epaymark.big9.utils.helpers.Constants.isVideo
@@ -41,15 +41,13 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
-import java.util.Objects
 
 class PaymentRequestImformationFragment : BaseFragment() {
     lateinit var binding: FragmentPaymentRequestImformationBinding
     private val viewModel: MyViewModel by activityViewModels()
     private var authViewModel: AuthViewModel?=null
     private var loader: Dialog? = null
-    var paySleeyUri:String?=""
-    var denomSlipUri:Uri?=null
+    var formType=""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,39 +63,64 @@ class PaymentRequestImformationFragment : BaseFragment() {
         initView()
         setObserver()
         onViewClick()
-        Log.d("TAG_payment", "onViewCreated: 1")
+
     }
 
     override fun onResume() {
         super.onResume()
-        if (isIsPaySlip){
-            authViewModel?.filePath?.observe(viewLifecycleOwner){
+        authViewModel?.filePath?.observe(viewLifecycleOwner) {
+            if (isIsPaySlip) {
+
+                viewModel.paySleeyUriUri=it
+                viewModel.paySleeyUriUri?.let {iUri->
+                    viewModel.paySleeyUri = iUri.uriToBase64(binding.root.context.contentResolver)
+                }
+                /*viewModel.paySleeyUriUri = it
+                viewModel.paySleeyUri = it.uriToBase64(binding.root.context.contentResolver)
 
 
-                paySleeyUri=it.uriToBase64(binding.root.context.contentResolver)
-
-                Log.d("TAG_payment", "onViewCreated: 2 "+paySleeyUri)
                 //denomSlipUri=it
-                binding.imgPlaySlip.setImage(it)
+                binding.imgPlaySlip.setImage(it)*/
+
+
+                isIsPaySlip = false
+                isDenomination = false
             }
 
-            isIsPaySlip=false
+            if (isDenomination) {
+
+                viewModel.denomSlipUriUri=it
+                viewModel.denomSlipUriUri?.let {iUri->
+                    viewModel.denomSlipUri = iUri.uriToBase64(binding.root.context.contentResolver)
+                }
+
+
+                isIsPaySlip = false
+                isDenomination = false
+            }
+            viewModel.paySleeyUriUri?.let { iUri ->
+                binding.imgPlaySlip.setImage(iUri)
+            }
+            viewModel.denomSlipUriUri?.let { iUri ->
+                binding.imgDoc.setImage(iUri)
+            }
+
         }
-        Log.d("TAG_payment", "onViewCreated: 3 ")
+
     }
     private fun onViewClick() {
         binding.apply {
-
             imgBack.back()
             imgPlaySlip.setOnClickListener{tvUploadPayslip.performClick()}
             tvUploadPayslip.setOnClickListener{
                 activity?.let {act->
                     Constants.isBackCamera =true
-
+                    isIsPaySlip=true
+                    isDenomination=false
                     Constants.isPdf =false
                     val cameraDialog = CameraDialog(object : CallBack {
                         override fun getValue(s: String) {
-                            getImage(s)
+                            getImage(s,true)
                         }
 
                     },false)
@@ -125,7 +148,7 @@ class PaymentRequestImformationFragment : BaseFragment() {
                                 "userid" to loginData.userid,
 
                             "bankid" to viewModel?.selectedBankId?.value,
-                            "ftype" to "F1",
+                            "ftype" to formType,
                             "prmode" to "",
                             "depositamount" to viewModel?.paymentAmt?.value,
                             "depositdate" to viewModel?.depositeDate?.value,
@@ -143,9 +166,14 @@ class PaymentRequestImformationFragment : BaseFragment() {
 
                             var PaymentSlip=
                                 //paySleeyUri?.let { it.createImagePart("paymentSlip") }
-                            paySleeyUri?.let { createImagePart("paymentSlip", it) }
+                                viewModel?.paySleeyUri?.let { createImagePart("paymentSlip", it) }
+
+
                             var denomSlip=
-                                denomSlipUri?.let { it.createImagePart("denomSlip")  }
+                                //paySleeyUri?.let { it.createImagePart("paymentSlip") }
+                                viewModel?.paySleeyUri?.let { createImagePart("denomSlip", it) }
+                           /* var denomSlip=
+                                denomSlipUri?.let { it.createImagePart("denomSlip")  }*/
 
 
                             val gson =  Gson()
@@ -160,22 +188,46 @@ class PaymentRequestImformationFragment : BaseFragment() {
                     //Toast.makeText(requireActivity(), "Ok", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            //denomination
+            imgDoc.setOnClickListener{tvUploadDoc.performClick()}
+            tvUploadDoc.setOnClickListener{
+                activity?.let {act->
+                    Constants.isBackCamera =true
+                    isIsPaySlip=false
+                    isDenomination=true
+                    Constants.isPdf =false
+                    val cameraDialog = CameraDialog(object : CallBack {
+                        override fun getValue(s: String) {
+                            getImage(s, false)
+                        }
+
+                    },false)
+                    cameraDialog.show(act.supportFragmentManager, cameraDialog.tag)
+
+                }
+            }
         }
 
 
 
     }
 
-    private fun getImage(s:String) {
+    private fun getImage(s: String, b: Boolean) {
         when(s){
             "g"->{
                 isVideo =false
                 isGallary =true
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                if (b) {
+                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                }
+                else{
+                    pickMediaDenomination.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                }
                 //findNavController().navigate(R.id.action_regFragment_to_cameraFragment)
             }
             "t"->{
-                isIsPaySlip=true
+
                 isVideo =false
                 isGallary =false
                 findNavController().navigate(R.id.action_paymentRequestImformationFragment_to_cameraFragment2)
@@ -185,9 +237,11 @@ class PaymentRequestImformationFragment : BaseFragment() {
     }
 
     fun initView() {
+
         viewModel?.selectedBankMode?.observe(viewLifecycleOwner){
             binding.apply {
                 if (it.trim()=="CASH CDM" || it.trim()=="CASH - COUNTER DEPOSIT" ){
+                    formType="F2"
                     imgDoc.visibility=View.VISIBLE
                     tvUploadDoc.visibility=View.VISIBLE
                     llDnomination1.visibility=View.VISIBLE
@@ -196,6 +250,7 @@ class PaymentRequestImformationFragment : BaseFragment() {
                     llDnomination0.visibility=View.VISIBLE
                 }
                 else{
+                    formType="F1"
                     imgDoc.visibility=View.GONE
                     tvUploadDoc.visibility=View.GONE
                     llDnomination1.visibility=View.GONE
@@ -233,8 +288,8 @@ class PaymentRequestImformationFragment : BaseFragment() {
                             s3: String,
                             s4: String
                         ) {
-                            findNavController().popBackStack()
-
+                           // findNavController().popBackStack()
+                            findNavController().navigate(R.id.action_paymentRequestImformationFragment_to_homeFragment2)
                         }
                     })
 
@@ -254,8 +309,43 @@ class PaymentRequestImformationFragment : BaseFragment() {
 
         if (uri != null) {
             authViewModel?.filePath?.value = uri
-            binding.imgPlaySlip.setImage(uri)
-            paySleeyUri=uri.uriToBase64(binding.root.context.contentResolver)
+            if (isDenomination){
+                binding.imgDoc.setImage(uri)
+                viewModel.denomSlipUri = uri.uriToBase64(binding.root.context.contentResolver)
+                isIsPaySlip=false
+                isDenomination=false
+            }
+            else if (isIsPaySlip){
+                binding.imgPlaySlip.setImage(uri)
+                viewModel.paySleeyUri = uri.uriToBase64(binding.root.context.contentResolver)
+                isIsPaySlip=false
+                isDenomination=false
+            }
+            /*Glide.with(binding.tvUploadPayslip.context)
+                .load(uri)
+                .into(binding.imgPlaySlip)*/
+            //findNavController().navigate(R.id.action_homeFragment_to_previewFragment)
+        } else {
+            viewModel?.filePath?.value = Uri.parse("/")
+
+            Log.d("PhotoPicker", "No media selected")
+        }
+
+    }
+
+
+
+    val pickMediaDenomination = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+
+        if (uri != null) {
+            //authViewModel?.filePath?.value = uri
+
+                binding.imgDoc.setImage(uri)
+                viewModel.denomSlipUri = uri.uriToBase64(binding.root.context.contentResolver)
+                isIsPaySlip=false
+                isDenomination=false
+
+
             /*Glide.with(binding.tvUploadPayslip.context)
                 .load(uri)
                 .into(binding.imgPlaySlip)*/

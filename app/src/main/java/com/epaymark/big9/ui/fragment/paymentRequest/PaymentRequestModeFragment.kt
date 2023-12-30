@@ -22,6 +22,7 @@ import com.epaymark.big9.network.RetrofitHelper.handleApiError
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.utils.common.MethodClass
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack2
 import com.google.gson.Gson
 
 class PaymentRequestModeFragment : BaseFragment() {
@@ -58,8 +59,10 @@ class PaymentRequestModeFragment : BaseFragment() {
     }
 
     fun initView() {
+        binding.imgBack.back()
         binding.apply {
-
+            viewModel?.paySleeyUriUri=null
+            viewModel?.denomSlipUriUri=null
             activity?.let {act->
                         loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
             }
@@ -154,9 +157,10 @@ class PaymentRequestModeFragment : BaseFragment() {
                 bankInformationList.add(BankModeListModel(R.drawable.rounded_bank,"ONLINE - IMPS","Minimam Amount:100.00","Maximum Amount: 500000.00"))
                 bankInformationList.add(BankModeListModel(R.drawable.rounded_bank,"ONLINE - NEFT","Minimam Amount:100.00","Maximum Amount: 500000.00"))
                 bankInformationList.add(BankModeListModel(R.drawable.rounded_bank,"ONLINE - RTGS","Minimam Amount:100.00","Maximum Amount: 500000.00"))*/
-                adapter= BankModeListAdapter(bankInformationList, object : CallBack {
-                    override fun getValue(s: String) {
+                adapter= BankModeListAdapter(bankInformationList, object : CallBack2 {
+                    override fun getValue2(s: String,s2: String) {
                         viewModel?.selectedBankMode?.value=s
+                        viewModel?.minMaxBalence?.value=s2
                         findNavController().navigate(R.id.action_paymentRequestModeFragment_to_paymentRequestImformationFragment)
                     }
 

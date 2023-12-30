@@ -108,7 +108,7 @@ class AddBankFragment : BaseFragment() {
                 activity?.let {act->
                     val bankListBottomSheetDialog = BankListBottomSheetDialog(object : CallBack {
                         override fun getValue(s: String) {
-                            Toast.makeText(requireActivity(), "$s", Toast.LENGTH_SHORT).show()
+                           // Toast.makeText(requireActivity(), "$s", Toast.LENGTH_SHORT).show()
                         }
                     })
                     bankListBottomSheetDialog.show(
@@ -149,11 +149,14 @@ class AddBankFragment : BaseFragment() {
                     val  data = mapOf(
                         "userid" to loginData.userid,
                         "image" to bankSlipDocumentImageBase64?.value,
-                        "bankname" to  beneficiary_bank_name.value?.toString(),
-                        "beneficiary_ifsc" to beneficiary_ifsc.value?.toString(),
-                        "beneficiary_acc" to beneficiary_acc.value?.toString(),
-                        "beneficiary_name" to beneficiary_name.value?.toString()
+                        "bname" to  beneficiary_bank_name.value?.toString(),
+                        "ifsccode" to beneficiary_ifsc.value?.toString(),
+                        "Accnumber" to beneficiary_acc.value?.toString(),
+                        "accholder" to beneficiary_name.value?.toString()
                     )
+
+
+
 
                     val gson= Gson()
                     var jsonString = gson.toJson(data)
@@ -172,6 +175,26 @@ class AddBankFragment : BaseFragment() {
             binding.apply {
                 authViewModel = ViewModelProvider(requireActivity())[AuthViewModel::class.java]
             }
+
+            val (isLogin, loginResponse) =sharedPreff.getLoginData()
+            loginResponse?.let { loginData ->
+                loginData.userid?.let {
+                    val data = mapOf(
+                        "userid" to it,
+                    )
+
+
+                    val gson =  Gson();
+                    var jsonString = gson.toJson(data);
+                    loginData.AuthToken?.let {
+                        viewModel?.addBankBankList(it,jsonString.encrypt())
+                    }
+                }
+
+
+            }
+
+
         }
     }
 
@@ -196,6 +219,25 @@ class AddBankFragment : BaseFragment() {
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                     viewModel.addToBankReceptLiveData?.value=null
 
+                }
+            }
+        }
+
+        viewModel?.addBankBankListResponseLiveData?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+
+
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }
         }

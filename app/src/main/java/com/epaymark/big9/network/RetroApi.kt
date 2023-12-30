@@ -4,6 +4,7 @@ import com.epaymark.big9.data.model.sample.Test
 import com.epaymark.big9.data.genericmodel.BaseResponse
 
 import com.epaymark.big9.data.model.AEPSReportModel
+import com.epaymark.big9.data.model.AddBankBankListModel
 import com.epaymark.big9.data.model.AddBankModel
 import com.epaymark.big9.data.model.AllBankListModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
@@ -29,6 +30,7 @@ import com.epaymark.big9.data.model.ResetTPINModel
 import com.epaymark.big9.data.model.ServiceCheckModel
 import com.epaymark.big9.data.model.SubmitMoveToBankBankListModel
 import com.epaymark.big9.data.model.TransactionReportModel
+import com.epaymark.big9.data.model.addnewBankModel
 import com.epaymark.big9.data.model.allReport.Bank_settle_reportModel
 import com.epaymark.big9.data.model.allReport.Cashout_ledger_reportModel
 import com.epaymark.big9.data.model.allReport.DmtReportReportModel
@@ -381,7 +383,7 @@ interface RetroApi {
     ): Response<SubmitMoveToBankBankListModel>
 
 
-    @POST("addbank")
+    @POST("v1/services/mtb/add_bank")
     suspend fun addBank(
         @Header("Authtoken") token: String,
         @Body data: String
@@ -527,6 +529,12 @@ interface RetroApi {
         @Part image1: MultipartBody.Part?,
         @Part image2: MultipartBody.Part?,
     ): Response<PaymentRequistModel>
+
+    @POST("services/mtb/bank_list")
+    suspend fun addBankBankList(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<AddBankBankListModel>
 
 
 }

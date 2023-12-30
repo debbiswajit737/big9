@@ -28,6 +28,7 @@ object Constants {
     var isDthOperator=false
     var isVideo=false
     var isIsPaySlip=false
+    var isDenomination=false
     var isIsCheck=false
     var isPdf=false
     var isBackCamera=true
@@ -74,4 +75,5 @@ object Constants {
     var loginMobileNumber: String?=null
     var loginMobileReferanceNumber: String?=null
     var SMS_SENDER_NUMBER: String="9674375433"
+    var paySleepType=""
 }

@@ -7,9 +7,11 @@ import com.epaymark.big9.databinding.BankListLayoutBinding
 import com.epaymark.big9.data.model.BankModeListModel
 
 import com.epaymark.big9.utils.`interface`.CallBack
+import com.epaymark.big9.utils.`interface`.CallBack2
+import com.epaymark.big9.utils.`interface`.CallBack3
 
 
-class BankModeListAdapter(private val items: List<BankModeListModel>, val callback: CallBack) : RecyclerView.Adapter<BankModeListAdapter.MyViewHolder>() {
+class BankModeListAdapter(private val items: List<BankModeListModel>, val callback: CallBack2) : RecyclerView.Adapter<BankModeListAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 
@@ -42,7 +44,7 @@ class BankModeListAdapter(private val items: List<BankModeListModel>, val callba
             item.bankName?.let {bankName->
                 binding.tvBankName.text = bankName
                 binding.llContainer.setOnClickListener{
-                    callback.getValue(bankName)
+                    callback.getValue2(bankName,"${item.bankAc.toString()} \n${item.ifsc.toString()} ")
                 }
             }
             item.bankAc?.let {bankAc->

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.AEPSReportModel
+import com.epaymark.big9.data.model.AddBankBankListModel
 import com.epaymark.big9.data.model.AddBankModel
 import com.epaymark.big9.data.model.AllBankListModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
@@ -1585,6 +1586,26 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     }
 
+
+
+    //addBankBankList
+    private val _addBankBankListResponseLiveData =
+        MutableLiveData<ResponseState<AddBankBankListModel>>()
+    val addBankBankListResponseLiveData: LiveData<ResponseState<AddBankBankListModel>>
+        get() = _addBankBankListResponseLiveData
+
+
+    suspend fun addBankBankList(token: String, loginModel: String) {
+        _addBankBankListResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.addBankBankList(token, loginModel.replace("\n", "").replace("\r", ""))
+            _addBankBankListResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _addBankBankListResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
 
 }
 

@@ -3,6 +3,7 @@ package com.epaymark.big9.ui.fragment.regandkyc
 import android.Manifest
 import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +34,7 @@ import androidx.camera.video.Recorder
 import androidx.camera.video.Recording
 import androidx.camera.video.VideoCapture
 import androidx.camera.video.VideoRecordEvent
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.databinding.DataBindingUtil
@@ -63,7 +66,7 @@ class CameraFragment : BaseFragment() {
     val TAG = "camera"
     @RequiresApi(Build.VERSION_CODES.P)
 
-
+    val CAMERA_PERMISSION_REQUEST_CODE=202
     private lateinit var countDownTimer: CountDownTimer
     private val initialCountDown: Long = 10000
     private val countDownInterval: Long = 1000
@@ -110,6 +113,37 @@ class CameraFragment : BaseFragment() {
     fun init() {
         binding.llUserDetails.visibility=View.GONE
         binding.btnGallaryImg.visibility=View.GONE
+        if (!isGallary && !isPdf) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                cameraInit()
+            } else {
+                checkPermissionOrio()
+            }
+        }
+        else{
+            //pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+
+
+
+                    pickPdfLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { result: Uri? ->
+                        if (result != null) {
+                            authViewModel?.filePath?.value = result
+                            findNavController().popBackStack()
+                        }
+                    }
+
+
+
+            val mimeTypes = arrayOf("application/pdf")
+            pickPdfLauncher.launch(mimeTypes)
+        }
+
+
+
+    }
+
+
+    private fun cameraInit() {
         if (isGallary) {
             binding.btnCaptureImg.visibility=View.GONE
             if (isPdf){
@@ -131,6 +165,8 @@ class CameraFragment : BaseFragment() {
         }
         else{
             binding.btnCaptureImg.visibility=View.VISIBLE
+            startCamera()
+            onViewClick()
             PermissionUtils.requestVideoRecordingPermission(requireActivity(), object :
                 PermissionsCallback {
                 override fun onPermissionRequest(granted: Boolean) {
@@ -146,8 +182,27 @@ class CameraFragment : BaseFragment() {
         }
     }
 
-   
     @RequiresApi(Build.VERSION_CODES.P)
+    private fun checkPermissionOrio() {
+        // Check if the permission has been granted
+        if (ContextCompat.checkSelfPermission(binding.root.context, Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, request it
+            activity?.let {
+                ActivityCompat.requestPermissions(
+                    it,
+                    arrayOf(Manifest.permission.CAMERA),
+                    CAMERA_PERMISSION_REQUEST_CODE
+                )
+            }
+
+        } else {
+            cameraInit()
+        }
+    }
+
+
+
     fun onViewClick() {
         binding.apply {
             btnCaptureImg.setOnClickListener {
@@ -559,5 +614,27 @@ class CameraFragment : BaseFragment() {
             Log.d("PhotoPicker", "No media selected")
         }
         findNavController().popBackStack()
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                cameraInit()
+            } else {
+                Toast.makeText(
+                    binding.root.context,
+                    "Camera permission is required to take photos and videos.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                findNavController().popBackStack()
+            }
+        }
     }
 }

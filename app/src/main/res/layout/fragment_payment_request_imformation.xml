@@ -228,7 +228,15 @@
                             android:text="@string/payment_amount"
                             android:textColor="@color/black"
                             android:textSize="@dimen/text_size" />
-
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/edit_text_title_margin_top"
+                            android:fontFamily="@font/montserrat_medium_500"
+                            android:text="@{viewModel.minMaxBalence}"
+                            android:textColor="@color/logo_color"
+                            tools:text="min\nmax"
+                            android:textSize="@dimen/text_size" />
                         <EditText
                             android:id="@+id/et_amt"
                             android:layout_width="match_parent"
@@ -392,6 +400,7 @@
                                     android:layout_marginTop="@dimen/edit_text_title_margin_top"
                                     android:fontFamily="@font/montserrat_medium_500"
                                     android:text="DENOMINATION 10"
+                                    android:layout_marginStart="@dimen/_10sdp"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/text_size" />
 
@@ -403,9 +412,10 @@
                                     android:background="@drawable/field_bg"
                                     android:hint="@string/particulars_hint"
                                     android:text="@={viewModel.denomination_10}"
-                                    android:inputType="text"
+                                    android:inputType="number"
                                     android:longClickable="false"
                                     android:maxLength="10"
+                                    android:layout_marginHorizontal="@dimen/_10sdp"
                                     android:padding="@dimen/_5sdp"
                                     android:drawablePadding="@dimen/_5sdp"
 
@@ -419,8 +429,7 @@
                                     android:fontFamily="@font/montserrat_regular_400"
                                     android:textColor="@color/pink2"
                                     android:textSize="@dimen/_9ssp"
-                                    android:text="@{viewModel.particularError}"
-                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
+
                                     />
                             </LinearLayout>
                             <LinearLayout
@@ -429,6 +438,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
                                 <TextView
+                                    android:layout_marginStart="@dimen/_10sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/edit_text_title_margin_top"
@@ -445,9 +455,10 @@
                                     android:background="@drawable/field_bg"
                                     android:hint="@string/particulars_hint"
                                     android:text="@={viewModel.denomination_20}"
-                                    android:inputType="text"
+                                    android:inputType="number"
                                     android:longClickable="false"
                                     android:maxLength="10"
+                                    android:layout_marginHorizontal="@dimen/_10sdp"
                                     android:padding="@dimen/_5sdp"
                                     android:drawablePadding="@dimen/_5sdp"
                                     android:textColor="@color/black"
@@ -460,8 +471,7 @@
                                     android:fontFamily="@font/montserrat_regular_400"
                                     android:textColor="@color/pink2"
                                     android:textSize="@dimen/_9ssp"
-                                    android:text="@{viewModel.particularError}"
-                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
+
                                     />
                             </LinearLayout>
                         </LinearLayout>
@@ -476,6 +486,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
                                 <TextView
+                                    android:layout_marginStart="@dimen/_10sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/edit_text_title_margin_top"
@@ -492,9 +503,10 @@
                                     android:background="@drawable/field_bg"
                                     android:hint="@string/particulars_hint"
                                     android:text="@={viewModel.denomination_50}"
-                                    android:inputType="text"
+                                    android:inputType="number"
                                     android:longClickable="false"
                                     android:maxLength="10"
+                                    android:layout_marginHorizontal="@dimen/_10sdp"
                                     android:padding="@dimen/_5sdp"
                                     android:drawablePadding="@dimen/_5sdp"
 
@@ -508,8 +520,6 @@
                                     android:fontFamily="@font/montserrat_regular_400"
                                     android:textColor="@color/pink2"
                                     android:textSize="@dimen/_9ssp"
-                                    android:text="@{viewModel.particularError}"
-                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
                                     />
                             </LinearLayout>
                             <LinearLayout
@@ -518,6 +528,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
                                 <TextView
+                                    android:layout_marginStart="@dimen/_10sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/edit_text_title_margin_top"
@@ -533,10 +544,11 @@
                                     android:layout_marginTop="@dimen/edit_text_margin_top"
                                     android:background="@drawable/field_bg"
                                     android:hint="@string/particulars_hint"
-                                    android:text="@={viewModel.denomination_20}"
-                                    android:inputType="text"
+                                    android:text="@={viewModel.denomination_100}"
+                                    android:inputType="number"
                                     android:longClickable="false"
                                     android:maxLength="10"
+                                    android:layout_marginHorizontal="@dimen/_10sdp"
                                     android:padding="@dimen/_5sdp"
                                     android:drawablePadding="@dimen/_5sdp"
                                     android:textColor="@color/black"
@@ -549,8 +561,6 @@
                                     android:fontFamily="@font/montserrat_regular_400"
                                     android:textColor="@color/pink2"
                                     android:textSize="@dimen/_9ssp"
-                                    android:text="@{viewModel.particularError}"
-                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
                                     />
                             </LinearLayout>
                         </LinearLayout>
@@ -566,6 +576,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
                                 <TextView
+                                    android:layout_marginStart="@dimen/_10sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/edit_text_title_margin_top"
@@ -582,9 +593,10 @@
                                     android:background="@drawable/field_bg"
                                     android:hint="@string/particulars_hint"
                                     android:text="@={viewModel.denomination_200}"
-                                    android:inputType="text"
+                                    android:inputType="number"
                                     android:longClickable="false"
                                     android:maxLength="10"
+                                    android:layout_marginHorizontal="@dimen/_10sdp"
                                     android:padding="@dimen/_5sdp"
                                     android:drawablePadding="@dimen/_5sdp"
                                     android:textColor="@color/black"
@@ -597,8 +609,6 @@
                                     android:fontFamily="@font/montserrat_regular_400"
                                     android:textColor="@color/pink2"
                                     android:textSize="@dimen/_9ssp"
-                                    android:text="@{viewModel.particularError}"
-                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
                                     />
                             </LinearLayout>
                             <LinearLayout
@@ -607,6 +617,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
                                 <TextView
+                                    android:layout_marginStart="@dimen/_10sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/edit_text_title_margin_top"
@@ -624,9 +635,10 @@
                                     android:hint="@string/particulars_hint"
                                     android:text="@={viewModel.denomination_500}"
                                     app:requestFocus="@{viewModel.particularErrorVisible}"
-                                    android:inputType="text"
+                                    android:inputType="number"
                                     android:longClickable="false"
                                     android:maxLength="10"
+                                    android:layout_marginHorizontal="@dimen/_10sdp"
                                     android:padding="@dimen/_5sdp"
                                     android:drawablePadding="@dimen/_5sdp"
                                     android:textColor="@color/black"
@@ -639,8 +651,6 @@
                                     android:fontFamily="@font/montserrat_regular_400"
                                     android:textColor="@color/pink2"
                                     android:textSize="@dimen/_9ssp"
-                                    android:text="@{viewModel.particularError}"
-                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
                                     />
                             </LinearLayout>
                         </LinearLayout>
@@ -656,6 +666,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
                                 <TextView
+                                    android:layout_marginStart="@dimen/_10sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/edit_text_title_margin_top"
@@ -672,9 +683,10 @@
                                     android:background="@drawable/field_bg"
                                     android:hint="@string/particulars_hint"
                                     android:text="@={viewModel.denomination_2000}"
-                                    android:inputType="text"
+                                    android:inputType="number"
                                     android:longClickable="false"
                                     android:maxLength="10"
+                                    android:layout_marginHorizontal="@dimen/_10sdp"
                                     android:padding="@dimen/_5sdp"
                                     android:drawablePadding="@dimen/_5sdp"
                                     android:textColor="@color/black"
@@ -687,8 +699,6 @@
                                     android:fontFamily="@font/montserrat_regular_400"
                                     android:textColor="@color/pink2"
                                     android:textSize="@dimen/_9ssp"
-                                    android:text="@{viewModel.particularError}"
-                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
                                     />
                             </LinearLayout>
                             <LinearLayout
@@ -715,7 +725,7 @@
                                     android:hint="@string/particulars_hint"
                                     android:text="@={viewModel.particular}"
                                     app:requestFocus="@{viewModel.particularErrorVisible}"
-                                    android:inputType="text"
+                                    android:inputType="number"
                                     android:longClickable="false"
                                     android:maxLength="10"
                                     android:padding="@dimen/_5sdp"
@@ -731,8 +741,6 @@
                                     android:fontFamily="@font/montserrat_regular_400"
                                     android:textColor="@color/pink2"
                                     android:textSize="@dimen/_9ssp"
-                                    android:text="@{viewModel.particularError}"
-                                    app:hideErrorTextView="@{viewModel.particularErrorVisible}"
                                     />
                             </LinearLayout>
                         </LinearLayout>
@@ -790,6 +798,8 @@
 
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="1.0"
+                                app:layout_constraintStart_toEndOf="@+id/tv_upload_payslip"
                                 app:layout_constraintTop_toBottomOf="@+id/img_play_slip" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 

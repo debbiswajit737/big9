@@ -12,6 +12,7 @@ import com.epaymark.big9.R
 import com.epaymark.big9.data.genericmodel.BaseResponse
 import com.epaymark.big9.data.model.AEPSReportData
 import com.epaymark.big9.data.model.AEPSReportModel
+import com.epaymark.big9.data.model.AddBankBankListModel
 import com.epaymark.big9.data.model.AddBankModel
 import com.epaymark.big9.data.model.AllBankListModel
 import com.epaymark.big9.data.model.ChangeUserPasswordModel
@@ -70,6 +71,12 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     var fromPage=""
     var data:Map<String, Any?>?=null
     val selectedButton = MutableLiveData<Int>()
+    var paySleeyUri:String?=""
+    var denomSlipUri:String?=""
+
+    var paySleeyUriUri:Uri?=null
+    var denomSlipUriUri:Uri?=null
+
 
 
 
@@ -91,6 +98,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val selectedBank = MutableLiveData<String>("")
     val selectedBankId = MutableLiveData<String>("")
     val selectedBankMode = MutableLiveData<String>("")
+    val minMaxBalence = MutableLiveData<String>("")
     val prepaitOrPostPaid = MutableLiveData<String>("")
     val reportType = MutableLiveData<String>("")
     val reportTypeIDRecept = MutableLiveData<String>("")
@@ -1690,7 +1698,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         get() = repository.submit_moveToBankReceptLiveData
     fun submitMovetobank(token: String, data: String) {
         viewModelScope.launch {
-            repository.moveToBank(token,data)
+            repository.submitMovetobank(token,data)
         }
     }
 
@@ -1770,4 +1778,12 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         }
     }
 
+    //addBankBankList
+    val addBankBankListResponseLiveData: LiveData<ResponseState<AddBankBankListModel>>
+        get() = repository.addBankBankListResponseLiveData
+    fun addBankBankList(token: String, data: String) {
+        viewModelScope.launch {
+            repository.addBankBankList(token,data)
+        }
+    }
 }

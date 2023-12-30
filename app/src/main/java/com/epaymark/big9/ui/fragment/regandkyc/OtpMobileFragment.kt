@@ -161,11 +161,21 @@ class OtpMobileFragment : BaseFragment()  {
                               //  }
                     }
                     else  {
-                        (activity as? RegActivity)?.let {act->
-                            val intent=Intent(act, AuthenticationActivity::class.java)
+                        activity?.let {act->
+                            try {
+                                it.data?.step?.let {
+                                    val stape=it.toInt()
+                                    val intent=Intent(act, AuthenticationActivity::class.java)
+                                    intent.putExtra(Constants.stape,stape)
+                                    startActivity(intent)
+                                    act.finish()
+                                }
+
+                            }catch (e:Exception){}
+                            /*val intent=Intent(act, AuthenticationActivity::class.java)
                             intent.putExtra(stape,it.data?.step)
                             startActivity(intent)
-                            act.finish()
+                            act.finish()*/
                         }
                     }
 

@@ -30,11 +30,13 @@ import com.epaymark.big9.network.ResponseState
 import com.epaymark.big9.network.RetrofitHelper.handleApiError
 import com.epaymark.big9.ui.activity.AuthenticationActivity
 import com.epaymark.big9.ui.activity.DashboardActivity
+import com.epaymark.big9.ui.activity.RegActivity
 import com.epaymark.big9.ui.base.BaseFragment
 import com.epaymark.big9.ui.popup.LoadingPopup
 import com.epaymark.big9.ui.receipt.AgreementPageFragment
 import com.epaymark.big9.ui.receipt.DthReceptDialogFragment
 import com.epaymark.big9.utils.common.MethodClass
+import com.epaymark.big9.utils.helpers.Constants
 import com.epaymark.big9.utils.helpers.Constants.API_KEY
 import com.epaymark.big9.utils.helpers.Constants.CLIENT_ID
 import com.epaymark.big9.utils.helpers.Constants.loginMobileNumber
@@ -129,12 +131,25 @@ class LoginMobileFragment : BaseFragment() {
                                                 "INACTIVE"
                                             )
                                             if (loginResponse.kycstep != null) {
-                                                startActivity(
+                                                /*startActivity(
                                                     Intent(
                                                         requireActivity(),
                                                         AuthenticationActivity::class.java
                                                     )
-                                                )
+                                                )*/
+                                                activity?.let { act->
+                                                    loginResponse.kycstep?.let {
+                                                        try {
+                                                            val stape=it.toInt()
+                                                            val intent=Intent(act, AuthenticationActivity::class.java)
+                                                            intent.putExtra(Constants.stape,stape)
+                                                            startActivity(intent)
+                                                            act.finish()
+                                                        }catch (e:Exception){}
+
+                                                    }
+
+                                                }
                                             } else {
                                                 findNavController().navigate(
                                                     R.id.action_loginMobileFragment_to_otpMobileFragment,

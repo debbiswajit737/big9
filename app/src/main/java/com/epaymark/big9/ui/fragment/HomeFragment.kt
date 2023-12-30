@@ -1218,6 +1218,15 @@ class HomeFragment : BaseFragment() {
         Log.d("TAG_token", "init: "+sharedPreff.getFcnToken().toString())
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
+
+            val (isLogin, loginResponse) =sharedPreff.getLoginData()
+            loginResponse?.let { loginData ->
+                loginData.name?.let {
+                    binding.tvUser.text=it
+                }
+            }
+
+
         }
         /**/
         viewModel.from_page_message.value="home"
@@ -1395,7 +1404,4 @@ class HomeFragment : BaseFragment() {
             }
         }
     }
-
-
-
 }
