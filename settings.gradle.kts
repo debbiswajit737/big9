@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "big9"
+rootProject.name = "com.big9.app"
 include(":app")
  

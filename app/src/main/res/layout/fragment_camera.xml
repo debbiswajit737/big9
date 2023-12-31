@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.epaymark.big9.data.viewMovel.AuthViewModel" />
+            type="com.big9.app.data.viewMovel.AuthViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

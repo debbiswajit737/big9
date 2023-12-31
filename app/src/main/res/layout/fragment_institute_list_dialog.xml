@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="viewModel"
-            type="com.epaymark.big9.data.viewMovel.MyViewModel" />
+            type="com.big9.app.data.viewMovel.MyViewModel" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout

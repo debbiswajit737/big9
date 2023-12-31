@@ -7,13 +7,13 @@
         <import type="android.view.View"/>
         <variable
             name="viewModel"
-            type="com.epaymark.big9.data.viewMovel.MyViewModel" />
+            type="com.big9.app.data.viewMovel.MyViewModel" />
         <variable
             name="usere"
-            type="com.epaymark.big9.data.model.profile.Data" />
+            type="com.big9.app.data.model.profile.Data" />
         <variable
             name="epotly_data"
-            type="com.epaymark.big9.data.model.EpotlyData" />
+            type="com.big9.app.data.model.EpotlyData" />
 
 
 

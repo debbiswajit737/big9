@@ -12,11 +12,11 @@ plugins {
 
 
 android {
-    namespace = "com.epaymark.big9"
+    namespace = "com.big9.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.epaymark.big9"
+        applicationId = "com.big9.app"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -200,6 +200,7 @@ dependencies {
 
 
     implementation ("androidx.paging:paging-runtime:3.0.1")
+    implementation ("org.jetbrains:annotations:16.0.2")
 }
 
 kapt {

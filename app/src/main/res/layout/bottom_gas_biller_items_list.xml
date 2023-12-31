@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.epaymark.big9.data.model.BottomSheetGasBillerListModel" />
+            type="com.big9.app.data.model.BottomSheetGasBillerListModel" />
     </data>
 
 

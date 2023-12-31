@@ -5,7 +5,7 @@
     <data>
         <variable
             name="model"
-            type="com.epaymark.big9.data.model.AccountDetailsModel" />
+            type="com.big9.app.data.model.AccountDetailsModel" />
     </data>
     <androidx.cardview.widget.CardView
         android:layout_marginTop="@dimen/_5sdp"

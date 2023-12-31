@@ -6,7 +6,7 @@
     <data>
         <!--<variable
             name="model"
-            type="com.epaymark.big9.data.model.UserInfoModel" />-->
+            type="com.big9.appbig9.app.data.model.UserInfoModel" />-->
     </data>
 
     <RelativeLayout

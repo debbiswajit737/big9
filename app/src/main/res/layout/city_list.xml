@@ -6,7 +6,7 @@
     <data>
         <variable
             name="model"
-            type="com.epaymark.big9.data.model.onBoardindPackage.CityData" />
+            type="com.big9.app.data.model.onBoardindPackage.CityData" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout

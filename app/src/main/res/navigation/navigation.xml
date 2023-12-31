@@ -9,12 +9,12 @@
     <!--paymentRequestFragment-->
     <fragment
         android:id="@+id/dashBoardFragment"
-        android:name="com.epaymark.big9.ui.fragment.DashBoardFragment"
+        android:name="com.big9.app.ui.fragment.DashBoardFragment"
         android:label="fragment_dash_board"
         tools:layout="@layout/fragment_dash_board" />
     <fragment
         android:id="@+id/homeFragment2"
-        android:name="com.epaymark.big9.ui.fragment.HomeFragment"
+        android:name="com.big9.app.ui.fragment.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment2_to_mobileRechargeFragment"
@@ -109,7 +109,7 @@
     </fragment>
     <fragment
         android:id="@+id/mobileRechargeFragment"
-        android:name="com.epaymark.big9.ui.fragment.MobileRechargeFragment"
+        android:name="com.big9.app.ui.fragment.MobileRechargeFragment"
         android:label="MobileRechargeFragment" >
         <action
             android:id="@+id/action_mobileRechargeFragment_to_operatorFragment"
@@ -130,15 +130,15 @@
     </fragment>
     <fragment
         android:id="@+id/operatorFragment"
-        android:name="com.epaymark.big9.ui.fragment.OperatorFragment"
+        android:name="com.big9.app.ui.fragment.OperatorFragment"
         android:label="OperatorFragment" />
     <fragment
         android:id="@+id/browserPlainFragment"
-        android:name="com.epaymark.big9.ui.fragment.BrowserPlainFragment"
+        android:name="com.big9.app.ui.fragment.BrowserPlainFragment"
         android:label="BrowserPlainFragment" />
     <fragment
         android:id="@+id/DTHRechargeFragment"
-        android:name="com.epaymark.big9.ui.fragment.DTHRechargeFragment"
+        android:name="com.big9.app.ui.fragment.DTHRechargeFragment"
         android:label="DTHRechargeFragment" >
         <action
             android:id="@+id/action_DTHRechargeFragment_to_operatorFragment"
@@ -146,11 +146,11 @@
     </fragment>
     <fragment
         android:id="@+id/billPayFragment"
-        android:name="com.epaymark.big9.ui.fragment.billpay.BillPayFragment"
+        android:name="com.big9.app.ui.fragment.billpay.BillPayFragment"
         android:label="BillPayFragment" />
     <fragment
         android:id="@+id/electricRechargeFragment"
-        android:name="com.epaymark.big9.ui.fragment.ElectricRechargeFragment"
+        android:name="com.big9.app.ui.fragment.ElectricRechargeFragment"
         android:label="ElectricRechargeFragment" >
         <action
             android:id="@+id/action_electricRechargeFragment_to_utilityBillPaymentFragment"
@@ -158,7 +158,7 @@
     </fragment>
     <fragment
         android:id="@+id/utilityBillPaymentFragment"
-        android:name="com.epaymark.big9.ui.fragment.UtilityBillPaymentFragment"
+        android:name="com.big9.app.ui.fragment.UtilityBillPaymentFragment"
         android:label="UtilityBillPaymentFragment" >
         <action
             android:id="@+id/action_utilityBillPaymentFragment_to_electricPriceListFragment"
@@ -166,11 +166,11 @@
     </fragment>
     <fragment
         android:id="@+id/electricPriceListFragment"
-        android:name="com.epaymark.big9.ui.fragment.ElectricPriceListFragment"
+        android:name="com.big9.app.ui.fragment.ElectricPriceListFragment"
         android:label="ElectricPriceListFragment" />
     <fragment
         android:id="@+id/reportFragment"
-        android:name="com.epaymark.big9.ui.fragment.ReportFragment"
+        android:name="com.big9.app.ui.fragment.ReportFragment"
         android:label="ReportFragment" >
         <action
             android:id="@+id/action_reportFragment_to_reportDetailsFragment"
@@ -178,43 +178,43 @@
     </fragment>
     <fragment
         android:id="@+id/reportDetailsFragment"
-        android:name="com.epaymark.big9.ui.fragment.ReportDetailsFragment"
+        android:name="com.big9.app.ui.fragment.ReportDetailsFragment"
         android:label="ReportDetailsFragment" />
     <fragment
         android:id="@+id/QRCodeFragment"
-        android:name="com.epaymark.big9.ui.fragment.QRCodeFragment"
+        android:name="com.big9.app.ui.fragment.QRCodeFragment"
         android:label="QRCodeFragment" />
     <fragment
         android:id="@+id/userDetailsFragment"
-        android:name="com.epaymark.big9.ui.fragment.UserDetailsFragment"
+        android:name="com.big9.app.ui.fragment.UserDetailsFragment"
         android:label="UserDetailsFragment" />
     <fragment
         android:id="@+id/supportFragment"
-        android:name="com.epaymark.big9.ui.fragment.SupportFragment"
+        android:name="com.big9.app.ui.fragment.SupportFragment"
         android:label="SupportFragment" />
     <fragment
         android:id="@+id/certificateFragment"
-        android:name="com.epaymark.big9.ui.fragment.CertificateFragment"
+        android:name="com.big9.app.ui.fragment.CertificateFragment"
         android:label="CertificateFragment" />
     <fragment
         android:id="@+id/termsAndConditionFragment"
-        android:name="com.epaymark.big9.ui.fragment.TermsAndConditionFragment"
+        android:name="com.big9.app.ui.fragment.TermsAndConditionFragment"
         android:label="TermsAndConditionFragment" />
     <fragment
         android:id="@+id/changePasswordFragment"
-        android:name="com.epaymark.big9.ui.fragment.ChangePasswordFragment"
+        android:name="com.big9.app.ui.fragment.ChangePasswordFragment"
         android:label="ChangePasswordFragment" />
     <fragment
         android:id="@+id/epotlyFragment"
-        android:name="com.epaymark.big9.ui.fragment.EpotlyFragment"
+        android:name="com.big9.app.ui.fragment.EpotlyFragment"
         android:label="EpotlyFragment" />
     <fragment
         android:id="@+id/cashWithdrawFragment"
-        android:name="com.epaymark.big9.ui.fragment.CashWithdrawFragment"
+        android:name="com.big9.app.ui.fragment.CashWithdrawFragment"
         android:label="CashWithdrawFragment" />
     <fragment
         android:id="@+id/paymentRequestFragment"
-        android:name="com.epaymark.big9.ui.fragment.paymentRequest.PaymentRequestFragment"
+        android:name="com.big9.app.ui.fragment.paymentRequest.PaymentRequestFragment"
         android:label="PaymentRequestFragment" >
         <action
             android:id="@+id/action_paymentRequestFragment_to_paymentRequestModeFragment"
@@ -223,7 +223,7 @@
     </fragment>
     <fragment
         android:id="@+id/paymentRequestModeFragment"
-        android:name="com.epaymark.big9.ui.fragment.paymentRequest.PaymentRequestModeFragment"
+        android:name="com.big9.app.ui.fragment.paymentRequest.PaymentRequestModeFragment"
         android:label="PaymentRequestModeFragment" >
         <action
             android:id="@+id/action_paymentRequestModeFragment_to_paymentRequestImformationFragment"
@@ -234,7 +234,7 @@
     </fragment>
     <fragment
         android:id="@+id/paymentRequestImformationFragment"
-        android:name="com.epaymark.big9.ui.fragment.paymentRequest.PaymentRequestImformationFragment"
+        android:name="com.big9.app.ui.fragment.paymentRequest.PaymentRequestImformationFragment"
         android:label="PaymentRequestImformationFragment" >
         <action
             android:id="@+id/action_paymentRequestImformationFragment_to_cameraFragment2"
@@ -245,15 +245,15 @@
     </fragment>
     <fragment
         android:id="@+id/cameraFragment2"
-        android:name="com.epaymark.big9.ui.fragment.regandkyc.CameraFragment"
+        android:name="com.big9.app.ui.fragment.regandkyc.CameraFragment"
         android:label="CameraFragment" />
     <fragment
         android:id="@+id/moveToWalletFragment"
-        android:name="com.epaymark.big9.ui.fragment.MoveToWalletFragment"
+        android:name="com.big9.app.ui.fragment.MoveToWalletFragment"
         android:label="MoveToWalletFragment" />
     <fragment
         android:id="@+id/moveToBankFragment"
-        android:name="com.epaymark.big9.ui.fragment.MoveToBankFragment"
+        android:name="com.big9.app.ui.fragment.MoveToBankFragment"
         android:label="MoveToBankFragment" >
         <action
             android:id="@+id/action_moveToBankFragment_to_addBankFragment"
@@ -261,7 +261,7 @@
     </fragment>
     <fragment
         android:id="@+id/moneyTranspherFragment"
-        android:name="com.epaymark.big9.ui.fragment.MoneyTranspherFragment"
+        android:name="com.big9.app.ui.fragment.MoneyTranspherFragment"
         android:label="MoneyTranspherFragment" >
 
         <action
@@ -270,7 +270,7 @@
     </fragment>
     <fragment
         android:id="@+id/creditCardPaymentFragment"
-        android:name="com.epaymark.big9.ui.fragment.CreditCardPaymentFragment"
+        android:name="com.big9.app.ui.fragment.CreditCardPaymentFragment"
         android:label="CreditCardPaymentFragment" >
         <action
             android:id="@+id/action_creditCardPaymentFragment_to_transactionOtpFragment"
@@ -284,15 +284,15 @@
     </fragment>
     <fragment
         android:id="@+id/transactionOtpFragment"
-        android:name="com.epaymark.big9.ui.fragment.TransactionOtpFragment"
+        android:name="com.big9.app.ui.fragment.TransactionOtpFragment"
         android:label="TransactionOtpFragment" />
     <fragment
         android:id="@+id/addBeneficiaryFragment"
-        android:name="com.epaymark.big9.ui.fragment.AddBeneficiaryFragment"
+        android:name="com.big9.app.ui.fragment.AddBeneficiaryFragment"
         android:label="AddBeneficiaryFragment" />
     <fragment
         android:id="@+id/beneficiaryFragment"
-        android:name="com.epaymark.big9.ui.fragment.BeneficiaryFragment"
+        android:name="com.big9.app.ui.fragment.BeneficiaryFragment"
         android:label="BeneficiaryFragment" >
         <action
             android:id="@+id/action_beneficiaryFragment_to_addBeneficiaryFragment"
@@ -300,19 +300,19 @@
     </fragment>
     <fragment
         android:id="@+id/miniStatementFragment"
-        android:name="com.epaymark.big9.ui.fragment.MiniStatementFragment"
+        android:name="com.big9.app.ui.fragment.MiniStatementFragment"
         android:label="MiniStatementFragment" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.epaymark.big9.ui.fragment.SearchFragment"
+        android:name="com.big9.app.ui.fragment.SearchFragment"
         android:label="SearchFragment" />
     <fragment
         android:id="@+id/fastTagFragment"
-        android:name="com.epaymark.big9.ui.fragment.FastTagFragment"
+        android:name="com.big9.app.ui.fragment.FastTagFragment"
         android:label="FastTagFragment" />
     <fragment
         android:id="@+id/loginPinfragment"
-        android:name="com.epaymark.big9.ui.fragment.LoginPinfragment"
+        android:name="com.big9.app.ui.fragment.LoginPinfragment"
         android:label="LoginPinfragment" >
         <action
             android:id="@+id/action_loginPinfragment_to_homeFragment2"
@@ -323,7 +323,7 @@
     </fragment>
     <fragment
         android:id="@+id/addBankFragment"
-        android:name="com.epaymark.big9.ui.fragment.AddBankFragment"
+        android:name="com.big9.app.ui.fragment.AddBankFragment"
         android:label="AddBankFragment" >
         <action
             android:id="@+id/action_addBankFragment_to_cameraFragment2"
@@ -331,11 +331,11 @@
     </fragment>
     <fragment
         android:id="@+id/balenceAEPSFragment"
-        android:name="com.epaymark.big9.ui.fragment.BalenceAEPSFragment"
+        android:name="com.big9.app.ui.fragment.BalenceAEPSFragment"
         android:label="BalenceAEPSFragment" />
     <fragment
         android:id="@+id/miniStatementFormFragment"
-        android:name="com.epaymark.big9.ui.fragment.MiniStatementFormFragment"
+        android:name="com.big9.app.ui.fragment.MiniStatementFormFragment"
         android:label="MiniStatementFormFragment" >
         <action
             android:id="@+id/action_miniStatementFormFragment_to_miniStatementFragment"
@@ -343,12 +343,12 @@
     </fragment>
     <fragment
         android:id="@+id/forgotPasswordOtpFragment"
-        android:name="com.epaymark.big9.ui.fragment.ForgotPasswordOtpFragment"
+        android:name="com.big9.app.ui.fragment.ForgotPasswordOtpFragment"
         android:label="ForgotPasswordOtpFragment" >
     </fragment>
     <fragment
         android:id="@+id/viewMoreFragment"
-        android:name="com.epaymark.big9.ui.fragment.ViewMoreFragment"
+        android:name="com.big9.app.ui.fragment.ViewMoreFragment"
         android:label="ViewMoreFragment" >
         <action
             android:id="@+id/action_viewMoreFragment_to_formFragment"
@@ -368,35 +368,35 @@
     </fragment>
     <fragment
         android:id="@+id/formFragment"
-        android:name="com.epaymark.big9.ui.fragment.FormFragment"
+        android:name="com.big9.app.ui.fragment.FormFragment"
         android:label="FormFragment" />
     <fragment
         android:id="@+id/educationFeesFragment"
-        android:name="com.epaymark.big9.ui.fragment.EducationFeesFragment"
+        android:name="com.big9.app.ui.fragment.EducationFeesFragment"
         android:label="EducationFeesFragment" />
     <fragment
         android:id="@+id/broadBandFragment"
-        android:name="com.epaymark.big9.ui.fragment.BroadBandFragment"
+        android:name="com.big9.app.ui.fragment.BroadBandFragment"
         android:label="BroadBandFragment" />
     <fragment
         android:id="@+id/gasBookingFragment"
-        android:name="com.epaymark.big9.ui.fragment.GasBookingFragment"
+        android:name="com.big9.app.ui.fragment.GasBookingFragment"
         android:label="GasBookingFragment" />
     <fragment
         android:id="@+id/loanPaymentFragment"
-        android:name="com.epaymark.big9.ui.fragment.LoanPaymentFragment"
+        android:name="com.big9.app.ui.fragment.LoanPaymentFragment"
         android:label="LoanPaymentFragment" />
     <fragment
         android:id="@+id/commissionReportFragment"
-        android:name="com.epaymark.big9.ui.fragment.report.CommissionReportFragment"
+        android:name="com.big9.app.ui.fragment.report.CommissionReportFragment"
         android:label="CommissionReportFragment" />
     <fragment
         android:id="@+id/walletLedgerReportFragment"
-        android:name="com.epaymark.big9.ui.fragment.report.WalletLedgerReportFragment"
+        android:name="com.big9.app.ui.fragment.report.WalletLedgerReportFragment"
         android:label="WalletLedgerReportFragment" />
     <fragment
         android:id="@+id/changeLoginPinFragment"
-        android:name="com.epaymark.big9.ui.fragment.tablayout.ChangeLoginPinFragment"
+        android:name="com.big9.app.ui.fragment.tablayout.ChangeLoginPinFragment"
         android:label="ChangeLoginPinFragment" >
         <action
             android:id="@+id/action_changeLoginPinFragment_to_homeFragment2"

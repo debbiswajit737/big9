@@ -7,10 +7,10 @@
         <import type="android.view.View"/>
         <variable
             name="model"
-            type="com.epaymark.big9.data.model.ReportModel" />
+            type="com.big9.app.data.model.ReportModel" />
         <variable
             name="propertyModel"
-            type="com.epaymark.big9.data.model.ReportPropertyModel" />
+            type="com.big9.app.data.model.ReportPropertyModel" />
     </data>
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"

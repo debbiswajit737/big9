@@ -93,7 +93,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.epaymark.big9.provider"
+            android:authorities="com.big9.app.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -112,7 +112,7 @@
             </intent-filter>
         </service>
         <receiver
-            android:name="com.epaymark.big9.utils.helpers.OtpRetriever"
+            android:name="com.big9.app.utils.helpers.OtpRetriever"
             android:exported="true"
             android:permission="com.google.android.gms.auth.api.phone.permission.SEND">
             <intent-filter>
