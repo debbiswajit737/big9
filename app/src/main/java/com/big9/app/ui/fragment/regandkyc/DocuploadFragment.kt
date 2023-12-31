@@ -2,10 +2,12 @@ package com.big9.app.ui.fragment.regandkyc
 
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -17,21 +19,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.impl.utils.ContextUtil.getApplicationContext
+import androidx.core.content.PermissionChecker
+import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.big9.app.R
-
 import com.big9.app.data.viewMovel.AuthViewModel
 import com.big9.app.databinding.FragmentDocuploadBinding
 import com.big9.app.network.ResponseState
 import com.big9.app.network.RetrofitHelper.handleApiError
-
 import com.big9.app.ui.activity.DashboardActivity
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.fragment.CameraDialog
+import com.big9.app.utils.*
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.helpers.Constants.isAfterReg
 import com.big9.app.utils.helpers.Constants.isBackCamera
@@ -48,6 +53,7 @@ import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import javax.inject.Inject
 
+
 class DocuploadFragment : BaseFragment() {
     lateinit var binding: FragmentDocuploadBinding
     private val authViewModel: AuthViewModel by activityViewModels()
@@ -55,6 +61,7 @@ class DocuploadFragment : BaseFragment() {
     private val VIDEO_CAPTURE = 101
     var textView: TextView?=null
     var type=""
+    private lateinit var pickPdfLauncher: ActivityResultLauncher<Array<String>>
     @Inject
     override lateinit var sharedPreff: SharedPreff
     override fun onCreateView(
@@ -452,7 +459,12 @@ class DocuploadFragment : BaseFragment() {
                     pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 }
                 else{
-                    findNavController().navigate(R.id.action_docuploadFragment_to_cameraFragment)
+                   // selectPdfAndCheckPermission()
+                    //findNavController().navigate(R.id.action_docuploadFragment_to_cameraFragment)
+                    findNavController().navigate(R.id.action_docuploadFragment_to_pdfCaptureFragment)
+                    //selectPDF()
+                    //val mimeTypes = arrayOf("application/pdf")
+                    //pickPdfLauncher.launch(mimeTypes)
                 }
                 //
             }
@@ -470,7 +482,7 @@ class DocuploadFragment : BaseFragment() {
             sharedPreff = SharedPreff(context)
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
         }
-
+        selectPDF()
     }
 
     fun setObserver() {
@@ -630,5 +642,34 @@ class DocuploadFragment : BaseFragment() {
         // Create a multipart body part with the video data
         return MultipartBody.Part.createFormData("videoKyc", "video.mp4", requestBody)
     }
+
+
+
+    fun selectPdfAndCheckPermission(){
+        // Check for permission to read external storage
+        if (checkSelfPermission(binding.root.context,android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            != PermissionChecker.PERMISSION_GRANTED
+        ) {
+            // Request the permission if not granted
+            requestPermissions(
+                arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                1
+            )
+        } else {
+            // Permission already granted, proceed with file selection
+            selectPDF()
+        }
+    }
+
+    private fun selectPDF() {
+        pickPdfLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { result: Uri? ->
+            if (result != null) {
+                authViewModel?.filePath?.value = result
+                findNavController().popBackStack()
+            }
+        }
+
+    }
+
 
 }
