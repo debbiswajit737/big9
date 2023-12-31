@@ -168,7 +168,7 @@ interface RetroApi {
         @Body data: String
     ): Response<commissionReportModel>
 
-   /* @POST("v1/reports/complaints_report")
+    /* @POST("v1/reports/complaints_report")
     suspend fun complaints_report(
         @Header("Authtoken") token: String,
         @Body data: String
@@ -248,7 +248,6 @@ interface RetroApi {
     ): Response<PrepaidMobolePlainModel>
 
 
-
     @POST("v1/services/mobile/pre_transfer")
     suspend fun MobilePrePaidpreTransfer(
         @Header("Authtoken") token: String,
@@ -270,7 +269,6 @@ interface RetroApi {
     ): Response<CreditCardVerifyOtpModel>
 
 
-
     @POST("v1/services/epotly/epotly_transfer")
     suspend fun epotlyTransfer(
         @Header("Authtoken") token: String,
@@ -284,13 +282,11 @@ interface RetroApi {
     ): Response<DTHTranspherModel>
 
 
-
     @POST("v1/services/dth/info")
     suspend fun dthUserInfo(
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<DTHUserInfoModel>
-
 
 
     @POST("v1/password/change_pin")
@@ -323,7 +319,7 @@ interface RetroApi {
         @Body data: String
     ): Response<AEPSReportModel>
 
-   /* @POST("v1/check-service")
+    /* @POST("v1/check-service")
     suspend fun checkService(
         @Header("Authtoken") token: String,
         @Body data: String
@@ -347,6 +343,7 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<ServiceCheckModel>
+
     @POST("v1/reports/microatm_report_receipt")
     suspend fun matmREportRECEPT(
         @Header("Authtoken") token: String,
@@ -388,14 +385,14 @@ interface RetroApi {
 
     @POST("move_to_wallet")
     suspend fun moveToWallet(
-            @Header("Authtoken") token: String,
-            @Body data: String
+        @Header("Authtoken") token: String,
+        @Body data: String
     ): Response<MoveToWalletModel>
 
     @POST("submit_move_to_eallet")
     suspend fun submitMoveToWallet(
-            @Header("Authtoken") token: String,
-            @Body data: String
+        @Header("Authtoken") token: String,
+        @Body data: String
     ): Response<SubmitMoveToBankBankListModel>
 
 
@@ -404,6 +401,7 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<BasicInfo>
+
     @Multipart
     @POST("v1/onboarding/basicinfo")
     suspend fun onboardingBasicinfo2(
@@ -413,8 +411,6 @@ interface RetroApi {
         @Part image2: MultipartBody.Part?,
         @Part image3: MultipartBody.Part?
     ): Response<BasicInfo>
-
-
 
 
     @Multipart
@@ -490,19 +486,19 @@ interface RetroApi {
     @Multipart
     @POST("v1/onboarding/document_upload")
     suspend fun documentUpload(
-    @Header("Authtoken") token: String,
-    @Part("data") data: RequestBody,
-    @Part partnerPanCard: MultipartBody.Part?,
-    @Part companyPanCard: MultipartBody.Part?,
-    @Part partnerAadhaarFront: MultipartBody.Part?,
-    @Part partnerAadhaarBack: MultipartBody.Part?,
-    @Part gstin: MultipartBody.Part?,
-    @Part coi: MultipartBody.Part?,
-    @Part boardResolution: MultipartBody.Part?,
-    @Part tradeLicense: MultipartBody.Part?,
-    @Part userSelfi: MultipartBody.Part?,
-    @Part userScp: MultipartBody.Part?,
-    @Part videoKyc: MultipartBody.Part?,
+        @Header("Authtoken") token: String,
+        @Part("data") data: RequestBody,
+        @Part partnerPanCard: MultipartBody.Part?,
+        @Part companyPanCard: MultipartBody.Part?,
+        @Part partnerAadhaarFront: MultipartBody.Part?,
+        @Part partnerAadhaarBack: MultipartBody.Part?,
+        @Part gstin: MultipartBody.Part?,
+        @Part coi: MultipartBody.Part?,
+        @Part boardResolution: MultipartBody.Part?,
+        @Part tradeLicense: MultipartBody.Part?,
+        @Part userSelfi: MultipartBody.Part?,
+        @Part userScp: MultipartBody.Part?,
+        @Part videoKyc: MultipartBody.Part?,
     ): Response<BasicInfo>
 
 

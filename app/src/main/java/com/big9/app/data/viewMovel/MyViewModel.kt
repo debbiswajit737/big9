@@ -1778,4 +1778,17 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             repository.addBankBankList(token,data)
         }
     }
+
+
+
+
+  //abcMethod
+val abcMethodResponseLiveData: LiveData<ResponseState<abcModel>>
+    get() = repository.abcMethodResponseLiveData
+fun abcMethod(token: String, data: String) {
+    viewModelScope.launch {
+        repository.abcMethod(token,data)
+    }
+}
+
 }

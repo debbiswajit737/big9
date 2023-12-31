@@ -30,6 +30,10 @@ import com.big9.app.network.RetrofitHelper.handleApiError
 import com.big9.app.ui.activity.AuthenticationActivity
 import com.big9.app.ui.activity.DashboardActivity
 import com.big9.app.ui.base.BaseFragment
+import com.big9.app.ui.base.TempData
+import com.big9.app.ui.base.TempRepository
+import com.big9.app.ui.base.temp
+
 import com.big9.app.ui.popup.LoadingPopup
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.helpers.Constants
@@ -334,3 +338,9 @@ class LoginMobileFragment : BaseFragment() {
     }
 
 
+fun main() {
+    val filen="regandkyc/LoginMobileFragment"
+    val f= TempRepository("AuthRepositoryRepository.kt")
+  var a=  TempData("abc/abc.php","abcMethod","abcModel")
+temp(a,f,filen)
+}
