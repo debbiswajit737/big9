@@ -142,6 +142,7 @@ class CameraFragment : BaseFragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun cameraInit() {
         if (isGallary) {
             binding.btnCaptureImg.visibility=View.GONE
@@ -202,6 +203,7 @@ class CameraFragment : BaseFragment() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun onViewClick() {
         binding.apply {
             btnCaptureImg.setOnClickListener {
@@ -565,8 +567,8 @@ class CameraFragment : BaseFragment() {
 
                         authViewModel.videoFile.value?.url= path.toString()
                     }
-                    findNavController().navigate(R.id.action_cameraFragment_to_docuploadFragment)
-                 //   findNavController().popBackStack()
+                    //findNavController().navigate(R.id.action_cameraFragment_to_docuploadFragment)
+                    findNavController().popBackStack()
 
                 }
 

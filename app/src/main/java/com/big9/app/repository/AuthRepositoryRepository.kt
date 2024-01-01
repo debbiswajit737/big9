@@ -1139,13 +1139,13 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
     val addToBankReceptLiveData: MutableLiveData<ResponseState<AddBankModel>>
         get() = _addToBankReceptLiveData
 
-    suspend fun addToBank(token: String, loginModel: String) {
+    suspend fun addToBank(token: String, loginModel: String, imagedata: MultipartBody.Part?) {
         _addToBankReceptLiveData.postValue(ResponseState.Loading())
         try {
             val response = api.addBank(
                 token,
                 loginModel.replace("\n", "").replace("\r", "")
-            )
+            ,imagedata)
             _addToBankReceptLiveData.postValue(
                 ResponseState.create(
                     response,

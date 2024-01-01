@@ -7,9 +7,10 @@ import com.big9.app.databinding.AccountDetailsLayoutBinding
 import com.big9.app.data.model.AccountDetailsModel
 
 import com.big9.app.utils.`interface`.CallBack
+import com.big9.app.utils.`interface`.CallBack2
 
 
-class AccountDetailsAdapter(private val items: ArrayList<AccountDetailsModel>, val callback: CallBack) : RecyclerView.Adapter<AccountDetailsAdapter.MyViewHolder>() {
+class AccountDetailsAdapter(private val items: ArrayList<AccountDetailsModel>, val callback: CallBack2) : RecyclerView.Adapter<AccountDetailsAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         //report_layout_item
@@ -39,7 +40,7 @@ class AccountDetailsAdapter(private val items: ArrayList<AccountDetailsModel>, v
             binding.cardContainer.setOnClickListener{
                 item.acc?.let {acc->
                     if (item.approvedStatue) {
-                        callback.getValue(acc)
+                        callback.getValue2(acc,item.id)
                     }
                 }
 

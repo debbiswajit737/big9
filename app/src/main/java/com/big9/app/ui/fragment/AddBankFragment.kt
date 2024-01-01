@@ -29,9 +29,10 @@ import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.isIsCheck
 import com.big9.app.utils.`interface`.CallBack
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class AddBankFragment : BaseFragment() {
     lateinit var binding: FragmentAddBankBinding
@@ -80,15 +81,17 @@ class AddBankFragment : BaseFragment() {
                     if (beneficiaryValidation()) {
                         if (authViewModel?.filePath?.value != null && authViewModel?.filePath?.value.toString() != "/") {
                             bank_check_ErrorVisible.value = false
-                            findNavController().popBackStack()
+
                             lifecycleScope.launch {
                                 var imageBase64=""
-                                val job = CoroutineScope(Dispatchers.IO).launch {
+                                //val job = CoroutineScope(Dispatchers.IO).launch {
                                     imageBase64= filePath?.value?.uriToBase64(binding.root.context.contentResolver)
                                         .toString()
                                     bankSlipDocumentImageBase64?.value =imageBase64
-                                    addBank()
-                                }
+
+                               // }
+
+                                addBank()
 
 
                             }
@@ -139,8 +142,6 @@ class AddBankFragment : BaseFragment() {
 
     }
     fun addBank(){
-
-
         val (isLogin, loginResponse) =sharedPreff.getLoginData()
         if (isLogin){
             loginResponse?.let {loginData->
@@ -154,16 +155,14 @@ class AddBankFragment : BaseFragment() {
                         "accholder" to beneficiary_name.value?.toString()
                     )
 
-
-
-
+                    var panimagedata=
+                        bankSlipDocumentImageBase64.value?.let { createImagePart("imagedata", it) }
                     val gson= Gson()
                     var jsonString = gson.toJson(data)
                     loginData.AuthToken?.let {
-                        addToBank(it,jsonString.encrypt())
+                        addToBank(it,jsonString.encrypt(),panimagedata)
                     }
                 }
-
             }
         }
     }
@@ -181,19 +180,13 @@ class AddBankFragment : BaseFragment() {
                     val data = mapOf(
                         "userid" to it,
                     )
-
-
                     val gson =  Gson();
                     var jsonString = gson.toJson(data);
                     loginData.AuthToken?.let {
                         viewModel?.addBankBankList(it,jsonString.encrypt())
                     }
                 }
-
-
             }
-
-
         }
     }
 
@@ -206,7 +199,7 @@ class AddBankFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
-
+                    findNavController().popBackStack()
 
                     viewModel.addToBankReceptLiveData?.value=null
                 }
@@ -278,5 +271,9 @@ class AddBankFragment : BaseFragment() {
         }
 
     }
-
+    fun createImagePart(name: String, base64String: String): MultipartBody.Part {
+        val bytes = android.util.Base64.decode(base64String, android.util.Base64.DEFAULT)
+        val requestBody = bytes.toRequestBody("image/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(name, "image.jpg", requestBody)
+    }
 }

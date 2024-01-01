@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.big9.app.R
 
+
 import com.big9.app.data.genericmodel.BaseResponse
 import com.big9.app.data.model.AEPSReportModel
 import com.big9.app.data.model.AddBankBankListModel
@@ -53,6 +54,8 @@ import com.big9.app.repository.AuthRepositoryRepository
 import com.big9.app.repository.TableRepository
 
 import com.big9.app.utils.helpers.helper.validate
+
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -1697,9 +1700,9 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     //add Bank
     val addToBankReceptLiveData: MutableLiveData<ResponseState<AddBankModel>>
         get() = repository.addToBankReceptLiveData
-    fun addToBank(token: String, data: String) {
+    fun addToBank(token: String, data: String, imagedata: MultipartBody.Part?) {
         viewModelScope.launch {
-            repository.addToBank(token,data)
+            repository.addToBank(token,data,imagedata)
         }
     }
 
@@ -1782,13 +1785,6 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
 
 
 
-  //abcMethod
-val abcMethodResponseLiveData: LiveData<ResponseState<abcModel>>
-    get() = repository.abcMethodResponseLiveData
-fun abcMethod(token: String, data: String) {
-    viewModelScope.launch {
-        repository.abcMethod(token,data)
-    }
-}
+
 
 }

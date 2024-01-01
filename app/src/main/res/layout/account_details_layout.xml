@@ -73,7 +73,20 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_acc"
         android:textColor="@color/black"
         tools:text="A/C: " />
-
+    <TextView
+        android:id="@+id/tv_status_msg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@{model.statusMsg}"
+        android:textSize="@dimen/_10ssp"
+        android:fontFamily="@font/open_sans_medium"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ifsc"
+        android:textColor="@{model.approvedStatue==true?@color/g5:@color/g3}"
+        tools:text="Status" />
     <View
         android:id="@+id/view4"
         android:layout_width="@dimen/_5sdp"
@@ -84,14 +97,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:layout_marginStart="@dimen/_5sdp"
+        android:id="@+id/view8"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
 
-        app:layout_constraintTop_toBottomOf="@+id/tv_ifsc"
+        android:layout_marginStart="@dimen/_5sdp"
         app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_status_msg" />
 
     <View
         android:id="@+id/view"

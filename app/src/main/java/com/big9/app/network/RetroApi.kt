@@ -364,23 +364,24 @@ interface RetroApi {
     ): Response<PatternLoginModel>
 
 
-    @POST("movetobank")
+    @POST("v1/services/mtb/list")
     suspend fun moveToBank(
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<MoveToBankBankListModel>
 
-    @POST("submit_movetobank")
+    @POST("v1/services/mtb/transfer")
     suspend fun submitMovetobank(
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<SubmitMoveToBankBankListModel>
 
-
+    @Multipart
     @POST("v1/services/mtb/add_bank")
     suspend fun addBank(
         @Header("Authtoken") token: String,
-        @Body data: String
+        @Body data: String,
+        imagedata: MultipartBody.Part?
     ): Response<AddBankModel>
 
     @POST("move_to_wallet")

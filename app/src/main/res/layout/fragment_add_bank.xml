@@ -331,9 +331,6 @@
 
                             />
                         <!--mobile End-->
-
-
-
                         <ImageView
                             android:id="@+id/img_check"
                             android:layout_width="@dimen/_100sdp"
