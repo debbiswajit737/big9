@@ -514,7 +514,10 @@ class HomeFragment : BaseFragment() {
     private fun viewOnClick() {
         binding.apply {
             imgBalance.setOnClickListener{
-                showBalencePopup(binding.root.context)
+                sharedPreff?.getUserData()?.let{
+                    showBalencePopup(binding.root.context,it.lienbal,it.payoutBalance)
+                }
+
             }
             imgSearch.setOnClickListener{
                         searchList.clear()
@@ -1169,7 +1172,8 @@ class HomeFragment : BaseFragment() {
                             }
                         }
                         else{
-                            checkService(s,tag)
+                            //checkService(s,tag)
+                           serviceNavigation(s,tag)
                         }
 
                        // serviceNavigation(s)
@@ -1284,6 +1288,8 @@ class HomeFragment : BaseFragment() {
             adapter = BannerViewpagerAdapter(iconList2)
         }
         binding.tvMessage.isSelected = true
+
+
 
     }
 

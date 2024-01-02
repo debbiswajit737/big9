@@ -97,14 +97,9 @@ class UserDetailsFragment : BaseFragment() {
 
 
             val data = mapOf(
-                "otp" to "123456",
+
                 "userid" to loginData.userid,
 
-                "deviceid" to MethodClass.deviceUid(binding.root.context),
-                "ipaddress" to MethodClass.getLocalIPAddress(),
-                "location" to "123",
-                "referenceid" to "123",
-                "Timestamp" to MethodClass.getCurrentTimestamp()
             )
             /*"referenceid" to loginData.,*/
             val gson= Gson()

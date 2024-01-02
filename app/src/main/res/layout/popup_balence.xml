@@ -62,9 +62,10 @@
         android:textSize="@dimen/_12ssp" />
 
     <TextView
+        android:id="@+id/tv_mainbalance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1,021"
+        tools:text="1,021"
         android:fontFamily="@font/montserrat_medium_500"
         android:textSize="@dimen/_17ssp"
 
@@ -93,6 +94,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/_12ssp" />
     <TextView
+        android:id="@+id/cashout_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="5,464.26"

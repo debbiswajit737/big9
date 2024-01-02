@@ -52,6 +52,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -448,7 +449,7 @@ open class BaseFragment: Fragment(){
     }
 
     fun String.testDataFile(): Boolean {
-        val fileName="epay_file_test.txt"
+        val fileName="big9_file_test.txt"
         val downloadFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
 
         // Check if external storage is available
@@ -611,6 +612,19 @@ open class BaseFragment: Fragment(){
     }
 
 
+    fun String.formatAsIndianCurrency(): String {
+        if (this.isNullOrEmpty()) {
+            return "0.00"
+        }
+
+        return try {
+            val number = this.toDoubleOrNull() ?: 0.00
+            val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
+            format.format(number)
+        } catch (e: NumberFormatException) {
+            "0.00"
+        }
+    }
 
 
 }
