@@ -41,12 +41,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.big9.app.R
-
-
 import com.big9.app.data.viewMovel.AuthViewModel
 import com.big9.app.databinding.FragmentCameraBinding
-
-
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.utils.helpers.Constants.contentValues
 import com.big9.app.utils.helpers.Constants.isBackCamera
@@ -56,6 +52,7 @@ import com.big9.app.utils.helpers.Constants.isVideo
 import com.big9.app.utils.helpers.PermissionUtils
 import com.big9.app.utils.helpers.PermissionUtils.createAlertDialog
 import com.big9.app.utils.`interface`.PermissionsCallback
+
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -63,9 +60,16 @@ import java.util.Locale
 
 class CameraFragment : BaseFragment() {
     val TAG = "camera"
-    @RequiresApi(Build.VERSION_CODES.P)
 
-    val CAMERA_PERMISSION_REQUEST_CODE=202
+
+
+    private val permissions = arrayOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.CAMERA
+    )
+    private val requestCode = 123
+
     private lateinit var countDownTimer: CountDownTimer
     private val initialCountDown: Long = 10000
     private val countDownInterval: Long = 1000
@@ -112,38 +116,6 @@ class CameraFragment : BaseFragment() {
     fun init() {
         binding.llUserDetails.visibility=View.GONE
         binding.btnGallaryImg.visibility=View.GONE
-        if (!isGallary && !isPdf) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                cameraInit()
-            } else {
-                checkPermissionOrio()
-            }
-        }
-        else{
-            //pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-
-
-
-                    pickPdfLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { result: Uri? ->
-                        if (result != null) {
-                            authViewModel?.filePath?.value = result
-                            findNavController().popBackStack()
-                        }
-                    }
-
-
-
-            val mimeTypes = arrayOf("application/pdf")
-            pickPdfLauncher.launch(mimeTypes)
-        }
-
-
-
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.P)
-    private fun cameraInit() {
         if (isGallary) {
             binding.btnCaptureImg.visibility=View.GONE
             if (isPdf){
@@ -165,44 +137,35 @@ class CameraFragment : BaseFragment() {
         }
         else{
             binding.btnCaptureImg.visibility=View.VISIBLE
-            startCamera()
-            onViewClick()
-            PermissionUtils.requestVideoRecordingPermission(requireActivity(), object :
-                PermissionsCallback {
-                override fun onPermissionRequest(granted: Boolean) {
+           //startCamera()
+            //onViewClick()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                PermissionUtils.requestVideoRecordingPermission(requireActivity(), object :
+                    PermissionsCallback {
+                    override fun onPermissionRequest(granted: Boolean) {
 
-                    if (granted) {
-                        startCamera()
-                        onViewClick()
-                    } else {
-                        dialogRecordingPermission()
+                        if (granted) {
+                            startCamera()
+                            onViewClick()
+                        } else {
+                            dialogRecordingPermission()
+                        }
                     }
-                }
-            })
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.P)
-    private fun checkPermissionOrio() {
-        // Check if the permission has been granted
-        if (ContextCompat.checkSelfPermission(binding.root.context, Manifest.permission.CAMERA)
-            != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted, request it
-            activity?.let {
-                ActivityCompat.requestPermissions(
-                    it,
-                    arrayOf(Manifest.permission.CAMERA),
-                    CAMERA_PERMISSION_REQUEST_CODE
-                )
+                })
             }
-
-        } else {
-            cameraInit()
+            else{
+                if (checkPermissions()) {
+                    startCamera()
+                    onViewClick()
+                } else {
+                    // Permissions are not granted, request them
+                    requestPermissions()
+                }
+            }
         }
     }
 
-
-
+   
     @RequiresApi(Build.VERSION_CODES.P)
     fun onViewClick() {
         binding.apply {
@@ -227,17 +190,6 @@ class CameraFragment : BaseFragment() {
                // circularProgressBar.visibility = View.VISIBLE
               //  btnCaptureVideo.visibility = View.GONE
             } else {
-                //video user details
-                val (isLogin, loginResponse) =sharedPreff.getLoginData()
-                loginResponse?.let { loginData ->
-                    authViewModel?.apply {
-                        loginData.name?.let {videoKycUserName.value=it}
-                        loginData.mobileNo?.let {videoKycUserMobileNo.value=it}
-                        loginData.aadhar?.let {videoKycUserAadharCard.value=it}
-                        loginData.pancard?.let {videoKycUserPancard.value=it}
-                    }
-                }
-
                 binding.llUserDetails.visibility=View.VISIBLE
                 binding.tvTimer.visibility = View.VISIBLE
                 btnCaptureImg.visibility = View.GONE
@@ -349,7 +301,7 @@ class CameraFragment : BaseFragment() {
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
                 } else {
                     // For versions prior to Nougat, use a hardcoded path
-                    File(Environment.getExternalStorageDirectory(), "com.big9.app/image")
+                    File(Environment.getExternalStorageDirectory(), "epay/image")
                 }
 
                 // Ensure the directory exists, and create it if necessary
@@ -386,9 +338,7 @@ class CameraFragment : BaseFragment() {
                     output.savedUri?.let { authViewModel.filePath.value = it
 
                         authViewModel?.filePath?.value = it
-                        try {
-                            findNavController().popBackStack()
-                        }catch (e:Exception){}
+                        findNavController().popBackStack()
                     }
                     //findNavController().navigate(R.id.action_cameraFragment_to_docuploadFragment)
                     //findNavController().popBackStack()
@@ -425,7 +375,7 @@ class CameraFragment : BaseFragment() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     // For Android 10 and higher, use RELATIVE_PATH
                   //  put(MediaStore.Video.Media.RELATIVE_PATH, "epay/video")
-                    put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + "/com.big9.app")
+                    put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + "/epay")
                 } else {
                     // For versions prior to Android 10, manage the file operations manually
                     val directoryPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -433,7 +383,7 @@ class CameraFragment : BaseFragment() {
                         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
                     } else {
                         // For versions prior to Nougat, use a hardcoded path
-                        File(Environment.getExternalStorageDirectory(), "com.big9.app/video")
+                        File(Environment.getExternalStorageDirectory(), "epay/video")
                     }
 
                     // Ensure the directory exists, and create it if necessary
@@ -567,8 +517,8 @@ class CameraFragment : BaseFragment() {
 
                         authViewModel.videoFile.value?.url= path.toString()
                     }
-                    //findNavController().navigate(R.id.action_cameraFragment_to_docuploadFragment)
-                    findNavController().popBackStack()
+                    findNavController().navigate(R.id.action_cameraFragment_to_docuploadFragment)
+                 //   findNavController().popBackStack()
 
                 }
 
@@ -617,24 +567,38 @@ class CameraFragment : BaseFragment() {
         findNavController().popBackStack()
     }
 
+    private fun checkPermissions(): Boolean {
+        // Check each required permission and return false if any permission is not granted
+        return permissions.all {
+            ContextCompat.checkSelfPermission(binding.root.context, it) == PackageManager.PERMISSION_GRANTED
+        }
+    }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun requestPermissions() {
+        // Request the permissions
+        activity?.let {
+            ActivityCompat.requestPermissions(it, permissions, requestCode)
+        }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                cameraInit()
+        if (requestCode == this.requestCode) {
+            // Check if all permissions were granted
+            if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                startCamera()
+                onViewClick()
             } else {
-                Toast.makeText(
-                    binding.root.context,
-                    "Camera permission is required to take photos and videos.",
-                    Toast.LENGTH_SHORT
-                ).show()
-                findNavController().popBackStack()
+                activity?.let {
+                    ActivityCompat.requestPermissions(it, permissions, requestCode)
+                }
+
             }
         }
     }

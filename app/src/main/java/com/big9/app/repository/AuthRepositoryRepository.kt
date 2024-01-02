@@ -16,6 +16,8 @@ import com.big9.app.data.model.DMTReportModel
 import com.big9.app.data.model.DTHTranspherModel
 import com.big9.app.data.model.DTHUserInfoModel
 import com.big9.app.data.model.EPotlyTranspherModel
+import com.big9.app.data.model.ForgotPasswordModel
+import com.big9.app.data.model.ForgotPasswordVerifyOtpModel
 import com.big9.app.data.model.MatmeportModel
 import com.big9.app.data.model.MoveToBankBankListModel
 import com.big9.app.data.model.MoveToWalletModel
@@ -1144,7 +1146,7 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         try {
             val response = api.addBank(
                 token,
-                loginModel.replace("\n", "").replace("\r", "")
+                loginModel.replace("\n", "").replace("\r", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull())
             ,imagedata)
             _addToBankReceptLiveData.postValue(
                 ResponseState.create(
@@ -1153,6 +1155,7 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
                 )
             )
         } catch (throwable: Throwable) {
+            Log.d("TAG_throwable", "addToBank: "+throwable.message)
             _addToBankReceptLiveData.postValue(ResponseState.create(throwable))
         }
 
@@ -1607,6 +1610,46 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         }
 
     }
+
+    //Forgot password
+    private val _forgotPasswordResponseLiveData =
+        MutableLiveData<ResponseState<ForgotPasswordModel>>()
+    val forgotPasswordResponseLiveData: MutableLiveData<ResponseState<ForgotPasswordModel>>
+        get() = _forgotPasswordResponseLiveData
+
+
+    suspend fun forgotPassword(token: String, loginModel: String) {
+        _forgotPasswordResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.ForgotPassword(token, loginModel.replace("\n", "").replace("\r", ""))
+            _forgotPasswordResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _forgotPasswordResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //forgot password veify otp
+    private val _forgotPasswordVerifyOtpResponseLiveData =
+        MutableLiveData<ResponseState<ForgotPasswordVerifyOtpModel>>()
+    val forgotPasswordVerifyOtpResponseLiveData: MutableLiveData<ResponseState<ForgotPasswordVerifyOtpModel>>
+        get() = _forgotPasswordVerifyOtpResponseLiveData
+
+
+    suspend fun ForgotPasswordVerifyOtp(token: String, loginModel: String) {
+        _forgotPasswordVerifyOtpResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.ForgotPasswordVerifyOtp(token, loginModel.replace("\n", "").replace("\r", ""))
+            _forgotPasswordVerifyOtpResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _forgotPasswordVerifyOtpResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
 
 }
 

@@ -338,9 +338,3 @@ class LoginMobileFragment : BaseFragment() {
     }
 
 
-fun main() {
-    val filen="regandkyc/LoginMobileFragment"
-    val f= TempRepository("AuthRepositoryRepository.kt")
-  var a=  TempData("abc/abc.php","abcMethod","abcModel")
-temp(a,f,filen)
-}

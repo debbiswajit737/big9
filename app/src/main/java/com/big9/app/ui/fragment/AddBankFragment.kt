@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.big9.app.R
+import com.big9.app.data.model.BankListModel
 
 import com.big9.app.data.viewMovel.AuthViewModel
 import com.big9.app.data.viewMovel.MyViewModel
@@ -24,6 +25,9 @@ import com.big9.app.network.ResponseState
 import com.big9.app.network.RetrofitHelper.handleApiError
 
 import com.big9.app.ui.base.BaseFragment
+import com.big9.app.ui.base.TempData
+import com.big9.app.ui.base.TempRepository
+import com.big9.app.ui.base.temp
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.isIsCheck
@@ -39,6 +43,7 @@ class AddBankFragment : BaseFragment() {
     private val viewModel: MyViewModel by activityViewModels()
     private var authViewModel: AuthViewModel?=null
     private var loader: Dialog? = null
+    var bankList = ArrayList<BankListModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -112,7 +117,7 @@ class AddBankFragment : BaseFragment() {
                         override fun getValue(s: String) {
                            // Toast.makeText(requireActivity(), "$s", Toast.LENGTH_SHORT).show()
                         }
-                    })
+                    },bankList)
                     bankListBottomSheetDialog.show(
                         act.supportFragmentManager,
                         bankListBottomSheetDialog.tag
@@ -148,18 +153,25 @@ class AddBankFragment : BaseFragment() {
                 viewModel?.apply {
                     val  data = mapOf(
                         "userid" to loginData.userid,
-                        "image" to bankSlipDocumentImageBase64?.value,
+
                         "bname" to  beneficiary_bank_name.value?.toString(),
                         "ifsccode" to beneficiary_ifsc.value?.toString(),
-                        "Accnumber" to beneficiary_acc.value?.toString(),
+                        "accnumber" to beneficiary_acc.value?.toString(),
                         "accholder" to beneficiary_name.value?.toString()
                     )
 
+                    /*userid
+                    bname
+                    accholder
+                    accnumber
+                    ifsccode*/
+
                     var panimagedata=
-                        bankSlipDocumentImageBase64.value?.let { createImagePart("imagedata", it) }
+                        bankSlipDocumentImageBase64.value?.let { createImagePart("imagefile", it) }
                     val gson= Gson()
                     var jsonString = gson.toJson(data)
                     loginData.AuthToken?.let {
+
                         addToBank(it,jsonString.encrypt(),panimagedata)
                     }
                 }
@@ -187,6 +199,9 @@ class AddBankFragment : BaseFragment() {
                     }
                 }
             }
+
+
+
         }
     }
 
@@ -223,7 +238,13 @@ class AddBankFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
+                    bankList.clear()
+                    it.data?.data?.let {
+                        it.forEach{
+                            bankList.add(BankListModel(R.drawable.bank_imps,it.name.toString(),"",it.ifsc.toString()))
+                        }
 
+                    }
 
                 }
 
@@ -233,6 +254,7 @@ class AddBankFragment : BaseFragment() {
                 }
             }
         }
+
 
 
     }

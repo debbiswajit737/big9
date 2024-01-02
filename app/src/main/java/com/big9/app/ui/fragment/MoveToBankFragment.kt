@@ -122,7 +122,8 @@ class MoveToBankFragment : BaseFragment() {
                                     s4: String
                                 ) {
                                     popup_message.value="Success"
-                                    val dialogFragment = MoveToBankReceptDialogFragment(object:
+                                    findNavController().popBackStack()
+                                    /*val dialogFragment = MoveToBankReceptDialogFragment(object:
                                         CallBack {
                                         override fun getValue(s: String) {
                                             if (Objects.equals(s,"back")) {
@@ -130,18 +131,18 @@ class MoveToBankFragment : BaseFragment() {
                                             }
                                         }
                                         })
-                                    dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                                    dialogFragment.show(childFragmentManager, dialogFragment.tag)*/
                                   }
                             }
                         )
                         successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
-                        moveToBankReceptLiveData?.value=null
+                        submit_moveToBankReceptLiveData?.value=null
                     }
 
                     is ResponseState.Error -> {
                         loader?.dismiss()
                         handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-                        moveToBankReceptLiveData?.value=null
+                        submit_moveToBankReceptLiveData?.value=null
                     }
                 }
             }
@@ -185,25 +186,39 @@ class MoveToBankFragment : BaseFragment() {
                     activity?.let {act->
                         val selectTransactionTypeBottomSheetDialog = SelectTransactionTypeBottomSheetDialog(object :
                             CallBack {
-                            override fun getValue(s: String) {
+                            override fun getValue(amount: String) {
 
 
                                 val tpinBottomSheetDialog = TpinBottomSheetDialog(object :
                                     CallBack {
-                                    override fun getValue(s: String) {
+                                    override fun getValue(tpin: String) {
 
                                         val (isLogin, loginResponse) =sharedPreff.getLoginData()
                                         if (isLogin){
                                             loginResponse?.let {loginData->
                                                 viewModel?.apply {
+                                                    var tType=""
+                                                    if (viewModel?.IMPSIsActive?.value==true){
+                                                        tType="IMPS"
+                                                    }
+                                                    else if(viewModel?.NEFTIsActive?.value==true){
+                                                        tType="NEFT"
+                                                    }
 
                                                     val  data = mapOf(
                                                         "userid" to loginData.userid,
-                                                        "tpin" to s,
-                                                        "custno" to epotly_mobile.value,
-                                                        "amount" to epotly_amt.value,
-                                                        "Id" to bankId,//bank id
+                                                        "tpin" to tpin,
+                                                        "type" to tType,
+
+                                                        "amount" to amount,
+                                                        "id" to bankId,
+
                                                     )
+
+
+
+
+
                                                     val gson= Gson()
                                                     var jsonString = gson.toJson(data)
                                                     loginData.AuthToken?.let {

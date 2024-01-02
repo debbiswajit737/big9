@@ -617,9 +617,14 @@ open class BaseFragment: Fragment(){
 
 data class TempData(val pathName:String,val methodName:String,val modelName:String,)
 data class TempRepository(var fileName:String?)
-
+/*fun main() {
+    val filen="AddBankFragment"
+    val f= TempRepository("AuthRepositoryRepository.kt")
+    var a=  TempData("v1/services/mtb/bank_list","MoveToBankBAnkList","MoveToBankBAnkListModel")
+    temp(a,f,filen)
+}*/
 fun temp(tempData: TempData,tempRepository:TempRepository?=null,fragmentFileName:String) {
-    val baseFilePath = "D:/BDAS/big9_final/big9/"
+    val baseFilePath = "E:/android_project/big9/project/big9/"
     val middlePath = "app/src/main/java/com/big9/app/"
     var endPath = "network/"
     var endPathFileName = "RetroApi.kt"
@@ -777,6 +782,7 @@ fun temp(tempData: TempData,tempRepository:TempRepository?=null,fragmentFileName
     endPathFileName = "$fragmentFileName.kt"
     filePath = "$baseFilePath$middlePath$endPath$endPathFileName"
     val fragmentTemplateText1 = """
+        
         myViewModel?.${tempData.methodName}ResponseLiveData?.observe(viewLifecycleOwner) {
             when (it) {
                 is ResponseState.Loading -> {
@@ -793,6 +799,7 @@ fun temp(tempData: TempData,tempRepository:TempRepository?=null,fragmentFileName
         }
     """.trimIndent()
     val fragmentTemplateText2 = """
+        
         val (isLogin, loginResponse) = sharedPreff.getLoginData()
         loginResponse?.let { loginData ->
             loginData.userid?.let {
@@ -809,8 +816,8 @@ fun temp(tempData: TempData,tempRepository:TempRepository?=null,fragmentFileName
             }
         }
     """.trimIndent()
-    replaceInFile(filePath, "temp1", fragmentTemplateText1)
-    replaceInFile(filePath, "temp2", fragmentTemplateText2)
+    replaceInFile(filePath, "temp1", fragmentTemplateText2)
+    replaceInFile(filePath, "temp2", fragmentTemplateText1)
 
 }
 fun replaceInFile(filePath: String, target: String, replacement: String) {

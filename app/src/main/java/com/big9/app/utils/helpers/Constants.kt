@@ -1,6 +1,7 @@
 package com.big9.app.utils.helpers
 
 import android.content.ContentValues
+import android.net.Uri
 import androidx.recyclerview.widget.RecyclerView
 import com.big9.app.adapter.ReportDetailsAdapter
 import com.big9.app.adapter.reportAdapter.CommissionReportAdapter
@@ -76,4 +77,6 @@ object Constants {
     var loginMobileReferanceNumber: String?=null
     var SMS_SENDER_NUMBER: String="9674375433"
     var paySleepType=""
+    var videoUri: Uri? =null
+    var rmnForgotPassword: String? =null
 }

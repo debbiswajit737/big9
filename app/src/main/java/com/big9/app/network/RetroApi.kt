@@ -15,6 +15,8 @@ import com.big9.app.data.model.DMTReportModel
 import com.big9.app.data.model.DTHTranspherModel
 import com.big9.app.data.model.DTHUserInfoModel
 import com.big9.app.data.model.EPotlyTranspherModel
+import com.big9.app.data.model.ForgotPasswordModel
+import com.big9.app.data.model.ForgotPasswordVerifyOtpModel
 import com.big9.app.data.model.MatmeportModel
 import com.big9.app.data.model.MoveToBankBankListModel
 import com.big9.app.data.model.MoveToWalletModel
@@ -376,21 +378,29 @@ interface RetroApi {
         @Body data: String
     ): Response<SubmitMoveToBankBankListModel>
 
-    @Multipart
+    /*@Multipart
     @POST("v1/services/mtb/add_bank")
     suspend fun addBank(
         @Header("Authtoken") token: String,
         @Body data: String,
         imagedata: MultipartBody.Part?
+    ): Response<AddBankModel>*/
+
+     @Multipart
+    @POST("v1/services/mtb/add_bank")
+    suspend fun addBank(
+         @Header("Authtoken") token: String,
+         @Part("data") data: RequestBody,
+         @Part imagedata: MultipartBody.Part?
     ): Response<AddBankModel>
 
-    @POST("move_to_wallet")
+    @POST("v1/services/mtw/stp")
     suspend fun moveToWallet(
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<MoveToWalletModel>
 
-    @POST("submit_move_to_eallet")
+    @POST("v1/services/mtw/stw")
     suspend fun submitMoveToWallet(
         @Header("Authtoken") token: String,
         @Body data: String
@@ -524,11 +534,23 @@ interface RetroApi {
         @Part image2: MultipartBody.Part?,
     ): Response<PaymentRequistModel>
 
-    @POST("services/mtb/bank_list")
+    @POST("v1/services/mtb/bank_list")
     suspend fun addBankBankList(
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<AddBankBankListModel>
 
+    @POST("v1/password/forgot_pin")
+    suspend fun ForgotPassword(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<ForgotPasswordModel>
+
+
+    @POST("v1/password/verify_otp")
+    suspend fun ForgotPasswordVerifyOtp(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<ForgotPasswordVerifyOtpModel>
 
 }

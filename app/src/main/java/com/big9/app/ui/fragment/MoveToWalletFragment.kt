@@ -142,40 +142,18 @@ class MoveToWalletFragment : BaseFragment() {
                                 val  data = mapOf(
                                 "userid" to loginData.userid,
                                 "tpin" to s,
-                                "custno" to epotly_mobile.value,
-                                "amt" to epotly_amt.value
+                                "amount" to amtMoveToWallet?.value
                                 )
 
                                 val gson= Gson()
                                 var jsonString = gson.toJson(data)
                                 loginData.AuthToken?.let {
-                                epotlyTranspher(it,jsonString.encrypt())
+                                    submitMoveToWallet(it,jsonString.encrypt())
                                 }
                                 }
 
                                 }
                                 }
-                                val successPopupFragment = SuccessPopupFragment(object :
-                                    CallBack4 {
-                                    override fun getValue4(
-                                        s1: String,
-                                        s2: String,
-                                        s3: String,
-                                        s4: String
-                                    ) {
-                                        val dialogFragment = MoveToWalletReceptDialogFragment(object:
-                                            CallBack {
-                                            override fun getValue(s: String) {
-                                                if (Objects.equals(s,"back")) {
-                                                    findNavController().popBackStack()
-                                                }
-                                            }
-                                        })
-                                        dialogFragment.show(childFragmentManager, dialogFragment.tag)
-                                    }
-
-                                })
-                                successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
 
 
 
@@ -248,6 +226,7 @@ class MoveToWalletFragment : BaseFragment() {
 
     fun initView() {
         activity?.let {act->
+            viewModel?.amtMoveToWallet?.value=""
           loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
         }
         apiCall()
@@ -255,6 +234,7 @@ class MoveToWalletFragment : BaseFragment() {
            etAmtWallet.setupAmount()
            etAmtPayabhi.setupAmount()
        }
+
     }
 
     private fun apiCall() {
@@ -265,10 +245,7 @@ class MoveToWalletFragment : BaseFragment() {
             viewModel?.apply {
 
             val  data = mapOf(
-            "userid" to loginData.userid,
-
-            "custno" to epotly_mobile.value,
-            "amt" to epotly_amt.value
+            "userid" to loginData.userid
             )
 
             val gson= Gson()
@@ -317,6 +294,30 @@ class MoveToWalletFragment : BaseFragment() {
 
                     is ResponseState.Success -> {
                         loader?.dismiss()
+                        popup_message?.value=it.data?.Description
+                        val successPopupFragment = SuccessPopupFragment(object :
+                            CallBack4 {
+                            override fun getValue4(
+                                s1: String,
+                                s2: String,
+                                s3: String,
+                                s4: String
+                            ) {
+                                popup_message?.value="Success"
+                                findNavController().popBackStack()
+                                /*val dialogFragment = MoveToWalletReceptDialogFragment(object:
+                                    CallBack {
+                                    override fun getValue(s: String) {
+                                        if (Objects.equals(s,"back")) {
+                                            findNavController().popBackStack()
+                                        }
+                                    }
+                                })
+                                dialogFragment.show(childFragmentManager, dialogFragment.tag)*/
+                            }
+
+                        })
+                        successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
 
 
                         submitMoveToWalletLiveData?.value=null

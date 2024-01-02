@@ -46,7 +46,6 @@ import com.big9.app.network.RetrofitHelper.handleApiError
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.fragment.fragmentDialog.GasBillerListDialog
 import com.big9.app.ui.popup.CustomPopup.showBalencePopup
-import com.big9.app.utils.*
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.common.MethodClass.userLogout
 import com.big9.app.utils.helpers.Constants.Postpaid

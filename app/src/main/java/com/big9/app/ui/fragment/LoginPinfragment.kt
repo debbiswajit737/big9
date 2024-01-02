@@ -14,6 +14,7 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -33,10 +34,14 @@ import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.popup.LoadingPopup
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.helpers.Constants
+import com.big9.app.utils.helpers.Constants.loginMobileReferanceNumber
+import com.big9.app.utils.helpers.Constants.rmnForgotPassword
 import com.big9.app.utils.helpers.PermissionUtils
 import com.big9.app.utils.`interface`.KeyPadOnClickListner
 import com.big9.app.utils.`interface`.PermissionsCallback
 import com.google.gson.Gson
+import com.google.gson.JsonObject
+import kotlin.random.Random
 
 
 class LoginPinfragment : BaseFragment() {
@@ -68,6 +73,7 @@ class LoginPinfragment : BaseFragment() {
         binding.apply {
             tvSwitchAcc.setOnClickListener {
                 activity?.let {act->
+                    sharedPreff.clearUserData()
                     val intent = Intent(act, RegActivity::class.java)
                     intent.putExtra("isForgotPin",false)
                     startActivity(intent)
@@ -82,6 +88,10 @@ class LoginPinfragment : BaseFragment() {
                     startActivity(intent)
                     act.finish()
                 }*/
+                viewModel?.userProfileMobile?.value?.let {
+                    rmnForgotPassword=it
+                }
+
                 findNavController().navigate(R.id.action_loginPinfragment_to_forgotPasswordOtpFragment)
             }
 
@@ -197,15 +207,15 @@ class LoginPinfragment : BaseFragment() {
         val (isLogin, loginResponse) =sharedPreff.getLoginData()
         loginResponse?.let {loginData->
 
-
+            loginMobileReferanceNumber ="com.big9.app"+generateRandomNumberInRange().toString()
             val data = mapOf(
-                "otp" to "123456",
+                "otp" to myViewModel?.loginPin?.value,
                 "userid" to loginData.userid,
 
                 "deviceid" to MethodClass.deviceUid(binding.root.context),
                 "ipaddress" to MethodClass.getLocalIPAddress(),
                 "location" to "123",
-                "referenceid" to "123",
+                "referenceid" to loginMobileReferanceNumber,
                 "Timestamp" to MethodClass.getCurrentTimestamp()
             )
             /*"referenceid" to loginData.,*/
@@ -270,9 +280,9 @@ class LoginPinfragment : BaseFragment() {
                                     }
                                     //This code need to delete.
                                     //After testing remove this code
-                                    if (myViewModel.loginPin.value=="123456") {
+                                    /*if (myViewModel.loginPin.value=="123456") {
                                         findNavController().navigate(com.big9.app.R.id.action_loginPinfragment_to_homeFragment2)
-                                    }
+                                    }*/
                                 }
 
                             }
@@ -389,12 +399,14 @@ class LoginPinfragment : BaseFragment() {
                 is ResponseState.Success -> {
                     myViewModel.loginPin.value=""
                     findNavController().navigate(com.big9.app.R.id.action_loginPinfragment_to_homeFragment2)
+                    myViewModel?.patternLoginReceptLiveData?.value=null
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
                     myViewModel.loginPin.value=""
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    myViewModel?.patternLoginReceptLiveData?.value=null
                 }
             }
         }
@@ -439,4 +451,9 @@ class LoginPinfragment : BaseFragment() {
              }
          }
      }*/
+
+
+    fun generateRandomNumberInRange(): Int {
+        return Random.nextInt(1000, 9999)
+    }
 }

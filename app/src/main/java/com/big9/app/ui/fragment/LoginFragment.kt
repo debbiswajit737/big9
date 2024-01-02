@@ -45,10 +45,10 @@ class LoginFragment : BaseFragment() {
 
     fun initView() {
 
-        var a="abc".encrypt()
+        /*var a="abc".encrypt()
         Log.d("TAG_edata", "encript data : "+a)
         val b=a.decrypt()
-        Log.d("TAG_edata", "decript data : "+b)
+        Log.d("TAG_edata", "decript data : "+b)*/
 
         keyPad.add(1)
         keyPad.add(2)

@@ -19,6 +19,8 @@ import com.big9.app.data.model.CreditCardSendOtpModel
 import com.big9.app.data.model.CreditCardVerifyOtpModel
 import com.big9.app.data.model.DMTReportModel
 import com.big9.app.data.model.EPotlyTranspherModel
+import com.big9.app.data.model.ForgotPasswordModel
+import com.big9.app.data.model.ForgotPasswordVerifyOtpModel
 import com.big9.app.data.model.MatmeportModel
 import com.big9.app.data.model.MoveToBankBankListModel
 import com.big9.app.data.model.MoveToWalletModel
@@ -1779,6 +1781,27 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     fun addBankBankList(token: String, data: String) {
         viewModelScope.launch {
             repository.addBankBankList(token,data)
+        }
+    }
+
+
+
+ //addBankBankList
+    val forgotPasswordResponseLiveData: MutableLiveData<ResponseState<ForgotPasswordModel>>
+        get() = repository.forgotPasswordResponseLiveData
+    fun forgotPassword(token: String, data: String) {
+        viewModelScope.launch {
+            repository.forgotPassword(token,data)
+        }
+    }
+
+
+    //addBankBankList
+    val forgotPasswordVerifyOtpResponseLiveData: MutableLiveData<ResponseState<ForgotPasswordVerifyOtpModel>>
+        get() = repository.forgotPasswordVerifyOtpResponseLiveData
+    fun ForgotPasswordVerifyOtp(token: String, data: String) {
+        viewModelScope.launch {
+            repository.ForgotPasswordVerifyOtp(token,data)
         }
     }
 

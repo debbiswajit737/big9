@@ -21,10 +21,10 @@ import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack4
 
-class BankListBottomSheetDialog(val callBack: CallBack) : BaseBottomSheetFragment() {
+class BankListBottomSheetDialog(val callBack: CallBack,val bankList:ArrayList<BankListModel>) : BaseBottomSheetFragment() {
     lateinit var binding: BankListBottomsheetLayoutBinding
     private val myViewModel: MyViewModel by activityViewModels()
-    var bankList = ArrayList<BankListModel>()
+    //var bankList = ArrayList<BankListModel>()
     private var loader: Dialog? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,12 +63,12 @@ class BankListBottomSheetDialog(val callBack: CallBack) : BaseBottomSheetFragmen
         binding.apply {
             binding.apply {
                 recycleViewPaymentRequest.apply {
+                   /* bankList.add(BankListModel(R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
                     bankList.add(BankListModel(R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
                     bankList.add(BankListModel(R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
                     bankList.add(BankListModel(R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
                     bankList.add(BankListModel(R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
-                    bankList.add(BankListModel(R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
-                    bankList.add(BankListModel(R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
+                    bankList.add(BankListModel(R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))*/
                     adapter= BankListAdapter(bankList, object : CallBack4 {
                         override fun getValue4(s1: String, s2: String, s3: String, s4: String) {
                             viewModel?.beneficiary_bank_name?.value=s1
