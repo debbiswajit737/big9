@@ -385,7 +385,29 @@ class LoginPinfragment : BaseFragment() {
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
-                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    if (it.errorCode==105){
+                        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                        loginResponse?.let {loginData->
+
+
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "clientid" to Constants.CLIENT_ID,
+                                "secretkey" to Constants.API_KEY,
+                                )
+                            /*"referenceid" to loginData.,*/
+                            val gson= Gson()
+                            var jsonString = gson.toJson(data)
+
+
+                            loginData.AuthToken?.let {
+                                myViewModel?.refreshToken(it,jsonString.encrypt())
+                            }
+                        }
+                    }
+                    else {
+                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    }
                 }
             }
         }
@@ -410,6 +432,22 @@ class LoginPinfragment : BaseFragment() {
                 }
             }
         }
+
+        //
+myViewModel?.refreshTokenResponseLiveData?.observe(viewLifecycleOwner) {
+    when (it) {
+        is ResponseState.Loading -> {
+            loader?.show()
+        }
+        is ResponseState.Success -> {
+            loader?.dismiss()
+        }
+        is ResponseState.Error -> {
+            loader?.dismiss()
+            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+        }
+    }
+}
 
     }
 

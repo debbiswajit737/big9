@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -51,6 +52,7 @@ import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.isBackCamera
 import com.big9.app.utils.helpers.PermissionUtils
 import com.big9.app.utils.helpers.PermissionUtils.createAlertDialog
+import com.big9.app.utils.helpers.helper.validate
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack2
 import com.big9.app.utils.`interface`.PermissionsCallback
@@ -636,6 +638,26 @@ class RegFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
+
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    loginResponse?.let {lData->
+
+
+                        authViewModel.name?.value.let {
+                            lData?.name=it
+                        }
+                        authViewModel.aadhar?.value.let {
+                            lData?.aadhar=it
+                        }
+                        authViewModel.panCardNo?.value.let {
+                            lData?.pancard=it
+                        }
+
+                        sharedPreff?.setLoginData(loginResponse, true, "ACTIVE")
+
+                    }
+
+
                     if (isNext)
                     findNavController().navigate(R.id.action_regFragment_to_kycDetailsFragment)
                     else

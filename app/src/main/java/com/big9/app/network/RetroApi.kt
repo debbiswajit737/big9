@@ -63,6 +63,7 @@ import com.big9.app.data.model.profile.profileResponse
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import refreshTokenModel
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -552,5 +553,14 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<ForgotPasswordVerifyOtpModel>
+
+
+@POST("refreshToken")
+    suspend fun refreshToken(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<refreshTokenModel>
+
+
 
 }

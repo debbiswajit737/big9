@@ -52,6 +52,8 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -619,8 +621,8 @@ open class BaseFragment: Fragment(){
 
         return try {
             val number = this.toDoubleOrNull() ?: 0.00
-            val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
-            format.format(number)
+            val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale("en", "IN")))
+            decimalFormat.format(number)
         } catch (e: NumberFormatException) {
             "0.00"
         }
@@ -631,12 +633,12 @@ open class BaseFragment: Fragment(){
 
 data class TempData(val pathName:String,val methodName:String,val modelName:String,)
 data class TempRepository(var fileName:String?)
-/*fun main() {
-    val filen="AddBankFragment"
+fun main() {
+    val filen="LoginPinfragment"
     val f= TempRepository("AuthRepositoryRepository.kt")
-    var a=  TempData("v1/services/mtb/bank_list","MoveToBankBAnkList","MoveToBankBAnkListModel")
+    var a=  TempData("refreshToken","refreshToken","refreshTokenModel")
     temp(a,f,filen)
-}*/
+}
 fun temp(tempData: TempData,tempRepository:TempRepository?=null,fragmentFileName:String) {
     val baseFilePath = "E:/android_project/big9/project/big9/"
     val middlePath = "app/src/main/java/com/big9/app/"

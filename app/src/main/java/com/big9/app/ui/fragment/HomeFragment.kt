@@ -515,7 +515,7 @@ class HomeFragment : BaseFragment() {
         binding.apply {
             imgBalance.setOnClickListener{
                 sharedPreff?.getUserData()?.let{
-                    showBalencePopup(binding.root.context,it.lienbal,it.payoutBalance)
+                    showBalencePopup(binding.root.context,it.currBalance?.formatAsIndianCurrency(),it.payoutBalance?.formatAsIndianCurrency(),it.lienbal?.formatAsIndianCurrency(),it.lienbalPayout?.formatAsIndianCurrency())
                 }
 
             }

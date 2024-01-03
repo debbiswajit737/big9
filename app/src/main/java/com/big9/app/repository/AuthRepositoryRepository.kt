@@ -66,6 +66,7 @@ import com.big9.app.network.RetroApi
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import refreshTokenModel
 
 
 import javax.inject.Inject
@@ -1649,6 +1650,32 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
 
     }
 
+
+
+
+
+
+
+
+
+    	//refreshToken
+private val _refreshTokenResponseLiveData =
+    MutableLiveData<ResponseState<refreshTokenModel>>()
+val refreshTokenResponseLiveData: LiveData<ResponseState<refreshTokenModel>>
+    get() = _refreshTokenResponseLiveData
+
+
+suspend fun refreshToken(token: String, loginModel: String) {
+    _refreshTokenResponseLiveData.postValue(ResponseState.Loading())
+    try {
+        val response =
+            api.refreshToken(token, loginModel.replace("\\n", "").replace("\\r", ""))
+        _refreshTokenResponseLiveData.postValue(ResponseState.create(response, "aa"))
+    } catch (throwable: Throwable) {
+        _refreshTokenResponseLiveData.postValue(ResponseState.create(throwable))
+    }
+
+}
 
 
 }

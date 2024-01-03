@@ -61,6 +61,7 @@ import com.big9.app.utils.helpers.helper.validate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import refreshTokenModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -1808,6 +1809,14 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
 
 
 
+  //refreshToken
+val refreshTokenResponseLiveData: LiveData<ResponseState<refreshTokenModel>>
+    get() = repository.refreshTokenResponseLiveData
+fun refreshToken(token: String, data: String) {
+    viewModelScope.launch {
+        repository.refreshToken(token,data)
+    }
+}
 
 
 }

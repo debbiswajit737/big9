@@ -190,6 +190,18 @@ class CameraFragment : BaseFragment() {
                // circularProgressBar.visibility = View.VISIBLE
               //  btnCaptureVideo.visibility = View.GONE
             } else {
+
+                //video user details
+                val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                loginResponse?.let { loginData ->
+                    authViewModel?.apply {
+                        loginData.name?.let {videoKycUserName.value=it}
+                        loginData.mobileNo?.let {videoKycUserMobileNo.value=it}
+                        loginData.aadhar?.let {videoKycUserAadharCard.value=it}
+                        loginData.pancard?.let {videoKycUserPancard.value=it}
+                    }
+                }
+
                 binding.llUserDetails.visibility=View.VISIBLE
                 binding.tvTimer.visibility = View.VISIBLE
                 btnCaptureImg.visibility = View.GONE

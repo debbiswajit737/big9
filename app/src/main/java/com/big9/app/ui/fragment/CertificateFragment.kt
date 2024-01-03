@@ -65,19 +65,32 @@ class CertificateFragment : BaseFragment() {
         binding.apply {
 
             imgBack.back()
-            setImageCertificate()
+            sharedPreff?.getUserData()?.let{
+                var userType=when(it.userType){
+                "R"->"Retailer"
+                "D"->"Distributor"
+                "SD"->"Super Distributor"
+                "F"->"Franchisee"
+                "A"->"Admin"
+                "COM"->"Compliance"
+                 else->{""}
+                }
+                setImageCertificate(it.ID,it.name,userType)
+
+            }
+
             imgDownlode.setOnClickListener{
                 loader?.show()
-                bitmap?.let {generatePdfWithBackground("epay_certificate.pdf","",it)  }
+                bitmap?.let {generatePdfWithBackground("big9_certificate.pdf","",it)  }
             }
           }
         }
 
-    private fun setImageCertificate() {
+    private fun setImageCertificate(id: String?, name: String?, userType: String) {
         // Load the drawable resource as a Bitmap
         val drawableId = R.drawable.ep_certificate // Replace with your drawable resource ID
         //val bitmap = (ContextCompat.getDrawable(context, drawableId) as BitmapDrawable).bitmap
-        bitmap=addTextToDrawable(binding.root.context,drawableId,"Test user","2211225588(Dealer)")
+        bitmap=addTextToDrawable(binding.root.context,drawableId,name.toString(),"${id}(${userType})")
         bitmap?.let { binding.imgCertificate.setImageBitmap(it) }
 
         //generatePdfWithBackground(binding.root.context,"epay_certificate.pdf","",bitmap)

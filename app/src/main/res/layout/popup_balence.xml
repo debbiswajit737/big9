@@ -72,9 +72,10 @@
         android:layout_gravity="center_horizontal"
         android:textColor="@color/logo_color"/>
     <TextView
+        android:id="@+id/tv_leanbalence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(Line Amount: 2,512.00)"
+        tools:text="(Line Amount: 2,512.00)"
 
         android:fontFamily="@font/open_sans_medium"
         android:textSize="@dimen/_12ssp"
@@ -104,9 +105,10 @@
         android:layout_gravity="center_horizontal"
         android:textColor="@color/logo_color"/>
     <TextView
+        android:id="@+id/lienbal_payout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(Line Amount: 500.00)"
+        tools:text="(Line Amount: 500.00)"
         android:paddingBottom="@dimen/_10sdp"
         android:fontFamily="@font/open_sans_medium"
         android:textSize="@dimen/_12ssp"

@@ -57,13 +57,21 @@ object CustomPopup {
 
 
 
-    fun showBalencePopup(context: Context, currBalance: String?, payoutBalance: String?) {
+    fun showBalencePopup(
+        context: Context,
+        currBalance: String?,
+        payoutBalance: String?,
+        lienbal: String?,
+        lienbalPayout: String?
+    ) {
         val binding = PopupBalenceBinding.inflate(LayoutInflater.from(context))
         //popup_balence
         val alertDialogBuilder = AlertDialog.Builder(context)
         alertDialogBuilder.setView(binding.root)
         binding.tvMainbalance.text=currBalance
         binding.cashoutBalance.text=payoutBalance
+        binding.tvLeanbalence.text="(Line Amount: $lienbal)"
+        binding.lienbalPayout.text="(Line Amount: $lienbalPayout)"
         //binding.model=userInfoModel
 
 

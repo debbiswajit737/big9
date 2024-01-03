@@ -50,16 +50,16 @@ class AuthenticationActivity : AppCompatActivity() {
                 navController?.navigate(R.id.homeFragment2)
             }
 
-            if (onBoundStape==0){
+            if (onBoundStape==1){
                 navController?.navigate(R.id.regFragment)
             }
-            if (onBoundStape==1){
+            if (onBoundStape==2){
                 navController?.navigate(R.id.kycDetailsFragment)
             }
-            if (onBoundStape==2){
+            if (onBoundStape==3){
                 navController?.navigate(R.id.bankDetailsFragment)
             }
-            if (onBoundStape==3){
+            if (onBoundStape==4){
                 navController?.navigate(R.id.docuploadFragment)
             }
         }

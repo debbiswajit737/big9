@@ -30,9 +30,9 @@ class LoginResponse {
     var userStatus: String? = null
     @SerializedName("kycstep")
     var kycstep: String? = null
-    @SerializedName("aadhar")
+    @SerializedName("aadhaarno")
     var aadhar: String? = null
-    @SerializedName("pancard")
+    @SerializedName("panno")
     var pancard: String? = null
 
 
