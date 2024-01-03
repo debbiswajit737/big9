@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -187,7 +188,23 @@ class CashWithdrawFragment : BaseFragment() {
 
     private fun aepsCall() {
         activity?.let {act->
-            val intent = Intent(act, HostActivity::class.java)
+
+            val intent = Intent(act, HostActivity::class.java).apply {
+                putExtra("pId", "PS00560")
+                putExtra("pApiKey", "UFMwMDU2MDlhM2JjYmZmZTE5MjVhMDI4MmRlN2QxZWM2ODI2OTZi")
+                putExtra("mobile", "9674375433")
+                putExtra("email", "debbiswajit737@gmail.com")
+                putExtra("mCode", "saura123")
+                putExtra("lat", "22.572645")
+                putExtra("lng", "88.363892")
+                putExtra("firm", "bdas")
+            }
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            someActivityResultLauncher.launch(intent)
+
+
+            /*val intent = Intent(act, HostActivity::class.java)
             intent.putExtra("pId", "PS00560")
             intent.putExtra("pApiKey", "UFMwMDU2MDlhM2JjYmZmZTE5MjVhMDI4MmRlN2QxZWM2ODI2OTZi")
             intent.putExtra("mobile", "9674375433")
@@ -196,14 +213,14 @@ class CashWithdrawFragment : BaseFragment() {
             intent.putExtra("lat", "22.572645")
             intent.putExtra("lng", "88.363892")
             intent.putExtra("firm", "bdas")
-           /* intent.putExtra("mCode", "saura123") //merchant unique code and should not contain special character
+           *//* intent.putExtra("mCode", "saura123") //merchant unique code and should not contain special character
             intent.putExtra("mobile", "9674375433") // merchant mobile no.
             intent.putExtra("lat", "22.572645")
             intent.putExtra("lng", "88.363892")
             intent.putExtra("firm", "Test Telecom")
-            intent.putExtra("email", "abc@gmail.com")*/
+            intent.putExtra("email", "abc@gmail.com")*//*
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivityForResult(intent, 999)
+            startActivityForResult(intent, 999)*/
         }
     }
 
@@ -223,6 +240,23 @@ class CashWithdrawFragment : BaseFragment() {
 
                 Log.i("logTag", detailedResponse)
             }
+        }
+    }
+
+    private val someActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            // Handle the result here
+            val status = data?.getBooleanExtra("status", false)
+            val response = data?.getIntExtra("response", 0)
+            val message = data?.getStringExtra("message")
+
+            val detailedResponse = "Status: $status, " +
+                    "Response: $response, " +
+                    "Message: $message"
+            Toast.makeText(binding.root.context, detailedResponse, Toast.LENGTH_LONG).show()
+
+            Log.i("logTag", detailedResponse)
         }
     }
 }
