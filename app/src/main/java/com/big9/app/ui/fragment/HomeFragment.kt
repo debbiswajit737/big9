@@ -2,8 +2,16 @@ package com.big9.app.ui.fragment
 
 
 
+import android.Manifest
 import android.app.Dialog
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothServerSocket
+import android.bluetooth.BluetoothSocket
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -20,6 +28,8 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -37,6 +47,7 @@ import com.big9.app.adapter.MostPopularAdapter
 import com.big9.app.adapter.ReportAdapter
 import com.big9.app.adapter.TravelAdapter
 import com.big9.app.adapter.UtilityAdapter
+import com.big9.app.adapter.bluetooth.BluetoothDeviceAdapter
 import com.big9.app.data.model.ListIcon
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.data.viewMovel.TableViewModel
@@ -67,10 +78,34 @@ import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack2
 import com.big9.app.utils.`interface`.PermissionsCallback
 import com.google.gson.Gson
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
+import java.util.UUID
 
 
 class HomeFragment : BaseFragment() {
     private val tableViewModel: TableViewModel by viewModels()
+    private lateinit var bluetoothDevice: BluetoothDevice
+    private lateinit var bluetoothSocket: BluetoothSocket
+    private lateinit var outputStream: OutputStream
+    private lateinit var inputStream: InputStream
+    val REQUEST_BLUETOOTH_PERMISSION=3
+    lateinit var bluetoothManager: BluetoothManager
+    lateinit var bluetoothAdapter: BluetoothAdapter
+    var   bluetoothDeviceAdapter: BluetoothDeviceAdapter?=null
+    val permissionsForBloothRequest = mutableListOf<String>(android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_ADMIN)
+
+    private val  MY_PERMISSIONS_REQUEST_CODE=1
+    var bluetoothDeviceList: ArrayList<BluetoothDevice> = ArrayList()
+    private var serverSocket: BluetoothServerSocket?=null
+
+
+    //val permissionList = arrayOf(android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_ADMIN)
     private var isRotated = true
     private var isRotated2 = true
     private var isRotated3 = true
@@ -272,7 +307,8 @@ class HomeFragment : BaseFragment() {
 
                 getString(R.string.cash_withdraw) -> {
                     isCashWithdraw = false
-                    activity?.let { act ->
+                    findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+                    /*activity?.let { act ->
                         val aadharAuthBottomSheetDialog =
                             AadharAuthBottomSheetDialog(object : CallBack {
                                 override fun getValue(s: String) {
@@ -283,7 +319,7 @@ class HomeFragment : BaseFragment() {
                             act.supportFragmentManager,
                             aadharAuthBottomSheetDialog.tag
                         )
-                    }
+                    }*/
 
                 }
 
@@ -291,10 +327,11 @@ class HomeFragment : BaseFragment() {
                 getString(R.string.mini_statement) -> {
                     viewModel.reportType.value = getString(R.string.dmt)
                     activity?.let { act ->
-                        val aadharAuthBottomSheetDialog =
+                        findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFormFragment)
+                        /*val aadharAuthBottomSheetDialog =
                             AadharAuthBottomSheetDialog(object : CallBack {
                                 override fun getValue(s: String) {
-                                    findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFormFragment)
+
                                     //findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFragment)
                                     // findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
 
@@ -303,24 +340,27 @@ class HomeFragment : BaseFragment() {
                         aadharAuthBottomSheetDialog.show(
                             act.supportFragmentManager,
                             aadharAuthBottomSheetDialog.tag
-                        )
+                        )*/
                     }
                 }
 
                 getString(R.string.aadhar_pay) -> {
                     isCashWithdraw = false
-                    activity?.let { act ->
+                    findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+                    /*activity?.let { act ->
                         val aadharAuthBottomSheetDialog =
                             AadharAuthBottomSheetDialog(object : CallBack {
                                 override fun getValue(s: String) {
-                                    findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+
                                 }
                             })
                         aadharAuthBottomSheetDialog.show(
                             act.supportFragmentManager,
                             aadharAuthBottomSheetDialog.tag
                         )
-                    }
+                    }*/
+
+
 
                 }
 
@@ -429,6 +469,8 @@ class HomeFragment : BaseFragment() {
 
                 getString(R.string.matm) -> {
                     activity?.let { act ->
+                        checkPermissionForBlooth()
+
                         val microATMBottomSheetDialog =
                             MicroATMBottomSheetDialog(object : CallBack {
                                 override fun getValue(microAtmTitle: String) {
@@ -511,13 +553,174 @@ class HomeFragment : BaseFragment() {
         }
     }
 
+
+    private fun checkPermissionForBlooth() {
+        /*for (permission in permissionList) {
+            if (ActivityCompat.checkSelfPermission(binding.root.context, permission)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionsForBloothRequest.add(permission)
+            }
+        }*/
+        //enableBlueTooth()
+        Dexter.withContext(binding.root.context)
+            .withPermissions(permissionsForBloothRequest)
+            .withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                    // Check if user has granted all
+                    if (report?.areAllPermissionsGranted() == true) {
+                        enableBlueTooth()
+                    } else {
+                        Toast.makeText(binding.root.context, "Permission deny", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    p0: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
+                    // User has denied a permission, proceed and ask them again
+                    token?.continuePermissionRequest()
+                }
+            }).check()
+
+    }
+
+    private fun enableBlueTooth() {
+
+        if (bluetoothAdapter?.isEnabled == false) {
+            //bluetoothAdapter?.enable()
+            val intent = (Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+            if (ActivityCompat.checkSelfPermission(
+                    binding.root.context,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                checkPermissionForBlooth()
+                return
+            }
+            startActivity(intent)
+
+        }
+        var device=bluetoothManager.adapter.bondedDevices
+        var deviceAddress=""
+        device.forEach{
+            Log.d("TAG_device", "enableBlueTooth: name:"+it.name+" address:"+it.address)
+            deviceAddress=it.address
+        }
+
+        bluetoothDevice = bluetoothAdapter.getRemoteDevice(deviceAddress)
+
+        // Pair with the device
+       // pairWithBluetoothDevice(bluetoothDevice)
+
+        // Connect and transfer data
+        activity?.let {act->
+            checkConnectAndTransferData(act)
+        }
+
+
+    }
+    private fun pairWithBluetoothDevice(device: BluetoothDevice) {
+        if (ActivityCompat.checkSelfPermission(
+                binding.root.context,
+                Manifest.permission.BLUETOOTH_CONNECT
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            if (!device.createBond()) {
+                Toast.makeText(binding.root.context, "connect  pair with the device", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+    private fun checkConnectAndTransferData(act: FragmentActivity) {
+        // Check and request Bluetooth permissions if needed
+        if (ActivityCompat.checkSelfPermission(
+                binding.root.context,
+                Manifest.permission.BLUETOOTH
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                act,
+                arrayOf(Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN),
+                REQUEST_BLUETOOTH_PERMISSION
+            )
+        } else {
+            // Permissions granted, proceed with Bluetooth operations
+            connectAndTransferData()
+        }
+        /*try {
+            if (ActivityCompat.checkSelfPermission(
+                    binding.root.context,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+            }
+            bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(UUID.randomUUID())
+            bluetoothSocket.connect()
+            outputStream = bluetoothSocket.outputStream
+
+            // Send data
+            val dataToSend = "Hello, Bluetooth Device!"
+            outputStream.write(dataToSend.toByteArray())
+
+            // Close the socket and output stream when done
+            outputStream.close()
+            bluetoothSocket.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            // Handle connection or data transfer errors
+        }*/
+    }
+
+    private fun connectAndTransferData() {
+        try {
+            if (ActivityCompat.checkSelfPermission(
+                    binding.root.context,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+            }
+            bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(UUID.randomUUID())
+            bluetoothSocket.connect()
+            outputStream = bluetoothSocket.outputStream
+            inputStream = bluetoothSocket.inputStream
+
+            // Send data
+            val dataToSend = "Hello, Bluetooth Device!"
+            outputStream.write(dataToSend.toByteArray())
+
+            // Read response
+            val buffer = ByteArray(1024)
+            val bytesRead = inputStream.read(buffer)
+            if (bytesRead != -1) {
+                val receivedData = String(buffer, 0, bytesRead)
+                // Handle the received data
+                Toast.makeText(binding.root.context, "Received data: $receivedData", Toast.LENGTH_SHORT).show()
+
+            }
+
+            // Close the streams and socket when done
+            outputStream.close()
+            inputStream.close()
+            bluetoothSocket.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(binding.root.context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+
+            // Handle connection or data transfer errors
+        }
+    }
+
+
     private fun viewOnClick() {
         binding.apply {
             imgBalance.setOnClickListener{
                 sharedPreff?.getUserData()?.let{
                     showBalencePopup(binding.root.context,it.currBalance?.formatAsIndianCurrency(),it.payoutBalance?.formatAsIndianCurrency(),it.lienbal?.formatAsIndianCurrency(),it.lienbalPayout?.formatAsIndianCurrency())
                 }
-
             }
             imgSearch.setOnClickListener{
                         searchList.clear()
@@ -1009,7 +1212,8 @@ class HomeFragment : BaseFragment() {
 
                 adapter= AEPSAdapter(iconList5,R.drawable.circle_shape2,object : CallBack2 {
                     override fun getValue2(s: String,tag: String) {
-                        checkService(s,tag)
+                        //checkService(s,tag)
+                        serviceNavigation(s,tag)
                        // serviceNavigation(s)
                        /* when(s) {
                             getString(R.string.balance) -> {
@@ -1208,6 +1412,8 @@ class HomeFragment : BaseFragment() {
         }
     }
 
+
+
     /*private fun rotateView(view: View, degrees: Float) {
         val rotation = ObjectAnimator.ofFloat(view, "rotation", degrees)
         rotation.duration = 500 // Adjust the duration as needed
@@ -1216,7 +1422,14 @@ class HomeFragment : BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun init() {
-        Log.d("TAG_token", "init: "+sharedPreff.getFcnToken().toString())
+        //Log.d("TAG_token", "init: "+sharedPreff.getFcnToken().toString())
+        activity?.let {
+            bluetoothManager = it.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+            bluetoothManager?.adapter?.let {
+                bluetoothAdapter =it
+            }
+        }
+
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
 
@@ -1407,4 +1620,7 @@ class HomeFragment : BaseFragment() {
             }
         }
     }
+
+
+
 }

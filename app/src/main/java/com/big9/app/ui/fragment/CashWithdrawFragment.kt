@@ -1,9 +1,12 @@
 package com.big9.app.ui.fragment
 
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +31,7 @@ import com.big9.app.ui.receipt.CashWithdrawReceptDialogFragment
 import com.big9.app.utils.helpers.Constants.isCashWithdraw
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack4
+import com.paysprint.onboardinglib.activities.HostActivity
 import java.util.Objects
 
 class CashWithdrawFragment : BaseFragment() {
@@ -130,6 +134,7 @@ class CashWithdrawFragment : BaseFragment() {
     }
 
     fun initView() {
+        aepsCall()
         binding.apply {
             etAmt.setupAmount()
 
@@ -180,5 +185,44 @@ class CashWithdrawFragment : BaseFragment() {
         })
     }
 
+    private fun aepsCall() {
+        activity?.let {act->
+            val intent = Intent(act, HostActivity::class.java)
+            intent.putExtra("pId", "PS00560")
+            intent.putExtra("pApiKey", "UFMwMDU2MDlhM2JjYmZmZTE5MjVhMDI4MmRlN2QxZWM2ODI2OTZi")
+            intent.putExtra("mobile", "9674375433")
+            intent.putExtra("email", "debbiswajit737@gmail.com")
+            intent.putExtra("mCode", "saura123")
+            intent.putExtra("lat", "22.572645")
+            intent.putExtra("lng", "88.363892")
+            intent.putExtra("firm", "bdas")
+           /* intent.putExtra("mCode", "saura123") //merchant unique code and should not contain special character
+            intent.putExtra("mobile", "9674375433") // merchant mobile no.
+            intent.putExtra("lat", "22.572645")
+            intent.putExtra("lng", "88.363892")
+            intent.putExtra("firm", "Test Telecom")
+            intent.putExtra("email", "abc@gmail.com")*/
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivityForResult(intent, 999)
+        }
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 999) {
+            if (resultCode == Activity.RESULT_OK) {
+                val status = data?.getBooleanExtra("status", false)
+                val response = data?.getIntExtra("response", 0)
+                val message = data?.getStringExtra("message")
+
+
+                val detailedResponse = "Status: $status,  " +
+                        "Response: $response, " +
+                        "Message: $message "
+                Toast.makeText(binding.root.context, detailedResponse, Toast.LENGTH_LONG).show()
+
+                Log.i("logTag", detailedResponse)
+            }
+        }
+    }
 }

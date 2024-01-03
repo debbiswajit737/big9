@@ -21,7 +21,7 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
-
+        multiDexEnabled =true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -198,9 +198,21 @@ dependencies {
     //implementation ("com.google.dagger:hilt-android:2.44.2")
     kapt ("com.google.dagger:hilt-android-compiler:2.39.1")
 
-
+    implementation ("androidx.multidex:multidex:2.0.1")
     implementation ("androidx.paging:paging-runtime:3.0.1")
     implementation ("org.jetbrains:annotations:16.0.2")
+
+
+    implementation(files("libs/onboardinglib_V.1.1.13.aar"))
+    //implementation (files("libs/onboard_uat_v2.0.aar"))
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:adapter-rxjava2:2.3.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("io.reactivex.rxjava2:rxandroid:2.0.1")
+    implementation ("com.google.code.gson:gson:2.5.2")
+    implementation ("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation ("com.karumi:dexter:5.0.0")
+    implementation ("com.github.yalantis:ucrop:2.2.6-native")
 }
 
 kapt {

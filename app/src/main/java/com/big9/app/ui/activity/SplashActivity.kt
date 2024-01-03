@@ -42,12 +42,10 @@ class SplashActivity : BaseActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-
         binding= DataBindingUtil.setContentView(this, R.layout.activity_splash)
         notiPermission()
         getFireBAseToken()
         init()
-
     }
 
     private fun getFireBAseToken() {
@@ -165,7 +163,9 @@ class SplashActivity : BaseActivity() {
                 PermissionsCallback {
                 override fun onPermissionRequest(granted: Boolean) {
                     if (!granted) {
-                        dialogRecordingPermission()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            dialogRecordingPermission()
+                        }
 
                     } else {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
