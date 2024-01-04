@@ -144,12 +144,12 @@ class CameraFragment : BaseFragment() {
                     PermissionsCallback {
                     override fun onPermissionRequest(granted: Boolean) {
 
-                        if (granted) {
+                      //  if (granted) {
                             startCamera()
                             onViewClick()
-                        } else {
+                       /* } else {
                             dialogRecordingPermission()
-                        }
+                        }*/
                     }
                 })
             }

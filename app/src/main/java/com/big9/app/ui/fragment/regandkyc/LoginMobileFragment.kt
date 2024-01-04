@@ -286,7 +286,7 @@ class LoginMobileFragment : BaseFragment() {
             PermissionUtils.requestVideoRecordingPermission(binding.root.context, object :
                 PermissionsCallback {
                 override fun onPermissionRequest(granted: Boolean) {
-                    if (!granted) {
+                   /* if (!granted) {
                         dialogRecordingPermission()
 
                     } else {
@@ -297,7 +297,7 @@ class LoginMobileFragment : BaseFragment() {
 
                         }
 
-                    }
+                    }*/
 
                 }
 

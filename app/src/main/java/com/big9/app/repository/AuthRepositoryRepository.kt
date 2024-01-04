@@ -72,6 +72,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import refreshTokenModel
+import verifyBeneficiaryModel
 
 
 import javax.inject.Inject
@@ -1674,7 +1675,7 @@ suspend fun refreshToken(token: String, loginModel: String) {
     _refreshTokenResponseLiveData.postValue(ResponseState.Loading())
     try {
         val response =
-            api.refreshToken(token, loginModel.replace("\\n", "").replace("\\r", ""))
+            api.refreshToken(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
         _refreshTokenResponseLiveData.postValue(ResponseState.create(response, "aa"))
     } catch (throwable: Throwable) {
         _refreshTokenResponseLiveData.postValue(ResponseState.create(throwable))
@@ -1771,12 +1772,55 @@ suspend fun addBeneficiary(token: String, loginModel: String) {
     _addBeneficiaryResponseLiveData.postValue(ResponseState.Loading())
     try {
         val response =
-            api.addBeneficiary(token, loginModel.replace("\\n", "").replace("\\r", ""))
+            api.addBeneficiary(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
         _addBeneficiaryResponseLiveData.postValue(ResponseState.create(response, "aa"))
     } catch (throwable: Throwable) {
         _addBeneficiaryResponseLiveData.postValue(ResponseState.create(throwable))
     }
 
 }
+
+
+      	//beneficiary Verify
+private val _beneficiaryVerifyResponseLiveData =
+    MutableLiveData<ResponseState<verifyBeneficiaryModel>>()
+val beneficiaryVerifyResponseLiveData: LiveData<ResponseState<verifyBeneficiaryModel>>
+    get() = _beneficiaryVerifyResponseLiveData
+
+
+
+
+    suspend fun beneficiaryVerify(token: String, loginModel: String) {
+        _beneficiaryVerifyResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.beneficiaryVerify(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
+            _beneficiaryVerifyResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _beneficiaryVerifyResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+        	//moneyTransfer
+private val _moneyTransferResponseLiveData =
+    MutableLiveData<ResponseState<verifyBeneficiaryModel>>()
+val moneyTransferResponseLiveData: MutableLiveData<ResponseState<verifyBeneficiaryModel>>
+    get() = _moneyTransferResponseLiveData
+
+
+
+
+    suspend fun moneyTransfer(token: String, loginModel: String) {
+        _moneyTransferResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.moneyTransfer(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
+            _moneyTransferResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _moneyTransferResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
 }
 

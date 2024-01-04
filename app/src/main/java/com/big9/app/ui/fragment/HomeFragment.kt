@@ -1660,7 +1660,7 @@ class HomeFragment : BaseFragment() {
             PermissionUtils.requestVideoRecordingPermission(binding.root.context, object :
                 PermissionsCallback {
                 override fun onPermissionRequest(granted: Boolean) {
-                    if (!granted) {
+                   /* if (!granted) {
                         dialogRecordingPermission()
 
                     } else {
@@ -1671,7 +1671,7 @@ class HomeFragment : BaseFragment() {
 
                         }
 
-                    }
+                    }*/
 
                 }
 

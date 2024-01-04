@@ -162,7 +162,7 @@ class SplashActivity : BaseActivity() {
             PermissionUtils.requestVideoRecordingPermission(binding.root.context, object :
                 PermissionsCallback {
                 override fun onPermissionRequest(granted: Boolean) {
-                    if (!granted) {
+                    /*if (!granted) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                             dialogRecordingPermission()
                         }
@@ -174,7 +174,7 @@ class SplashActivity : BaseActivity() {
                             }
                         }
 
-                    }
+                    }*/
 
                 }
 

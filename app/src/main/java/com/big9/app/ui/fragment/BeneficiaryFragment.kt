@@ -2,6 +2,7 @@ package com.big9.app.ui.fragment
 
 
 import BeneficiaryListAdapter
+import BeneficiaryListAdapter2
 import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -14,9 +15,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import beneficiaryListData
 import com.big9.app.R
 
 import com.big9.app.data.model.BeneficiaryListModel
+import com.big9.app.data.model.BeneficiaryListModel2
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentBeneficiaryBinding
 import com.big9.app.network.ResponseState
@@ -28,6 +31,7 @@ import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack4
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
@@ -38,8 +42,8 @@ import com.google.zxing.qrcode.QRCodeWriter
 class BeneficiaryFragment : BaseFragment() {
     lateinit var binding: FragmentBeneficiaryBinding
     private val viewModel: MyViewModel by activityViewModels()
-    var beneficiaryList = ArrayList<BeneficiaryListModel>()
-    var beneficiaryListAdapter :BeneficiaryListAdapter?=null
+    var beneficiaryList = ArrayList<BeneficiaryListModel2>()
+    var beneficiaryListAdapter :BeneficiaryListAdapter2?=null
     private var loader: Dialog? = null
     var customerid=""
     override fun onCreateView(
@@ -120,39 +124,93 @@ loginResponse?.let { loginData ->
         }
         is ResponseState.Success -> {
             loader?.dismiss()
-            setRecycleView()
+            setRecycleView(it?.data?.data)
             viewModel?.beneficiaryListResponseLiveData?.value=null
         }
         is ResponseState.Error -> {
             loader?.dismiss()
-            setRecycleView()
+
             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
             viewModel?.beneficiaryListResponseLiveData?.value=null
         }
     }
 }
+        viewModel?.moneyTransferResponseLiveData?.observe(viewLifecycleOwner) {
+        when (it) {
+        is ResponseState.Loading -> {
+            loader?.show()
+        }
+        is ResponseState.Success -> {
+            loader?.dismiss()
+            viewModel?.receiveStatus?.value =it?.data?.Description
+            val dialogFragment = ReceptDialogFragment()
+            dialogFragment.show(childFragmentManager, dialogFragment.tag)
+            viewModel?.moneyTransferResponseLiveData?.value=null
+        }
+        is ResponseState.Error -> {
+            loader?.dismiss()
+
+            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+            viewModel?.moneyTransferResponseLiveData?.value=null
+        }
+    }
+}
+
+
     }
 
-    private fun setRecycleView() {
+    private fun setRecycleView(data: ArrayList<beneficiaryListData>?) {
         binding.recycleViewBeneficiary.apply {
             beneficiaryList.clear()
-            beneficiaryList.add(BeneficiaryListModel("Test User1",R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
+            data?.forEach {
+                it.apply {
+                    beneficiaryList.add(BeneficiaryListModel2(recName,R.drawable.bank_imps,recBankname,"A/C:${recAcno}",recIfsc,recId))
+                }
+
+            }
+           /* beneficiaryList.add(BeneficiaryListModel("Test User1",R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
             beneficiaryList.add(BeneficiaryListModel("Test User2",R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
             beneficiaryList.add(BeneficiaryListModel("Test User3",R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
-            beneficiaryList.add(BeneficiaryListModel("Test User4",R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
-            beneficiaryListAdapter=BeneficiaryListAdapter(beneficiaryList, object : CallBack4 {
-                override fun getValue4(s1: String, s2: String, s3: String, s4: String) {
+            beneficiaryList.add(BeneficiaryListModel("Test User4",R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))*/
+            beneficiaryListAdapter=BeneficiaryListAdapter2(beneficiaryList, object : CallBack4 {
+                override fun getValue4(benId: String, s2: String, s3: String, s4: String) {
 
                     activity?.let {act->
                         val selectTransactionTypeBottomSheetDialog = SelectTransactionTypeBottomSheetDialog(object :
                             CallBack {
-                            override fun getValue(s: String) {
+                            override fun getValue(amount: String) {
                                 val tpinBottomSheetDialog = TpinBottomSheetDialog(object :
                                     CallBack {
-                                    override fun getValue(s: String) {
-                                        viewModel?.receiveStatus?.value="Success"
-                                        val dialogFragment = ReceptDialogFragment()
-                                        dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                                    override fun getValue(tpin: String) {
+                                        // API call
+                                        val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                                        loginResponse?.let { loginData ->
+                                            loginData.userid?.let {
+                                                var tType=""
+                                                if (viewModel?.IMPSIsActive?.value==true){
+                                                    tType="IMPS"
+                                                }
+                                                else if(viewModel?.NEFTIsActive?.value==true){
+                                                    tType="NEFT"
+                                                }
+                                                val data = mapOf(
+                                                    "userid" to loginData.userid,
+                                                    "custid" to Constants.customerId,
+                                                    "benid" to benId,
+                                                    "usertpin" to tpin,
+                                                    "trans_amt" to amount,
+                                                    "tmode" to tType,
+                                                )
+
+
+                                                val gson = Gson()
+                                                var jsonString = gson.toJson(data)
+                                                loginData.AuthToken?.let {
+                                                    viewModel?.moneyTransfer(it, jsonString.encrypt())
+                                                }
+                                            }
+                                        }
+
                                     }
                                 })
                                 tpinBottomSheetDialog.show(

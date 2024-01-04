@@ -77,6 +77,7 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import verifyBeneficiaryModel
 
 interface RetroApi {
 
@@ -596,4 +597,18 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<addBeneficiaryModel>
+
+    @POST("v1/services/dmt/verify_beneficiary.php")
+    suspend fun beneficiaryVerify(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<verifyBeneficiaryModel>
+
+ @POST("v1/services/dmt/money_transfer")
+    suspend fun moneyTransfer(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<verifyBeneficiaryModel>
+
+
 }

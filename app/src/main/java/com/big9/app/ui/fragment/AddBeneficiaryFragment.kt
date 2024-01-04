@@ -24,10 +24,15 @@ import com.big9.app.network.RetrofitHelper.handleApiError
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.fragment.BankListBottomSheetDialog
 import com.big9.app.ui.popup.CustomPopup.showDebitPopup
+import com.big9.app.ui.popup.SuccessPopupFragment
+import com.big9.app.ui.popup.SuccessPopupFragment2
+import com.big9.app.ui.receipt.EPotlyReceptDialogFragment
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.helpers.Constants.customerId
 import com.big9.app.utils.`interface`.CallBack
+import com.big9.app.utils.`interface`.CallBack4
 import com.google.gson.Gson
+import java.util.Objects
 
 
 class AddBeneficiaryFragment : BaseFragment() {
@@ -95,7 +100,28 @@ loginResponse?.let { loginData ->
                     showDebitPopup(tvVerify.context,object: CallBack {
                         override fun getValue(s: String) {
                             // API call
-                            viewModel?.beneficiary_name?.value="Sample Beneficiary Name"
+                            val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                            loginResponse?.let { loginData ->
+                                loginData.userid?.let {
+                                    val data = mapOf(
+                                        "userid" to loginData.userid,
+                                        "custid" to customerId,
+                                        "bankid" to viewModel?.bankIdBene?.value,
+                                        "bankName" to viewModel?.beneficiary_bank_name?.value,
+                                        "account_number" to viewModel?.beneficiary_acc?.value,
+                                        "ifsc" to viewModel?.beneficiary_ifsc?.value,
+                                        "benef_name" to viewModel?.beneficiary_name?.value,
+                                    )
+
+
+                                    val gson = Gson()
+                                    var jsonString = gson.toJson(data)
+                                    loginData.AuthToken?.let {
+                                        viewModel?.beneficiaryVerify(it, jsonString.encrypt())
+                                    }
+                                }
+                            }
+
                         }
                     })
 
@@ -182,6 +208,21 @@ loginResponse?.let { loginData ->
         }
         is ResponseState.Success -> {
             loader?.dismiss()
+            viewModel.popup_message.value="${it?.data?.Description}"
+            val successPopupFragment = SuccessPopupFragment2(object :
+                CallBack4 {
+                override fun getValue4(
+                    s1: String,
+                    s2: String,
+                    s3: String,
+                    s4: String
+                ) {
+                    viewModel.popup_message.value="Success"
+                    findNavController().popBackStack()
+                }
+
+            })
+            successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
         }
         is ResponseState.Error -> {
             loader?.dismiss()
@@ -189,6 +230,38 @@ loginResponse?.let { loginData ->
         }
     }
 }
+
+    viewModel?.beneficiaryVerifyResponseLiveData?.observe(viewLifecycleOwner) {
+    when (it) {
+        is ResponseState.Loading -> {
+            loader?.show()
+        }
+        is ResponseState.Success -> {
+            loader?.dismiss()
+            //viewModel?.beneficiary_name?.value="Sample Beneficiary Name"
+            viewModel.popup_message.value="${it?.data?.Description}"
+            val successPopupFragment = SuccessPopupFragment2(object :
+                CallBack4 {
+                override fun getValue4(
+                    s1: String,
+                    s2: String,
+                    s3: String,
+                    s4: String
+                ) {
+                    viewModel.popup_message.value="Success"
+                }
+
+            })
+            successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
+        }
+        is ResponseState.Error -> {
+            loader?.dismiss()
+            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+        }
+    }
+}
+
+
     }
 
 

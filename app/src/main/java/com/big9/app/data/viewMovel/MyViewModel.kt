@@ -67,6 +67,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import refreshTokenModel
+import verifyBeneficiaryModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -1872,6 +1873,22 @@ val addBeneficiaryResponseLiveData: LiveData<ResponseState<addBeneficiaryModel>>
 fun addBeneficiary(token: String, data: String) {
     viewModelScope.launch {
         repository.addBeneficiary(token,data)
+    }
+}
+  //beneficiary Verify
+val beneficiaryVerifyResponseLiveData: LiveData<ResponseState<verifyBeneficiaryModel>>
+    get() = repository.beneficiaryVerifyResponseLiveData
+fun beneficiaryVerify(token: String, data: String) {
+    viewModelScope.launch {
+        repository.beneficiaryVerify(token,data)
+    }
+}
+  //moneyTransfer
+val moneyTransferResponseLiveData: MutableLiveData<ResponseState<verifyBeneficiaryModel>>
+    get() = repository.moneyTransferResponseLiveData
+fun moneyTransfer(token: String, data: String) {
+    viewModelScope.launch {
+        repository.moneyTransfer(token,data)
     }
 }
 

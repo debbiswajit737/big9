@@ -1,20 +1,25 @@
 import com.google.gson.annotations.SerializedName
 
 class beneficiaryListModel {
-    @SerializedName("message"  ) var message  : String?   = null
-    @SerializedName("status"   ) var status   : Int?      = null
-    @SerializedName("mobile"   ) var mobile   : String?   = null
-    @SerializedName("custID"   ) var custID   : String?   = null
-    @SerializedName("custType" ) var custType : String?   = null
-    @SerializedName("response" ) var response : beneficiaryListData? = beneficiaryListData()
+    @SerializedName("Description")
+    var Description: String? = null
+    @SerializedName("response_code")
+    var responseCode: Int? = null
+    @SerializedName("data")
+    var data: ArrayList<beneficiaryListData> = arrayListOf()
+    @SerializedName("timestamp")
+    var timestamp: String? = null
 }
+
 class beneficiaryListData {
-    @SerializedName("fname"        ) var fname       : String? = null
-    @SerializedName("lname"        ) var lname       : String? = null
-    @SerializedName("mobile"       ) var mobile      : String? = null
-    @SerializedName("status"       ) var status      : String? = null
-    @SerializedName("bank3_limit"  ) var bank3Limit  : Int?    = null
-    @SerializedName("bank3_status" ) var bank3Status : String? = null
-    @SerializedName("bank2_limit"  ) var bank2Limit  : Int?    = null
-    @SerializedName("bank1_limit"  ) var bank1Limit  : Int?    = null
+    @SerializedName("rec_name")
+    var recName: String? = null
+    @SerializedName("rec_id")
+    var recId: String? = null
+    @SerializedName("rec_acno")
+    var recAcno: String? = null
+    @SerializedName("rec_ifsc")
+    var recIfsc: String? = null
+    @SerializedName("rec_bankname")
+    var recBankname: String? = null
 }
