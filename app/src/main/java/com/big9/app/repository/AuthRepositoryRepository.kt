@@ -1,5 +1,6 @@
 package com.big9.app.repository
 
+import addBeneficiaryModel
 import addRemitterModel
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -1755,6 +1756,25 @@ suspend fun addRemitter(token: String, loginModel: String) {
         _addRemitterResponseLiveData.postValue(ResponseState.create(response, "aa"))
     } catch (throwable: Throwable) {
         _addRemitterResponseLiveData.postValue(ResponseState.create(throwable))
+    }
+
+}
+
+    	//addBeneficiary
+private val _addBeneficiaryResponseLiveData =
+    MutableLiveData<ResponseState<addBeneficiaryModel>>()
+val addBeneficiaryResponseLiveData: LiveData<ResponseState<addBeneficiaryModel>>
+    get() = _addBeneficiaryResponseLiveData
+
+
+suspend fun addBeneficiary(token: String, loginModel: String) {
+    _addBeneficiaryResponseLiveData.postValue(ResponseState.Loading())
+    try {
+        val response =
+            api.addBeneficiary(token, loginModel.replace("\\n", "").replace("\\r", ""))
+        _addBeneficiaryResponseLiveData.postValue(ResponseState.create(response, "aa"))
+    } catch (throwable: Throwable) {
+        _addBeneficiaryResponseLiveData.postValue(ResponseState.create(throwable))
     }
 
 }

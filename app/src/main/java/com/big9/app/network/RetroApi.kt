@@ -1,5 +1,6 @@
 package com.big9.app.network
 
+import addBeneficiaryModel
 import addRemitterModel
 import beneficiaryListModel
 import cashCollectionModel
@@ -589,4 +590,10 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<addRemitterModel>
+
+@POST("v1/services/dmt/add_beneficiary.php")
+    suspend fun addBeneficiary(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<addBeneficiaryModel>
 }

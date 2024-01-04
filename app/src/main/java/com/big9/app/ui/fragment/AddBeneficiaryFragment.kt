@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.big9.app.R
 import com.big9.app.data.model.BankListModel
+import com.big9.app.data.model.BankListModel2
 
 
 import com.big9.app.data.viewMovel.MyViewModel
@@ -24,6 +25,7 @@ import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.fragment.BankListBottomSheetDialog
 import com.big9.app.ui.popup.CustomPopup.showDebitPopup
 import com.big9.app.utils.common.MethodClass
+import com.big9.app.utils.helpers.Constants.customerId
 import com.big9.app.utils.`interface`.CallBack
 import com.google.gson.Gson
 
@@ -31,7 +33,7 @@ import com.google.gson.Gson
 class AddBeneficiaryFragment : BaseFragment() {
     lateinit var binding: FragmentAddBeneficiaryBinding
     private val viewModel: MyViewModel by activityViewModels()
-    var bankList = ArrayList<BankListModel>()
+    var bankList = ArrayList<BankListModel2>()
     private var loader: Dialog? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +63,29 @@ class AddBeneficiaryFragment : BaseFragment() {
             btnSubmit.setOnClickListener{
                 activity?.let {act->
                     if (viewModel?.beneficiaryValidation() == true){
-                    findNavController().popBackStack()
+                    //findNavController().popBackStack()
+
+                        //
+val (isLogin, loginResponse) = sharedPreff.getLoginData()
+loginResponse?.let { loginData ->
+    loginData.userid?.let {
+        val data = mapOf(
+            "userid" to loginData.userid,
+            "custid" to customerId,
+            "bankid" to viewModel?.bankIdBene?.value,
+            "bankName" to viewModel?.beneficiary_bank_name?.value,
+            "account_number" to viewModel?.beneficiary_acc?.value,
+            "ifsc" to viewModel?.beneficiary_ifsc?.value,
+            "benef_name" to viewModel?.beneficiary_name?.value,
+        )
+
+        val gson = Gson()
+        var jsonString = gson.toJson(data)
+        loginData.AuthToken?.let {
+            viewModel?.addBeneficiary(it, jsonString.encrypt())
+        }
+    }
+}
                     }
                 }
 
@@ -80,7 +104,7 @@ class AddBeneficiaryFragment : BaseFragment() {
 
             etBeneficiaryBankName.setOnClickListener{
                 activity?.let {act->
-                    val bankListBottomSheetDialog = BankListBottomSheetDialog(object : CallBack {
+                    val bankListBottomSheetDialog = BankListBottom2SheetDialog(object : CallBack {
                         override fun getValue(s: String) {
                             Toast.makeText(requireActivity(), "$s", Toast.LENGTH_SHORT).show()
                         }
@@ -136,7 +160,7 @@ class AddBeneficiaryFragment : BaseFragment() {
                     bankList.clear()
                     it.data?.data?.let {
                         it.forEach{
-                            bankList.add(BankListModel(R.drawable.default_1,it.name.toString(),"A/C",it.ifsc.toString()))
+                            bankList.add(BankListModel2(R.drawable.default_1,it.name.toString(),"A/C",it.ifsc.toString(),it.id.toString()))
                         }
 
                     }
@@ -149,6 +173,22 @@ class AddBeneficiaryFragment : BaseFragment() {
                 }
             }
         }
+
+        //
+        viewModel?.addBeneficiaryResponseLiveData?.observe(viewLifecycleOwner) {
+    when (it) {
+        is ResponseState.Loading -> {
+            loader?.show()
+        }
+        is ResponseState.Success -> {
+            loader?.dismiss()
+        }
+        is ResponseState.Error -> {
+            loader?.dismiss()
+            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+        }
+    }
+}
     }
 
 

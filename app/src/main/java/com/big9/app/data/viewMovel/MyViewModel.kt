@@ -1,5 +1,6 @@
 package com.big9.app.data.viewMovel
 
+import addBeneficiaryModel
 import addRemitterModel
 import android.net.Uri
 import androidx.lifecycle.LiveData
@@ -196,6 +197,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
 
     val beneficiary_bank_name = MutableLiveData<String>()
     val beneficiary_ifsc = MutableLiveData<String>()
+    val bankIdBene = MutableLiveData<String>()
     val beneficiary_acc = MutableLiveData<String>()
     val beneficiary_name = MutableLiveData<String>()
 
@@ -1860,6 +1862,16 @@ val addRemitterResponseLiveData: MutableLiveData<ResponseState<addRemitterModel>
 fun addRemitter(token: String, data: String) {
     viewModelScope.launch {
         repository.addRemitter(token,data)
+    }
+}
+
+
+  //addBeneficiary
+val addBeneficiaryResponseLiveData: LiveData<ResponseState<addBeneficiaryModel>>
+    get() = repository.addBeneficiaryResponseLiveData
+fun addBeneficiary(token: String, data: String) {
+    viewModelScope.launch {
+        repository.addBeneficiary(token,data)
     }
 }
 

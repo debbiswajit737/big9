@@ -634,9 +634,9 @@ open class BaseFragment: Fragment(){
 data class TempData(val pathName:String,val methodName:String,val modelName:String,)
 data class TempRepository(var fileName:String?)
 fun main() {
-    val filen="OtpNewRmnFragment"
+    val filen="AddBeneficiaryFragment"
     val f= TempRepository("AuthRepositoryRepository.kt")
-    var a=  TempData("v1/services/dmt/add_remitter.php","addRemitter","addRemitterModel")
+    var a=  TempData("v1/services/dmt/add_beneficiary.php","addBeneficiary","addBeneficiaryModel")
     temp(a,f,filen)
 }
 fun temp(tempData: TempData,tempRepository:TempRepository?=null,fragmentFileName:String) {
