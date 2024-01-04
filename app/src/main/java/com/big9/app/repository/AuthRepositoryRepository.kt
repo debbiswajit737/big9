@@ -1,8 +1,12 @@
 package com.big9.app.repository
 
+import addRemitterModel
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import beneficiaryListModel
+import cashCollectionModel
+import checkUserModel
 import com.big9.app.data.genericmodel.BaseResponse
 import com.big9.app.data.model.AEPSReportModel
 import com.big9.app.data.model.AddBankBankListModel
@@ -1678,5 +1682,81 @@ suspend fun refreshToken(token: String, loginModel: String) {
 }
 
 
+
+    	//cashCollection
+private val _cashCollectionResponseLiveData =
+    MutableLiveData<ResponseState<cashCollectionModel>>()
+val cashCollectionResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
+    get() = _cashCollectionResponseLiveData
+
+
+suspend fun cashCollection(token: String, loginModel: String) {
+    _cashCollectionResponseLiveData.postValue(ResponseState.Loading())
+    try {
+        val response =
+            api.cashCollection(token, loginModel.replace("\\n", "").replace("\\r", ""))
+        _cashCollectionResponseLiveData.postValue(ResponseState.create(response, "aa"))
+    } catch (throwable: Throwable) {
+        _cashCollectionResponseLiveData.postValue(ResponseState.create(throwable))
+    }
+
+}
+
+    	//checkUser
+private val _checkUserResponseLiveData =
+    MutableLiveData<ResponseState<checkUserModel>>()
+val checkUserResponseLiveData: MutableLiveData<ResponseState<checkUserModel>>
+    get() = _checkUserResponseLiveData
+
+
+suspend fun checkUser(token: String, loginModel: String) {
+    _checkUserResponseLiveData.postValue(ResponseState.Loading())
+    try {
+        val response =
+            api.checkUser(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
+        _checkUserResponseLiveData.postValue(ResponseState.create(response, "aa"))
+    } catch (throwable: Throwable) {
+        _checkUserResponseLiveData.postValue(ResponseState.create(throwable))
+    }
+
+}
+
+    	//beneficiaryList
+private val _beneficiaryListResponseLiveData =
+    MutableLiveData<ResponseState<beneficiaryListModel>>()
+val beneficiaryListResponseLiveData: MutableLiveData<ResponseState<beneficiaryListModel>>
+    get() = _beneficiaryListResponseLiveData
+
+
+suspend fun beneficiaryList(token: String, loginModel: String) {
+    _beneficiaryListResponseLiveData.postValue(ResponseState.Loading())
+    try {
+        val response =
+            api.beneficiaryList(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
+        _beneficiaryListResponseLiveData.postValue(ResponseState.create(response, "aa"))
+    } catch (throwable: Throwable) {
+        _beneficiaryListResponseLiveData.postValue(ResponseState.create(throwable))
+    }
+
+}
+
+    	//addRemitter
+private val _addRemitterResponseLiveData =
+    MutableLiveData<ResponseState<addRemitterModel>>()
+val addRemitterResponseLiveData: MutableLiveData<ResponseState<addRemitterModel>>
+    get() = _addRemitterResponseLiveData
+
+
+suspend fun addRemitter(token: String, loginModel: String) {
+    _addRemitterResponseLiveData.postValue(ResponseState.Loading())
+    try {
+        val response =
+            api.addRemitter(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
+        _addRemitterResponseLiveData.postValue(ResponseState.create(response, "aa"))
+    } catch (throwable: Throwable) {
+        _addRemitterResponseLiveData.postValue(ResponseState.create(throwable))
+    }
+
+}
 }
 

@@ -401,7 +401,7 @@ class LoginPinfragment : BaseFragment() {
 
 
                             loginData.AuthToken?.let {
-                                myViewModel?.refreshToken(it,jsonString.encrypt())
+                              //  myViewModel?.refreshToken(it,jsonString.encrypt())
                             }
                         }
                     }

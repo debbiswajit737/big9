@@ -1,10 +1,14 @@
 package com.big9.app.data.viewMovel
 
+import addRemitterModel
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import beneficiaryListModel
+import cashCollectionModel
+import checkUserModel
 import com.big9.app.R
 
 
@@ -842,22 +846,22 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
                 mobileSendMoneyErrorVisible.value = false
             }
         }
-
-        if (nameSendMoney.value?.trim().isNullOrBlank()) {
-            nameSendMoneyError.value = "Name is required"
-            nameSendMoneyErrorVisible.value = true
-            isValid = false
-        } else {
-            if (nameSendMoney.value?.trim()?.validate("name")==false) {
-                nameSendMoneyError.value = "Name is not valid"
+        if(sendMoneyVisibility?.value==true) {
+            if (nameSendMoney.value?.trim().isNullOrBlank()) {
+                nameSendMoneyError.value = "Name is required"
                 nameSendMoneyErrorVisible.value = true
                 isValid = false
             } else {
-                nameSendMoneyError.value = ""
-                nameSendMoneyErrorVisible.value = false
+                if (nameSendMoney.value?.trim()?.validate("name") == false) {
+                    nameSendMoneyError.value = "Name is not valid"
+                    nameSendMoneyErrorVisible.value = true
+                    isValid = false
+                } else {
+                    nameSendMoneyError.value = ""
+                    nameSendMoneyErrorVisible.value = false
+                }
             }
         }
-
         return isValid
     }
 
@@ -1818,5 +1822,45 @@ fun refreshToken(token: String, data: String) {
     }
 }
 
+
+
+  //cashCollection
+val cashCollectionResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
+    get() = repository.cashCollectionResponseLiveData
+fun cashCollection(token: String, data: String) {
+    viewModelScope.launch {
+        repository.cashCollection(token,data)
+    }
+}
+
+
+  //checkUser
+val checkUserResponseLiveData: MutableLiveData<ResponseState<checkUserModel>>
+    get() = repository.checkUserResponseLiveData
+fun checkUser(token: String, data: String) {
+    viewModelScope.launch {
+        repository.checkUser(token,data)
+    }
+}
+
+
+  //beneficiaryList
+val beneficiaryListResponseLiveData: MutableLiveData<ResponseState<beneficiaryListModel>>
+    get() = repository.beneficiaryListResponseLiveData
+fun beneficiaryList(token: String, data: String) {
+    viewModelScope.launch {
+        repository.beneficiaryList(token,data)
+    }
+}
+
+
+  //addRemitter
+val addRemitterResponseLiveData: MutableLiveData<ResponseState<addRemitterModel>>
+    get() = repository.addRemitterResponseLiveData
+fun addRemitter(token: String, data: String) {
+    viewModelScope.launch {
+        repository.addRemitter(token,data)
+    }
+}
 
 }

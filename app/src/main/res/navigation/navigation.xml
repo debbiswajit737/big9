@@ -267,6 +267,9 @@
         <action
             android:id="@+id/action_moneyTranspherFragment_to_beneficiaryFragment"
             app:destination="@id/beneficiaryFragment" />
+        <action
+            android:id="@+id/action_moneyTranspherFragment_to_otpNewRmnFragment"
+            app:destination="@id/otpNewRmnFragment" />
     </fragment>
     <fragment
         android:id="@+id/creditCardPaymentFragment"
@@ -401,5 +404,13 @@
         <action
             android:id="@+id/action_changeLoginPinFragment_to_homeFragment2"
             app:destination="@id/homeFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/otpNewRmnFragment"
+        android:name="com.big9.app.ui.fragment.OtpNewRmnFragment"
+        android:label="OtpNewRmnFragment" >
+        <action
+            android:id="@+id/action_otpNewRmnFragment_to_beneficiaryFragment"
+            app:destination="@id/beneficiaryFragment" />
     </fragment>
 </navigation>

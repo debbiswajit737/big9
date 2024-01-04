@@ -2,6 +2,7 @@ package com.big9.app.ui.fragment
 
 
 import BeneficiaryListAdapter
+import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
@@ -18,10 +19,15 @@ import com.big9.app.R
 import com.big9.app.data.model.BeneficiaryListModel
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentBeneficiaryBinding
+import com.big9.app.network.ResponseState
+import com.big9.app.network.RetrofitHelper.handleApiError
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.utils.*
+import com.big9.app.utils.common.MethodClass
+import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack4
+import com.google.gson.Gson
 
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
@@ -34,6 +40,8 @@ class BeneficiaryFragment : BaseFragment() {
     private val viewModel: MyViewModel by activityViewModels()
     var beneficiaryList = ArrayList<BeneficiaryListModel>()
     var beneficiaryListAdapter :BeneficiaryListAdapter?=null
+    private var loader: Dialog? = null
+    var customerid=""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,6 +73,67 @@ class BeneficiaryFragment : BaseFragment() {
 
 
     fun initView() {
+
+   activity?.let {act->
+               loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
+       /*customerid = arguments?.getString("customerid").toString()*/
+   }
+val (isLogin, loginResponse) = sharedPreff.getLoginData()
+loginResponse?.let { loginData ->
+    loginData.userid?.let {
+        val data = mapOf(
+            "userid" to loginData.userid,
+            "custid" to Constants.customerId
+        )
+        val gson = Gson()
+        var jsonString = gson.toJson(data)
+        loginData.AuthToken?.let {
+            viewModel?.beneficiaryList(it, jsonString.encrypt())
+        }
+    }
+}
+
+
+    }
+
+    fun setObserver() {
+        binding.apply {
+            etSearch.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    beneficiaryListAdapter?.filter?.filter(s)
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+            })
+        }
+
+
+        //
+        viewModel?.beneficiaryListResponseLiveData?.observe(viewLifecycleOwner) {
+        when (it) {
+        is ResponseState.Loading -> {
+            loader?.show()
+        }
+        is ResponseState.Success -> {
+            loader?.dismiss()
+            setRecycleView()
+            viewModel?.beneficiaryListResponseLiveData?.value=null
+        }
+        is ResponseState.Error -> {
+            loader?.dismiss()
+            setRecycleView()
+            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+            viewModel?.beneficiaryListResponseLiveData?.value=null
+        }
+    }
+}
+    }
+
+    private fun setRecycleView() {
         binding.recycleViewBeneficiary.apply {
             beneficiaryList.clear()
             beneficiaryList.add(BeneficiaryListModel("Test User1",R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
@@ -101,23 +170,6 @@ class BeneficiaryFragment : BaseFragment() {
             })
             adapter=beneficiaryListAdapter
         }
-    }
-
-    fun setObserver() {
-        binding.apply {
-            etSearch.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    beneficiaryListAdapter?.filter?.filter(s)
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                }
-            })
-        }
-
     }
 
     @Throws(WriterException::class)

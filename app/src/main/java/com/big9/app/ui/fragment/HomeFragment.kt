@@ -191,6 +191,32 @@ class HomeFragment : BaseFragment() {
                 isFromUtilityPage=false
             }*/
         }
+
+        // 
+        viewModel?.cashCollectionResponseLiveData?.observe(viewLifecycleOwner) {
+    when (it) {
+        is ResponseState.Loading -> {
+            loader?.show()
+        }
+        is ResponseState.Success -> {
+            loader?.dismiss()
+           it.data?.redirecturl?.let {
+               WebView(binding.root.context).set(it,"")
+
+           }
+            viewModel?.from_page_message?.value=null
+/*
+ "https://www.gibl.in/wallet/validate2/",
+                   "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
+ */
+        }
+        is ResponseState.Error -> {
+            loader?.dismiss()
+            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+            viewModel?.from_page_message?.value=null
+        }
+    }
+}
     }
 
     private fun getDeviceWIDTHandHeight() {
@@ -466,6 +492,68 @@ class HomeFragment : BaseFragment() {
                 getString(R.string.credit_card) -> {
                     findNavController().navigate(R.id.action_homeFragment2_to_creditCardPaymentFragment)
                 }
+
+                getString(R.string.cash_collection) -> {
+
+
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            viewModel?.apply {
+
+                                val  data = mapOf(
+                                    "userid" to loginData.userid,
+                                    "service" to slag
+                                )
+
+                                val gson= Gson()
+                                var jsonString = gson.toJson(data)
+
+                                loginData.AuthToken?.let {
+                                    cashCollection(it,jsonString.encrypt())
+                                }
+                            }
+
+                        }
+                    }
+
+                    /*val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    loginResponse?.let { loginData ->
+                        loginData.userid?.let {
+                            val data = mapOf("userid" to it,
+                                )
+                            val gson = Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                Log.d("TAG_sss", "serviceNavigation: "+jsonString.encrypt())
+                                viewModel?.cashCollection(it,jsonString.encrypt())//"jsonString.encrypt()"
+                            }
+                        }
+                    }*/
+
+                    /*WebView(binding.root.context).set(
+                        "https://www.gibl.in/wallet/validate2/",
+                        "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
+                    )*/
+                    //
+
+                    /*val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                    loginResponse?.let { loginData ->
+                        loginData.userid?.let {
+                            val data = mapOf(
+                                "userid" to loginData.userid
+
+                            )
+                            val gson = Gson()
+                            var jsonString = gson.toJson(data)
+                            loginData.AuthToken?.let {
+                                viewModel?.cashCollection(it, jsonString.encrypt())
+                            }
+                        }
+}*/
+                }
+
+
 
                 getString(R.string.matm) -> {
                     activity?.let { act ->
@@ -1058,8 +1146,10 @@ class HomeFragment : BaseFragment() {
                 iconList3.add(ListIcon("View More", R.drawable.view_more))*/
                 adapter= FinancialAdapter(iconList11,R.drawable.circle_shape2, object : CallBack2 {
                     override fun getValue2(s: String,tag: String) {
-                        checkService(s,tag)
-                        //serviceNavigation(s)
+                        //checkService(s,tag)
+
+                        //need comment. now testing perpose
+                        serviceNavigation(s,tag)
                         /*when(s){
                             getString(R.string.prepaid)->{
                                 findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)

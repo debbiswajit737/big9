@@ -192,9 +192,9 @@ class CashWithdrawFragment : BaseFragment() {
             val intent = Intent(act, HostActivity::class.java).apply {
                 putExtra("pId", "PS00560")
                 putExtra("pApiKey", "UFMwMDU2MDlhM2JjYmZmZTE5MjVhMDI4MmRlN2QxZWM2ODI2OTZi")
-                putExtra("mobile", "9674375433")
-                putExtra("email", "debbiswajit737@gmail.com")
-                putExtra("mCode", "saura123")
+                putExtra("mobile", "9674375434")
+                putExtra("email", "debbiswajit738@gmail.com")
+                putExtra("mCode", "saura124")
                 putExtra("lat", "22.572645")
                 putExtra("lng", "88.363892")
                 putExtra("firm", "bdas")

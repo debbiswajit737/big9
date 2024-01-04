@@ -79,4 +79,6 @@ object Constants {
     var paySleepType=""
     var videoUri: Uri? =null
     var rmnForgotPassword: String? =null
+    var customerId: String =""
+    var bankCode: String =""
 }

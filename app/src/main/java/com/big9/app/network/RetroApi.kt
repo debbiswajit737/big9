@@ -1,5 +1,9 @@
 package com.big9.app.network
 
+import addRemitterModel
+import beneficiaryListModel
+import cashCollectionModel
+import checkUserModel
 import com.big9.app.data.model.sample.Test
 import com.big9.app.data.genericmodel.BaseResponse
 
@@ -387,12 +391,12 @@ interface RetroApi {
         imagedata: MultipartBody.Part?
     ): Response<AddBankModel>*/
 
-     @Multipart
+    @Multipart
     @POST("v1/services/mtb/add_bank")
     suspend fun addBank(
-         @Header("Authtoken") token: String,
-         @Part("data") data: RequestBody,
-         @Part imagedata: MultipartBody.Part?
+        @Header("Authtoken") token: String,
+        @Part("data") data: RequestBody,
+        @Part imagedata: MultipartBody.Part?
     ): Response<AddBankModel>
 
     @POST("v1/services/mtw/stp")
@@ -555,12 +559,34 @@ interface RetroApi {
     ): Response<ForgotPasswordVerifyOtpModel>
 
 
-@POST("refreshToken")
+    @POST("refreshToken")
     suspend fun refreshToken(
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<refreshTokenModel>
 
+    @POST("v1/services/cashcoll/cashcol")
+    suspend fun cashCollection(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<cashCollectionModel>
 
 
+    @POST("v1/services/dmt/check_remitter.php")
+    suspend fun checkUser(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<checkUserModel>
+
+    @POST("v1/services/dmt/beneficiary_list.php")
+    suspend fun beneficiaryList(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<beneficiaryListModel>
+
+    @POST("v1/services/dmt/add_remitter.php")
+    suspend fun addRemitter(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<addRemitterModel>
 }
