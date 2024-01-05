@@ -12,7 +12,7 @@ import com.google.android.gms.common.api.Status
 class OtpRetriever : BroadcastReceiver() {
     //private var smsBroadcastReceiverListener: SmsBroadcastReceiverListener? = null
     override fun onReceive(context: Context, intent: Intent) {
-        if (SmsRetriever.SMS_RETRIEVED_ACTION == intent.action) {
+        /*if (SmsRetriever.SMS_RETRIEVED_ACTION == intent.action) {
             val extras = intent.extras
             val status = extras!![SmsRetriever.EXTRA_STATUS] as Status?
             when (status?.statusCode) {
@@ -27,7 +27,7 @@ class OtpRetriever : BroadcastReceiver() {
                    // smsBroadcastReceiverListener?.onFailure()
                 }
             }
-        }
+        }*/
     }
 
    /* fun setListener(smsBroadcastReceiverListener: SmsBroadcastReceiverListener) {

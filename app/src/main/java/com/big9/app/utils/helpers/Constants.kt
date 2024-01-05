@@ -51,7 +51,8 @@ object Constants {
     const val AES_TRANSFORMATION = "AES/CBC/PKCS5Padding"
     const val AES_KEY =  "a22786308b71488790be222216260e0a"
 
-    const val AES_IV =  "gPmSeGRX2BdOm50EuHW0f9jUHKmfTLtW"
+    const val AES_IV =  "EvUc8IIYzYvcrfXo"
+    //const val AES_IV =  "gPmSeGRX2BdOm50EuHW0f9jUHKmfTLtW"
     const val API_KEY =  "677a05e769f1a888ddb86397eb45c57d2700bb7b83b4f3b7282bf6aba4266c7f"
     const val CLIENT_ID =  "big9_164604122023"
     const val Postpaid =  "Postpaid"
@@ -75,10 +76,13 @@ object Constants {
     var reportDetailsAdapter: ReportDetailsAdapter?=null
     var loginMobileNumber: String?=null
     var loginMobileReferanceNumber: String?=null
-    var SMS_SENDER_NUMBER: String="9674375433"
+    //var SMS_SENDER_NUMBER: String=""
     var paySleepType=""
     var videoUri: Uri? =null
     var rmnForgotPassword: String? =null
     var customerId: String =""
     var bankCode: String =""
+
+    var eOpid=""
+    var appUpdateUrl:String?=null
 }

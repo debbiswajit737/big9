@@ -2,18 +2,21 @@ package com.big9.app.utils.common
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
+import android.widget.Toast
 import com.big9.app.R
 import com.big9.app.ui.activity.RegActivity
 import com.big9.app.utils.helpers.SharedPreff
@@ -110,6 +113,18 @@ object MethodClass {
         this.startActivity(intent)
         // Toast.makeText(this, "Logout", Toast.LENGTH_LONG).show()
     }
+
+    fun Context.appUpdate() {
+        val appPackageName = "com.big9.app"
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+        } catch (e: ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+        }
+
+    }
+
+
 
     @SuppressLint("HardwareIds")
     fun deviceUid(context: Context): String {

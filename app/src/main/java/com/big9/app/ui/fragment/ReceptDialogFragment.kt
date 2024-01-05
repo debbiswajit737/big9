@@ -1,6 +1,7 @@
 package com.big9.app.ui.fragment
 
 
+import MoneyTranspherModel
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -34,7 +35,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 
-class ReceptDialogFragment : BaseCenterSheetFragment() {
+class ReceptDialogFragment(val moneyTranspherdata: MoneyTranspherModel?) : BaseCenterSheetFragment() {
     lateinit var binding: FragmentReceptDialogBinding
     private val viewModel: MyViewModel by activityViewModels()
 
@@ -148,7 +149,9 @@ class ReceptDialogFragment : BaseCenterSheetFragment() {
     fun initView() {
         setCrdViewMinHeight()
         binding.recycleViewReceiptDetails.apply {
+            moneyTranspherdata?.let {
 
+            }
             adapter= ReceiptAdapter(recycleViewReceiptList)
         }
     }

@@ -1,7 +1,6 @@
 package com.big9.app.ui.fragment
 
 
-
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -34,6 +33,7 @@ import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.popup.LoadingPopup
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.helpers.Constants
+import com.big9.app.utils.helpers.Constants.appUpdateUrl
 import com.big9.app.utils.helpers.Constants.loginMobileReferanceNumber
 import com.big9.app.utils.helpers.Constants.rmnForgotPassword
 import com.big9.app.utils.helpers.PermissionUtils
@@ -72,16 +72,16 @@ class LoginPinfragment : BaseFragment() {
     private fun onViewClick() {
         binding.apply {
             tvSwitchAcc.setOnClickListener {
-                activity?.let {act->
+                activity?.let { act ->
                     sharedPreff.clearUserData()
                     val intent = Intent(act, RegActivity::class.java)
-                    intent.putExtra("isForgotPin",false)
+                    intent.putExtra("isForgotPin", false)
                     startActivity(intent)
                     act.finish()
                 }
 
             }
-            tvForgotPassword.setOnClickListener{
+            tvForgotPassword.setOnClickListener {
                 /*activity?.let {act->
                     val intent = Intent(act, RegActivity::class.java)
                     intent.putExtra("isForgotPin",true)
@@ -89,13 +89,11 @@ class LoginPinfragment : BaseFragment() {
                     act.finish()
                 }*/
                 viewModel?.userProfileMobile?.value?.let {
-                    rmnForgotPassword=it
+                    rmnForgotPassword = it
                 }
 
                 findNavController().navigate(R.id.action_loginPinfragment_to_forgotPasswordOtpFragment)
             }
-
-
 
 
         }
@@ -106,12 +104,13 @@ class LoginPinfragment : BaseFragment() {
         super.onResume()
 
     }
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun initView() {
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
         }
-        myViewModel.loginPin.value=""
+        myViewModel.loginPin.value = ""
         checkPermission()
         setKeyPad(binding.recyclePhonePad)
         binding.apply {
@@ -119,31 +118,14 @@ class LoginPinfragment : BaseFragment() {
             hideKeyBoard(firstPinView)
         }
 
-        sharedPreff?.getUserData()?.let{
-           setUserData(it)
+        sharedPreff?.getUserData()?.let {
+            setUserData(it)
         }
 
 
         //transition slip
-        myViewModel.receiveStatus.value=""
-        myViewModel.receiveReceptMessahe.value=getString(R.string.transaction_slip)
-        Constants.recycleViewReceiptList.clear()
-
-        Constants.recycleViewReceiptList.add(ReceiptModel(type = 4))
-        Constants.recycleViewReceiptList.add(ReceiptModel(type = 1, property = "ACCOUNT NUMBER", reportValue ="300000025" ))
-        Constants.recycleViewReceiptList.add(ReceiptModel(type = 1, property = "BANK NAME", reportValue ="AXIS BANK" ))
-        Constants.recycleViewReceiptList.add(ReceiptModel(type = 1, property = "BENEFICIARY NAME", reportValue ="test value" ))
-        Constants.recycleViewReceiptList.add(ReceiptModel(type = 1, property = "SENDER NUMBER", reportValue ="9234268887" ))
-        Constants.recycleViewReceiptList.add(ReceiptModel(type = 2, title = "TRANSACTION DATE: 2023-09-09 14:44:26" ))
-
-        Constants.recycleViewReceiptList.add(ReceiptModel(type = 3, transactionId = "300000085", rrnId = "325220891591", price = "100" , transactionMessage = "Refund", userName = "Test User"))
-
-        Constants.recycleViewReceiptList.add(ReceiptModel(type = 3, transactionId = "300000085", rrnId = "325220891591", price = "100" , transactionMessage = "Refund", userName = "Test User"))
-
-        Constants.recycleViewReceiptList.add(ReceiptModel(type = 3, transactionId = "300000085", rrnId = "325220891591", price = "100" , transactionMessage = "Refund", userName = "Test User"))
-
-        Constants.recycleViewReceiptList.add(ReceiptModel(type = 3, transactionId = "300000085", rrnId = "325220891591", price = "100" , transactionMessage = "Refund", userName = "Test User"))
-
+        myViewModel.receiveStatus.value = ""
+        myViewModel.receiveReceptMessahe.value = getString(R.string.transaction_slip)
 
 
         //Constants.recycleViewReceiptList.add(ReceiptModel("Transaction Id","300000025", type = 1))
@@ -201,13 +183,13 @@ class LoginPinfragment : BaseFragment() {
             }
         }*/
 
-            /*"referenceid" to loginData.,*/
+        /*"referenceid" to loginData.,*/
 
-            //val a="eyJ1c2VyX2lkIjoiIiwidGltZXN0YW1wIjoxNzAxOTM5MTk2LCJyYW5kb20iOiJhN2ZjZWRjMjM1NzkxOGJlZDdjNjY2OGJjYmVhYmNhMmU4NWNhYWIwODE2ODg5ZjdhODY5YTY3MzBmNWY3Y2MzIn0="
-        val (isLogin, loginResponse) =sharedPreff.getLoginData()
-        loginResponse?.let {loginData->
+        //val a="eyJ1c2VyX2lkIjoiIiwidGltZXN0YW1wIjoxNzAxOTM5MTk2LCJyYW5kb20iOiJhN2ZjZWRjMjM1NzkxOGJlZDdjNjY2OGJjYmVhYmNhMmU4NWNhYWIwODE2ODg5ZjdhODY5YTY3MzBmNWY3Y2MzIn0="
+        val (isLogin, loginResponse) = sharedPreff.getLoginData()
+        loginResponse?.let { loginData ->
 
-            loginMobileReferanceNumber ="com.big9.app"+generateRandomNumberInRange().toString()
+            loginMobileReferanceNumber = "com.big9.app" + generateRandomNumberInRange().toString()
             val data = mapOf(
                 "otp" to myViewModel?.loginPin?.value,
                 "userid" to loginData.userid,
@@ -219,13 +201,13 @@ class LoginPinfragment : BaseFragment() {
                 "Timestamp" to MethodClass.getCurrentTimestamp()
             )
             /*"referenceid" to loginData.,*/
-            val gson= Gson()
+            val gson = Gson()
             var jsonString = gson.toJson(data)
 
 
-                loginData.AuthToken?.let {
-                    myViewModel?.profile2(it,jsonString.encrypt())
-                }
+            loginData.AuthToken?.let {
+                myViewModel?.profile2(it, jsonString.encrypt())
+            }
 
 
         }
@@ -250,57 +232,55 @@ class LoginPinfragment : BaseFragment() {
         keyPad.add(11)
         PhonePad.apply {
 
-            adapter= PhonePadAdapter2(keyPad,object : KeyPadOnClickListner {
+            adapter = PhonePadAdapter2(keyPad, object : KeyPadOnClickListner {
                 override fun onClick(item: Int) {
                     //myViewModel.loginPin.value?.let {
-                        if (item<=9 ) {
-                            if (myViewModel.loginPin.value?.length!=6) {
-                                val loginPin="${myViewModel.loginPin.value}$item"
-                                myViewModel.loginPin.value= loginPin
-                                if(myViewModel.loginPin.value?.length==6){
+                    if (item <= 9) {
+                        if (myViewModel.loginPin.value?.length != 6) {
+                            val loginPin = "${myViewModel.loginPin.value}$item"
+                            myViewModel.loginPin.value = loginPin
+                            if (myViewModel.loginPin.value?.length == 6) {
 
 
-
-                                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
-                                    loginResponse?.let {loginData->
-
-
-                                        val data = mapOf(
-                                            "userid" to loginData.userid,
-                                            "mpin" to myViewModel.loginPin.value
-                                        )
-
-                                        val gson= Gson()
-                                        var jsonString = gson.toJson(data)
+                                val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                                loginResponse?.let { loginData ->
 
 
-                                        loginData.AuthToken?.let {
-                                            myViewModel?.patternLogin(it,jsonString.encrypt())
-                                        }
+                                    val data = mapOf(
+                                        "userid" to loginData.userid,
+                                        "mpin" to myViewModel.loginPin.value
+                                    )
+
+                                    val gson = Gson()
+                                    var jsonString = gson.toJson(data)
+
+
+                                    loginData.AuthToken?.let {
+                                        myViewModel?.patternLogin(it, jsonString.encrypt())
                                     }
-                                    //This code need to delete.
-                                    //After testing remove this code
-                                    /*if (myViewModel.loginPin.value=="123456") {
-                                        findNavController().navigate(com.big9.app.R.id.action_loginPinfragment_to_homeFragment2)
-                                    }*/
                                 }
-
-                            }
-                        }
-
-                        else {
-                            if (myViewModel.loginPin.value?.isNotEmpty() == true) {
-                                myViewModel.loginPin.value = this.toString().substring(0,
-                                    myViewModel.loginPin.value?.length?.minus(1) ?: 0
-                                )
+                                //This code need to delete.
+                                //After testing remove this code
+                                /*if (myViewModel.loginPin.value=="123456") {
+                                    findNavController().navigate(com.big9.app.R.id.action_loginPinfragment_to_homeFragment2)
+                                }*/
                             }
 
                         }
+                    } else {
+                        if (myViewModel.loginPin.value?.isNotEmpty() == true) {
+                            myViewModel.loginPin.value = this.toString().substring(
+                                0,
+                                myViewModel.loginPin.value?.length?.minus(1) ?: 0
+                            )
+                        }
+
+                    }
                     //}
                 }
 
             })
-            isNestedScrollingEnabled=false
+            isNestedScrollingEnabled = false
         }
     }
 
@@ -312,7 +292,7 @@ class LoginPinfragment : BaseFragment() {
             PermissionUtils.requestVideoRecordingPermission(binding.root.context, object :
                 PermissionsCallback {
                 override fun onPermissionRequest(granted: Boolean) {
-                    if (!granted) {
+                    /*if (!granted) {
                         dialogRecordingPermission()
 
                     } else {
@@ -323,7 +303,7 @@ class LoginPinfragment : BaseFragment() {
 
                         }
 
-                    }
+                    }*/
 
                 }
 
@@ -364,10 +344,10 @@ class LoginPinfragment : BaseFragment() {
     }
 
     private fun observer() {
-        myViewModel?.profile2Response?.observe(viewLifecycleOwner){
+        myViewModel?.profile2Response?.observe(viewLifecycleOwner) {
             when (it) {
                 is ResponseState.Loading -> {
-                   // loader?.show()
+                    // loader?.show()
                 }
 
                 is ResponseState.Success -> {
@@ -378,33 +358,53 @@ class LoginPinfragment : BaseFragment() {
                     }
 
 
-
-                  //  Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
+                    //  Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
 
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
-                    if (it.errorCode==105){
-                        val (isLogin, loginResponse) =sharedPreff.getLoginData()
-                        loginResponse?.let {loginData->
+                    if (it.errorCode == 105) {
+                        val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                        loginResponse?.let { loginData ->
 
 
                             val data = mapOf(
                                 "userid" to loginData.userid,
                                 "clientid" to Constants.CLIENT_ID,
                                 "secretkey" to Constants.API_KEY,
-                                )
+                            )
                             /*"referenceid" to loginData.,*/
-                            val gson= Gson()
+                            val gson = Gson()
                             var jsonString = gson.toJson(data)
 
 
                             loginData.AuthToken?.let {
-                              //  myViewModel?.refreshToken(it,jsonString.encrypt())
+                                myViewModel?.refreshToken(it, jsonString.encrypt())
                             }
                         }
                     }
+                    if (it.errorCode == 103) {
+                        val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                        loginResponse?.let { loginData ->
+
+
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                            )
+                            /*"referenceid" to loginData.,*/
+                            val gson = Gson()
+                            var jsonString = gson.toJson(data)
+
+
+                            loginData.AuthToken?.let {
+                                myViewModel?.appUpdate(it, jsonString.encrypt())
+                            }
+                        }
+                    }
+
+
+
                     else {
                         handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                     }
@@ -412,42 +412,83 @@ class LoginPinfragment : BaseFragment() {
             }
         }
 
-        myViewModel?.patternLoginReceptLiveData?.observe(viewLifecycleOwner){
+        myViewModel?.patternLoginReceptLiveData?.observe(viewLifecycleOwner) {
             when (it) {
                 is ResponseState.Loading -> {
                     // loader?.show()
                 }
 
                 is ResponseState.Success -> {
-                    myViewModel.loginPin.value=""
+                    myViewModel.loginPin.value = ""
                     findNavController().navigate(com.big9.app.R.id.action_loginPinfragment_to_homeFragment2)
-                    myViewModel?.patternLoginReceptLiveData?.value=null
+                    myViewModel?.patternLoginReceptLiveData?.value = null
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
-                    myViewModel.loginPin.value=""
+                    myViewModel.loginPin.value = ""
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-                    myViewModel?.patternLoginReceptLiveData?.value=null
+                    myViewModel?.patternLoginReceptLiveData?.value = null
                 }
             }
         }
 
         //
-myViewModel?.refreshTokenResponseLiveData?.observe(viewLifecycleOwner) {
-    when (it) {
-        is ResponseState.Loading -> {
-            loader?.show()
+        myViewModel?.refreshTokenResponseLiveData?.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+
+                    val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                    loginResponse?.let { lData ->
+
+
+                        /*
+                        authViewModel.panCardNo?.value.let {
+                            lData?.pancard=it
+                        }
+                        */
+                        sharedPreff?.setLoginData(loginResponse, true, "ACTIVE")
+
+                    }
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
         }
-        is ResponseState.Success -> {
-            loader?.dismiss()
+
+
+        myViewModel?.appupdateResponseLiveData?.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+                    appUpdateUrl=it?.data?.appUpdateUrl
+                    it?.data?.appUpdateUrl?.let {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
+                    }
+
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
         }
-        is ResponseState.Error -> {
-            loader?.dismiss()
-            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-        }
-    }
-}
+
+
+
 
     }
 
@@ -465,8 +506,8 @@ myViewModel?.refreshTokenResponseLiveData?.observe(viewLifecycleOwner) {
                 .into(binding.profileImage)
         }
         myViewModel.apply {
-            userProfileMobile.value=data.mobileNo
-            userProfileName.value=data.name
+            userProfileMobile.value = data.mobileNo
+            userProfileName.value = data.name
         }
     }
 

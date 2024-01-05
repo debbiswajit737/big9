@@ -9,6 +9,12 @@
             name="viewModel"
             type="com.big9.app.data.viewMovel.MyViewModel" />
 
+        <variable
+            name="edata"
+            type="com.big9.app.data.viewMovel.MyViewModel" />
+
+
+
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -118,7 +124,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/wbsedcl"
+                        android:src="@drawable/electric"
                         app:civ_border_color="#FF000000"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView24" />
@@ -140,7 +146,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:text="Consumer Id: 123456789"
+                        android:text="Consumer Id: "
                         android:fontFamily="@font/open_sans_medium"
                         android:textColor="@color/black"
                         app:layout_constraintStart_toEndOf="@+id/img_operator"
@@ -194,6 +200,7 @@
                     />
 
                     <TextView
+                        android:visibility="invisible"
                         android:id="@+id/tv_pay_month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -239,7 +246,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:fontFamily="@font/open_sans_medium"
-                        android:text="₹100"
+                        android:text=""
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_8ssp"
                         app:layout_constraintEnd_toEndOf="@+id/tv_price"
@@ -252,6 +259,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_medium"
                         android:text="NOV 2023"
+                        android:visibility="invisible"
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_8ssp"
                         app:layout_constraintEnd_toEndOf="@+id/tv_price"
@@ -259,11 +267,12 @@
                     />
 
                     <TextView
+
                         android:id="@+id/tv_bill_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_medium"
-                        android:text="10-10-2023"
+                        android:text=""
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_8ssp"
                         app:layout_constraintEnd_toEndOf="@+id/tv_price"
@@ -310,7 +319,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_e_bold"
-                        android:text="₹100"
+                        android:text=""
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_12ssp"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_total"
@@ -360,7 +369,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:fontFamily="@font/open_sans_medium"
-                        android:text="458555556522"
+                        android:text=""
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_9ssp"
                         app:layout_constraintStart_toStartOf="@+id/tv_payment_details_tag"
@@ -374,7 +383,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_medium"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:text="456012345678"
+                        android:text=""
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_9ssp"
                         app:layout_constraintStart_toStartOf="@+id/tv_payment_details_tag"
@@ -383,6 +392,7 @@
                     />
 
                     <TextView
+                        android:visibility="invisible"
                         android:id="@+id/tv_office_tag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -396,6 +406,7 @@
                     />
 
                     <TextView
+                        android:visibility="invisible"
                         android:id="@+id/tv_office"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

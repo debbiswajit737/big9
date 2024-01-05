@@ -15,7 +15,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.Log
@@ -194,7 +193,7 @@ class HomeFragment : BaseFragment() {
 
         // 
         viewModel?.cashCollectionResponseLiveData?.observe(viewLifecycleOwner) {
-    when (it) {
+        when (it) {
         is ResponseState.Loading -> {
             loader?.show()
         }
@@ -217,6 +216,65 @@ class HomeFragment : BaseFragment() {
         }
     }
 }
+
+    viewModel?.insuranceResponseLiveData?.observe(viewLifecycleOwner) {
+        when (it) {
+        is ResponseState.Loading -> {
+            loader?.show()
+        }
+        is ResponseState.Success -> {
+            loader?.dismiss()
+           it.data?.redirecturl?.let {
+               WebView(binding.root.context).set(it,"")
+
+           }
+            viewModel?.from_page_message?.value=null
+/*
+ "https://www.gibl.in/wallet/validate2/",
+                   "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
+ */
+        }
+        is ResponseState.Error -> {
+            loader?.dismiss()
+            handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+            viewModel?.from_page_message?.value=null
+        }
+    }
+}
+
+
+
+        viewModel?.electricStatelistResponseLiveData?.observe(viewLifecycleOwner){
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+
+                    activity?.let {act->
+
+                        val stateListDialog = EStateListDialog(object : CallBack {
+                            override fun getValue(s: String) {
+                                viewModel?.state?.value=s
+
+                                findNavController().navigate(R.id.action_homeFragment2_to_electricRechargeFragment)
+                            }
+
+                        },it.data?.stateList)
+                        stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
+
+                    }
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
+
     }
 
     private fun getDeviceWIDTHandHeight() {
@@ -417,10 +475,30 @@ class HomeFragment : BaseFragment() {
                 }
 
                 getString(R.string.insurance) -> {
-                    WebView(binding.root.context).set(
+                    /*WebView(binding.root.context).set(
                         "https://www.gibl.in/wallet/validate2/",
                         "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
-                    )
+                    )*/
+                    val (isLogin, loginResponse) =sharedPreff.getLoginData()
+                    if (isLogin){
+                        loginResponse?.let {loginData->
+                            viewModel?.apply {
+
+                                val  data = mapOf(
+                                    "userid" to loginData.userid,
+                                    "service" to slag
+                                )
+
+                                val gson= Gson()
+                                var jsonString = gson.toJson(data)
+
+                                loginData.AuthToken?.let {
+                                    insurance(it,jsonString.encrypt(),getString(R.string.insurance))
+                                }
+                            }
+
+                        }
+                    }
                 }
 
 
@@ -510,7 +588,7 @@ class HomeFragment : BaseFragment() {
                                 var jsonString = gson.toJson(data)
 
                                 loginData.AuthToken?.let {
-                                    cashCollection(it,jsonString.encrypt())
+                                    cashCollection(it,jsonString.encrypt(),getString(R.string.cash_collection))
                                 }
                             }
 
@@ -618,7 +696,8 @@ class HomeFragment : BaseFragment() {
 
 
                 getString(R.string.electric) -> {
-                    activity?.let { act ->
+                    electricStateList()
+                    /*activity?.let { act ->
                         val stateListDialog = StateListDialog(object : CallBack {
                             override fun getValue(s: String) {
                                 viewModel?.state?.value = s
@@ -628,7 +707,7 @@ class HomeFragment : BaseFragment() {
                         })
                         stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
 
-                    }
+                    }*/
                 }
 
                 //recycleUtility
@@ -1141,15 +1220,15 @@ class HomeFragment : BaseFragment() {
                 iconList11.add(ListIcon(getString(R.string.credit_card), R.drawable.credit_card,getString(R.string.credit_card_slag)))
                 iconList11.add(ListIcon(getString(R.string.cash_collection), R.drawable.cash_collection,getString(R.string.cash_collection_slag)))
                 iconList11.add(ListIcon(getString(R.string.matm), R.drawable.matm,getString(R.string.matm_slag)))
-                iconList11.add(ListIcon(getString(R.string.money_transfer), R.drawable.imps,getString(R.string.dmt_slag)))
+                iconList11.add(ListIcon(getString(R.string.money_transfer), R.drawable.imps,getString(R.string.imps_slag)))
                 /*iconList3.add(ListIcon("Water", R.drawable.water))
                 iconList3.add(ListIcon("View More", R.drawable.view_more))*/
                 adapter= FinancialAdapter(iconList11,R.drawable.circle_shape2, object : CallBack2 {
                     override fun getValue2(s: String,tag: String) {
-                        //checkService(s,tag)
+                        checkService(s,tag)
 
                         //need comment. now testing perpose
-                        serviceNavigation(s,tag)
+                        //serviceNavigation(s,tag)
                         /*when(s){
                             getString(R.string.prepaid)->{
                                 findNavController().navigate(R.id.action_homeFragment2_to_mobileRechargeFragment)
@@ -1194,8 +1273,8 @@ class HomeFragment : BaseFragment() {
 
             recycleUtility.apply {
                 iconList10.clear()
-                iconList10.add(ListIcon(getString(R.string.electric), R.drawable.electric,"no slag"))
-                iconList10.add(ListIcon(getString(R.string.gas), R.drawable.gas_ioc,"no slag"))
+                iconList10.add(ListIcon(getString(R.string.electric), R.drawable.electric,getString(R.string.bill_pay)))
+                iconList10.add(ListIcon(getString(R.string.gas), R.drawable.gas_ioc,getString(R.string.bill_pay)))
                 iconList10.add(ListIcon(getString(R.string.fast_tag), R.drawable.icons8_fastag,getString(R.string.fast_tag_slag)))
                 iconList10.add(ListIcon(getString(R.string.view_more), R.drawable.view_more,getString(R.string.view_more)))
                 adapter= UtilityAdapter(iconList10,R.drawable.circle_shape2, object : CallBack2 {
@@ -1237,24 +1316,15 @@ class HomeFragment : BaseFragment() {
             recycleMostUses.apply {
                 requestFocus()
                 iconList12.clear()
-                iconList12.add(ListIcon(getString(R.string.electric), R.drawable.electric,"no slag"))
+                iconList12.add(ListIcon(getString(R.string.electric), R.drawable.electric,getString(R.string.bill_pay)))
 
                 adapter= MostPopularAdapter(iconList12,R.drawable.circle_shape2, object : CallBack {
                     override fun getValue(s: String) {
                         when(s){
 
                             getString(R.string.electric)->{
-                                activity?.let {act->
-                                    val stateListDialog = StateListDialog(object : CallBack {
-                                        override fun getValue(s: String) {
-                                            viewModel?.state?.value=s
-                                            findNavController().navigate(R.id.action_homeFragment2_to_electricRechargeFragment)
-                                        }
+                                electricStateList()
 
-                                    })
-                                    stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
-
-                                }
                             }
                             getString(R.string.view_more)->{}
 
@@ -1711,6 +1781,21 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-
+    fun electricStateList(){
+        val (isLogin, loginResponse) =sharedPreff.getLoginData()
+        loginResponse?.let { loginData ->
+            loginData.userid?.let {
+                val data = mapOf(
+                    "userid" to it,
+                    "ebilpay" to "electric",
+                )
+                val gson =  Gson();
+                var jsonString = gson.toJson(data);
+                loginData.AuthToken?.let {
+                    viewModel?.electricStatelist(it,jsonString.encrypt())
+                }
+            }
+        }
+    }
 
 }

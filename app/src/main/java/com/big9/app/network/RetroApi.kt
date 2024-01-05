@@ -1,8 +1,12 @@
 package com.big9.app.network
 
+import MoneyTranspherModel
 import addBeneficiaryModel
 import addRemitterModel
+import appUpdateUrlModel
 import beneficiaryListModel
+import billerlistModel
+import billpaytransactionModel
 import cashCollectionModel
 import checkUserModel
 import com.big9.app.data.model.sample.Test
@@ -66,6 +70,8 @@ import com.big9.app.data.model.otp.OtpResponse
 import com.big9.app.data.model.paymentReport.PaymentReportResponse
 import com.big9.app.data.model.profile.profileResponse
 import com.google.gson.JsonObject
+import electricBillbillFetchModel
+import electricStatelistModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import refreshTokenModel
@@ -567,8 +573,24 @@ interface RetroApi {
         @Body data: String
     ): Response<refreshTokenModel>
 
+
+    @POST("appupdate")
+    suspend fun appupdate(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<appUpdateUrlModel>
+
+
+
+
     @POST("v1/services/cashcoll/cashcol")
     suspend fun cashCollection(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<cashCollectionModel>
+
+    @POST("v1/services/cashcoll/cashcol")
+    suspend fun insurance(
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<cashCollectionModel>
@@ -592,7 +614,7 @@ interface RetroApi {
         @Body data: String
     ): Response<addRemitterModel>
 
-@POST("v1/services/dmt/add_beneficiary.php")
+    @POST("v1/services/dmt/add_beneficiary.php")
     suspend fun addBeneficiary(
         @Header("Authtoken") token: String,
         @Body data: String
@@ -604,11 +626,34 @@ interface RetroApi {
         @Body data: String
     ): Response<verifyBeneficiaryModel>
 
- @POST("v1/services/dmt/money_transfer")
+    @POST("v1/services/dmt/money_transfer")
     suspend fun moneyTransfer(
         @Header("Authtoken") token: String,
         @Body data: String
-    ): Response<verifyBeneficiaryModel>
+    ): Response<MoneyTranspherModel>
 
 
+    @POST("v1/services/billpay/electricbill/statelist.php")
+    suspend fun electricStatelist(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<electricStatelistModel>
+
+    @POST("v1/services/billpay/electricbill/billerlist.php")
+    suspend fun electricbillerlist(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<billerlistModel>
+
+    @POST("v1/services/billpay/electricbill/billfetch.php")
+    suspend fun electricBillbillFetch(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<electricBillbillFetchModel>
+
+    @POST("v1/services/billpay/electricbill/billpay.php")
+    suspend fun billpaytransaction(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<billpaytransactionModel>
 }

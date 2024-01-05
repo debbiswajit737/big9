@@ -9,13 +9,14 @@ import android.widget.Filter
 import android.widget.Filterable
 import com.bumptech.glide.Glide
 import com.big9.app.databinding.ListElectricBillerBinding
-import com.big9.app.data.model.ElectricModel
+import com.big9.app.data.model.ElectricModel2
+import com.big9.app.utils.`interface`.CallBack2
 
 
-class BillerListAdapter(private var items: List<ElectricModel>, private val callBack: CallBack) :
+class BillerListAdapter(private var items: ArrayList<ElectricModel2>, private val callBack: CallBack2) :
     RecyclerView.Adapter<BillerListAdapter.MyViewHolder>(), Filterable {
 
-    private var filteredItems: List<ElectricModel> = items
+    private var filteredItems: List<ElectricModel2> = items
 //list_electric_biller
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -34,7 +35,7 @@ class BillerListAdapter(private var items: List<ElectricModel>, private val call
 
     inner class MyViewHolder(val binding: ListElectricBillerBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ElectricModel, position: Int) {
+        fun bind(item: ElectricModel2, position: Int) {
             //binding.tvState.text = item.stateCity
             binding.model = item
             item.image?.let {
@@ -50,10 +51,10 @@ class BillerListAdapter(private var items: List<ElectricModel>, private val call
                     item.isSelected=false
                 }
                 filteredItems[position].isSelected=true
-                callBack.getValue(item.biller_name)
+                callBack.getValue2(item.biller_name,item.iddata.toString())
 
                 binding.executePendingBindings()
-                Log.d("TAG_filteredItems", "bind: "+filteredItems)
+                //Log.d("TAG_filteredItems", "bind: "+filteredItems)
                 notifyDataSetChanged()
             }
 
@@ -79,16 +80,16 @@ class BillerListAdapter(private var items: List<ElectricModel>, private val call
             }
 
             override fun publishResults(constraint: CharSequence, results: FilterResults) {
-                filteredItems = results.values as List<ElectricModel>
+                filteredItems = results.values as List<ElectricModel2>
                 notifyDataSetChanged()
             }
         }
     }
 
     // Update the list of items
-    fun updateData(newItems: List<ElectricModel>) {
+    /*fun updateData(newItems: List<ElectricModel2>) {
         items = newItems
         filteredItems = newItems
         notifyDataSetChanged()
-    }
+    }*/
 }

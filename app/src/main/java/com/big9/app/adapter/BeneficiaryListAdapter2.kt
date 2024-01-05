@@ -8,13 +8,14 @@ import com.big9.app.data.model.BeneficiaryListModel
 import com.big9.app.data.model.BeneficiaryListModel2
 
 import com.big9.app.utils.`interface`.CallBack4
+import com.big9.app.utils.`interface`.CallBack7
 import java.util.*
 import kotlin.collections.ArrayList
 
 class BeneficiaryListAdapter2(
 
     private var items: List<BeneficiaryListModel2>,
-    private val callback: CallBack4
+    private val callback: CallBack7
 ) : RecyclerView.Adapter<BeneficiaryListAdapter2.MyViewHolder>(), Filterable {
 
     private var filteredList: List<BeneficiaryListModel2> = items
@@ -40,7 +41,7 @@ class BeneficiaryListAdapter2(
             item.bankName?.let { bankName ->
                 binding.tvBankName.text = bankName
                 binding.llContainer.setOnClickListener {
-                    callback.getValue4(item.benId.toString(), binding.tvIfsc.text.toString(), "", "")
+                    callback.getValue7(item.benId.toString(), binding.tvIfsc.text.toString(), item.bankName, item.bankAc.toString(),item.beneficiaryName.toString(),"","")
                 }
             }
             item.bankAc?.let { bankAc ->

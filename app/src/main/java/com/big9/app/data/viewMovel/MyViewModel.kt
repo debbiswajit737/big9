@@ -1,5 +1,6 @@
 package com.big9.app.data.viewMovel
 
+import MoneyTranspherModel
 import addBeneficiaryModel
 import addRemitterModel
 import android.net.Uri
@@ -7,7 +8,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import appUpdateUrlModel
 import beneficiaryListModel
+import billerlistModel
+import billpaytransactionModel
 import cashCollectionModel
 import checkUserModel
 import com.big9.app.R
@@ -64,6 +68,8 @@ import com.big9.app.utils.helpers.helper.validate
 
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import electricBillbillFetchModel
+import electricStatelistModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import refreshTokenModel
@@ -1825,16 +1831,40 @@ fun refreshToken(token: String, data: String) {
     }
 }
 
+  //app update
+val appupdateResponseLiveData: LiveData<ResponseState<appUpdateUrlModel>>
+    get() = repository.appUpdateResponseLiveData
+fun appUpdate(token: String, data: String) {
+    viewModelScope.launch {
+        repository.appUpdate(token,data)
+    }
+}
+
+
+
 
 
   //cashCollection
 val cashCollectionResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
     get() = repository.cashCollectionResponseLiveData
-fun cashCollection(token: String, data: String) {
+fun cashCollection(token: String, data: String, insuranceOrCashCollection: String) {
     viewModelScope.launch {
-        repository.cashCollection(token,data)
+        repository.cashCollection(token,data,insuranceOrCashCollection)
     }
 }
+
+
+    //insurance
+val insuranceResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
+    get() = repository.insuranceResponseLiveData
+fun insurance(token: String, data: String, insuranceOrCashCollection: String) {
+    viewModelScope.launch {
+        repository.insurance(token,data,insuranceOrCashCollection)
+    }
+}
+
+
+
 
 
   //checkUser
@@ -1868,7 +1898,7 @@ fun addRemitter(token: String, data: String) {
 
 
   //addBeneficiary
-val addBeneficiaryResponseLiveData: LiveData<ResponseState<addBeneficiaryModel>>
+val addBeneficiaryResponseLiveData: MutableLiveData<ResponseState<addBeneficiaryModel>>
     get() = repository.addBeneficiaryResponseLiveData
 fun addBeneficiary(token: String, data: String) {
     viewModelScope.launch {
@@ -1876,7 +1906,7 @@ fun addBeneficiary(token: String, data: String) {
     }
 }
   //beneficiary Verify
-val beneficiaryVerifyResponseLiveData: LiveData<ResponseState<verifyBeneficiaryModel>>
+val beneficiaryVerifyResponseLiveData: MutableLiveData<ResponseState<verifyBeneficiaryModel>>
     get() = repository.beneficiaryVerifyResponseLiveData
 fun beneficiaryVerify(token: String, data: String) {
     viewModelScope.launch {
@@ -1884,11 +1914,51 @@ fun beneficiaryVerify(token: String, data: String) {
     }
 }
   //moneyTransfer
-val moneyTransferResponseLiveData: MutableLiveData<ResponseState<verifyBeneficiaryModel>>
+val moneyTransferResponseLiveData: MutableLiveData<ResponseState<MoneyTranspherModel>>
     get() = repository.moneyTransferResponseLiveData
 fun moneyTransfer(token: String, data: String) {
     viewModelScope.launch {
         repository.moneyTransfer(token,data)
+    }
+}
+
+
+  //electricStatelist
+val electricStatelistResponseLiveData: LiveData<ResponseState<electricStatelistModel>>
+    get() = repository.electricStatelistResponseLiveData
+fun electricStatelist(token: String, data: String) {
+    viewModelScope.launch {
+        repository.electricStatelist(token,data)
+    }
+}
+
+
+  //electricbillerlist
+val electricbillerlistResponseLiveData: LiveData<ResponseState<billerlistModel>>
+    get() = repository.electricbillerlistResponseLiveData
+fun electricbillerlist(token: String, data: String) {
+    viewModelScope.launch {
+        repository.electricbillerlist(token,data)
+    }
+}
+
+
+  //electricBillbillFetch
+val electricBillbillFetchResponseLiveData: LiveData<ResponseState<electricBillbillFetchModel>>
+    get() = repository.electricBillbillFetchResponseLiveData
+fun electricBillbillFetch(token: String, data: String) {
+    viewModelScope.launch {
+        repository.electricBillbillFetch(token,data)
+    }
+}
+
+
+  //billpaytransaction
+val billpaytransactionResponseLiveData: MutableLiveData<ResponseState<billpaytransactionModel>>
+    get() = repository.billpaytransactionResponseLiveData
+fun billpaytransaction(token: String, data: String) {
+    viewModelScope.launch {
+        repository.billpaytransaction(token,data)
     }
 }
 

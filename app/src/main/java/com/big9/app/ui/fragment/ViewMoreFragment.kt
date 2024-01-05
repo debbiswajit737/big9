@@ -74,7 +74,7 @@ class ViewMoreFragment : BaseFragment() {
             binding.recycleUtility.apply {
             utilityBillList.clear()
             utilityBillList.add(ListIcon(getString(R.string.education_fees), R.drawable.ioc_tuition_fees,"no slag"))
-            utilityBillList.add(ListIcon(getString(R.string.broadband), R.drawable.router,"no slag"))
+            utilityBillList.add(ListIcon(getString(R.string.broadband), R.drawable.router,getString(R.string.broadband)))
             utilityBillList.add(ListIcon(getString(R.string.gas_booking), R.drawable.gas_booking_ioc,"no slag"))
             utilityBillList.add(ListIcon(getString(R.string.loan_payment), R.drawable.loan_ioc_new,"no slag"))
 

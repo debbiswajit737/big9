@@ -101,6 +101,9 @@
     <string name="mobile_recharge">Mobile Recharge</string>
     <string name="dth_recharge">DTH Recharge</string>
     <string name="dth_recharge_slag">dth</string>
+    <string name="bill_pay">bill_pay</string>
+    <string name="broadband_slag">broadband</string>
+    <string name="imps_slag">imps</string>
     <string name="select_operator">Select Operator</string>
     <string name="prepaid">Prepaid</string>
     <string name="mobile_slag">mobile</string>

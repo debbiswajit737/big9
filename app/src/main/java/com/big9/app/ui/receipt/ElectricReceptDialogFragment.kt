@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import billpaytransactionData
 import com.big9.app.R
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentElectricReceptDialogBinding
@@ -15,7 +16,7 @@ import com.big9.app.ui.base.BaseCenterSheetFragment
 import com.big9.app.utils.`interface`.CallBack
 
 
-class ElectricReceptDialogFragment(val callBack: CallBack) : BaseCenterSheetFragment() {
+class ElectricReceptDialogFragment(val callBack: CallBack,val eTransDAta: billpaytransactionData?) : BaseCenterSheetFragment() {
     lateinit var binding: FragmentElectricReceptDialogBinding
     private val viewModel: MyViewModel by activityViewModels()
 
@@ -62,7 +63,27 @@ class ElectricReceptDialogFragment(val callBack: CallBack) : BaseCenterSheetFrag
 
     fun initView() {
         setCrdViewMinHeight()
+        eTransDAta?.let {
+            binding.apply {
+                textView26.text="Consumer Id: ${it.customerId}"
+                textView29.text="${it.txnAmount}"
+                tvBillDate.text="${it.txnDate}"
+                textView30.text="${it.txnAmount}"
+                tvTransactionId.text="${it.txnID}"
+                tvInvoiceValue.text="${it.integratorid}"
 
+
+            }
+            /*
+             "customer_id": "303357803",
+        "txnAmount": "00",
+        "txnDate": "2024-01-05 12:50:48",
+        "txnID": 300000455,
+        "txnstatue": "SUCCESS",
+        "integratorid": null,
+        "operatorid": null
+             */
+        }
     }
 
     private fun setCrdViewMinHeight() {

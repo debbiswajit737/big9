@@ -189,7 +189,7 @@ class MoneyTranspherFragment : BaseFragment() {
             }
             customerId=remiterUserData?.custID.toString()
             remiterUserData?.status?.let {status->
-                Toast.makeText(requireContext(), ""+status, Toast.LENGTH_SHORT).show()
+
               if (status=="200"){
                   isNewUser=false
                   viewModel?.mobileSendMoney?.value=it.data?.response?.mobile.toString()

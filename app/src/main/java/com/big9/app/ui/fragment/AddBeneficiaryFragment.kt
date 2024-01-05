@@ -219,6 +219,7 @@ loginResponse?.let { loginData ->
                 ) {
                     viewModel.popup_message.value="Success"
                     findNavController().popBackStack()
+                    viewModel?.addBeneficiaryResponseLiveData?.value=null
                 }
 
             })
@@ -227,6 +228,7 @@ loginResponse?.let { loginData ->
         is ResponseState.Error -> {
             loader?.dismiss()
             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+            viewModel?.addBeneficiaryResponseLiveData?.value=null
         }
     }
 }
@@ -238,7 +240,7 @@ loginResponse?.let { loginData ->
         }
         is ResponseState.Success -> {
             loader?.dismiss()
-            //viewModel?.beneficiary_name?.value="Sample Beneficiary Name"
+            viewModel?.beneficiary_name?.value="${it?.data?.benName}"
             viewModel.popup_message.value="${it?.data?.Description}"
             val successPopupFragment = SuccessPopupFragment2(object :
                 CallBack4 {
@@ -249,6 +251,7 @@ loginResponse?.let { loginData ->
                     s4: String
                 ) {
                     viewModel.popup_message.value="Success"
+                    viewModel?.beneficiaryVerifyResponseLiveData?.value=null
                 }
 
             })
@@ -257,6 +260,7 @@ loginResponse?.let { loginData ->
         is ResponseState.Error -> {
             loader?.dismiss()
             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+            viewModel?.beneficiaryVerifyResponseLiveData?.value=null
         }
     }
 }

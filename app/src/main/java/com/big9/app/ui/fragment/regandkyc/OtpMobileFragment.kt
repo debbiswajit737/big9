@@ -55,7 +55,7 @@ import com.big9.app.utils.common.MethodClass.getLocalIPAddress
 import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.API_KEY
 import com.big9.app.utils.helpers.Constants.CLIENT_ID
-import com.big9.app.utils.helpers.Constants.SMS_SENDER_NUMBER
+
 import com.big9.app.utils.helpers.Constants.loginMobileNumber
 import com.big9.app.utils.helpers.Constants.loginMobileReferanceNumber
 import com.big9.app.utils.helpers.OtpRetriever
@@ -458,7 +458,7 @@ class OtpMobileFragment : BaseFragment()  {
     private fun onViewClick() {
         binding?.apply {
             binding.tdResendOtp.setOnClickListener {
-
+                viewModel?.otp?.value=""
                if (binding.tdResendOtp.text.toString().trim()=="Resend OTP"){
                    val data = mapOf(
                        "clientid" to CLIENT_ID,
@@ -736,10 +736,10 @@ class OtpMobileFragment : BaseFragment()  {
 
 
     private fun startSmartUserConsent() {
-        activity?.let {
+        /*activity?.let {
             val client = SmsRetriever.getClient(it)
             client.startSmsUserConsent(SMS_SENDER_NUMBER)
-        }
+        }*/
 
     }
     private fun getActivityResult(result: ActivityResult?) {

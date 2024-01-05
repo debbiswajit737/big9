@@ -1,5 +1,6 @@
 package com.big9.app.ui.activity
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
@@ -9,10 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.big9.app.R
-
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.ActivityDashboardBinding
-
 import com.big9.app.ui.base.BaseActivity
 import com.big9.app.ui.popup.ErrorPopUp
 import com.big9.app.ui.popup.LoadingPopup
@@ -27,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class DashboardActivity : BaseActivity() {

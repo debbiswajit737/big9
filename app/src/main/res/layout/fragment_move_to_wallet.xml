@@ -127,7 +127,7 @@
                                         android:id="@+id/tv_amt"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="₹960.00"
+                                        android:text="₹null"
                                         android:textColor="@color/logo_color"
                                         android:fontFamily="@font/montserrat_regular_400"
                                         android:textSize="@dimen/_14ssp"

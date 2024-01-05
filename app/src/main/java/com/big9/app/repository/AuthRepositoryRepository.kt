@@ -1,13 +1,19 @@
 package com.big9.app.repository
 
+import MoneyTranspherModel
 import addBeneficiaryModel
 import addRemitterModel
+import android.provider.Settings.Global.getString
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import appUpdateUrlModel
 import beneficiaryListModel
+import billerlistModel
+import billpaytransactionModel
 import cashCollectionModel
 import checkUserModel
+import com.big9.app.R
 import com.big9.app.data.genericmodel.BaseResponse
 import com.big9.app.data.model.AEPSReportModel
 import com.big9.app.data.model.AddBankBankListModel
@@ -68,6 +74,8 @@ import com.big9.app.data.model.profile.profileResponse
 import com.big9.app.data.model.sample.Test
 import com.big9.app.network.ResponseState
 import com.big9.app.network.RetroApi
+import electricBillbillFetchModel
+import electricStatelistModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -77,7 +85,7 @@ import verifyBeneficiaryModel
 
 import javax.inject.Inject
 
-class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
+class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     private val _formResponseLiveData =
         MutableLiveData<ResponseState<BaseResponse<Test>>>()
     val formResponseLiveData: LiveData<ResponseState<BaseResponse<Test>>>
@@ -424,8 +432,6 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
     }
 
 
-
-
     //bank_settle_report
     private val _bank_settle_reportResponseLiveData =
         MutableLiveData<ResponseState<Bank_settle_reportModel>>()
@@ -617,12 +623,11 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
                 )
             )
         } catch (throwable: Throwable) {
-            Log.d("TAGjsondata", "prepaid_mobile_operator_list: "+throwable.message)
+            Log.d("TAGjsondata", "prepaid_mobile_operator_list: " + throwable.message)
             _prepaid_mobile_operator_listResponseLiveData.postValue(ResponseState.create(throwable))
         }
 
     }
-
 
 
     //Postpaid mobile transpher
@@ -652,7 +657,6 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
     }
 
 
-
     //Prepaid mobile transpher
     private val _prePaidMobilePlainListResponseLiveData =
         MutableLiveData<ResponseState<PrepaidMobolePlainModel>>()
@@ -678,7 +682,6 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         }
 
     }
-
 
 
     //Prepaid mobile transpher
@@ -755,7 +758,6 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         }
 
     }
-
 
 
     //Epotly Transpher
@@ -984,33 +986,32 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
     }*/
 
 
-   /* //Check service home
-    private val _checkServiceHomeResponseLiveData =
-        MutableLiveData<ResponseState<CheckServiceModel>>()
-    val checkServiceHomeResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
-        get() = _checkServiceHomeResponseLiveData
+    /* //Check service home
+     private val _checkServiceHomeResponseLiveData =
+         MutableLiveData<ResponseState<CheckServiceModel>>()
+     val checkServiceHomeResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
+         get() = _checkServiceHomeResponseLiveData
 
-    suspend fun checkServiceHome(token: String, loginModel: String) {
-      //  _checkServiceHomeResponseLiveData.postValue(ResponseState.Loading())
-        try {
-       //     val response = api.checkServiceHomePage(
-         //       token,
-         //       loginModel.replace("\n", "").replace("\r", "")
-            )
-            _checkServiceHomeResponseLiveData.postValue(
-                ResponseState.create(
-                    response,
-                    "aa"
-                )
-            )
-        } catch (throwable: Throwable) {
-            Log.d("TAG_service", "checkServiceHome: "+throwable.message)
-            _checkServiceHomeResponseLiveData.postValue(ResponseState.create(throwable))
-        }
+     suspend fun checkServiceHome(token: String, loginModel: String) {
+       //  _checkServiceHomeResponseLiveData.postValue(ResponseState.Loading())
+         try {
+        //     val response = api.checkServiceHomePage(
+          //       token,
+          //       loginModel.replace("\n", "").replace("\r", "")
+             )
+             _checkServiceHomeResponseLiveData.postValue(
+                 ResponseState.create(
+                     response,
+                     "aa"
+                 )
+             )
+         } catch (throwable: Throwable) {
+             Log.d("TAG_service", "checkServiceHome: "+throwable.message)
+             _checkServiceHomeResponseLiveData.postValue(ResponseState.create(throwable))
+         }
 
-    }
-*/
-
+     }
+ */
 
 
     //MATM
@@ -1063,7 +1064,6 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         }
 
     }
-
 
 
     //patternlogin
@@ -1153,8 +1153,9 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         try {
             val response = api.addBank(
                 token,
-                loginModel.replace("\n", "").replace("\r", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull())
-            ,imagedata)
+                loginModel.replace("\n", "").replace("\r", "").replace("\r", "")
+                    .toRequestBody("text/plain".toMediaTypeOrNull()), imagedata
+            )
             _addToBankReceptLiveData.postValue(
                 ResponseState.create(
                     response,
@@ -1162,7 +1163,7 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
                 )
             )
         } catch (throwable: Throwable) {
-            Log.d("TAG_throwable", "addToBank: "+throwable.message)
+            Log.d("TAG_throwable", "addToBank: " + throwable.message)
             _addToBankReceptLiveData.postValue(ResponseState.create(throwable))
         }
 
@@ -1170,22 +1171,22 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
 
     //Move to wallet
     private val _moveToWalletLiveData =
-            MutableLiveData<ResponseState<MoveToWalletModel>>()
+        MutableLiveData<ResponseState<MoveToWalletModel>>()
     val moveToWalletLiveData: MutableLiveData<ResponseState<MoveToWalletModel>>
-    get() = _moveToWalletLiveData
+        get() = _moveToWalletLiveData
 
     suspend fun moveToWallet(token: String, loginModel: String) {
         _moveToWalletLiveData.postValue(ResponseState.Loading())
         try {
             val response = api.moveToWallet(
-                    token,
-                    loginModel.replace("\n", "").replace("\r", "")
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
             )
             _moveToWalletLiveData.postValue(
-                    ResponseState.create(
-                            response,
-                            "aa"
-                    )
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
             )
         } catch (throwable: Throwable) {
             _moveToWalletLiveData.postValue(ResponseState.create(throwable))
@@ -1195,22 +1196,22 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
 
     //Submit Move to wallet
     private val _submitMoveToWalletLiveData =
-            MutableLiveData<ResponseState<SubmitMoveToBankBankListModel>>()
+        MutableLiveData<ResponseState<SubmitMoveToBankBankListModel>>()
     val submitMoveToWalletLiveData: MutableLiveData<ResponseState<SubmitMoveToBankBankListModel>>
-    get() = _submitMoveToWalletLiveData
+        get() = _submitMoveToWalletLiveData
 
     suspend fun submitMoveToWallet(token: String, loginModel: String) {
         _submitMoveToWalletLiveData.postValue(ResponseState.Loading())
         try {
             val response = api.submitMoveToWallet(
-                    token,
-                    loginModel.replace("\n", "").replace("\r", "")
+                token,
+                loginModel.replace("\n", "").replace("\r", "")
             )
             _submitMoveToWalletLiveData.postValue(
-                    ResponseState.create(
-                            response,
-                            "aa"
-                    )
+                ResponseState.create(
+                    response,
+                    "aa"
+                )
             )
         } catch (throwable: Throwable) {
             _submitMoveToWalletLiveData.postValue(ResponseState.create(throwable))
@@ -1255,17 +1256,20 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         _onboardingBasicinfoResponseLiveData.postValue(ResponseState.Loading())
         try {
             val response =
-                api.onboardingBasicinfo2(token, loginModel.replace("\n", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull()),
-                    panimagedata,aadharfrontimagedata,aadharbackimagedata
-                    )
+                api.onboardingBasicinfo2(
+                    token,
+                    loginModel.replace("\n", "").replace("\r", "")
+                        .toRequestBody("text/plain".toMediaTypeOrNull()),
+                    panimagedata,
+                    aadharfrontimagedata,
+                    aadharbackimagedata
+                )
             _onboardingBasicinfoResponseLiveData.postValue(ResponseState.create(response, "aa"))
         } catch (throwable: Throwable) {
             _onboardingBasicinfoResponseLiveData.postValue(ResponseState.create(throwable))
         }
 
     }
-
-
 
 
     suspend fun onboardingBasicinfo(
@@ -1293,7 +1297,8 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
                 MultipartBody.Part.createFormData("image3", "image3.jpg", requestBody)
             }
 
-            val response = api.onboardingBasicinfo(token, jsonRequestBody, image1Part, image2Part, image3Part)
+            val response =
+                api.onboardingBasicinfo(token, jsonRequestBody, image1Part, image2Part, image3Part)
             // Handle response
         } catch (throwable: Throwable) {
             // Handle error
@@ -1358,7 +1363,6 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         }
 
     }
-
 
 
     //businesstypeMethod
@@ -1445,14 +1449,17 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         get() = _bankDetailsResponseLiveData
 
 
-    suspend fun bankDetails(token: String, loginModel: String,panimagedata: MultipartBody.Part?) {
+    suspend fun bankDetails(token: String, loginModel: String, panimagedata: MultipartBody.Part?) {
         _bankDetailsResponseLiveData.postValue(ResponseState.Loading())
         try {
-           /* val response =
-                api.bankDetails(token, loginModel.replace("\n", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull(),panimagedata))*/
+            /* val response =
+                 api.bankDetails(token, loginModel.replace("\n", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull(),panimagedata))*/
 
             val response =
-                api.bankDetails(token, loginModel.replace("\n", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull()),
+                api.bankDetails(
+                    token,
+                    loginModel.replace("\n", "").replace("\r", "")
+                        .toRequestBody("text/plain".toMediaTypeOrNull()),
                     panimagedata
                 )
 
@@ -1469,6 +1476,7 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         MutableLiveData<ResponseState<BasicInfo>>()
     val documentUploadResponseLiveData: LiveData<ResponseState<BasicInfo>>
         get() = _documentUploadResponseLiveData
+
     suspend fun documentUpload(
         token: String,
         loginModel: String,
@@ -1487,8 +1495,21 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         _documentUploadResponseLiveData.postValue(ResponseState.Loading())
         try {
             val response =
-                api.documentUpload(token, loginModel.replace("\n", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull()),
-                    partnerPanCard,companyPanCard,partnerAadhaarFront,partnerAadhaarBack,gstin,coi,boardResolution,tradeLicense,userSelfi,userScp,videoKyc
+                api.documentUpload(
+                    token,
+                    loginModel.replace("\n", "").replace("\r", "")
+                        .toRequestBody("text/plain".toMediaTypeOrNull()),
+                    partnerPanCard,
+                    companyPanCard,
+                    partnerAadhaarFront,
+                    partnerAadhaarBack,
+                    gstin,
+                    coi,
+                    boardResolution,
+                    tradeLicense,
+                    userSelfi,
+                    userScp,
+                    videoKyc
                 )
             _documentUploadResponseLiveData.postValue(ResponseState.create(response, "aa"))
         } catch (throwable: Throwable) {
@@ -1543,14 +1564,23 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         get() = _PaymentRequistResponseLiveData
 
 
-    suspend fun PaymentRequist(token: String, loginModel: String,paymentSlip: MultipartBody.Part?,denomSlip: MultipartBody.Part?) {
+    suspend fun PaymentRequist(
+        token: String,
+        loginModel: String,
+        paymentSlip: MultipartBody.Part?,
+        denomSlip: MultipartBody.Part?
+    ) {
         _PaymentRequistResponseLiveData.postValue(ResponseState.Loading())
         try {
-           /* val response =
-                api.PaymentRequist(token, loginModel.replace("\n", "").replace("\r", ""))*/
+            /* val response =
+                 api.PaymentRequist(token, loginModel.replace("\n", "").replace("\r", ""))*/
             val response =
-                api.PaymentRequist(token, loginModel.replace("\n", "").replace("\r", "").toRequestBody("text/plain".toMediaTypeOrNull()),
-                    paymentSlip,denomSlip
+                api.PaymentRequist(
+                    token,
+                    loginModel.replace("\n", "").replace("\r", "")
+                        .toRequestBody("text/plain".toMediaTypeOrNull()),
+                    paymentSlip,
+                    denomSlip
                 )
             _PaymentRequistResponseLiveData.postValue(ResponseState.create(response, "aa"))
         } catch (throwable: Throwable) {
@@ -1596,7 +1626,6 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
         }
 
     }
-
 
 
     //addBankBankList
@@ -1657,164 +1686,244 @@ class AuthRepositoryRepository @Inject constructor( private val api: RetroApi) {
     }
 
 
+    //refreshToken
+    private val _refreshTokenResponseLiveData =
+        MutableLiveData<ResponseState<refreshTokenModel>>()
+    val refreshTokenResponseLiveData: LiveData<ResponseState<refreshTokenModel>>
+        get() = _refreshTokenResponseLiveData
 
 
+    suspend fun refreshToken(token: String, loginModel: String) {
+        _refreshTokenResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.refreshToken(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _refreshTokenResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _refreshTokenResponseLiveData.postValue(ResponseState.create(throwable))
+        }
 
-
-
-
-
-    	//refreshToken
-private val _refreshTokenResponseLiveData =
-    MutableLiveData<ResponseState<refreshTokenModel>>()
-val refreshTokenResponseLiveData: LiveData<ResponseState<refreshTokenModel>>
-    get() = _refreshTokenResponseLiveData
-
-
-suspend fun refreshToken(token: String, loginModel: String) {
-    _refreshTokenResponseLiveData.postValue(ResponseState.Loading())
-    try {
-        val response =
-            api.refreshToken(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
-        _refreshTokenResponseLiveData.postValue(ResponseState.create(response, "aa"))
-    } catch (throwable: Throwable) {
-        _refreshTokenResponseLiveData.postValue(ResponseState.create(throwable))
     }
 
-}
+
+    //app Update
+    private val _appUpdateResponseLiveData =
+        MutableLiveData<ResponseState<appUpdateUrlModel>>()
+    val appUpdateResponseLiveData: LiveData<ResponseState<appUpdateUrlModel>>
+        get() = _appUpdateResponseLiveData
 
 
+    suspend fun appUpdate(token: String, loginModel: String) {
+        _appUpdateResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.appupdate(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _appUpdateResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _appUpdateResponseLiveData.postValue(ResponseState.create(throwable))
+        }
 
-    	//cashCollection
-private val _cashCollectionResponseLiveData =
-    MutableLiveData<ResponseState<cashCollectionModel>>()
-val cashCollectionResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
-    get() = _cashCollectionResponseLiveData
-
-
-suspend fun cashCollection(token: String, loginModel: String) {
-    _cashCollectionResponseLiveData.postValue(ResponseState.Loading())
-    try {
-        val response =
-            api.cashCollection(token, loginModel.replace("\\n", "").replace("\\r", ""))
-        _cashCollectionResponseLiveData.postValue(ResponseState.create(response, "aa"))
-    } catch (throwable: Throwable) {
-        _cashCollectionResponseLiveData.postValue(ResponseState.create(throwable))
     }
 
-}
-
-    	//checkUser
-private val _checkUserResponseLiveData =
-    MutableLiveData<ResponseState<checkUserModel>>()
-val checkUserResponseLiveData: MutableLiveData<ResponseState<checkUserModel>>
-    get() = _checkUserResponseLiveData
 
 
-suspend fun checkUser(token: String, loginModel: String) {
-    _checkUserResponseLiveData.postValue(ResponseState.Loading())
-    try {
-        val response =
-            api.checkUser(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
-        _checkUserResponseLiveData.postValue(ResponseState.create(response, "aa"))
-    } catch (throwable: Throwable) {
-        _checkUserResponseLiveData.postValue(ResponseState.create(throwable))
+
+
+    //cashCollection
+    private val _cashCollectionResponseLiveData =
+        MutableLiveData<ResponseState<cashCollectionModel>>()
+    val cashCollectionResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
+        get() = _cashCollectionResponseLiveData
+
+
+    suspend fun cashCollection(
+        token: String,
+        loginModel: String,
+        insuranceOrCashCollection: String
+    ) {
+        _cashCollectionResponseLiveData.postValue(ResponseState.Loading())
+        try {
+
+            val response = api.cashCollection(
+                token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                    .replace("\\s".toRegex(), "".trim())
+            )
+
+            _cashCollectionResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _cashCollectionResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
     }
 
-}
 
-    	//beneficiaryList
-private val _beneficiaryListResponseLiveData =
-    MutableLiveData<ResponseState<beneficiaryListModel>>()
-val beneficiaryListResponseLiveData: MutableLiveData<ResponseState<beneficiaryListModel>>
-    get() = _beneficiaryListResponseLiveData
+    //insurance
+    private val _insuranceResponseLiveData =
+        MutableLiveData<ResponseState<cashCollectionModel>>()
+    val insuranceResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
+        get() = _insuranceResponseLiveData
 
+    suspend fun insurance(
+        token: String,
+        loginModel: String,
+        insuranceOrCashCollection: String
+    ) {
+        _insuranceResponseLiveData.postValue(ResponseState.Loading())
+        try {
 
-suspend fun beneficiaryList(token: String, loginModel: String) {
-    _beneficiaryListResponseLiveData.postValue(ResponseState.Loading())
-    try {
-        val response =
-            api.beneficiaryList(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
-        _beneficiaryListResponseLiveData.postValue(ResponseState.create(response, "aa"))
-    } catch (throwable: Throwable) {
-        _beneficiaryListResponseLiveData.postValue(ResponseState.create(throwable))
+            val response = api.insurance(
+                token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                    .replace("\\s".toRegex(), "".trim())
+            )
+
+            _insuranceResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _insuranceResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
     }
 
-}
 
-    	//addRemitter
-private val _addRemitterResponseLiveData =
-    MutableLiveData<ResponseState<addRemitterModel>>()
-val addRemitterResponseLiveData: MutableLiveData<ResponseState<addRemitterModel>>
-    get() = _addRemitterResponseLiveData
+    //checkUser
+    private val _checkUserResponseLiveData =
+        MutableLiveData<ResponseState<checkUserModel>>()
+    val checkUserResponseLiveData: MutableLiveData<ResponseState<checkUserModel>>
+        get() = _checkUserResponseLiveData
 
 
-suspend fun addRemitter(token: String, loginModel: String) {
-    _addRemitterResponseLiveData.postValue(ResponseState.Loading())
-    try {
-        val response =
-            api.addRemitter(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
-        _addRemitterResponseLiveData.postValue(ResponseState.create(response, "aa"))
-    } catch (throwable: Throwable) {
-        _addRemitterResponseLiveData.postValue(ResponseState.create(throwable))
+    suspend fun checkUser(token: String, loginModel: String) {
+        _checkUserResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.checkUser(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _checkUserResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _checkUserResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
     }
 
-}
-
-    	//addBeneficiary
-private val _addBeneficiaryResponseLiveData =
-    MutableLiveData<ResponseState<addBeneficiaryModel>>()
-val addBeneficiaryResponseLiveData: LiveData<ResponseState<addBeneficiaryModel>>
-    get() = _addBeneficiaryResponseLiveData
+    //beneficiaryList
+    private val _beneficiaryListResponseLiveData =
+        MutableLiveData<ResponseState<beneficiaryListModel>>()
+    val beneficiaryListResponseLiveData: MutableLiveData<ResponseState<beneficiaryListModel>>
+        get() = _beneficiaryListResponseLiveData
 
 
-suspend fun addBeneficiary(token: String, loginModel: String) {
-    _addBeneficiaryResponseLiveData.postValue(ResponseState.Loading())
-    try {
-        val response =
-            api.addBeneficiary(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
-        _addBeneficiaryResponseLiveData.postValue(ResponseState.create(response, "aa"))
-    } catch (throwable: Throwable) {
-        _addBeneficiaryResponseLiveData.postValue(ResponseState.create(throwable))
+    suspend fun beneficiaryList(token: String, loginModel: String) {
+        _beneficiaryListResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.beneficiaryList(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _beneficiaryListResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _beneficiaryListResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
     }
 
-}
+    //addRemitter
+    private val _addRemitterResponseLiveData =
+        MutableLiveData<ResponseState<addRemitterModel>>()
+    val addRemitterResponseLiveData: MutableLiveData<ResponseState<addRemitterModel>>
+        get() = _addRemitterResponseLiveData
 
 
-      	//beneficiary Verify
-private val _beneficiaryVerifyResponseLiveData =
-    MutableLiveData<ResponseState<verifyBeneficiaryModel>>()
-val beneficiaryVerifyResponseLiveData: LiveData<ResponseState<verifyBeneficiaryModel>>
-    get() = _beneficiaryVerifyResponseLiveData
+    suspend fun addRemitter(token: String, loginModel: String) {
+        _addRemitterResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.addRemitter(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _addRemitterResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _addRemitterResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //addBeneficiary
+    private val _addBeneficiaryResponseLiveData =
+        MutableLiveData<ResponseState<addBeneficiaryModel>>()
+    val addBeneficiaryResponseLiveData: MutableLiveData<ResponseState<addBeneficiaryModel>>
+        get() = _addBeneficiaryResponseLiveData
 
 
+    suspend fun addBeneficiary(token: String, loginModel: String) {
+        _addBeneficiaryResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.addBeneficiary(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _addBeneficiaryResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _addBeneficiaryResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+    //beneficiary Verify
+    private val _beneficiaryVerifyResponseLiveData =
+        MutableLiveData<ResponseState<verifyBeneficiaryModel>>()
+    val beneficiaryVerifyResponseLiveData: MutableLiveData<ResponseState<verifyBeneficiaryModel>>
+        get() = _beneficiaryVerifyResponseLiveData
 
 
     suspend fun beneficiaryVerify(token: String, loginModel: String) {
         _beneficiaryVerifyResponseLiveData.postValue(ResponseState.Loading())
         try {
             val response =
-                api.beneficiaryVerify(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
+                api.beneficiaryVerify(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
             _beneficiaryVerifyResponseLiveData.postValue(ResponseState.create(response, "aa"))
         } catch (throwable: Throwable) {
             _beneficiaryVerifyResponseLiveData.postValue(ResponseState.create(throwable))
         }
 
     }
-        	//moneyTransfer
-private val _moneyTransferResponseLiveData =
-    MutableLiveData<ResponseState<verifyBeneficiaryModel>>()
-val moneyTransferResponseLiveData: MutableLiveData<ResponseState<verifyBeneficiaryModel>>
-    get() = _moneyTransferResponseLiveData
 
-
+    //moneyTransfer
+    private val _moneyTransferResponseLiveData =
+        MutableLiveData<ResponseState<MoneyTranspherModel>>()
+    val moneyTransferResponseLiveData: MutableLiveData<ResponseState<MoneyTranspherModel>>
+        get() = _moneyTransferResponseLiveData
 
 
     suspend fun moneyTransfer(token: String, loginModel: String) {
         _moneyTransferResponseLiveData.postValue(ResponseState.Loading())
         try {
             val response =
-                api.moneyTransfer(token, loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ").replace("\\s".toRegex(), "".trim()))
+                api.moneyTransfer(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
             _moneyTransferResponseLiveData.postValue(ResponseState.create(response, "aa"))
         } catch (throwable: Throwable) {
             _moneyTransferResponseLiveData.postValue(ResponseState.create(throwable))
@@ -1822,5 +1931,97 @@ val moneyTransferResponseLiveData: MutableLiveData<ResponseState<verifyBeneficia
 
     }
 
+
+    //electricStatelist
+    private val _electricStatelistResponseLiveData =
+        MutableLiveData<ResponseState<electricStatelistModel>>()
+    val electricStatelistResponseLiveData: LiveData<ResponseState<electricStatelistModel>>
+        get() = _electricStatelistResponseLiveData
+
+
+    suspend fun electricStatelist(token: String, loginModel: String) {
+        _electricStatelistResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.electricStatelist(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _electricStatelistResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _electricStatelistResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //electricbillerlist
+    private val _electricbillerlistResponseLiveData =
+        MutableLiveData<ResponseState<billerlistModel>>()
+    val electricbillerlistResponseLiveData: LiveData<ResponseState<billerlistModel>>
+        get() = _electricbillerlistResponseLiveData
+
+
+    suspend fun electricbillerlist(token: String, loginModel: String) {
+        _electricbillerlistResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.electricbillerlist(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _electricbillerlistResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _electricbillerlistResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //electricBillbillFetch
+    private val _electricBillbillFetchResponseLiveData =
+        MutableLiveData<ResponseState<electricBillbillFetchModel>>()
+    val electricBillbillFetchResponseLiveData: LiveData<ResponseState<electricBillbillFetchModel>>
+        get() = _electricBillbillFetchResponseLiveData
+
+
+    suspend fun electricBillbillFetch(token: String, loginModel: String) {
+        _electricBillbillFetchResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.electricBillbillFetch(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _electricBillbillFetchResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _electricBillbillFetchResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //billpaytransaction
+    private val _billpaytransactionResponseLiveData =
+        MutableLiveData<ResponseState<billpaytransactionModel>>()
+    val billpaytransactionResponseLiveData: MutableLiveData<ResponseState<billpaytransactionModel>>
+        get() = _billpaytransactionResponseLiveData
+
+
+    suspend fun billpaytransaction(token: String, loginModel: String) {
+        _billpaytransactionResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.billpaytransaction(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _billpaytransactionResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _billpaytransactionResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
 }
 
