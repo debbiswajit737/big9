@@ -6,6 +6,8 @@ import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -28,6 +30,7 @@ import com.big9.app.ui.popup.SuccessPopupFragment2
 import com.big9.app.utils.*
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.helpers.Constants
+import com.big9.app.utils.helpers.Constants.totalBankLimit
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack4
 import com.big9.app.utils.`interface`.CallBack7
@@ -70,8 +73,22 @@ class BeneficiaryFragment : BaseFragment() {
     private fun onViewClick() {
 
         binding.apply {
+            rootView.setOnClickListener{
+                rootView.setupUI()
+            }
+            rootView2.setOnClickListener{
+                rootView2.setupUI()
+            }
+
           imgBack.back()
             tvAddBeneficiary.setOnClickListener {
+                viewModel?.apply {
+                    beneficiary_bank_name?.value=""
+                    beneficiary_ifsc?.value=""
+                    beneficiary_acc?.value=""
+                    beneficiary_name?.value=""
+                }
+
                 findNavController().navigate(R.id.action_beneficiaryFragment_to_addBeneficiaryFragment)
             }
           }
@@ -84,6 +101,7 @@ class BeneficiaryFragment : BaseFragment() {
    activity?.let {act->
                loader = MethodClass.custom_loader(act, getString(R.string.please_wait))
        /*customerid = arguments?.getString("customerid").toString()*/
+
    }
 val (isLogin, loginResponse) = sharedPreff.getLoginData()
 loginResponse?.let { loginData ->
@@ -105,6 +123,10 @@ loginResponse?.let { loginData ->
 
     fun setObserver() {
         binding.apply {
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.totalLimit.text="Combined Limit: ₹$totalBankLimit"
+            },100)
+
             etSearch.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     beneficiaryListAdapter?.filter?.filter(s)

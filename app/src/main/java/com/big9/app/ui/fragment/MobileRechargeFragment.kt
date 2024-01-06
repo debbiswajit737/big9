@@ -2,10 +2,12 @@ package com.big9.app.ui.fragment
 
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -18,6 +20,7 @@ import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentMobileRechargeBinding
 import com.big9.app.network.ResponseState
 import com.big9.app.network.RetrofitHelper.handleApiError
+import com.big9.app.ui.activity.DashboardActivity
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.receipt.MobileReceptDialogFragment
 import com.big9.app.ui.receipt.PostPaidMobileReceptDialogFragment
@@ -104,14 +107,14 @@ class MobileRechargeFragment : BaseFragment() {
             btnSubmit.setOnClickListener{
                 activity?.let {act->
                     if (viewModel?.regValidation() == true){
-                        btnSubmit.setBottonLoader(false,llSubmitLoader)
+                        //btnSubmit.setBottonLoader(false,llSubmitLoader)
                             val tpinBottomSheetDialog = TpinBottomSheetDialog(object : CallBack {
                                 override fun getValue(s: String) {
                                     submit(s)
 
                                 }
                             })
-                            tpinBottomSheetDialog.isCancelable=false
+                            //tpinBottomSheetDialog.isCancelable=false
                             tpinBottomSheetDialog.show(act.supportFragmentManager, tpinBottomSheetDialog.tag)
 
                     }
@@ -163,6 +166,7 @@ class MobileRechargeFragment : BaseFragment() {
     }
 
     fun initView() {
+        backPressedCheck()
         binding.apply {
             activity?.let {
                 loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
@@ -271,5 +275,17 @@ class MobileRechargeFragment : BaseFragment() {
         }
     }
 
+    fun backPressedCheck(){
+        activity?.let {act->
+            act.onBackPressedDispatcher.addCallback(act, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.let {act->
+                        startActivity(Intent(act,DashboardActivity::class.java).putExtra(Constants.isAfterReg,true))
+                    }
 
+                }
+            })
+        }
+
+    }
 }

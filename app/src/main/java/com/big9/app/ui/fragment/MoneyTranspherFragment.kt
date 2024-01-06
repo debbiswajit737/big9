@@ -22,6 +22,7 @@ import com.big9.app.ui.base.BaseFragment
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.helpers.Constants.bankCode
 import com.big9.app.utils.helpers.Constants.customerId
+import com.big9.app.utils.helpers.Constants.totalBankLimit
 import com.google.gson.Gson
 
 class MoneyTranspherFragment : BaseFragment() {
@@ -55,7 +56,9 @@ class MoneyTranspherFragment : BaseFragment() {
 
     private fun onViewClick() {
         binding.apply {
-
+            rootView.setOnClickListener{
+                rootView.setupUI()
+            }
             imgBack.back()
 
             activity?.let {act->
@@ -183,6 +186,26 @@ class MoneyTranspherFragment : BaseFragment() {
                 var bank1=0
                 var bank2=0
                 var bank3=0
+
+
+                it.bank1Limit?.let {
+                    bank1=it
+                }
+                it.bank2Limit?.let {
+                    bank2=it
+                }
+                it.bank3Limit?.let {
+                    bank3=it
+                }
+
+
+                try {
+                   /* var bank1_=bank1.plus(bank2)
+                    var bank2_=bank1_.plus(bank3)*/
+                    var total=bank1+bank2+bank3
+                    totalBankLimit=total.toString()
+                }catch (e:Exception){}
+
                /* bank1
 
                 "bank3_limit":25000,"bank3_status":"yes","bank2_limit":25000,"bank1_limit":25000}}*/

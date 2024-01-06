@@ -3,11 +3,19 @@ package com.big9.app.ui.fragment
 
 
 import android.app.Dialog
+import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -20,6 +28,7 @@ import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentAddBeneficiaryBinding
 import com.big9.app.network.ResponseState
 import com.big9.app.network.RetrofitHelper.handleApiError
+import com.big9.app.ui.activity.DashboardActivity
 
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.fragment.BankListBottomSheetDialog
@@ -28,6 +37,7 @@ import com.big9.app.ui.popup.SuccessPopupFragment
 import com.big9.app.ui.popup.SuccessPopupFragment2
 import com.big9.app.ui.receipt.EPotlyReceptDialogFragment
 import com.big9.app.utils.common.MethodClass
+import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.customerId
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack4
@@ -61,8 +71,52 @@ class AddBeneficiaryFragment : BaseFragment() {
         binding.apply {
 
             imgBack.back()
+            rootView.setOnClickListener{
+                rootView.setupUI()
+            }
+            cardView2.setOnClickListener{
+                cardView2.setupUI()
+            }
 
 
+
+            // Assuming your parent layout is a RelativeLayout with id "parentLayout"
+            val parentLayout = binding.rootView
+
+            parentLayout.setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus) {
+                    parentLayout.hideKeyboard()
+                }
+            }
+
+
+            //binding.rootView.hideKeyboard()
+// Set up touch listener for root layout
+           /* binding.rootView.setOnTouchListener { _, event ->
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    // Check if the touch event is outside of the EditText
+                    val editText = binding.etBeneficiaryBankName // Replace with your EditText
+                    if (editText.isFocused) {
+                        val outRect = Rect()
+                        editText.getGlobalVisibleRect(outRect)
+                        if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                            // Hide the keyboard
+                            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            imm.hideSoftInputFromWindow(editText.windowToken, 0)
+                            editText.clearFocus()
+                        }
+                    }
+                }
+                false
+            }*/
+            /*rootView.setOnClickListener{
+                activity?.let {act->
+                    binding.etBenName.hideKeyboard()
+
+                    //binding.etBenName.clearFocus()
+                }
+
+            }*/
 
 
             btnSubmit.setOnClickListener{
@@ -132,7 +186,7 @@ loginResponse?.let { loginData ->
                 activity?.let {act->
                     val bankListBottomSheetDialog = BankListBottom2SheetDialog(object : CallBack {
                         override fun getValue(s: String) {
-                            Toast.makeText(requireActivity(), "$s", Toast.LENGTH_SHORT).show()
+                           // Toast.makeText(requireActivity(), "$s", Toast.LENGTH_SHORT).show()
                         }
                     },bankList)
                     bankListBottomSheetDialog.show(
@@ -186,7 +240,7 @@ loginResponse?.let { loginData ->
                     bankList.clear()
                     it.data?.data?.let {
                         it.forEach{
-                            bankList.add(BankListModel2(R.drawable.default_1,it.name.toString(),"A/C",it.ifsc.toString(),it.id.toString()))
+                            bankList.add(BankListModel2(R.drawable.bank_name_ioc,it.name.toString(),"A/C",it.ifsc.toString(),it.id.toString()))
                         }
 
                     }
@@ -197,6 +251,8 @@ loginResponse?.let { loginData ->
                     loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
+
+                else -> {}
             }
         }
 
@@ -240,7 +296,10 @@ loginResponse?.let { loginData ->
         }
         is ResponseState.Success -> {
             loader?.dismiss()
-            viewModel?.beneficiary_name?.value="${it?.data?.benName}"
+            it?.data?.benName?.let {
+                viewModel?.beneficiary_name?.value="${it}"
+            }
+
             viewModel.popup_message.value="${it?.data?.Description}"
             val successPopupFragment = SuccessPopupFragment2(object :
                 CallBack4 {
@@ -268,5 +327,17 @@ loginResponse?.let { loginData ->
 
     }
 
+   /* fun backPressedCheck(){
+        activity?.let {act->
+            act.onBackPressedDispatcher.addCallback(act, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.let {act->
+                        startActivity(Intent(act, DashboardActivity::class.java).putExtra(Constants.isAfterReg,true))
+                    }
 
+                }
+            })
+        }
+
+    }*/
 }

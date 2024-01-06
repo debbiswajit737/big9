@@ -11,6 +11,7 @@
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/gray"
@@ -45,6 +46,7 @@
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/rootView2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -99,9 +101,10 @@
                             android:fontFamily="@font/open_sans_medium"
                             tools:text="user name"/>
                         <TextView
+                            android:id="@+id/totalLimit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{`Combined Limit: `+`75000.00`}"
+                            android:text="@{`Combined Limit: `+``}"
                             android:textColor="@color/logo_second_color"
                             android:textSize="@dimen/_12ssp"
                             android:fontFamily="@font/open_sans_medium"

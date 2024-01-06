@@ -105,4 +105,11 @@
         <!-- Customize the color of the selected date background -->
         <item name="colorAccent">@color/logo_color</item>
     </style>
+
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:windowFullscreen">true</item>
+
+    </style>
 </resources>

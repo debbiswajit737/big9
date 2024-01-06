@@ -2,12 +2,14 @@ package com.big9.app.ui.fragment
 
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -20,11 +22,13 @@ import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentDthRechargeBinding
 import com.big9.app.network.ResponseState
 import com.big9.app.network.RetrofitHelper.handleApiError
+import com.big9.app.ui.activity.DashboardActivity
 
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.popup.SuccessPopupFragment
 import com.big9.app.ui.receipt.DthReceptDialogFragment
 import com.big9.app.utils.common.MethodClass
+import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.isDthOperator
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack4
@@ -108,7 +112,7 @@ class DTHRechargeFragment : BaseFragment() {
                         }
                     })
                     activity?.let {act->
-                        tpinBottomSheetDialog.isCancelable = false
+                       // tpinBottomSheetDialog.isCancelable = false
                         tpinBottomSheetDialog.show(act.supportFragmentManager, tpinBottomSheetDialog.tag)
                     }
                 }
@@ -132,6 +136,7 @@ class DTHRechargeFragment : BaseFragment() {
     }
 
     fun initView() {
+        backPressedCheck()
         binding.apply {
             etAmt.setupAmount()
         }
@@ -255,5 +260,17 @@ class DTHRechargeFragment : BaseFragment() {
 
     }
 
+    fun backPressedCheck(){
+        activity?.let {act->
+            act.onBackPressedDispatcher.addCallback(act, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.let {act->
+                        startActivity(Intent(act, DashboardActivity::class.java).putExtra(Constants.isAfterReg,true))
+                    }
 
+                }
+            })
+        }
+
+    }
 }

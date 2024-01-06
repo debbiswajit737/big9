@@ -1,5 +1,6 @@
 package com.big9.app.repository
 
+import InsuranceModel
 import MoneyTranspherModel
 import addBeneficiaryModel
 import addRemitterModel
@@ -1767,8 +1768,8 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     //insurance
     private val _insuranceResponseLiveData =
-        MutableLiveData<ResponseState<cashCollectionModel>>()
-    val insuranceResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
+        MutableLiveData<ResponseState<InsuranceModel>>()
+    val insuranceResponseLiveData: LiveData<ResponseState<InsuranceModel>>
         get() = _insuranceResponseLiveData
 
     suspend fun insurance(

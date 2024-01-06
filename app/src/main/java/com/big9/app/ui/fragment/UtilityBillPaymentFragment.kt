@@ -128,7 +128,7 @@ class UtilityBillPaymentFragment : BaseFragment() {
                         }
                     })
                     activity?.let { act ->
-                        tpinBottomSheetDialog.isCancelable=false
+                        //tpinBottomSheetDialog.isCancelable=false
                         tpinBottomSheetDialog.show(
                             act.supportFragmentManager,
                             tpinBottomSheetDialog.tag

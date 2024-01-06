@@ -1,5 +1,6 @@
 package com.big9.app.data.viewMovel
 
+import InsuranceModel
 import MoneyTranspherModel
 import addBeneficiaryModel
 import addRemitterModel
@@ -1855,7 +1856,7 @@ fun cashCollection(token: String, data: String, insuranceOrCashCollection: Strin
 
 
     //insurance
-val insuranceResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
+val insuranceResponseLiveData: LiveData<ResponseState<InsuranceModel>>
     get() = repository.insuranceResponseLiveData
 fun insurance(token: String, data: String, insuranceOrCashCollection: String) {
     viewModelScope.launch {

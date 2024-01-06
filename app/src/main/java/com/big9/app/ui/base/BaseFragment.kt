@@ -18,8 +18,8 @@ import android.provider.OpenableColumns
 import android.text.InputFilter
 import android.util.Base64
 import android.util.Log
-
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebResourceRequest
@@ -28,23 +28,22 @@ import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.big9.app.R
+import com.big9.app.utils.*
 import com.big9.app.utils.helpers.Constants.AES_ALGORITHM
 import com.big9.app.utils.helpers.Constants.AES_IV
 import com.big9.app.utils.helpers.Constants.AES_KEY
 import com.big9.app.utils.helpers.Constants.AES_TRANSFORMATION
 import com.big9.app.utils.helpers.Constants.INPUT_FILTER_MAX_VALUE
 import com.big9.app.utils.helpers.Constants.INPUT_FILTER_POINTER_LENGTH
-
 import com.big9.app.utils.helpers.DecimalDigitsInputFilter
 import com.big9.app.utils.helpers.PermissionUtils
 import com.big9.app.utils.helpers.SharedPreff
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.PermissionsCallback
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -54,7 +53,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -63,6 +61,7 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import javax.inject.Inject
 import kotlin.math.roundToInt
+
 
 @AndroidEntryPoint
 open class BaseFragment: Fragment(){
@@ -564,8 +563,8 @@ open class BaseFragment: Fragment(){
     }
 
     fun View.setBottonLoader(isVisible:Boolean,view:View){
-        this.isVisible=isVisible
-        view.isVisible=!this.isVisible
+        //this.isVisible=isVisible
+        //view.isVisible=!this.isVisible
     }
 
     fun Uri.getImageSizeInMb(contentResolver: ContentResolver): Double? {
@@ -627,233 +626,41 @@ open class BaseFragment: Fragment(){
             "0.00"
         }
     }
+    fun View.hideKeyboard( ) {
 
+            val imm = this.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(windowToken, 0)
 
-}
-
-data class TempData(val pathName:String,val methodName:String,val modelName:String,)
-data class TempRepository(var fileName:String?)
-fun main() {
-    val filen="UtilityBillPaymentFragment"
-    val f= TempRepository("AuthRepositoryRepository.kt")
-    var a=  TempData("billpaytransaction","billpaytransaction","billpaytransactionModel")
-    temp(a,f,filen)
-}
-fun temp(tempData: TempData,tempRepository:TempRepository?=null,fragmentFileName:String) {
-    val baseFilePath = "E:/android_project/big9/project/big9/"
-    val middlePath = "app/src/main/java/com/big9/app/"
-    var endPath = "network/"
-    var endPathFileName = "RetroApi.kt"
-
-    var filePath = "$baseFilePath$middlePath$endPath$endPathFileName"
-    val templateText = "@POST(\"${tempData.pathName}\")\n" +
-            "    suspend fun ${tempData.methodName}(\n" +
-            "        @Header(\"Authtoken\") token: String,\n" +
-            "        @Body data: String\n" +
-            "    ): Response<${tempData.modelName}>\n"
-
-    var file = File(filePath)
-    if (file.exists()) {
-        var existingContent = file.readText()
-        var lastIndex = existingContent.lastIndexOf('}')
-        if (lastIndex != -1) {
-            val updatedContent = StringBuilder(existingContent).apply {
-                insert(lastIndex, "\n$templateText")
-            }.toString()
-            file.writeText(updatedContent)
-            println("File '$filePath' has been updated with the template text.")
-
-
-            endPath = "data/model/newModel/"
-            endPathFileName = "${tempData.modelName}.kt"
-            filePath = "$baseFilePath$middlePath$endPath$endPathFileName"
-
-            val templateText = """
-        import com.google.gson.annotations.SerializedName
-
-        class ${tempData.modelName} {
-            @SerializedName("userid")
-            var userid: String? = null
-            @SerializedName("status")
-            var status: String? = null
-        }
-    """.trimIndent()
-    //writeFileData(templateText,filePath)
-            var file = File(filePath)
-            if (!file.exists()) {
-                file.createNewFile()
-            }
-
-            file.writeText(templateText)
-
-
-            println("File '$filePath' has been created with the template text.")
-        } else {
-            println("File '$filePath' does not contain a closing brace '}'.")
-        }
-    } else {
-        println("File '$filePath' does not exist.")
-    }
-
-    // repository
-    endPath = "repository/"
-
-    endPathFileName = "AuthRepositoryRepository.kt"
-    filePath = "$baseFilePath$middlePath$endPath$endPathFileName"
-    var file2 = File(filePath)
-    if (file2.exists()) {
-        var existingContent = file2.readText()
-        var lastIndex = existingContent.lastIndexOf('}')
-        if (lastIndex != -1) {
-
-
-
-            val templateText2 = """
-        	//${tempData.methodName}
-    private val _${tempData.methodName}ResponseLiveData =
-        MutableLiveData<ResponseState<${tempData.modelName}>>()
-    val ${tempData.methodName}ResponseLiveData: LiveData<ResponseState<${tempData.modelName}>>
-        get() = _${tempData.methodName}ResponseLiveData
-
-
-    suspend fun ${tempData.methodName}(token: String, loginModel: String) {
-        _${tempData.methodName}ResponseLiveData.postValue(ResponseState.Loading())
-        try {
-            val response =
-                api.${tempData.methodName}(token, loginModel.replace("\\n", "").replace("\\r", ""))
-            _${tempData.methodName}ResponseLiveData.postValue(ResponseState.create(response, "aa"))
-        } catch (throwable: Throwable) {
-            _${tempData.methodName}ResponseLiveData.postValue(ResponseState.create(throwable))
-        }
 
     }
 
-    """.trimIndent()
-           // writeFileData(templateText2,filePath)
-            val updatedContent = StringBuilder(existingContent).apply {
-                insert(lastIndex, "\n$templateText2")
-            }.toString()
 
-            println("File '$filePath' has been updated with the template text.")
-            file2.writeText(updatedContent)
+     fun View.setupUI() {
 
-
-            println("File '$filePath' has been created with the template text.")
-        } else {
-            println("File '$filePath' does not contain a closing brace '}'.")
-        }
-    } else {
-        println("File '$filePath' does not exist.")
-    }
-
-
-
-    //viewmodel
-
-    endPath = "data/viewMovel/"
-
-    endPathFileName = "MyViewModel.kt"
-    filePath = "$baseFilePath$middlePath$endPath$endPathFileName"
-    var file3 = File(filePath)
-    if (file3.exists()) {
-        var existingContent = file3.readText()
-        var lastIndex = existingContent.lastIndexOf('}')
-        if (lastIndex != -1) {
-
-
-
-            val templateText2 = """
-      //${tempData.methodName}
-    val ${tempData.methodName}ResponseLiveData: LiveData<ResponseState<${tempData.modelName}>>
-        get() = repository.${tempData.methodName}ResponseLiveData
-    fun ${tempData.methodName}(token: String, data: String) {
-        viewModelScope.launch {
-            repository.${tempData.methodName}(token,data)
-        }
-    }
-
-
-    """.trimIndent()
-            // writeFileData(templateText2,filePath)
-            val updatedContent = StringBuilder(existingContent).apply {
-                insert(lastIndex, "\n$templateText2")
-            }.toString()
-
-            println("File '$filePath' has been updated with the template text.")
-            file3.writeText(updatedContent)
-
-
-            println("File '$filePath' has been created with the template text.")
-        } else {
-            println("File '$filePath' does not contain a closing brace '}'.")
-        }
-    } else {
-        println("File '$filePath' does not exist.")
-    }
-
-
-    //replace
-    // Replace placeholders in a file in the ui/fragment directory
-    endPath = "ui/fragment/"
-    endPathFileName = "$fragmentFileName.kt"
-    filePath = "$baseFilePath$middlePath$endPath$endPathFileName"
-    val fragmentTemplateText1 = """
-        
-        myViewModel?.${tempData.methodName}ResponseLiveData?.observe(viewLifecycleOwner) {
-            when (it) {
-                is ResponseState.Loading -> {
-                    loader?.show()
-                }
-                is ResponseState.Success -> {
-                    loader?.dismiss()
-                }
-                is ResponseState.Error -> {
-                    loader?.dismiss()
-                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-                }
+        // Set up touch listener for non-text box views to hide keyboard.
+        if (view !is EditText) {
+            this.setOnTouchListener { v, event ->
+                hideSoftKeyBoard(this)
+                false
             }
         }
-    """.trimIndent()
-    val fragmentTemplateText2 = """
-        
-        val (isLogin, loginResponse) = sharedPreff.getLoginData()
-        loginResponse?.let { loginData ->
-            loginData.userid?.let {
-                val data = mapOf(
-                    "userid" to loginData.userid,
-                    "startdate" to "01-12-2023",
-                    "enddate" to "15-12-2023",
-                )
-                val gson = Gson()
-                var jsonString = gson.toJson(data)
-                loginData.AuthToken?.let {
-                    myViewModel?.${tempData.methodName}(it, jsonString.encrypt())
-                }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (this is ViewGroup) {
+            for (i in 0 until this.childCount) {
+                val innerView = this.getChildAt(i)
+                innerView.setupUI()
             }
         }
-    """.trimIndent()
-    replaceInFile(filePath, "temp1", fragmentTemplateText2)
-    replaceInFile(filePath, "temp2", fragmentTemplateText1)
-
-}
-fun replaceInFile(filePath: String, target: String, replacement: String) {
-    val file = File(filePath)
-    if (file.exists()) {
-        val content = file.readText()
-        val updatedContent = content.replace(target, replacement)
-        file.writeText(updatedContent)
-        println("File '$filePath' has been updated with the replacements.")
-    } else {
-        println("File '$filePath' does not exist.")
-    }
-}
-
-fun writeFileData(templateText: String, filePath: String) {
-    var file = File(filePath)
-    if (!file.exists()) {
-        file.createNewFile()
     }
 
-    file.writeText(templateText)
+    fun hideSoftKeyBoard(v:View){
+        val imm = v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(v.windowToken, 0)
+
+    }
+
 }
+
+
 

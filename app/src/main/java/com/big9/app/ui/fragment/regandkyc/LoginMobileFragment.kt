@@ -30,9 +30,7 @@ import com.big9.app.network.RetrofitHelper.handleApiError
 import com.big9.app.ui.activity.AuthenticationActivity
 import com.big9.app.ui.activity.DashboardActivity
 import com.big9.app.ui.base.BaseFragment
-import com.big9.app.ui.base.TempData
-import com.big9.app.ui.base.TempRepository
-import com.big9.app.ui.base.temp
+
 
 import com.big9.app.ui.popup.LoadingPopup
 import com.big9.app.utils.common.MethodClass

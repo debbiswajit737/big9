@@ -49,6 +49,21 @@ class DashboardActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         myViewModel = ViewModelProvider(this)[MyViewModel::class.java]
+
+
+        val navHostFragment: NavHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+        intent?.let { intentData ->
+            val isReceptBooleanValue = intentData.getBooleanExtra(isRecept, false)
+            val isAfterRegVal = intentData.getBooleanExtra(isAfterReg, false)
+            if (isReceptBooleanValue) {
+
+            }
+            if (isAfterRegVal) {
+                navController?.navigate(R.id.homeFragment2)
+            }}
+
         init()
 
         observer()
@@ -66,7 +81,7 @@ class DashboardActivity : BaseActivity() {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val navHostFragment: NavHostFragment =
+                   /* val navHostFragment: NavHostFragment =
                         supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
                     navController = navHostFragment.navController
                     intent?.let { intentData ->
@@ -78,7 +93,7 @@ class DashboardActivity : BaseActivity() {
                         if (isAfterRegVal) {
                             navController?.navigate(R.id.homeFragment2)
                         }
-                    }
+                    }*/
 
                     var currentFragmentId = navController?.currentDestination?.id
                     if (currentFragmentId == R.id.homeFragment) {

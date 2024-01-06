@@ -427,7 +427,30 @@ class LoginPinfragment : BaseFragment() {
                 is ResponseState.Error -> {
                     loader?.dismiss()
                     myViewModel.loginPin.value = ""
-                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    if (it.errorCode == 105) {
+
+                        val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                        loginResponse?.let { loginData ->
+
+
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "clientid" to Constants.CLIENT_ID,
+                                "secretkey" to Constants.API_KEY,
+                            )
+                            /*"referenceid" to loginData.,*/
+                            val gson = Gson()
+                            var jsonString = gson.toJson(data)
+
+
+                            loginData.AuthToken?.let {
+                                myViewModel?.refreshToken(it, jsonString.encrypt())
+                            }
+                        }
+                    }
+                    else {
+                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    }
                     myViewModel?.patternLoginReceptLiveData?.value = null
                 }
             }

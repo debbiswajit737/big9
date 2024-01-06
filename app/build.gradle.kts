@@ -14,7 +14,9 @@ plugins {
 android {
     namespace = "com.big9.app"
     compileSdk = 34
-
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
     defaultConfig {
         applicationId = "com.big9.app"
         minSdk = 24
@@ -213,6 +215,7 @@ dependencies {
     implementation ("androidx.legacy:legacy-support-v4:1.0.0")
     implementation ("com.karumi:dexter:5.0.0")
     implementation ("com.github.yalantis:ucrop:2.2.6-native")
+    implementation ("com.google.android.play:app-update-ktx:2.1.0")
 }
 
 kapt {

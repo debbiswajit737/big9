@@ -1,5 +1,6 @@
 package com.big9.app.network
 
+import InsuranceModel
 import MoneyTranspherModel
 import addBeneficiaryModel
 import addRemitterModel
@@ -589,11 +590,11 @@ interface RetroApi {
         @Body data: String
     ): Response<cashCollectionModel>
 
-    @POST("v1/services/cashcoll/cashcol")
+    @POST("v1/services/insurance/insurance.php")
     suspend fun insurance(
         @Header("Authtoken") token: String,
         @Body data: String
-    ): Response<cashCollectionModel>
+    ): Response<InsuranceModel>
 
 
     @POST("v1/services/dmt/check_remitter.php")

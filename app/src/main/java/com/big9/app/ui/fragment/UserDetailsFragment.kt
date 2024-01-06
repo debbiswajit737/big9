@@ -137,8 +137,8 @@ class UserDetailsFragment : BaseFragment() {
                             userDetailsList.add(UserDetails("Gender",it.gender.toString()))
                             userDetailsList.add(UserDetails("Pincode",it.pincode.toString()))
                             userDetailsList.add(UserDetails("DOB",it.dob.toString()))
-                            userDetailsList.add(UserDetails("Payout Balance",it.payoutBalance.toString()))
-                            userDetailsList.add(UserDetails("Payabhi Wallet",it.payabhiWallet.toString()))
+                            //userDetailsList.add(UserDetails("Payout Balance",it.payoutBalance.toString()))
+                            //userDetailsList.add(UserDetails("Payabhi Wallet",it.payabhiWallet.toString()))
                             //userDetailsList.add(UserDetails("Payabhi Wallet",it.payabhiWallet.toString()))
                             userDetailsAdapter?.items=userDetailsList
                             userDetailsAdapter?.notifyDataSetChanged()

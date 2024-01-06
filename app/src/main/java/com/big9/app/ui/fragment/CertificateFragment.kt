@@ -75,7 +75,7 @@ class CertificateFragment : BaseFragment() {
                 "COM"->"Compliance"
                  else->{""}
                 }
-                setImageCertificate(it.ID,it.name,userType)
+                setImageCertificate(it.ID,it.name?.uppercase(),userType)
 
             }
 
@@ -90,7 +90,7 @@ class CertificateFragment : BaseFragment() {
         // Load the drawable resource as a Bitmap
         val drawableId = R.drawable.ep_certificate // Replace with your drawable resource ID
         //val bitmap = (ContextCompat.getDrawable(context, drawableId) as BitmapDrawable).bitmap
-        bitmap=addTextToDrawable(binding.root.context,drawableId,name.toString(),"${id}(${userType})")
+        bitmap=addTextToDrawable(binding.root.context,drawableId,name.toString(),"(${userType})")
         bitmap?.let { binding.imgCertificate.setImageBitmap(it) }
 
         //generatePdfWithBackground(binding.root.context,"epay_certificate.pdf","",bitmap)

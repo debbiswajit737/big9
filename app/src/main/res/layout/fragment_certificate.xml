@@ -131,7 +131,7 @@
     android:layout_gravity="center"
     android:textColor="@color/black"
     android:textSize="@dimen/_8ssp"
-    android:text="Please check downlode folder"/>
+    android:text="Please check download folder"/>
                                 </LinearLayout>
 
                             </androidx.core.widget.NestedScrollView>

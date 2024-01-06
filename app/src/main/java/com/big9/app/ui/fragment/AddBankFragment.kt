@@ -25,9 +25,7 @@ import com.big9.app.network.ResponseState
 import com.big9.app.network.RetrofitHelper.handleApiError
 
 import com.big9.app.ui.base.BaseFragment
-import com.big9.app.ui.base.TempData
-import com.big9.app.ui.base.TempRepository
-import com.big9.app.ui.base.temp
+
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.isIsCheck

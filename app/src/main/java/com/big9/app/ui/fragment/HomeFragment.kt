@@ -224,9 +224,10 @@ class HomeFragment : BaseFragment() {
         }
         is ResponseState.Success -> {
             loader?.dismiss()
-           it.data?.redirecturl?.let {
-               WebView(binding.root.context).set(it,"")
-
+           it.data?.data?.redirecturl?.let {redirecturl->
+               it.data?.data?.retData?.let {retData->
+                   WebView(binding.root.context).set(redirecturl,retData)
+               }
            }
             viewModel?.from_page_message?.value=null
 /*
@@ -1178,7 +1179,7 @@ class HomeFragment : BaseFragment() {
                 iconList3.clear()
                 iconList3.add(ListIcon(getString(R.string.prepaid), R.drawable.db_mobile,getString(R.string.mobile_slag)))
                 iconList3.add(ListIcon(getString(R.string.postpaid), R.drawable.db_mobile,getString(R.string.mobile_slag)))
-                iconList3.add(ListIcon(getString(R.string.dth_recharge), R.drawable.ic_dth_recharge,getString(R.string.dth_recharge)))
+                iconList3.add(ListIcon(getString(R.string.dth_recharge), R.drawable.ic_dth_recharge,getString(R.string.dth_recharge_slag)))
                 /*iconList3.add(ListIcon(getString(R.string.electric), R.drawable.electric))
                 iconList3.add(ListIcon("Fast Tag", R.drawable.icons8_fastag))
                 iconList3.add(ListIcon("Google Play", R.drawable.google_play))*/

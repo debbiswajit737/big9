@@ -84,7 +84,7 @@
             android:drawableStart="@drawable/baseline_notifications_24"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:text="This is a sample message. test aaaaa asfdsf fgfgfg fgfgf fgfg fgfg fgfg fgfg fgfg fgf fgfg fgf gf"
+            android:text="Dear Channel Partner, Beware of fraudulent calls and links to asking to share your deposit slip, OTP, MPIN, or Login Password. After AEPS Onboarding completed once, please wait minimum 6 banking hours for further process."
              />
         </androidx.cardview.widget.CardView>
 

@@ -26,6 +26,11 @@ import com.big9.app.utils.helpers.PermissionUtils
 import com.big9.app.utils.helpers.SharedPreff
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.PermissionsCallback
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
@@ -33,6 +38,15 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class SplashActivity : BaseActivity() {
+
+    private lateinit var appUpdateManager: AppUpdateManager
+
+    private val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            if (result.resultCode != RESULT_OK) {
+                // Handle update failure or user cancellation here
+            }
+        }
     lateinit var binding: ActivitySplashBinding
     @Inject
     lateinit var sharedPreff: SharedPreff
@@ -44,23 +58,35 @@ class SplashActivity : BaseActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         binding= DataBindingUtil.setContentView(this, R.layout.activity_splash)
+        checkForAppUpdate()
         notiPermission()
-        getFireBAseToken()
+
         init()
     }
 
-    private fun getFireBAseToken() {
+    private fun checkForAppUpdate() {
+        appUpdateManager = AppUpdateManagerFactory.create(this)
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // Token retrieval was successful
-                val token = task.result
-                sharedPreff.setfirebase_token(token)
-            } else {
-                /*// Token retrieval failed
-                Log.e(TAG, "Failed to retrieve FCM token: ${task.exception}")*/
+        // Returns an intent object that you use to check for an update.
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    activityResultLauncher,
+                    AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                )
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkForAppUpdate()
     }
 
     private fun notiPermission() {
@@ -214,5 +240,30 @@ class SplashActivity : BaseActivity() {
             }
         }
     }
+fun appupdate(){
+    val appUpdateManager = AppUpdateManagerFactory.create(this)
 
+// Returns an intent object that you use to check for an update.
+    val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+// Checks that the platform will allow the specified type of update.
+    appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+        if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+            // This example applies an immediate update. To apply a flexible update
+            // instead, pass in AppUpdateType.FLEXIBLE
+            && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+        ) {
+            appUpdateManager.startUpdateFlowForResult(
+                // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                appUpdateInfo,
+                // an activity result launcher registered via registerForActivityResult
+                activityResultLauncher,
+                // Or pass 'AppUpdateType.FLEXIBLE' to newBuilder() for
+                // flexible updates.
+                AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build())
+        }
+
+
+    }
+}
 }

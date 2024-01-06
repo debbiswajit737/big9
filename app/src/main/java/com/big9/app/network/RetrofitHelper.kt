@@ -57,7 +57,12 @@ object RetrofitHelper {
 
     fun Fragment.handleApiError(isNetworkError: Boolean, errorCode: Int?, errorMessage: String?, isShowPopup:Boolean=true) {
         context?.let {
-            handleError(it, isNetworkError, errorCode, errorMessage, isShowPopup)
+            var errorMessageData=errorMessage
+            if (errorMessage?.lowercase()?.contains("authentication")==true){
+                errorMessageData="Something went wrong try again later"
+            }
+
+            handleError(it, isNetworkError, errorCode, errorMessageData, isShowPopup)
         }
     }
 
