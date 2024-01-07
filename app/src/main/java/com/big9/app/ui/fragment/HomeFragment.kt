@@ -265,13 +265,14 @@ class HomeFragment : BaseFragment() {
 
                         },it.data?.stateList)
                         stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
-
+                        viewModel?.electricStatelistResponseLiveData?.value=null
                     }
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    viewModel?.electricStatelistResponseLiveData?.value=null
                 }
             }
         }

@@ -62,7 +62,9 @@ class MobileRechargeFragment : BaseFragment() {
 
     private fun onViewClick() {
         binding.apply {
-
+            rootView.setOnClickListener {
+                activity?.let { act -> rootView.hideSoftKeyBoard(act) }
+            }
             //imgBack.back()
             imgBack.setOnClickListener{
                 findNavController().navigate(R.id.action_mobileRechargeFragment_to_homeFragment2)
@@ -280,9 +282,12 @@ class MobileRechargeFragment : BaseFragment() {
             act.onBackPressedDispatcher.addCallback(act, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     activity?.let {act->
-                        startActivity(Intent(act,DashboardActivity::class.java).putExtra(Constants.isAfterReg,true))
+                        val intent = Intent(act, DashboardActivity::class.java).apply {
+                            putExtra(Constants.isAfterReg, true)
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        act.startActivity(intent)
                     }
-
                 }
             })
         }

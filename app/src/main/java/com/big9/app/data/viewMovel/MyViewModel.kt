@@ -558,6 +558,25 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         return isValid
     }
 
+    fun electricVerifyValidation(): Boolean {
+
+        invisibleErrorTexts()
+
+        var isValid = true
+        if (consumerId.value?.trim().isNullOrBlank()) {
+            consumerIdError.value = "Please enter a valid Customer Id fixed 11 digit"
+            consumerIdErrorVisible.value = true
+            isValid = false
+        } else {
+            consumerIdError.value = ""
+            consumerIdErrorVisible.value = false
+        }
+
+        return isValid
+    }
+
+
+
      /*   val loginResponseLiveData: LiveData<ResponseState<BaseResponse<Test>>>
         get() = repository.loginResponseLiveData
     fun login(requestBody: JsonObject) {
@@ -1925,7 +1944,7 @@ fun moneyTransfer(token: String, data: String) {
 
 
   //electricStatelist
-val electricStatelistResponseLiveData: LiveData<ResponseState<electricStatelistModel>>
+val electricStatelistResponseLiveData: MutableLiveData<ResponseState<electricStatelistModel>>
     get() = repository.electricStatelistResponseLiveData
 fun electricStatelist(token: String, data: String) {
     viewModelScope.launch {
@@ -1935,7 +1954,7 @@ fun electricStatelist(token: String, data: String) {
 
 
   //electricbillerlist
-val electricbillerlistResponseLiveData: LiveData<ResponseState<billerlistModel>>
+val electricbillerlistResponseLiveData: MutableLiveData<ResponseState<billerlistModel>>
     get() = repository.electricbillerlistResponseLiveData
 fun electricbillerlist(token: String, data: String) {
     viewModelScope.launch {
@@ -1945,7 +1964,7 @@ fun electricbillerlist(token: String, data: String) {
 
 
   //electricBillbillFetch
-val electricBillbillFetchResponseLiveData: LiveData<ResponseState<electricBillbillFetchModel>>
+val electricBillbillFetchResponseLiveData: MutableLiveData<ResponseState<electricBillbillFetchModel>>
     get() = repository.electricBillbillFetchResponseLiveData
 fun electricBillbillFetch(token: String, data: String) {
     viewModelScope.launch {

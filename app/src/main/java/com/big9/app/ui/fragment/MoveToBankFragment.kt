@@ -10,12 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.big9.app.R
 
 import com.big9.app.adapter.AccountDetailsAdapter
 import com.big9.app.data.model.AccountDetailsModel
 import com.big9.app.data.model.MoveToBankBankListData
+import com.big9.app.data.viewMovel.AuthViewModel
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentMoveToBankBinding
 import com.big9.app.network.ResponseState
@@ -35,6 +37,7 @@ import java.util.Objects
 class MoveToBankFragment : BaseFragment() {
     lateinit var binding: FragmentMoveToBankBinding
     private val viewModel: MyViewModel by activityViewModels()
+    var authViewModel: AuthViewModel?=null
     var accountDetailsList = ArrayList<AccountDetailsModel>()
     private var loader: Dialog? = null
     override fun onCreateView(
@@ -58,6 +61,14 @@ class MoveToBankFragment : BaseFragment() {
         binding.apply {
           imgBack.back()
             fabAddBank.setOnClickListener{
+                viewModel?.apply {
+                    beneficiary_bank_name?.value=""
+                    beneficiary_ifsc?.value=""
+                    beneficiary_acc?.value=""
+                    beneficiary_name?.value=""
+                }
+
+                authViewModel?.filePath?.value=null
                 findNavController().navigate(R.id.action_moveToBankFragment_to_addBankFragment)
             }
           }

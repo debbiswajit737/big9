@@ -1,6 +1,7 @@
 package com.big9.app.ui.base
 
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.ContentResolver
 import android.content.Context
@@ -20,6 +21,7 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebResourceRequest
@@ -626,39 +628,77 @@ open class BaseFragment: Fragment(){
             "0.00"
         }
     }
-    fun View.hideKeyboard( ) {
+//    fun View.hideKeyboard( ) {
+//
+//            val imm = this.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            imm.hideSoftInputFromWindow(windowToken, 0)
+//
+//
+//    }
 
-            val imm = this.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(windowToken, 0)
+
+//     fun View.setupUI() {
+//
+//        // Set up touch listener for non-text box views to hide keyboard.
+//        if (view !is EditText) {
+//            this.setOnTouchListener { v, event ->
+//                hideSoftKeyBoard(this)
+//                false
+//            }
+//        }
+//
+//        //If a layout container, iterate over children and seed recursion.
+//        if (this is ViewGroup) {
+//            for (i in 0 until this.childCount) {
+//                val innerView = this.getChildAt(i)
+//                innerView.setupUI()
+//            }
+//        }
+//    }
+
+    fun View.hideSoftKeyBoard(activity: Activity?){
+        //val imm = v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        //imm.hideSoftInputFromWindow(v.windowToken, 0)
+
+            hideKeyboardByClickingOutside(this,activity)
 
 
     }
 
-
-     fun View.setupUI() {
+    fun hideKeyboardByClickingOutside(view: View, activity: Activity?) {
+        //First time hide keyboard
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
         // Set up touch listener for non-text box views to hide keyboard.
         if (view !is EditText) {
-            this.setOnTouchListener { v, event ->
-                hideSoftKeyBoard(this)
+            view.setOnTouchListener { _, _ ->
+                hideSoftKeyboard(activity)
                 false
             }
         }
 
         //If a layout container, iterate over children and seed recursion.
-        if (this is ViewGroup) {
-            for (i in 0 until this.childCount) {
-                val innerView = this.getChildAt(i)
-                innerView.setupUI()
+        if (view is ViewGroup) {
+            for (i in 0 until view.childCount) {
+                val innerView: View = view.getChildAt(i)
+                hideKeyboardByClickingOutside(innerView, activity)
+            }
+        }
+    }
+    private fun hideSoftKeyboard(activity: Activity?) {
+        activity?.let {
+            val inputMethodManager: InputMethodManager = activity.getSystemService(
+                Activity.INPUT_METHOD_SERVICE
+            ) as InputMethodManager
+            if (inputMethodManager.isAcceptingText) {
+                inputMethodManager.hideSoftInputFromWindow(
+                    activity.currentFocus?.windowToken,
+                    0
+                )
             }
         }
     }
 
-    fun hideSoftKeyBoard(v:View){
-        val imm = v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(v.windowToken, 0)
-
-    }
 
 }
 

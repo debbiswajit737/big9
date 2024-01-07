@@ -98,12 +98,13 @@ class ElectricRechargeFragment : BaseFragment() {
                 is ResponseState.Success -> {
                     loader?.dismiss()
                     setRecycleView(it?.data?.billerData)
-
+                    viewModel?.electricbillerlistResponseLiveData?.value=null
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    viewModel?.electricbillerlistResponseLiveData?.value=null
                 }
             }
         }
@@ -124,8 +125,16 @@ class ElectricRechargeFragment : BaseFragment() {
 
             billerListAdapter = BillerListAdapter(billerList, object : CallBack2 {
                 override fun getValue2(s: String,opid: String) {
-                    viewModel?.billerAddress?.value = s
+                    viewModel?.apply {
+                        consumerId?.value=""
+
+                        consumerIdPrice?.value=""
+
+                        billerAddress?.value = s
+                    }
+
                     eOpid=opid
+
                     findNavController().navigate(R.id.action_electricRechargeFragment_to_utilityBillPaymentFragment)
                 }
 

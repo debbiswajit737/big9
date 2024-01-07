@@ -200,12 +200,12 @@
                     />
 
                     <TextView
-                        android:visibility="invisible"
+
                         android:id="@+id/tv_pay_month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_medium"
-                        android:text="Bill Paid For"
+                        android:text="Status"
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_8ssp"
                         app:layout_constraintStart_toStartOf="@+id/tv_payment_details_tag"
@@ -258,8 +258,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_medium"
-                        android:text="NOV 2023"
-                        android:visibility="invisible"
+                        android:text="Success"
+
                         android:textColor="@color/logo_color"
                         android:textSize="@dimen/_8ssp"
                         app:layout_constraintEnd_toEndOf="@+id/tv_price"

@@ -73,12 +73,10 @@ class BeneficiaryFragment : BaseFragment() {
     private fun onViewClick() {
 
         binding.apply {
-            rootView.setOnClickListener{
-                rootView.setupUI()
+            rootView.setOnClickListener {
+                activity?.let { act -> rootView.hideSoftKeyBoard(act) }
             }
-            rootView2.setOnClickListener{
-                rootView2.setupUI()
-            }
+
 
           imgBack.back()
             tvAddBeneficiary.setOnClickListener {

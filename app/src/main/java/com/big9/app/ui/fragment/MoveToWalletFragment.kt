@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -58,6 +59,9 @@ class MoveToWalletFragment : BaseFragment() {
     private fun onViewClick() {
 
         binding.apply {
+            rootView.setOnClickListener{
+                activity?.let {act-> rootView.hideSoftKeyBoard(act) }
+            }
             val collapseAnimation: Animation =
                 AnimationUtils.loadAnimation(requireActivity(), R.anim.collapse_animation)
           imgBack.back()

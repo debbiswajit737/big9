@@ -1,11 +1,14 @@
 package com.big9.app.ui.fragment
 
 
+import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -57,8 +60,9 @@ class MoneyTranspherFragment : BaseFragment() {
     private fun onViewClick() {
         binding.apply {
             rootView.setOnClickListener{
-                rootView.setupUI()
+                activity?.let {act-> rootView.hideSoftKeyBoard(act) }
             }
+
             imgBack.back()
 
             activity?.let {act->
@@ -70,7 +74,7 @@ class MoneyTranspherFragment : BaseFragment() {
                                     remiterUserData.apply {
                                         val bundle = Bundle()
 
-                                            bundle.putString("customerid", customerId)
+                                          bundle.putString("customerid", customerId)
                                             bundle.putString("customer_number", viewModel?.mobileSendMoney?.value)
                                             bundle.putString("customer_name", viewModel?.nameSendMoney?.value)
                                             findNavController().navigate(R.id.action_moneyTranspherFragment_to_otpNewRmnFragment,bundle)
@@ -259,5 +263,14 @@ class MoneyTranspherFragment : BaseFragment() {
 
     }
 
+    private fun hideSoftKeyboard() {
+        val inputMethodManager = binding.root.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        binding.apply {
+            root.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            etMob?.let { focusedView ->
+                inputMethodManager.hideSoftInputFromWindow(focusedView.windowToken, 0)
+            }
+        }
+    }
 
 }

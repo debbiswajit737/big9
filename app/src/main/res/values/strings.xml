@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Big9</string>
 
+    <string name="something_went_wrong_please_try_again_later">Something went wrong. Please try again later.</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="recharge_bill_payment"><![CDATA[Recharge & Bill Payment]]></string>
     <string name="ok">Ok</string>
@@ -285,4 +286,5 @@
     <string name="current_amount_a">Current amount</string>
     <string name="msg_token_fmt" />
     <string name="channel_id" >big9</string>
+    <string name="banks_list">Bank List</string>
 </resources>

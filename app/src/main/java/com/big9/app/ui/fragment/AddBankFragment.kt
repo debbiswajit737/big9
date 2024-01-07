@@ -74,7 +74,9 @@ class AddBankFragment : BaseFragment() {
         binding.apply {
 
             imgBack.back()
-
+            cRootView.setOnClickListener {
+                activity?.let { act -> cRootView.hideSoftKeyBoard(act) }
+            }
 
 
             etAmt.oem(btnSubmit)

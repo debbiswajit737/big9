@@ -15,6 +15,7 @@ import com.big9.app.databinding.ActivityDashboardBinding
 import com.big9.app.ui.base.BaseActivity
 import com.big9.app.ui.popup.ErrorPopUp
 import com.big9.app.ui.popup.LoadingPopup
+import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.isAfterReg
 import com.big9.app.utils.helpers.Constants.isRecept
 import com.big9.app.utils.helpers.RequestBodyHelper
@@ -62,6 +63,7 @@ class DashboardActivity : BaseActivity() {
             }
             if (isAfterRegVal) {
                 navController?.navigate(R.id.homeFragment2)
+                return
             }}
 
         init()
@@ -137,7 +139,10 @@ class DashboardActivity : BaseActivity() {
 
     fun navigate() {
         //navController?.navigate(R.id.homeFragment2)
-        navController?.popBackStack(R.id.homeFragment2,false)
+        //navController?.popBackStack(R.id.homeFragment2,false)
+
+            startActivity(Intent(this, DashboardActivity::class.java).putExtra(Constants.isAfterReg,true))
+
     }
 
     fun shareImage(screenshotBitmap: Bitmap) {

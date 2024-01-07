@@ -1936,7 +1936,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     //electricStatelist
     private val _electricStatelistResponseLiveData =
         MutableLiveData<ResponseState<electricStatelistModel>>()
-    val electricStatelistResponseLiveData: LiveData<ResponseState<electricStatelistModel>>
+    val electricStatelistResponseLiveData: MutableLiveData<ResponseState<electricStatelistModel>>
         get() = _electricStatelistResponseLiveData
 
 
@@ -1959,7 +1959,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     //electricbillerlist
     private val _electricbillerlistResponseLiveData =
         MutableLiveData<ResponseState<billerlistModel>>()
-    val electricbillerlistResponseLiveData: LiveData<ResponseState<billerlistModel>>
+    val electricbillerlistResponseLiveData: MutableLiveData<ResponseState<billerlistModel>>
         get() = _electricbillerlistResponseLiveData
 
 
@@ -1982,7 +1982,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     //electricBillbillFetch
     private val _electricBillbillFetchResponseLiveData =
         MutableLiveData<ResponseState<electricBillbillFetchModel>>()
-    val electricBillbillFetchResponseLiveData: LiveData<ResponseState<electricBillbillFetchModel>>
+    val electricBillbillFetchResponseLiveData: MutableLiveData<ResponseState<electricBillbillFetchModel>>
         get() = _electricBillbillFetchResponseLiveData
 
 

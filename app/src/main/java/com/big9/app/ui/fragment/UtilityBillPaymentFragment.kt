@@ -58,37 +58,47 @@ class UtilityBillPaymentFragment : BaseFragment() {
 
     private fun onViewClick() {
         binding.apply {
+            llRootView.setOnClickListener {
+                activity?.let { act -> llRootView.hideSoftKeyBoard(act) }
+            }
+            rootView.setOnClickListener {
+                activity?.let { act -> rootView.hideSoftKeyBoard(act) }
+            }
 
             imgBack.back()
 
             btnFetchAmt.setOnClickListener {
-                activity?.let { act ->
-                    val (isLogin, loginResponse) = sharedPreff.getLoginData()
-                    loginResponse?.let { loginData ->
-                        loginData.userid?.let {
-                            val data = mapOf(
-                                "userid" to loginData.userid,
-                                "custid" to viewModel?.consumerId?.value.toString(),
-                                "opid" to Constants.eOpid
-                            )
-                            val gson = Gson()
-                            var jsonString = gson.toJson(data)
-                            loginData.AuthToken?.let {
-                                viewModel?.electricBillbillFetch(it, jsonString.encrypt())
+                if (viewModel?.electricVerifyValidation() == true) {
+                    activity?.let { act ->
+                        val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                        loginResponse?.let { loginData ->
+                            loginData.userid?.let {
+                                val data = mapOf(
+                                    "userid" to loginData.userid,
+                                    "custid" to viewModel?.consumerId?.value.toString(),
+                                    "opid" to Constants.eOpid
+                                )
+                                val gson = Gson()
+                                var jsonString = gson.toJson(data)
+                                loginData.AuthToken?.let {
+                                    viewModel?.electricBillbillFetch(it, jsonString.encrypt())
+                                }
                             }
                         }
+                        //findNavController().navigate(R.id.action_utilityBillPaymentFragment_to_electricPriceListFragment)
+                        /*val electricPriceListDialog = ElectricPriceListFragment(object : CallBack {
+                            override fun getValue(s: String) {
+                                viewModel?.consumerIdPrice?.value=s
+
+                            }
+
+                        })
+                        electricPriceListDialog.show(act.supportFragmentManager, electricPriceListDialog.tag)
+    */
                     }
-                    //findNavController().navigate(R.id.action_utilityBillPaymentFragment_to_electricPriceListFragment)
-                    /*val electricPriceListDialog = ElectricPriceListFragment(object : CallBack {
-                        override fun getValue(s: String) {
-                            viewModel?.consumerIdPrice?.value=s
 
-                        }
-
-                    })
-                    electricPriceListDialog.show(act.supportFragmentManager, electricPriceListDialog.tag)
-*/
                 }
+
 
             }
 
@@ -165,7 +175,11 @@ class UtilityBillPaymentFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
-                    viewModel.consumerIdPrice.value = it?.data?.amt.toString()
+
+                    it?.data?.amt?.let {amt->
+                        viewModel.consumerIdPrice.value = amt
+                    }
+
                     viewModel.popup_message.value = "${it?.data?.message}"
                     val successPopupFragment = SuccessPopupFragment(object :
                         CallBack4 {
@@ -180,11 +194,13 @@ class UtilityBillPaymentFragment : BaseFragment() {
 
                     })
                     successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
+                    viewModel.electricBillbillFetchResponseLiveData?.value=null
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    viewModel.electricBillbillFetchResponseLiveData?.value=null
                 }
             }
         }
@@ -198,7 +214,7 @@ class UtilityBillPaymentFragment : BaseFragment() {
                 is ResponseState.Success -> {
                     loader?.dismiss()
                     var eTransDAta=it.data?.data
-                    viewModel.popup_message.value = "${it?.data?.status}"
+                    viewModel.popup_message.value = "${it?.data?.message}"
                     val successPopupFragment = SuccessPopupFragment(object :
                         CallBack4 {
                         override fun getValue4(

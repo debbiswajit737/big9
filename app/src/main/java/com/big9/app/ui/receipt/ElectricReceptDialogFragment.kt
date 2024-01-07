@@ -1,18 +1,21 @@
 package com.big9.app.ui.receipt
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import billpaytransactionData
 import com.big9.app.R
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentElectricReceptDialogBinding
 import com.big9.app.ui.activity.DashboardActivity
 import com.big9.app.ui.base.BaseCenterSheetFragment
+import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.`interface`.CallBack
 
 
@@ -39,8 +42,22 @@ class ElectricReceptDialogFragment(val callBack: CallBack,val eTransDAta: billpa
 
     private fun onViewClick() {
         binding.apply {
-            imgBack.back()
-            imgHome.backToHome()
+            //imgBack.back()
+           // imgHome.backToHome()
+            imgBack.setOnClickListener{
+                imgHome.performClick()
+            }
+            imgHome.setOnClickListener {
+                activity?.let {act->
+
+                    val intent = Intent(act, DashboardActivity::class.java).apply {
+                        putExtra(Constants.isAfterReg, true)
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    startActivity(intent)
+
+                }
+            }
             fabShare.setOnClickListener{
                 shareImage()
             }
@@ -71,7 +88,13 @@ class ElectricReceptDialogFragment(val callBack: CallBack,val eTransDAta: billpa
                 textView30.text="${it.txnAmount}"
                 tvTransactionId.text="${it.txnID}"
                 tvInvoiceValue.text="${it.integratorid}"
-
+                tvBillPaidNonth.text="${it.txnstatue}"
+                if ((it.txnstatue?.lowercase()=="success")==true){
+                    imgWriteTick.setImageResource(R.drawable.right_tick)
+                }
+                else{
+                    imgWriteTick.setImageResource(R.drawable.close_icon)
+                }
 
             }
             /*

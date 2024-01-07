@@ -151,10 +151,14 @@
     <fragment
         android:id="@+id/electricRechargeFragment"
         android:name="com.big9.app.ui.fragment.ElectricRechargeFragment"
-        android:label="ElectricRechargeFragment" >
+        android:label="ElectricRechargeFragment"
+
+        >
         <action
             android:id="@+id/action_electricRechargeFragment_to_utilityBillPaymentFragment"
-            app:destination="@id/utilityBillPaymentFragment" />
+            app:destination="@id/utilityBillPaymentFragment"
+            app:popUpTo="@id/electricRechargeFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/utilityBillPaymentFragment"
@@ -163,6 +167,7 @@
         <action
             android:id="@+id/action_utilityBillPaymentFragment_to_electricPriceListFragment"
             app:destination="@id/electricPriceListFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/electricPriceListFragment"

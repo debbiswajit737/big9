@@ -3,6 +3,7 @@ package com.big9.app.network
 import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
+import com.big9.app.R
 import com.big9.app.ui.popup.ErrorPopUp
 import com.big9.app.utils.common.MethodClass.appUpdate
 import com.big9.app.utils.common.MethodClass.userLogout
@@ -59,7 +60,7 @@ object RetrofitHelper {
         context?.let {
             var errorMessageData=errorMessage
             if (errorMessage?.lowercase()?.contains("authentication")==true){
-                errorMessageData="Something went wrong try again later"
+                errorMessageData=getString(R.string.something_went_wrong_please_try_again_later)
             }
 
             handleError(it, isNetworkError, errorCode, errorMessageData, isShowPopup)

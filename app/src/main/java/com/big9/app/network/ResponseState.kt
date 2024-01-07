@@ -26,7 +26,7 @@ sealed class ResponseState<T>(
             return when(throwable){
                 is HttpException -> {
                     Log.d(TAG, "GenericApiResponse: Error: ${throwable.code()}: ${throwable.message()}")
-                    Error(false, "Something went wrong try again later", throwable.code())
+                    Error(false, "Something went wrong. Please try again later.", throwable.code())
                     //Error(false, throwable.message(), throwable.code())
                 }
                 is IOException -> {
@@ -38,7 +38,7 @@ sealed class ResponseState<T>(
                     //other exceptions
                     Log.d(TAG, "GenericApiResponse: other Error")
                     //Error(false, throwable.message, null)
-                    Error(false, "Something went wrong try again later", null)
+                    Error(false, "Something went wrong. Please try again later.", null)
                 }
             }
         }

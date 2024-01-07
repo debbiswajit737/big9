@@ -51,6 +51,7 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/rootView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/_10sdp"
@@ -105,6 +106,7 @@
                     app:cardCornerRadius="@dimen/_12sdp">
 
                     <LinearLayout
+                        android:id="@+id/ll_rootView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/white"

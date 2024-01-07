@@ -44,272 +44,270 @@
 
         </LinearLayout>
 
-        <androidx.core.widget.NestedScrollView
+       <!-- <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:shadowRadius="@dimen/_8sdp"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+            tools:context=".ui.activity.DashBoardActivity"
+            tools:layout_editor_absoluteX="13dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/_10sdp"
-                android:shadowRadius="@dimen/_8sdp"
-                tools:context=".ui.activity.DashBoardActivity">
+                app:cardCornerRadius="@dimen/_12sdp">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView2"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:cardCornerRadius="@dimen/_12sdp">
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10sdp">
 
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/white"
-                        android:orientation="vertical"
-                        android:padding="@dimen/_10sdp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_bold"
-                            android:gravity="center"
-                            android:text="DTH Recharge"
-                            android:textColor="@color/logo_color"
-                            android:textSize="@dimen/_14ssp" />
-
-
-
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/edit_text_title_margin_top"
-                            android:fontFamily="@font/montserrat_medium_500"
-                            android:text="@string/subscriber_id"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size" />
-
-                        <EditText
-                            android:id="@+id/et_institutetype"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/edit_text_height"
-                            android:layout_marginTop="@dimen/edit_text_margin_top"
-                            android:background="@drawable/field_bg"
-                            android:hint="@string/subscriber_id"
-                            android:text="@={viewModel.subId}"
-                            app:requestFocus="@{viewModel.subIdErrorVisible}"
-                            android:inputType="number"
-                            android:longClickable="false"
-                            android:maxLength="10"
-                            android:padding="@dimen/_5sdp"
-                            android:drawablePadding="@dimen/_5sdp"
-                            android:drawableStart="@drawable/sub_id_icon"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/gray"
-                            android:textSize="@dimen/edit_text_size" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat_regular_400"
-                            android:textColor="@color/pink2"
-                            android:textSize="@dimen/_9ssp"
-                            android:text="@{viewModel.subIdError}"
-                            app:hideErrorTextView="@{viewModel.subIdErrorVisible}"
-                            />
-                        <!--mobile End-->
-
-
-
-
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/edit_text_title_margin_top"
-                            android:fontFamily="@font/montserrat_medium_500"
-                            android:text="@string/select_operator"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size" />
-
-                        <RelativeLayout
-                            android:id="@+id/rl_operator"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginTop="@dimen/edit_text_margin_top"
-                            android:background="@drawable/field_bg"
-
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/et_operator"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginStart="@dimen/_5sdp"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:layout_marginEnd="@dimen/_5sdp"
-                                android:drawableStart="@drawable/operator_select"
-                                android:text="@{viewModel.dthOperator}"
-                                android:layout_marginBottom="@dimen/_5sdp"
-                                android:background="@null"
-                                android:drawableTint="@color/logo_color"
-                                android:drawablePadding="@dimen/_5sdp"
-                                android:hint="@string/select_operator"
-                                android:inputType="numberDecimal"
-                                android:longClickable="false"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/gray"
-                                android:textSize="@dimen/edit_text_size" />
-
-                            <TextView
-                                android:id="@+id/btn_customer_info"
-                                android:layout_width="wrap_content"
-
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:layout_gravity="end"
-                                android:layout_marginEnd="@dimen/_5sdp"
-                                android:background="@drawable/btn_bg"
-                                android:paddingHorizontal="@dimen/_5sdp"
-                                android:paddingVertical="@dimen/_2sdp"
-                                android:text="@string/customer_info" />
-                        </RelativeLayout>
-
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat_regular_400"
-                            android:text="@{viewModel.dthError}"
-                            app:hideErrorTextView="@{viewModel.dthErrorErrorVisible}"
-                            android:textColor="@color/pink2"
-                            android:textSize="@dimen/_9ssp"
-
-                            />
-                        <!--mobile End-->
-
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/edit_text_title_margin_top"
-                            android:fontFamily="@font/montserrat_medium_500"
-                            android:text="@string/enter_amount"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size" />
-
-                        <EditText
-                            android:id="@+id/et_amt"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/edit_text_height"
-                            android:layout_marginTop="@dimen/edit_text_margin_top"
-                            android:background="@drawable/field_bg"
-                            android:hint="@string/enter_amount"
-                            android:text="@={viewModel.dthAmt}"
-                            app:requestFocus="@{viewModel.dthAmtErrorVisible}"
-                            android:inputType="numberDecimal"
-                            android:longClickable="false"
-                            android:maxLength="10"
-                            android:padding="@dimen/_5sdp"
-                            android:drawablePadding="@dimen/_5sdp"
-                            android:drawableStart="@drawable/sub_id_icon"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/gray"
-                            android:textSize="@dimen/edit_text_size" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat_regular_400"
-                            android:textColor="@color/pink2"
-                            android:textSize="@dimen/_9ssp"
-                            android:text="@{viewModel.dthAmtError}"
-                            app:hideErrorTextView="@{viewModel.dthAmtErrorVisible}"
-                            />
-                    </LinearLayout>
-
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/card_userDetails"
-                    android:layout_width="0dp"
-                    android:visibility="gone"
-                    app:cardPreventCornerOverlap="false"
-                    app:cardUseCompatPadding="true"
-                    app:cardCornerRadius="@dimen/_12sdp"
-                    android:elevation="@dimen/_12sdp"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView2">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:visibility="visible"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_gradian"
+                        android:fontFamily="@font/poppins_bold"
+                        android:gravity="center"
+                        android:text="DTH Recharge"
+                        android:textColor="@color/logo_color"
+                        android:textSize="@dimen/_14ssp" />
 
-                        android:orientation="vertical">
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/logo_second_color"
-                            android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/edit_text_title_margin_top"
+                        android:fontFamily="@font/montserrat_medium_500"
+                        android:text="@string/subscriber_id"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:layout_gravity="center_horizontal"
-                                android:fontFamily="@font/open_sans_medium"
-                                android:gravity="center_horizontal"
-                                android:padding="@dimen/_5sdp"
-                                android:text="Subscriber info"
-                                android:textColor="@color/white"
+                    <EditText
+                        android:id="@+id/et_institutetype"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/edit_text_height"
+                        android:layout_marginTop="@dimen/edit_text_margin_top"
+                        android:background="@drawable/field_bg"
+                        android:drawableStart="@drawable/sub_id_icon"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:hint="@string/subscriber_id"
+                        android:inputType="number"
+                        android:longClickable="false"
+                        android:maxLength="10"
+                        android:padding="@dimen/_5sdp"
+                        android:text="@={viewModel.subId}"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/gray"
+                        android:textSize="@dimen/edit_text_size"
+                        app:requestFocus="@{viewModel.subIdErrorVisible}" />
 
-                                android:textSize="@dimen/_10ssp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_regular_400"
+                        android:text="@{viewModel.subIdError}"
+                        android:textColor="@color/pink2"
+                        android:textSize="@dimen/_9ssp"
+                        app:hideErrorTextView="@{viewModel.subIdErrorVisible}" />
+                    <!--mobile End-->
 
-                            <ImageView
-                                android:id="@+id/img_close"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:src="@android:drawable/ic_menu_close_clear_cancel"
-                                app:tint="@color/logo_color" />
-                        </RelativeLayout>
-                        <LinearLayout
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/edit_text_title_margin_top"
+                        android:fontFamily="@font/montserrat_medium_500"
+                        android:text="@string/select_operator"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size" />
+
+                    <RelativeLayout
+                        android:id="@+id/rl_operator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="@dimen/edit_text_margin_top"
+                        android:background="@drawable/field_bg"
+
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/et_operator"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <TextView
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:background="@null"
+                            android:drawableStart="@drawable/operator_select"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:drawableTint="@color/logo_color"
+                            android:hint="@string/select_operator"
+                            android:inputType="numberDecimal"
+                            android:longClickable="false"
+                            android:text="@{viewModel.dthOperator}"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/gray"
+                            android:textSize="@dimen/edit_text_size" />
 
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/_10sdp"
-                                android:fontFamily="@font/montserrat_medium_500"
-                                android:text="@{viewModel.userName}"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_16ssp"
-                                tools:text="Test User" />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@{`(`+viewModel.type+`)`}"
-                                tools:text="(active)"
-                                android:textColor="@color/logo_second_color"/>
-                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/btn_customer_info"
+                            android:layout_width="wrap_content"
 
-                        <!--<RelativeLayout
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:background="@drawable/btn_bg"
+                            android:paddingHorizontal="@dimen/_5sdp"
+                            android:paddingVertical="@dimen/_2sdp"
+                            android:text="@string/customer_info" />
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_regular_400"
+                        android:text="@{viewModel.dthError}"
+                        android:textColor="@color/pink2"
+                        android:textSize="@dimen/_9ssp"
+                        app:hideErrorTextView="@{viewModel.dthErrorErrorVisible}"
+
+                        />
+                    <!--mobile End-->
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/edit_text_title_margin_top"
+                        android:fontFamily="@font/montserrat_medium_500"
+                        android:text="@string/enter_amount"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size" />
+
+                    <EditText
+                        android:id="@+id/et_amt"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/edit_text_height"
+                        android:layout_marginTop="@dimen/edit_text_margin_top"
+                        android:background="@drawable/field_bg"
+                        android:drawableStart="@drawable/sub_id_icon"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:hint="@string/enter_amount"
+                        android:inputType="numberDecimal"
+                        android:longClickable="false"
+                        android:maxLength="10"
+                        android:padding="@dimen/_5sdp"
+                        android:text="@={viewModel.dthAmt}"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/gray"
+                        android:textSize="@dimen/edit_text_size"
+                        app:requestFocus="@{viewModel.dthAmtErrorVisible}" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_regular_400"
+                        android:text="@{viewModel.dthAmtError}"
+                        android:textColor="@color/pink2"
+                        android:textSize="@dimen/_9ssp"
+                        app:hideErrorTextView="@{viewModel.dthAmtErrorVisible}" />
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_userDetails"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:elevation="@dimen/_12sdp"
+                android:visibility="gone"
+                app:cardCornerRadius="@dimen/_12sdp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView2">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_gradian"
+                    android:orientation="vertical"
+
+                    android:visibility="visible">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/logo_second_color"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center_horizontal"
+                            android:fontFamily="@font/open_sans_medium"
+                            android:gravity="center_horizontal"
+                            android:padding="@dimen/_5sdp"
+                            android:text="Subscriber info"
+                            android:textColor="@color/white"
+
+                            android:textSize="@dimen/_10ssp" />
+
+                        <ImageView
+                            android:id="@+id/img_close"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:src="@android:drawable/ic_menu_close_clear_cancel"
+                            app:tint="@color/logo_color" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_10sdp"
+                            android:fontFamily="@font/montserrat_medium_500"
+                            android:text="@{viewModel.userName}"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_16ssp"
+                            tools:text="Test User" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{`(`+viewModel.type+`)`}"
+                            android:textColor="@color/logo_second_color"
+                            tools:text="(active)" />
+                    </LinearLayout>
+
+                    <!--<RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
@@ -343,135 +341,140 @@
 -->
 
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:orientation="horizontal">
+
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_20sdp"
-                            android:orientation="horizontal">
-                            <LinearLayout
-                                android:layout_width="0dp"
+                            android:layout_weight=".1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight=".1"
-                                android:orientation="vertical">
-                                <TextView
-                                    android:layout_gravity="center_horizontal"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_14ssp"
-                                    tools:text="₹1000"
-                                    android:fontFamily="@font/open_sans_medium"
-                                    android:text="@{`₹`+viewModel.balence}"/>
-                                <TextView
-                                    android:layout_gravity="center_horizontal"
-                                    android:textColor="@color/logo_second_color"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="(balance)"/>
-                            </LinearLayout>
+                                android:layout_gravity="center_horizontal"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:text="@{`₹`+viewModel.balence}"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_14ssp"
+                                tools:text="₹1000" />
 
-                            <LinearLayout
-                                android:layout_width="0dp"
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight=".1"
-                                android:orientation="vertical"
-                                android:paddingBottom="@dimen/_2sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:fontFamily="@font/open_sans_medium"
-                                    android:text="@{`₹`+viewModel.nextRecharge}"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_14ssp"
-                                    tools:text="23-08-2023" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:text="(next recharge)"
-                                    android:textColor="@color/logo_second_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight=".1"
-                                android:orientation="vertical"
-                                android:paddingBottom="@dimen/_2sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:fontFamily="@font/open_sans_medium"
-                                    android:text="@{`₹`+viewModel.monthly}"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_14ssp"
-                                    tools:text="₹789" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:text="(monthly)"
-                                    android:textColor="@color/logo_second_color" />
-                            </LinearLayout>
-
-
+                                android:layout_gravity="center_horizontal"
+                                android:text="(balance)"
+                                android:textColor="@color/logo_second_color" />
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".1"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/_2sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:text="@{`₹`+viewModel.nextRecharge}"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_14ssp"
+                                tools:text="23-08-2023" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="(next recharge)"
+                                android:textColor="@color/logo_second_color" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".1"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/_2sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:fontFamily="@font/open_sans_medium"
+                                android:text="@{`₹`+viewModel.monthly}"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_14ssp"
+                                tools:text="₹789" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="(monthly)"
+                                android:textColor="@color/logo_second_color" />
+                        </LinearLayout>
+
+
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
 
-                <Button
-                    android:id="@+id/btn_submit"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/btn_height"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="end"
+            <Button
+                android:id="@+id/btn_submit"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/btn_height"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="end"
 
-                    android:layout_marginVertical="@dimen/_10sdp"
-                    android:background="@drawable/btn_bg"
-                    android:padding="@dimen/_5sdp"
+                android:layout_marginVertical="@dimen/_10sdp"
+                android:background="@drawable/btn_bg"
+                android:padding="@dimen/_5sdp"
 
-                    android:text="@string/proceed"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/cardView2"
-                    app:layout_constraintTop_toBottomOf="@+id/card_userDetails" />
-                <LinearLayout
-                    android:id="@+id/ll_submit_loader"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/btn_height"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="end"
-                    android:layout_marginVertical="@dimen/_10sdp"
-                    android:background="@drawable/btn_bg"
-                    android:padding="@dimen/_5sdp"
-                    android:visibility="gone"
-                    android:text="@string/proceed"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/cardView2"
-                    app:layout_constraintTop_toBottomOf="@+id/card_userDetails"
-                    android:orientation="vertical" >
-                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:text="@string/proceed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/cardView2"
+                app:layout_constraintTop_toBottomOf="@+id/card_userDetails" />
+
+            <LinearLayout
+                android:id="@+id/ll_submit_loader"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/btn_height"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="end"
+                android:layout_marginVertical="@dimen/_10sdp"
+                android:background="@drawable/btn_bg"
+                android:orientation="vertical"
+                android:padding="@dimen/_5sdp"
+                android:text="@string/proceed"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/cardView2"
+                app:layout_constraintTop_toBottomOf="@+id/card_userDetails">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:indeterminate="true"
+                    android:padding="@dimen/_2sdp"
                     app:indicatorColor="@color/white"
                     app:indicatorSize="@dimen/_15sdp"
-                    android:padding="@dimen/_2sdp"
-                    android:layout_gravity="center"
 
                     app:trackColor="@color/gray"
                     app:trackThickness="@dimen/_2sdp" />
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+       <!-- </androidx.core.widget.NestedScrollView>-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

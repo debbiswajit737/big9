@@ -47,7 +47,9 @@ class EpotlyFragment : BaseFragment() {
 
     private fun onViewClick() {
         binding.apply {
-
+            rootView.setOnClickListener {
+                activity?.let { act -> rootView.hideSoftKeyBoard(act) }
+            }
             imgBack.back()
             btnSubmit.setOnClickListener{
                 activity?.let {act->

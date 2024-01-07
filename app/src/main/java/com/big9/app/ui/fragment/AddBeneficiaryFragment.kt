@@ -72,23 +72,11 @@ class AddBeneficiaryFragment : BaseFragment() {
 
             imgBack.back()
             rootView.setOnClickListener{
-                rootView.setupUI()
+                activity?.let {act-> rootView.hideSoftKeyBoard(act) }
             }
-            cardView2.setOnClickListener{
-                cardView2.setupUI()
+            rootView3.setOnClickListener{
+                activity?.let {act-> rootView.hideSoftKeyBoard(act) }
             }
-
-
-
-            // Assuming your parent layout is a RelativeLayout with id "parentLayout"
-            val parentLayout = binding.rootView
-
-            parentLayout.setOnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus) {
-                    parentLayout.hideKeyboard()
-                }
-            }
-
 
             //binding.rootView.hideKeyboard()
 // Set up touch listener for root layout
