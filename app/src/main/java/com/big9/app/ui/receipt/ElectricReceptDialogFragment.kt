@@ -42,10 +42,13 @@ class ElectricReceptDialogFragment(val callBack: CallBack,val eTransDAta: billpa
 
     private fun onViewClick() {
         binding.apply {
+            imgBack.setOnClickListener {
+               dismiss()
+            }
             //imgBack.back()
            // imgHome.backToHome()
             imgBack.setOnClickListener{
-                imgHome.performClick()
+              //  imgHome.performClick()
             }
             imgHome.setOnClickListener {
                 activity?.let {act->
@@ -114,6 +117,12 @@ class ElectricReceptDialogFragment(val callBack: CallBack,val eTransDAta: billpa
 
     fun setObserver() {
         binding.apply {
+            if ((eTransDAta?.txnstatue?.lowercase()=="success")==true){
+                binding.imgWriteTick.setImageResource(R.drawable.right_tick)
+            }
+            else{
+                binding.imgWriteTick.setImageResource(R.drawable.close_icon)
+            }
             viewModel?.selectrdOperator?.observe(viewLifecycleOwner){operatorImage->
                 if (operatorImage!=null){
                    try {

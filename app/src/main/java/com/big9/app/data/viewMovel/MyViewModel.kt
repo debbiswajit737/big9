@@ -1875,7 +1875,7 @@ fun cashCollection(token: String, data: String, insuranceOrCashCollection: Strin
 
 
     //insurance
-val insuranceResponseLiveData: LiveData<ResponseState<InsuranceModel>>
+val insuranceResponseLiveData: MutableLiveData<ResponseState<InsuranceModel>>
     get() = repository.insuranceResponseLiveData
 fun insurance(token: String, data: String, insuranceOrCashCollection: String) {
     viewModelScope.launch {

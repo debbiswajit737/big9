@@ -52,7 +52,11 @@ class KycDetailsFragment : BaseFragment() {
     }
 
     private fun onViewClick() {
+        binding.rootView.setOnClickListener {
+            activity?.let { act -> binding.rootView.hideSoftKeyBoard(act) }
+        }
         binding.btnSaveContinue.setOnClickListener {
+
             if (authViewModel.kycValidation()) {
                 authViewModel.apply {
                     /*val regModel = KycDetails(

@@ -64,7 +64,9 @@ class DTHRechargeFragment : BaseFragment() {
         binding.apply {
 
             imgBack.back()
-
+            rootView.setOnClickListener {
+                activity?.let { act -> rootView.hideSoftKeyBoard(act) }
+            }
             btnCustomerInfo.setOnClickListener{
                 activity?.let {
                     loader = MethodClass.custom_loader(it, getString(R.string.please_wait))

@@ -99,7 +99,8 @@
                         android:layout_height="@dimen/_20sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/right_tick"
+
+                        android:src="@drawable/default_1"
                         app:layout_constraintBottom_toBottomOf="@+id/textView24"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/textView24" />

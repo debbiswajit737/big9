@@ -103,6 +103,9 @@ class DocuploadFragment : BaseFragment() {
     private fun onViewClick() {
         activity?.let {act->
             binding.apply {
+                rootView.setOnClickListener {
+                    activity?.let { act -> rootView.hideSoftKeyBoard(act) }
+                }
                 llVideoKyc.setOnClickListener{
                     isGallary=false
                     isVideo=true

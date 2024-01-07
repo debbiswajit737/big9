@@ -99,6 +99,9 @@ class RegFragment : BaseFragment() {
 
     private fun onViewClick() {
         binding.apply {
+            rootView.setOnClickListener {
+                activity?.let { act -> rootView.hideSoftKeyBoard(act) }
+            }
             spinnerGender.apply {
                 val genderArray = arrayOf("Male", "Female")
                 adapter = ArrayAdapter<String>(this.context, R.layout.custom_spinner_item, genderArray)

@@ -55,6 +55,9 @@ class BankDetailsFragment : BaseFragment() {
     }
 
     private fun onViewClick() {
+        binding.rootView.setOnClickListener {
+            activity?.let { act -> binding.rootView.hideSoftKeyBoard(act) }
+        }
         binding.btnSaveContinue.setOnClickListener {
             if (authViewModel.bankDetailsValidation()) {
                 /*val bankDetails = BankDetails(

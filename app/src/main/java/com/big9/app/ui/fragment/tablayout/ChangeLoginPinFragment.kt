@@ -56,6 +56,9 @@ class ChangeLoginPinFragment : BaseFragment() {
     private fun onViewClick() {
 
         binding.apply {
+            rootView.setOnClickListener {
+                activity?.let { act -> rootView.hideSoftKeyBoard(act) }
+            }
             btnSubmit.setOnClickListener{
                 if (viewModel?.changeLoginPinValidation() == true){
                     changePassword()

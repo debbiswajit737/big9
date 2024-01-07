@@ -1769,7 +1769,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     //insurance
     private val _insuranceResponseLiveData =
         MutableLiveData<ResponseState<InsuranceModel>>()
-    val insuranceResponseLiveData: LiveData<ResponseState<InsuranceModel>>
+    val insuranceResponseLiveData: MutableLiveData<ResponseState<InsuranceModel>>
         get() = _insuranceResponseLiveData
 
     suspend fun insurance(

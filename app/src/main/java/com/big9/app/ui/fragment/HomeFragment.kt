@@ -200,7 +200,7 @@ class HomeFragment : BaseFragment() {
         is ResponseState.Success -> {
             loader?.dismiss()
            it.data?.redirecturl?.let {
-               WebView(binding.root.context).set(it,"")
+               WebView(binding.root.context).set(it)
 
            }
             viewModel?.from_page_message?.value=null
@@ -226,7 +226,15 @@ class HomeFragment : BaseFragment() {
             loader?.dismiss()
            it.data?.data?.redirecturl?.let {redirecturl->
                it.data?.data?.retData?.let {retData->
-                   WebView(binding.root.context).set(redirecturl,retData)
+                   //WebView(binding.root.context).set(redirecturl,retData)
+                   WebView(binding.root.context).set(
+                       redirecturl,
+                       retData
+                   )
+                   /*WebView(binding.root.context).set(
+                       "https://www.gibl.in/wallet/validate2/",
+                       "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
+                   )*/
                }
            }
             viewModel?.from_page_message?.value=null
@@ -234,11 +242,13 @@ class HomeFragment : BaseFragment() {
  "https://www.gibl.in/wallet/validate2/",
                    "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
  */
+            viewModel?.insuranceResponseLiveData?.value=null
         }
         is ResponseState.Error -> {
             loader?.dismiss()
             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
             viewModel?.from_page_message?.value=null
+            viewModel?.insuranceResponseLiveData?.value=null
         }
     }
 }

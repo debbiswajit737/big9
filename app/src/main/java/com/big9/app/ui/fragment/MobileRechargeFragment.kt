@@ -173,6 +173,9 @@ class MobileRechargeFragment : BaseFragment() {
             activity?.let {
                 loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
             }
+            rootView.setOnClickListener {
+                activity?.let { act -> rootView.hideSoftKeyBoard(act) }
+            }
             etAmt.setupAmount()
             if (viewModel?.prepaitOrPostPaid?.value== Constants.Postpaid) {
                 binding.btnBrowse.visibility=View.GONE
@@ -211,6 +214,7 @@ class MobileRechargeFragment : BaseFragment() {
                         data?.mobileno=it.mobileno
                         data?.curramt=it.curramt
                         data?.refillid=it.refillid
+                        data?.status=it.status
                         data.image=viewModel?.selectrdOperator?.value
                     }
                     val dialogFragment = PostPaidMobileReceptDialogFragment(object: CallBack {
@@ -249,6 +253,7 @@ class MobileRechargeFragment : BaseFragment() {
                             data?.mobileno=it.mobileno
                             data?.curramt="${it.curramt}"
                             data?.refillid=it.refillid
+                            data?.status=it.status
                             data.image=viewModel?.selectrdOperator?.value
                         }
 

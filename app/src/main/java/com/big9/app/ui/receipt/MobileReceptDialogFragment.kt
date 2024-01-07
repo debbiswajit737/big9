@@ -95,6 +95,12 @@ class MobileReceptDialogFragment(val callBack: CallBack, val data: PrepaidMobole
     }
 
     fun initView() {
+        if ((data?.status?.lowercase()=="success")==true){
+            binding.imgWriteTick.setImageResource(R.drawable.right_tick)
+        }
+        else{
+            binding.imgWriteTick.setImageResource(R.drawable.close_icon)
+        }
         setCrdViewMinHeight()
         lifecycleScope.launch {
             //delay(1000)

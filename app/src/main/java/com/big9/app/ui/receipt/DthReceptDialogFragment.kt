@@ -45,6 +45,12 @@ class DthReceptDialogFragment(val callBack: CallBack, val dTHTranspherModel: DTH
     private fun onViewClick() {
 
         binding.apply {
+            if ((dTHTranspherModel?.status?.lowercase()=="success")==true){
+                binding.imgWriteTick.setImageResource(R.drawable.right_tick)
+            }
+            else{
+                binding.imgWriteTick.setImageResource(R.drawable.close_icon)
+            }
             imgBack.back()
             imgHome.backToHome()
             fabShare.setOnClickListener{

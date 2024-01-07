@@ -175,7 +175,7 @@ class UtilityBillPaymentFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
-
+                    viewModel.consumerIdPrice.value = "10"
                     it?.data?.amt?.let {amt->
                         viewModel.consumerIdPrice.value = amt
                     }

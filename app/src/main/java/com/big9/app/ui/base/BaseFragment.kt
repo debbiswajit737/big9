@@ -312,6 +312,23 @@ open class BaseFragment: Fragment(){
 
     fun WebView.set(url:String,postData:String){
         this.webViewClient = MyWebViewClient()
+        val url = "https://www.gibl.in/wallet/validate2/"
+        val postData = "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
+        //val postData = "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
+        this.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
+                return true
+            }
+        }
+        Log.d("TAG_urlabcd", "set:A "+url)
+        Log.d("TAG_urlabcd", "set:B *"+postData+"*")
+        this.postUrl(url, postData.toByteArray())
+    }
+
+    fun WebView.set(url:String){
+        this.webViewClient = MyWebViewClient()
         //val url = "https://www.gibl.in/wallet/validate2/"
         //val postData = "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
         this.webViewClient = object : WebViewClient() {
@@ -321,7 +338,7 @@ open class BaseFragment: Fragment(){
                 return true
             }
         }
-        this.postUrl(url, postData.toByteArray())
+        this.postUrl(url, "".toByteArray())
     }
 
     private inner class MyWebViewClient : WebViewClient() {

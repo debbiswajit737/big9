@@ -291,6 +291,7 @@ interface RetroApi {
         @Body data: String
     ): Response<EPotlyTranspherModel>
 
+
     @POST("v1/services/dth/transfer")
     suspend fun dthTransfer(
         @Header("Authtoken") token: String,
@@ -651,6 +652,7 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<electricBillbillFetchModel>
+
 
     @POST("v1/services/billpay/electricbill/billpay.php")
     suspend fun billpaytransaction(
