@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.big9.app.R
 import com.big9.app.data.model.PrepaidMoboleTranspherModel
+import com.big9.app.data.model.ReceiptModel
 import com.big9.app.data.model.allReport.PostPaidMobileTranspherModel
 import com.big9.app.data.viewMovel.MobileRechargeViewModel
 import com.big9.app.data.viewMovel.MyViewModel
@@ -22,15 +23,14 @@ import com.big9.app.network.ResponseState
 import com.big9.app.network.RetrofitHelper.handleApiError
 import com.big9.app.ui.activity.DashboardActivity
 import com.big9.app.ui.base.BaseFragment
-import com.big9.app.ui.receipt.MobileReceptDialogFragment
-import com.big9.app.ui.receipt.PostPaidMobileReceptDialogFragment
+import com.big9.app.ui.receipt.newRecept.PostPaidnewMobileReceptDialogFragment
+import com.big9.app.ui.receipt.newRecept.PrePaidMobileReceptDialogFragment
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.common.MethodClass.getLocalIPAddress
 import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.isDthOperator
 import com.big9.app.utils.helpers.Constants.isFirstPageOpeenPostPaidMobile
 import com.big9.app.utils.`interface`.CallBack
-import java.util.Objects
 
 
 class MobileRechargeFragment : BaseFragment() {
@@ -209,22 +209,38 @@ class MobileRechargeFragment : BaseFragment() {
                     loader?.dismiss()
 
                     val data= PostPaidMobileTranspherModel()
-                    it.data?.let {
-                        data?.amount=it.amount
-                        data?.mobileno=it.mobileno
-                        data?.curramt=it.curramt
-                        data?.refillid=it.refillid
-                        data?.status=it.status
-                        data.image=viewModel?.selectrdOperator?.value
+                    it?.data?.data?.let {
+                        if (it?.size!! > 0 ?: 0) {
+                           it?.get(0)?.let {
+                                /* data?.amount=it.amount
+                                 data?.mobileno=it.mobileno
+                                 data?.curramt=it.curramt
+                                 data?.refillid=it.refillid
+                                 data?.status=it.status
+                                 data.image=viewModel?.selectrdOperator?.value*/
+
+                                Constants.recycleViewReceiptList.clear()
+                                viewModel?.receiveStatus?.value=getString(R.string.mobile_recharged)
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Operator",viewModel?.operator?.value.toString()))
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Mobile No",it.mobileno.toString()))
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Amount",it.mobileno.toString()))
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Current Amount",it.curramt.toString()))
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Refill Id",it.refillid.toString()))
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Status",it.status.toString()))
+                                val dialogFragment = PostPaidnewMobileReceptDialogFragment()
+                                dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                            }
+                        }
                     }
-                    val dialogFragment = PostPaidMobileReceptDialogFragment(object: CallBack {
+
+                   /* val dialogFragment = PostPaidMobileReceptDialogFragment(object: CallBack {
                                     override fun getValue(s: String) {
                                         if (Objects.equals(s,"back")) {
                                             findNavController().popBackStack()
                                         }
                                     }
                                 }, data)
-                                dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                                dialogFragment.show(childFragmentManager, dialogFragment.tag)*/
                     mobileRechargeViewModel?.postPaidMobileTranspherResponseLiveData?.value=null
 
                 }
@@ -248,23 +264,43 @@ class MobileRechargeFragment : BaseFragment() {
                     loader?.dismiss()
 
                         val data= PrepaidMoboleTranspherModel()
-                        it.data?.let {
-                            data?.amount=it.amount
-                            data?.mobileno=it.mobileno
-                            data?.curramt="${it.curramt}"
-                            data?.refillid=it.refillid
-                            data?.status=it.status
-                            data.image=viewModel?.selectrdOperator?.value
-                        }
+                    it?.data?.data?.let {
+                        if (it?.size!! > 0 ?: 0) {
+                            it?.get(0)?.let {
+                                /* data?.amount=it.amount
+                                 data?.mobileno=it.mobileno
+                                 data?.curramt="${it.curramt}"
+                                 data?.refillid=it.refillid
+                                 data?.status=it.status
+                                 data.image=viewModel?.selectrdOperator?.value*/
 
-                        val dialogFragment = MobileReceptDialogFragment(object: CallBack {
+
+                                Constants.recycleViewReceiptList.clear()
+                                viewModel?.receiveStatus?.value=getString(R.string.mobile_recharged)
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Transaction Id",it.refillid.toString()))
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Operator",viewModel?.operator?.value.toString()))
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Mobile No",it.mobileno.toString()))
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Amount",it.amount.toString()))
+
+                                //Constants.recycleViewReceiptList.add(ReceiptModel("Refill Id",it.refillid.toString()))
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Status",it.status.toString()))
+                                val dialogFragment = PrePaidMobileReceptDialogFragment()
+                                dialogFragment.show(childFragmentManager, dialogFragment.tag)
+
+
+                            }
+                        }
+                    }
+
+
+                       /* val dialogFragment = MobileReceptDialogFragment(object: CallBack {
                             override fun getValue(s: String) {
                                 if (Objects.equals(s,"back")) {
                                     findNavController().popBackStack()
                                 }
                             }
                         }, data)
-                        dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                        dialogFragment.show(childFragmentManager, dialogFragment.tag)*/
 
 
                     mobileRechargeViewModel?.prePaidMobileTranspherResponseLiveData?.value=null

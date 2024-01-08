@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:padding="10dp"
+        android:visibility="gone"
         android:background="@color/gray"
         tools:ignore="MissingConstraints">
 
@@ -104,6 +105,7 @@
         app:labelVisibilityMode="unlabeled"
         app:itemTextColor="@color/black"
         app:menu="@menu/items_menu"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.big9.app.R
 
 import com.big9.app.adapter.PhonePadAdapter
+import com.big9.app.data.model.ReceiptModel
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentTransactionOtpBinding
 import com.big9.app.network.ResponseState
@@ -24,7 +25,10 @@ import com.big9.app.network.RetrofitHelper.handleApiError
 
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.popup.SuccessPopupFragment
+import com.big9.app.ui.receipt.newRecept.CreditCardReceptDialogFragment
+import com.big9.app.ui.receipt.newRecept.PostPaidnewMobileReceptDialogFragment
 import com.big9.app.utils.common.MethodClass
+import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.`interface`.CallBack4
 import com.big9.app.utils.`interface`.KeyPadOnClickListner
 import com.google.gson.Gson
@@ -203,31 +207,49 @@ class TransactionOtpFragment : BaseFragment() {
                         credit_mobile.value=""
                         credit_amt.value=""
                         credit_remarks.value=""
-                        it.data?.let {
-                            popup_message.value="Transaction Date : ${it.transDate}\n" +
-                                    "Card Type: ${it.network}\n"+
-                                    "Current Balance : ${it.usercurrbal}\n"+
-                                    "Amount : ${it.amount}\n"+
-                                    "Status : ${it.status}\n"
+                        var message=it?.data?.Description?.toString()
+                        it?.data?.data?.let {data->
+                            if (data.size>0){
+                                data?.get(0)?.let {
+                                   // popup_message.value=""
+
+                                    val successPopupFragment = SuccessPopupFragment(object :
+                                        CallBack4 {
+                                        override fun getValue4(
+                                            s1: String,
+                                            s2: String,
+                                            s3: String,
+                                            s4: String
+                                        ) {
+                                            viewModel.popup_message.value="Success"
+                                            Constants.recycleViewReceiptList.clear()
+                                            // viewModel?.receiveStatus?.value="getString(R.string.mobile_recharged)"
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("Transaction Date",it?.transDate.toString()))
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("Card Type: ",it.network.toString()))
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("Current Balance : ",it?.usercurrbal.toString()))
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("Current Amount",it.amount.toString()))
+
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("Status",it.status.toString()))
+
+                                            val dialogFragment = CreditCardReceptDialogFragment()
+                                            dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                                            // findNavController().popBackStack(R.id.homeFragment2,false)
+                                            //findNavController().popBackStack()
+                                        }
+
+                                    })
+                                    successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
+
+
+                                }
+                            }
                         }
+
+
 
                     }
 
-                    val successPopupFragment = SuccessPopupFragment(object :
-                        CallBack4 {
-                        override fun getValue4(
-                            s1: String,
-                            s2: String,
-                            s3: String,
-                            s4: String
-                        ) {
-                            viewModel.popup_message.value="Success"
-                            findNavController().popBackStack(R.id.homeFragment2,false)
-                            //findNavController().popBackStack()
-                          }
 
-                    })
-                    successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
                 }
                 is ResponseState.Error -> {
                     loader?.dismiss()

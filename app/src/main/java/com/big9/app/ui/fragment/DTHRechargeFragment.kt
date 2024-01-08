@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.big9.app.R
+import com.big9.app.data.model.ReceiptModel
 import com.big9.app.data.viewMovel.DTHViewModel
 
 import com.big9.app.data.viewMovel.MyViewModel
@@ -26,7 +27,7 @@ import com.big9.app.ui.activity.DashboardActivity
 
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.popup.SuccessPopupFragment
-import com.big9.app.ui.receipt.DthReceptDialogFragment
+import com.big9.app.ui.receipt.newRecept.DTHnewMobileReceptDialogFragment
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.isDthOperator
@@ -192,16 +193,72 @@ class DTHRechargeFragment : BaseFragment() {
                             s3: String,
                             s4: String
                         ) {
-                            it.data?.let {
-                                val dialogFragment = DthReceptDialogFragment(object: CallBack {
+                            /*it.data?.let {
+                                val dialogFragment2 = DthReceptDialogFragment(object: CallBack {
                                     override fun getValue(s: String) {
                                         if (Objects.equals(s,"back")) {
                                             findNavController().popBackStack()
                                         }
                                     }
                                 },it)
-                                dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                                dialogFragment2.show(childFragmentManager, dialogFragment2.tag)
+                            }*/
+                            it?.data?.data?.let {
+                                if (it?.size!! > 0?:0) {
+
+
+                                    it?.get(0).let {
+                                        viewModel?.receiveStatus?.value = getString(R.string.dth_recharged)
+                                        /*
+         @SerializedName("userid") var userid: String? = null,
+            @SerializedName("status") var status: String? = null,
+            @SerializedName("refillid") var refillid: String? = null,
+            @SerializedName("subscriber_id") var subscriberId: String? = null,
+            @SerializedName("amount") var amount: String? = null,
+            @SerializedName("curramt") var curramt: String? = null,
+            @SerializedName("operator") var operator: String? = null,
+            @SerializedName("operatorid") var operatorid: String? = null
+         */
+                                        Constants.recycleViewReceiptList.add(
+                                            ReceiptModel(
+                                                "Transaction Id",
+                                                it?.refillid.toString()
+                                            )
+                                        )
+                                        Constants.recycleViewReceiptList.add(
+                                            ReceiptModel(
+                                                "Operator",
+                                                viewModel?.operator?.value.toString()
+                                            )
+                                        )
+                                        Constants.recycleViewReceiptList.add(
+                                            ReceiptModel(
+                                                "Subscriber Id",
+                                                it?.subscriberId.toString()
+                                            )
+                                        )
+                                        Constants.recycleViewReceiptList.add(
+                                            ReceiptModel(
+                                                "Amount",
+                                                it?.amount.toString()
+                                            )
+                                        )
+
+                                        Constants.recycleViewReceiptList.add(
+                                            ReceiptModel(
+                                                "Status",
+                                                it?.status.toString()
+                                            )
+                                        )
+
+
+                                        val dialogFragment = DTHnewMobileReceptDialogFragment()
+                                        dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                                    }
+                                }
                             }
+
+
                         }
                     }
                     )

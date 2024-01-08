@@ -83,24 +83,24 @@ class DashboardActivity : BaseActivity() {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 CoroutineScope(Dispatchers.Main).launch {
-                   /* val navHostFragment: NavHostFragment =
-                        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-                    navController = navHostFragment.navController
-                    intent?.let { intentData ->
-                        val isReceptBooleanValue = intentData.getBooleanExtra(isRecept, false)
-                        val isAfterRegVal = intentData.getBooleanExtra(isAfterReg, false)
-                        if (isReceptBooleanValue) {
+                    /* val navHostFragment: NavHostFragment =
+                         supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                     navController = navHostFragment.navController
+                     intent?.let { intentData ->
+                         val isReceptBooleanValue = intentData.getBooleanExtra(isRecept, false)
+                         val isAfterRegVal = intentData.getBooleanExtra(isAfterReg, false)
+                         if (isReceptBooleanValue) {
 
-                        }
-                        if (isAfterRegVal) {
-                            navController?.navigate(R.id.homeFragment2)
-                        }
-                    }*/
+                         }
+                         if (isAfterRegVal) {
+                             navController?.navigate(R.id.homeFragment2)
+                         }
+                     }*/
 
                     var currentFragmentId = navController?.currentDestination?.id
                     if (currentFragmentId == R.id.homeFragment) {
-                        binding.bottomNav.visibility = View.VISIBLE
-                        binding.clHeader.visibility = View.VISIBLE
+                        binding.bottomNav.visibility = View.GONE
+                        binding.clHeader.visibility = View.GONE
                     } else {
                         binding.bottomNav.visibility = View.GONE
                         binding.clHeader.visibility = View.GONE
@@ -113,35 +113,35 @@ class DashboardActivity : BaseActivity() {
 
     fun observer() {
 
-       /* myViewModel.loginResponseLiveData.observe(this) {
+        /* myViewModel.loginResponseLiveData.observe(this) {
 
-            when (it) {
-                is ResponseState.Loading -> {
-                    //loadingPopup?.show()
-                }
+             when (it) {
+                 is ResponseState.Loading -> {
+                     //loadingPopup?.show()
+                 }
 
-                is ResponseState.Success -> {
-                    loadingPopup?.dismiss()
-                    //  Toast.makeText(this, ""+it?.data?.response?.data?.get(0)?.name, Toast.LENGTH_SHORT).show()
-                    //var a=it.data?.response?.data?.get(0)?.name?.encryptData("ttt")
-                    // var a=it?.data?.response?.data?.get(0)?.name
-                    //var b=a?.decryptData("ttt")
-                    //Toast.makeText(this, "$b", Toast.LENGTH_SHORT).show()
-                }
+                 is ResponseState.Success -> {
+                     loadingPopup?.dismiss()
+                     //  Toast.makeText(this, ""+it?.data?.response?.data?.get(0)?.name, Toast.LENGTH_SHORT).show()
+                     //var a=it.data?.response?.data?.get(0)?.name?.encryptData("ttt")
+                     // var a=it?.data?.response?.data?.get(0)?.name
+                     //var b=a?.decryptData("ttt")
+                     //Toast.makeText(this, "$b", Toast.LENGTH_SHORT).show()
+                 }
 
-                is ResponseState.Error -> {
-                    loadingPopup?.dismiss()
-                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-                }
-            }
-        }*/
+                 is ResponseState.Error -> {
+                     loadingPopup?.dismiss()
+                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                 }
+             }
+         }*/
     }
 
     fun navigate() {
         //navController?.navigate(R.id.homeFragment2)
         //navController?.popBackStack(R.id.homeFragment2,false)
 
-            startActivity(Intent(this, DashboardActivity::class.java).putExtra(Constants.isAfterReg,true))
+        startActivity(Intent(this, DashboardActivity::class.java).putExtra(Constants.isAfterReg,true))
 
     }
 

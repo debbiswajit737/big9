@@ -32,7 +32,7 @@ class MobileReceptDialogFragment(val callBack: CallBack, val data: PrepaidMobole
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mobile_recept_dialog, container, false)
         binding.viewModel = viewModel
         binding.model=data
-        Log.d("TAG_amount", "onCreateView: "+data?.amount)
+
         binding.lifecycleOwner = this
         return binding.root
     }
@@ -46,7 +46,7 @@ class MobileReceptDialogFragment(val callBack: CallBack, val data: PrepaidMobole
 
     private fun onViewClick() {
 
-        binding.apply {
+      /*  binding.apply {
             imgBack.setOnClickListener{
                dismiss()
                 viewModel?.apply {
@@ -70,13 +70,13 @@ class MobileReceptDialogFragment(val callBack: CallBack, val data: PrepaidMobole
             fabShare.setOnClickListener{
                 shareImage()
             }
-            /*imgHome.setOnClickListener{
+            *//*imgHome.setOnClickListener{
                 callBack.getValue("back")
-                *//*(activity as? DashboardActivity)?.let {
+                *//**//*(activity as? DashboardActivity)?.let {
                     it.startActivity(Intent(it,DashboardActivity::class.java).putExtra(isRecept,true).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-                }*//*
-            }*/
-          }
+                }*//**//*
+            }*//*
+          }*/
         }
 
 
@@ -86,8 +86,8 @@ class MobileReceptDialogFragment(val callBack: CallBack, val data: PrepaidMobole
         activity?.let {
             binding.apply {
 
-                var screenshotBitmap =cardView2.takeScreenshot()
-                (activity as? DashboardActivity)?.shareImage(screenshotBitmap)
+              //  var screenshotBitmap =cardView2.takeScreenshot()
+              //  (activity as? DashboardActivity)?.shareImage(screenshotBitmap)
             }
         }
 
@@ -95,20 +95,20 @@ class MobileReceptDialogFragment(val callBack: CallBack, val data: PrepaidMobole
     }
 
     fun initView() {
-        if ((data?.status?.lowercase()=="success")==true){
+       /* if ((data?.status?.lowercase()=="success")==true){
             binding.imgWriteTick.setImageResource(R.drawable.right_tick)
         }
         else{
             binding.imgWriteTick.setImageResource(R.drawable.close_icon)
-        }
+        }*/
         setCrdViewMinHeight()
         lifecycleScope.launch {
             //delay(1000)
-            Glide.with(binding.root.context)
+      /*      Glide.with(binding.root.context)
 
                 .load(data?.image)
                // .transition(DrawableTransitionOptions.withCrossFade())
-                .into(binding.imgOperator)
+                .into(binding.imgOperator)*/
             /*viewModel?.selectrdOperator?.observe(viewLifecycleOwner){operatorImage->
                 if (operatorImage!=null){
                     try {
@@ -136,9 +136,9 @@ class MobileReceptDialogFragment(val callBack: CallBack, val data: PrepaidMobole
         binding.apply {
             viewModel?.selectrdOperator?.observe(viewLifecycleOwner){operatorImage->
                 if (operatorImage!=null){
-                   try {
+                 /*  try {
                        imgOperator.setImageResource(operatorImage.toInt())
-                   } catch (e:Exception){}
+                   } catch (e:Exception){}*/
                 }
             }
         }
