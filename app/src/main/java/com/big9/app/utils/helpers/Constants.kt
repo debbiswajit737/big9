@@ -86,4 +86,12 @@ object Constants {
     var eOpid=""
     var appUpdateUrl:String?=null
     var totalBankLimit="a"
+
+    var ID: String=""
+    var name: String=""
+    var mobileNo: String=""
+    var currBalance: String=""
+    var bname: String=""
+    var s1:String=""
+    var s2:String=""
 }

@@ -11,14 +11,17 @@ import androidx.fragment.app.activityViewModels
 import com.big9.app.R
 
 import com.big9.app.adapter.BottomStateListAdapter
+import com.big9.app.adapter.BottomStateListAdapterWithId
 import com.big9.app.data.model.BottomSheetStateListModel
+import com.big9.app.data.model.BottomSheetStateListModelWithId
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.StateBottomsheetLayoutBinding
 
 import com.big9.app.ui.base.BaseBottomSheetFragment
 import com.big9.app.utils.`interface`.CallBack
+import com.big9.app.utils.`interface`.CallBack2
 
-class StateListDialog(val callBack: CallBack,val stateList: ArrayList<BottomSheetStateListModel>) : BaseBottomSheetFragment() {
+class AddRetailerStateListDialog(val callBack: CallBack2, val stateList: ArrayList<BottomSheetStateListModelWithId>) : BaseBottomSheetFragment() {
     lateinit var binding: StateBottomsheetLayoutBinding
     private val viewModel: MyViewModel by activityViewModels()
 
@@ -88,10 +91,10 @@ class StateListDialog(val callBack: CallBack,val stateList: ArrayList<BottomShee
             stateList.add(BottomSheetStateListModel("Uttarakhand", false));
             stateList.add(BottomSheetStateListModel("West Bengal", false));
 */
-            adapter= BottomStateListAdapter(stateList, object : CallBack {
-                override fun getValue(s: String) {
+            adapter= BottomStateListAdapterWithId(stateList, object : CallBack2 {
+                override fun getValue2(s: String,id:String) {
                     viewModel?.apply {
-                        callBack.getValue(s)
+                        callBack.getValue2(s,id)
                         dismiss()
                     }
 

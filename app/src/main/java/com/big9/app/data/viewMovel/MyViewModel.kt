@@ -1,8 +1,10 @@
 package com.big9.app.data.viewMovel
 
+import AddRetailarDetailsModel
 import AddretailerModel
 import InsuranceModel
 import MoneyTranspherModel
+import PayPartnerModel
 import ViewRetailerModel
 import addBeneficiaryModel
 import addRemitterModel
@@ -59,6 +61,8 @@ import com.big9.app.data.model.allReport.complaints_reportMode
 import com.big9.app.data.model.allReport.loadRequestModel
 import com.big9.app.data.model.login.LoginResponse
 import com.big9.app.data.model.onBoardindPackage.BasicInfo
+import com.big9.app.data.model.onBoardindPackage.CityListModel
+import com.big9.app.data.model.onBoardindPackage.StateListModel
 import com.big9.app.data.model.otp.OtpResponse
 import com.big9.app.data.model.paymentReport.PaymentReportResponse
 import com.big9.app.data.model.profile.profileResponse
@@ -122,6 +126,7 @@ class MyViewModel @Inject constructor(
 
     val tPin = MutableLiveData<String>("")
     val state = MutableLiveData<String>()
+    val district = MutableLiveData<String>()
 
     val billerAddress = MutableLiveData<String>()
 
@@ -152,6 +157,7 @@ class MyViewModel @Inject constructor(
     val stateresp = MutableLiveData<String>()
 
 
+    val ratailerPayAmt = MutableLiveData<String>()
     val ratailerMobile = MutableLiveData<String>()
     val mobile = MutableLiveData<String>()
     val operator = MutableLiveData<String>()
@@ -215,6 +221,12 @@ class MyViewModel @Inject constructor(
     val provided_aadhar_number = MutableLiveData<String>()
     val provided_customer_number = MutableLiveData<String>()
 
+
+    val ratailerName = MutableLiveData<String>()
+    val ratailerShopName = MutableLiveData<String>()
+    val ratailerEmail = MutableLiveData<String>()
+    val ratailerAddress = MutableLiveData<String>()
+
     val vehicleRegId = MutableLiveData<String>()
     val fastTagOperator = MutableLiveData<String>()
     val fastTagAmt = MutableLiveData<String>()
@@ -266,6 +278,13 @@ class MyViewModel @Inject constructor(
     val epotly_mobileError = MutableLiveData<String>()
     val cash_withdraw_pin_codeError = MutableLiveData<String>()
     val cash_withdraw_pan_codeError = MutableLiveData<String>()
+
+
+
+    val ratailerNameError = MutableLiveData<String>()
+    val ratailerShopNameError = MutableLiveData<String>()
+    val ratailerEmailError = MutableLiveData<String>()
+    val ratailerAddressError = MutableLiveData<String>()
 
     val paymentAmtError = MutableLiveData<String>()
     val depositeDate = MutableLiveData<String>()
@@ -328,6 +347,13 @@ class MyViewModel @Inject constructor(
     val subIdErrorVisible = MutableLiveData<Boolean>()
     val dthErrorErrorVisible = MutableLiveData<Boolean>()
     val dthAmtErrorVisible = MutableLiveData<Boolean>()
+
+
+    val ratailerNameErrorVisible = MutableLiveData<Boolean>()
+    val ratailerShopNameErrorVisible = MutableLiveData<Boolean>()
+    val ratailerEmailErrorVisible = MutableLiveData<Boolean>()
+    val ratailerAddressErrorVisible = MutableLiveData<Boolean>()
+
 
     val consumerIdErrorVisible = MutableLiveData<Boolean>()
     val consumerIdPriceErrorVisible = MutableLiveData<Boolean>()
@@ -1379,6 +1405,58 @@ class MyViewModel @Inject constructor(
         }
         return isValid
     }
+     fun addRetailerValidation(): Boolean {
+
+
+
+        var isValid = true
+        if (ratailerName.value?.trim().isNullOrBlank()) {
+            ratailerNameError.value = "This field is required"
+            ratailerNameErrorVisible.value = true
+            isValid = false
+        } else {
+            ratailerNameError.value = ""
+            ratailerNameErrorVisible.value = false
+        }
+         if (ratailerShopName.value?.trim().isNullOrBlank()) {
+             ratailerShopNameError.value = "This field is required"
+             ratailerShopNameErrorVisible.value = true
+            isValid = false
+        } else {
+             ratailerShopNameError.value = ""
+             ratailerShopNameErrorVisible.value = false
+        }
+        if (ratailerEmail.value?.trim().isNullOrBlank()) {
+            ratailerEmailError.value = "This field is required"
+            ratailerEmailErrorVisible.value = true
+            isValid = false
+        } else {
+
+
+            if (ratailerEmail.value?.trim()?.validate("email")==false){
+                ratailerEmailError.value = "Email is not valid"
+                ratailerEmailErrorVisible.value = true
+                isValid = false
+            } else {
+                ratailerEmailError.value = ""
+                ratailerEmailErrorVisible.value = false
+            }
+
+
+
+        }
+         if (ratailerAddress.value?.trim().isNullOrBlank()) {
+             ratailerAddressError.value = "This field is required"
+             ratailerAddressErrorVisible.value = true
+            isValid = false
+        } else {
+             ratailerAddressError.value = ""
+             ratailerAddressErrorVisible.value = false
+        }
+
+
+        return isValid
+    }
 
     fun invisibleErrorTexts() {
         mobileErrorVisible.value = false
@@ -2059,8 +2137,44 @@ class MyViewModel @Inject constructor(
         }
     }
 
+    //add retailer details
+    val add_retailer_dtlsResponseLiveData: MutableLiveData<ResponseState<AddRetailarDetailsModel>>
+        get() = repository.add_retailer_dtlsResponseLiveData
+
+    fun add_retailer_dtls(token: String, data: String) {
+        viewModelScope.launch {
+            repository.add_retailer_dtls(token, data)
+        }
+    }
+   //PayPartnerModel
+    val pay_partnerResponseLiveData: MutableLiveData<ResponseState<PayPartnerModel>>
+        get() = repository.pay_partnerResponseLiveData
+
+    fun pay_partner(token: String, data: String) {
+        viewModelScope.launch {
+            repository.pay_partner(token, data)
+        }
+    }
 
 
 
+
+
+    val StateListResponseLiveData: LiveData<ResponseState<StateListModel>>
+        get() = repository.StateListResponseLiveData
+    fun StateList(token: String, data: String) {
+        viewModelScope.launch {
+            repository.StateList(token,data)
+        }
+    }
+
+    //CityList
+    val CityListResponseLiveData: LiveData<ResponseState<CityListModel>>
+        get() = repository.CityListResponseLiveData
+    fun CityList(token: String, data: String) {
+        viewModelScope.launch {
+            repository.CityList(token,data)
+        }
+    }
 
 }

@@ -33,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:padding="@dimen/_5sdp"
+                android:visibility="invisible"
                 android:src="@drawable/baseline_arrow_back_24" />
 
             <ImageView
@@ -108,9 +109,10 @@
                             android:fontFamily="@font/open_sans_medium"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
+
                             android:paddingHorizontal="@dimen/_10sdp"
                             android:text="@{viewModel.receiveStatus}"
-                            android:visibility="@{viewModel.receiveStatus.isEmpty()?View.GONE:View.VISIBLE}"
+                            android:visibility="invisible"
 
                             app:textColorBasedOnStatus="@{viewModel.receiveStatus}"
                             android:textSize="@dimen/_12ssp"

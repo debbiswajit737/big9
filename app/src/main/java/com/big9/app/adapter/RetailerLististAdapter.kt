@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.big9.app.databinding.RetailerListLayoutBinding
 
 import com.big9.app.utils.`interface`.CallBack4
+import com.big9.app.utils.`interface`.CallBack7
 
 
-class RetailerLististAdapter(private val items: ArrayList<ViewRetailerData>, val callback: CallBack4) : RecyclerView.Adapter<RetailerLististAdapter.MyViewHolder>() {
+class RetailerLististAdapter(private val items: ArrayList<ViewRetailerData>, val callback: CallBack7) : RecyclerView.Adapter<RetailerLististAdapter.MyViewHolder>() {
     private var filteredItems: List<ViewRetailerData> = items.toList()
 
 
@@ -51,7 +52,7 @@ class RetailerLististAdapter(private val items: ArrayList<ViewRetailerData>, val
     @SerializedName("bname"        ) var bname       : String? = null
              */
             binding.llContainer.setOnClickListener {
-                callback.getValue4(item?.name.toString(), binding.tvIfsc.text.toString(), item.name.toString(), item.ID.toString())
+                callback.getValue7(item?.ID.toString(), item?.name.toString(), item.mobileNo.toString(), item.currBalance.toString(), item.bname.toString(),"","")
             }
             item.name?.let { name ->
                 binding.tvBankName.text = name

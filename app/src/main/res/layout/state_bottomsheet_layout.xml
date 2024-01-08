@@ -25,7 +25,7 @@
             android:drawableEnd="@drawable/arrow_drop_down"
             android:fontFamily="@font/open_sans_e_bold"
             android:paddingStart="@dimen/_10sdp"
-            android:text="Bill Cycle"
+            android:text="City/District"
             android:textColor="@color/logo_color"
             android:textSize="@dimen/_12ssp"
             app:layout_constraintStart_toStartOf="parent"

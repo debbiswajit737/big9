@@ -49,7 +49,6 @@ import com.big9.app.adapter.RetailerAdapter
 import com.big9.app.adapter.TravelAdapter
 import com.big9.app.adapter.UtilityAdapter
 import com.big9.app.adapter.bluetooth.BluetoothDeviceAdapter
-import com.big9.app.data.model.BankListModel
 import com.big9.app.data.model.ListIcon
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.data.viewMovel.TableViewModel
@@ -61,6 +60,7 @@ import com.big9.app.ui.fragment.fragmentDialog.GasBillerListDialog
 import com.big9.app.ui.popup.CustomPopup.showBalencePopup
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.common.MethodClass.userLogout
+import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.Postpaid
 import com.big9.app.utils.helpers.Constants.Prepaid
 import com.big9.app.utils.helpers.Constants.commissionReportAdapter
@@ -78,6 +78,7 @@ import com.big9.app.utils.helpers.Constants.searchValueTag
 import com.big9.app.utils.helpers.PermissionUtils
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack2
+import com.big9.app.utils.`interface`.CallBack7
 import com.big9.app.utils.`interface`.PermissionsCallback
 import com.google.gson.Gson
 import com.karumi.dexter.Dexter
@@ -302,14 +303,14 @@ class HomeFragment : BaseFragment() {
                     loader?.dismiss()
                     setRecycleView(it?.data?.data)
 
-                    viewModel?.addRetailerResponseLiveData?.value=null
+                    viewModel?.viewRetailerModelResponseLiveData?.value=null
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                     //binding.btnSubmit.setBottonLoader(true,binding.llSubmitLoader)
-                    viewModel?.addRetailerResponseLiveData?.value=null
+                    viewModel?.viewRetailerModelResponseLiveData?.value=null
                 }
             }
         }
@@ -330,8 +331,14 @@ class HomeFragment : BaseFragment() {
     @SerializedName("curr_balance" ) var currBalance : String? = null
     @SerializedName("bname"        ) var bname       : String? = null
  */
-            val bankListBottomSheetDialog = RetailerListBottomSheetDialog(object : CallBack {
-                override fun getValue(s: String) {
+            val bankListBottomSheetDialog = RetailerListBottomSheetDialog(object : CallBack7 {
+                override fun getValue7(ID: String, name: String, mobileNo: String, currBalance: String, bname: String,s1:String,s2:String) {
+                    Constants.ID=ID
+                    Constants.name=name
+                    Constants.mobileNo=mobileNo
+                    Constants.currBalance=currBalance
+                    Constants.bname=bname
+
                     findNavController().navigate(R.id.action_homeFragment2_to_retailerPaymentFragment)
                     // Toast.makeText(requireActivity(), "$s", Toast.LENGTH_SHORT).show()
                 }
@@ -571,21 +578,22 @@ class HomeFragment : BaseFragment() {
                 //recycleUtility
 
                 getString(R.string.electric) -> {
-                    activity?.let { act ->
+                    electricStateList()
+                    /*activity?.let { act ->
                         val stateListDialog = StateListDialog(object : CallBack {
                             override fun getValue(s: String) {
                                 viewModel?.state?.value = s
                                 findNavController().navigate(R.id.action_homeFragment2_to_electricRechargeFragment)
                             }
 
-                        })
+                        }, stateList)
                         stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
 
-                    }
+                    }*/
                 }
 
                 getString(R.string.gas) -> {
-                    activity?.let { act ->
+                   /* activity?.let { act ->
                         val stateListDialog = StateListDialog(object : CallBack {
                             override fun getValue(s: String) {
                                 viewModel?.state?.value = s
@@ -603,10 +611,10 @@ class HomeFragment : BaseFragment() {
 
                             }
 
-                        })
+                        }, stateList)
                         stateListDialog.show(act.supportFragmentManager, stateListDialog.tag)
 
-                    }
+                    }*/
                 }
 
 
@@ -1380,7 +1388,7 @@ class HomeFragment : BaseFragment() {
 
 
             recycleMostUses.apply {
-                requestFocus()
+              //  requestFocus()
                 iconList12.clear()
                 iconList12.add(ListIcon(getString(R.string.electric), R.drawable.electric,getString(R.string.bill_pay)))
 
@@ -1502,6 +1510,7 @@ class HomeFragment : BaseFragment() {
                         //serviceNavigation(s)
                         when(s){
                             getString(R.string.add_retailers) -> {
+                                viewModel?.ratailerMobile?.value=""
                                 findNavController().navigate(R.id.action_homeFragment2_to_addRetailerFragment)
                             }
 

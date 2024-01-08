@@ -22,8 +22,9 @@ import com.big9.app.ui.base.BaseCenterSheetFragment
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack4
+import com.big9.app.utils.`interface`.CallBack7
 
-class RetailerListBottomSheetDialog(val callBack: CallBack, var retailer: ArrayList<ViewRetailerData>?) : BaseCenterSheetFragment() {
+class RetailerListBottomSheetDialog(val callBack: CallBack7, var retailer: ArrayList<ViewRetailerData>?) : BaseCenterSheetFragment() {
     lateinit var binding: BankListBottomsheetLayoutBinding
     private val myViewModel: MyViewModel by activityViewModels()
     //var bankList = ArrayList<BankListModel>()
@@ -86,11 +87,12 @@ class RetailerListBottomSheetDialog(val callBack: CallBack, var retailer: ArrayL
 
                     }
 
-                    retailerLististAdapter= RetailerLististAdapter(retailerArray, object : CallBack4 {
-                        override fun getValue4(s1: String, s2: String, s3: String, s4: String) {
+                    retailerLististAdapter= RetailerLististAdapter(retailerArray, object : CallBack7 {
+                        override fun getValue7(ID: String, name: String, mobileNo: String, currBalance: String, bname: String,s1:String,s2:String) {
+
                             viewModel?.beneficiary_bank_name?.value=s1
                             viewModel?.beneficiary_ifsc?.value=s2
-                            callBack.getValue(s1)
+                            callBack.getValue7(ID,name,mobileNo,currBalance,bname,"","")
                             dismiss()
                         }
                     })

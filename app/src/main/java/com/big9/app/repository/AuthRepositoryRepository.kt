@@ -1,8 +1,10 @@
 package com.big9.app.repository
 
+import AddRetailarDetailsModel
 import AddretailerModel
 import InsuranceModel
 import MoneyTranspherModel
+import PayPartnerModel
 import ViewRetailerModel
 import addBeneficiaryModel
 import addRemitterModel
@@ -2072,6 +2074,52 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         }
 
     }
+    //add_retailer_dtls
+    private val _add_retailer_dtlsResponseLiveData =
+        MutableLiveData<ResponseState<AddRetailarDetailsModel>>()
+    val add_retailer_dtlsResponseLiveData: MutableLiveData<ResponseState<AddRetailarDetailsModel>>
+        get() = _add_retailer_dtlsResponseLiveData
+
+
+    suspend fun add_retailer_dtls(token: String, loginModel: String) {
+        _add_retailer_dtlsResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.add_retailer_dtls(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _add_retailer_dtlsResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _add_retailer_dtlsResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+   //pay_partner
+    private val _pay_partnerResponseLiveData =
+        MutableLiveData<ResponseState<PayPartnerModel>>()
+    val pay_partnerResponseLiveData: MutableLiveData<ResponseState<PayPartnerModel>>
+        get() = _pay_partnerResponseLiveData
+
+
+    suspend fun pay_partner(token: String, loginModel: String) {
+        _pay_partnerResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.pay_partner(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _pay_partnerResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _pay_partnerResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
 
 
 
