@@ -50,8 +50,8 @@ sealed class ResponseState<T>(
             Log.d(TAG, "GenericApiResponse: raw: ${response.raw()}")
             Log.d(TAG, "GenericApiResponse: headers: ${response.headers()}")
             Log.d(TAG, "GenericApiResponse: message: ${response.message()}")
-
-            return if((response.isSuccessful || response.code()==205) && response.body()!=null){
+            var responseCode=response.code()
+            return if((response.isSuccessful && response.body()!=null) ||(responseCode==205 && response.errorBody()!=null) ){
                 // success
 //                val successResponse = Gson().toJson(response.body())
 //                val jObj = JSONObject(successResponse)

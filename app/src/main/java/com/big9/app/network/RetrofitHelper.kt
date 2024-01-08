@@ -113,6 +113,10 @@ object RetrofitHelper {
 
                     context.appUpdate()
                 }
+                105 -> {
+
+                    context.userLogout()
+                }
 
                 else -> {
                     ErrorPopUp(context).showMessageDialog(errorMessage)

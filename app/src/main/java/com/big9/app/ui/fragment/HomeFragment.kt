@@ -231,9 +231,10 @@ class HomeFragment : BaseFragment() {
            it.data?.data?.redirecturl?.let {redirecturl->
                it.data?.data?.retData?.let {retData->
                    //WebView(binding.root.context).set(redirecturl,retData)
+                   var data="ret_data="+retData
                    WebView(binding.root.context).set(
                        redirecturl,
-                       retData
+                       data
                    )
                    /*WebView(binding.root.context).set(
                        "https://www.gibl.in/wallet/validate2/",

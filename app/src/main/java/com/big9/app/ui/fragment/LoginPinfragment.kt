@@ -364,7 +364,7 @@ class LoginPinfragment : BaseFragment() {
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
-                    if (it.errorCode == 105) {
+                   /* if (it.errorCode == 105) {
                         val (isLogin, loginResponse) = sharedPreff.getLoginData()
                         loginResponse?.let { loginData ->
 
@@ -374,7 +374,7 @@ class LoginPinfragment : BaseFragment() {
                                 "clientid" to Constants.CLIENT_ID,
                                 "secretkey" to Constants.API_KEY,
                             )
-                            /*"referenceid" to loginData.,*/
+                            *//*"referenceid" to loginData.,*//*
                             val gson = Gson()
                             var jsonString = gson.toJson(data)
 
@@ -383,7 +383,7 @@ class LoginPinfragment : BaseFragment() {
                                 myViewModel?.refreshToken(it, jsonString.encrypt())
                             }
                         }
-                    }
+                    }*/
                     if (it.errorCode == 103) {
                         val (isLogin, loginResponse) = sharedPreff.getLoginData()
                         loginResponse?.let { loginData ->
@@ -427,7 +427,7 @@ class LoginPinfragment : BaseFragment() {
                 is ResponseState.Error -> {
                     loader?.dismiss()
                     myViewModel.loginPin.value = ""
-                    if (it.errorCode == 105) {
+                    /*if (it.errorCode == 105) {
 
                         val (isLogin, loginResponse) = sharedPreff.getLoginData()
                         loginResponse?.let { loginData ->
@@ -438,7 +438,7 @@ class LoginPinfragment : BaseFragment() {
                                 "clientid" to Constants.CLIENT_ID,
                                 "secretkey" to Constants.API_KEY,
                             )
-                            /*"referenceid" to loginData.,*/
+                            *//*"referenceid" to loginData.,*//*
                             val gson = Gson()
                             var jsonString = gson.toJson(data)
 
@@ -447,10 +447,10 @@ class LoginPinfragment : BaseFragment() {
                                 myViewModel?.refreshToken(it, jsonString.encrypt())
                             }
                         }
-                    }
-                    else {
+                    }*/
+                   // else {
                         handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-                    }
+                  //  }
                     myViewModel?.patternLoginReceptLiveData?.value = null
                 }
             }
