@@ -51,7 +51,7 @@ sealed class ResponseState<T>(
             Log.d(TAG, "GenericApiResponse: headers: ${response.headers()}")
             Log.d(TAG, "GenericApiResponse: message: ${response.message()}")
 
-            return if(response.isSuccessful && response.body()!=null){
+            return if((response.isSuccessful || response.code()==205) && response.body()!=null){
                 // success
 //                val successResponse = Gson().toJson(response.body())
 //                val jObj = JSONObject(successResponse)
@@ -64,6 +64,7 @@ sealed class ResponseState<T>(
 //                }
                 Success(response.body())
             }
+
             else {
                 //Error
                 val errorObj =

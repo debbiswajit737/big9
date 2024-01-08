@@ -287,4 +287,6 @@
     <string name="msg_token_fmt" />
     <string name="channel_id" >big9</string>
     <string name="banks_list">Bank List</string>
+    <string name="add_retailers">Add Retailers</string>
+    <string name="view_channel">View Channel</string>
 </resources>

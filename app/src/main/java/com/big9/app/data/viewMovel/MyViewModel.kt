@@ -1,7 +1,9 @@
 package com.big9.app.data.viewMovel
 
+import AddretailerModel
 import InsuranceModel
 import MoneyTranspherModel
+import ViewRetailerModel
 import addBeneficiaryModel
 import addRemitterModel
 import android.net.Uri
@@ -78,19 +80,18 @@ import verifyBeneficiaryModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepository, private val tableRepository: TableRepository) : ViewModel() {
-    var fromPage=""
-    var data:Map<String, Any?>?=null
+class MyViewModel @Inject constructor(
+    private val repository: AuthRepositoryRepository,
+    private val tableRepository: TableRepository
+) : ViewModel() {
+    var fromPage = ""
+    var data: Map<String, Any?>? = null
     val selectedButton = MutableLiveData<Int>()
-    var paySleeyUri:String?=""
-    var denomSlipUri:String?=""
+    var paySleeyUri: String? = ""
+    var denomSlipUri: String? = ""
 
-    var paySleeyUriUri:Uri?=null
-    var denomSlipUriUri:Uri?=null
-
-
-
-
+    var paySleeyUriUri: Uri? = null
+    var denomSlipUriUri: Uri? = null
 
 
     val userProfileMobile = MutableLiveData<String>()
@@ -103,7 +104,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val receiveReceptMessahe = MutableLiveData<String>("")
     val loginPin = MutableLiveData<String>("")
     val otp: MutableLiveData<String> = MutableLiveData("")
-    var otpMobile=MutableLiveData<String>("")
+    var otpMobile = MutableLiveData<String>("")
     var sendMoneyVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     var filePath: MutableLiveData<Uri> = MutableLiveData()
     val selectedBank = MutableLiveData<String>("")
@@ -151,7 +152,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val stateresp = MutableLiveData<String>()
 
 
-
+    val ratailerMobile = MutableLiveData<String>()
     val mobile = MutableLiveData<String>()
     val operator = MutableLiveData<String>()
     val operatorCode = MutableLiveData<String>()
@@ -243,7 +244,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val gasBookingAmt = MutableLiveData<String>()
 
 
-
+    val ratailerMobileMobileError = MutableLiveData<String>()
     val mobileError = MutableLiveData<String>()
     val operatorError = MutableLiveData<String>()
     val amtError = MutableLiveData<String>()
@@ -305,7 +306,6 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val loanAmountError = MutableLiveData<String>()
 
 
-
     val selectOperatorError = MutableLiveData<String>()
     val operatorSubIdError = MutableLiveData<String>()
     val operatordthAmtError = MutableLiveData<String>()
@@ -316,12 +316,12 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     val educationAmtError = MutableLiveData<String>()
 
 
-
     val gasbookingNumberError = MutableLiveData<String>()
     val gasBillerError = MutableLiveData<String>()
     val gasBookingAmtError = MutableLiveData<String>()
 
 
+    val ratailerMobileMobileErrorVisible = MutableLiveData<Boolean>()
     val mobileErrorVisible = MutableLiveData<Boolean>()
     val operatorErrorVisible = MutableLiveData<Boolean>()
     val amtErrorErrorVisible = MutableLiveData<Boolean>()
@@ -408,11 +408,10 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             mobileErrorVisible.value = true
             isValid = false
         } else {
-            if ((mobile?.value?.length?:-1 >= minMobileLength?.value?:0) && (mobile?.value?.length?:-1 <= maxMobileLength?.value?:0)){
+            if ((mobile?.value?.length ?: -1 >= minMobileLength?.value ?: 0) && (mobile?.value?.length ?: -1 <= maxMobileLength?.value ?: 0)) {
                 mobileError.value = ""
                 mobileErrorVisible.value = false
-            }
-            else{
+            } else {
                 mobileError.value = "Valid mobile number required"
                 mobileErrorVisible.value = true
                 isValid = false
@@ -426,17 +425,17 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             isValid = false
         } else {
             try {
-                val amtValue=amt?.value?.toInt()
-                if ((amtValue?:-1 >= minrecharge?.value?:0) && (amtValue?:-1 <= maxrecharge?.value?:0)){
+                val amtValue = amt?.value?.toInt()
+                if ((amtValue ?: -1 >= minrecharge?.value ?: 0) && (amtValue ?: -1 <= maxrecharge?.value ?: 0)) {
                     amtError.value = ""
                     amtErrorErrorVisible.value = false
-                }
-                else{
-                    amtError.value = "Kindly provide a valid amount. Ensure the amount is not less than ₹${minrecharge?.value} and does not exceed ₹${maxrecharge?.value}"
+                } else {
+                    amtError.value =
+                        "Kindly provide a valid amount. Ensure the amount is not less than ₹${minrecharge?.value} and does not exceed ₹${maxrecharge?.value}"
                     amtErrorErrorVisible.value = true
                     isValid = false
                 }
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 amtError.value = "Please enter valid amount"
                 amtErrorErrorVisible.value = true
                 isValid = false
@@ -469,11 +468,10 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             mobileErrorVisible.value = true
             isValid = false
         } else {
-            if ((mobile?.value?.length?:-1 >= minMobileLength?.value?:0) && (mobile?.value?.length?:-1 <= maxMobileLength?.value?:0)){
+            if ((mobile?.value?.length ?: -1 >= minMobileLength?.value ?: 0) && (mobile?.value?.length ?: -1 <= maxMobileLength?.value ?: 0)) {
                 mobileError.value = ""
                 mobileErrorVisible.value = false
-            }
-            else{
+            } else {
                 mobileError.value = "Valid mobile number required"
                 mobileErrorVisible.value = true
                 isValid = false
@@ -485,9 +483,6 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
 
         return isValid
     }
-
-
-
 
 
     fun dthValidation(): Boolean {
@@ -526,7 +521,6 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
 
         return isValid
     }
-
 
 
     fun electricValidation(): Boolean {
@@ -576,15 +570,13 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     }
 
 
-
-     /*   val loginResponseLiveData: LiveData<ResponseState<BaseResponse<Test>>>
-        get() = repository.loginResponseLiveData
-    fun login(requestBody: JsonObject) {
-        viewModelScope.launch {
-            repository.login(requestBody)
-        }
-    }*/
-
+    /*   val loginResponseLiveData: LiveData<ResponseState<BaseResponse<Test>>>
+       get() = repository.loginResponseLiveData
+   fun login(requestBody: JsonObject) {
+       viewModelScope.launch {
+           repository.login(requestBody)
+       }
+   }*/
 
 
     fun changeLoginPinValidation(): Boolean {
@@ -711,7 +703,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             cash_withdraw_pin_codeErrorVisible.value = true
             isValid = false
         } else {
-            if (cash_withdraw_pin_code.value?.trim()?.validate("pincode")==false) {
+            if (cash_withdraw_pin_code.value?.trim()?.validate("pincode") == false) {
                 cash_withdraw_pin_codeError.value = "PIN code is not valid"
                 cash_withdraw_pin_codeErrorVisible.value = true
                 isValid = false
@@ -728,7 +720,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             cash_withdraw_pan_codeErrorVisible.value = true
             isValid = false
         } else {
-            if (cash_withdraw_pan.value?.trim()?.validate("pan")==false) {
+            if (cash_withdraw_pan.value?.trim()?.validate("pan") == false) {
                 cash_withdraw_pan_codeError.value = "Pan card number is required"
                 cash_withdraw_pan_codeErrorVisible.value = true
                 isValid = false
@@ -789,6 +781,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
 
         return isValid
     }
+
     fun settleWalletValidation(): Boolean {
 
         invisibleErrorTexts()
@@ -806,6 +799,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
 
         return isValid
     }
+
     fun payabhiValidation(): Boolean {
 
         invisibleErrorTexts()
@@ -839,15 +833,14 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             amtMoveToBankErrorVisible.value = false
         }
 
-        if (IMPSIsActive?.value==false && NEFTIsActive?.value==false){
+        if (IMPSIsActive?.value == false && NEFTIsActive?.value == false) {
             isValid = false
-            amtMoveToBankModeError.value="Please select a valid bank transaction mode."
-            bankModeMoveToBankErrorVisible.value=true
-        }
-        else{
+            amtMoveToBankModeError.value = "Please select a valid bank transaction mode."
+            bankModeMoveToBankErrorVisible.value = true
+        } else {
 
-            amtMoveToBankModeError.value=""
-            bankModeMoveToBankErrorVisible.value=false
+            amtMoveToBankModeError.value = ""
+            bankModeMoveToBankErrorVisible.value = false
         }
 
 
@@ -875,7 +868,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
                 mobileSendMoneyErrorVisible.value = false
             }
         }
-        if(sendMoneyVisibility?.value==true) {
+        if (sendMoneyVisibility?.value == true) {
             if (nameSendMoney.value?.trim().isNullOrBlank()) {
                 nameSendMoneyError.value = "Name is required"
                 nameSendMoneyErrorVisible.value = true
@@ -900,13 +893,11 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         var isValid = true
         if (mobileSendMoney.value?.trim().isNullOrBlank()) {
             isValid = false
-        }
-        else {
+        } else {
             isValid = mobile.value?.trim()?.length == 10
         }
         return isValid
     }
-
 
 
     fun creditValidation(): Boolean {
@@ -919,11 +910,10 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             credit_cardErrorVisible.value = true
             isValid = false
         } else {
-            if (credit_card.value?.trim()?.length!=16){
+            if (credit_card.value?.trim()?.length != 16) {
                 credit_cardError.value = "Credit card number is not valid."
                 credit_cardErrorVisible.value = true
-            }
-            else{
+            } else {
                 credit_cardError.value = ""
                 credit_cardErrorVisible.value = false
             }
@@ -937,7 +927,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             credit_holder_name_ErrorVisible.value = true
             isValid = false
         } else {
-            if (credit_holder_name.value?.trim()?.validate("name")==false) {
+            if (credit_holder_name.value?.trim()?.validate("name") == false) {
                 credit_holder_name_Error.value = "Name is not valid"
                 credit_holder_name_ErrorVisible.value = true
                 isValid = false
@@ -981,16 +971,23 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             credit_remarks_Error.value = ""
             credit_remarks_ErrorVisible.value = false
         }
-        if(selectedButton.value==0){
-            isValid=false
-            select_card_type_ErrorVisible.value=true
-        }
-        else{
-            select_card_type_ErrorVisible.value=false
-            select_card_type.value=when(selectedButton.value){
-               R.id.radioVisa->{"visa"}
-               R.id.radioMasterCard->{"mastercard"}
-                else -> {"amex"}
+        if (selectedButton.value == 0) {
+            isValid = false
+            select_card_type_ErrorVisible.value = true
+        } else {
+            select_card_type_ErrorVisible.value = false
+            select_card_type.value = when (selectedButton.value) {
+                R.id.radioVisa -> {
+                    "visa"
+                }
+
+                R.id.radioMasterCard -> {
+                    "mastercard"
+                }
+
+                else -> {
+                    "amex"
+                }
             }
 
         }
@@ -1047,6 +1044,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         }
         return isValid
     }
+
     fun beneficiaryVerifyValidation(): Boolean {
 
         invisibleErrorTexts()
@@ -1113,7 +1111,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
             provided_aadhar_numberErrorVisible.value = true
             isValid = false
         } else {
-            if (provided_aadhar_number.value?.trim()?.validate("aadhar")==false) {
+            if (provided_aadhar_number.value?.trim()?.validate("aadhar") == false) {
                 provided_aadhar_numberError.value = "Aadhar number is not valid"
                 provided_aadhar_numberErrorVisible.value = true
                 isValid = false
@@ -1154,7 +1152,7 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         } else {
 
 
-            if (vehicleRegId.value?.trim()?.validate("vehicle")==false) {
+            if (vehicleRegId.value?.trim()?.validate("vehicle") == false) {
                 vehicleRegIdError.value = "Invalid Registration Number"
                 vehicleRegIdErrorVisible.value = true
                 isValid = false
@@ -1184,35 +1182,35 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         return isValid
     }
 
-     fun balenceValidation(): Boolean {
-         invisibleErrorTexts()
+    fun balenceValidation(): Boolean {
+        invisibleErrorTexts()
 
-         var isValid = true
-         if (balence_enquary_aadhar_number.value?.trim().isNullOrBlank()) {
-             balence_enquary_aadhar_numberError.value = "Aadhar number is required"
-             balence_enquary_aadhar_numberErrorVisible.value = true
-             isValid = false
-         } else {
-             if (balence_enquary_aadhar_number.value?.trim()?.validate("aadhar")==false) {
-                 balence_enquary_aadhar_numberError.value = "Aadhar number is not valid"
-                 balence_enquary_aadhar_numberErrorVisible.value = true
-                 isValid = false
-             } else {
-                 balence_enquary_aadhar_numberError.value = ""
-                 balence_enquary_aadhar_numberErrorVisible.value = false
-             }
-         }
+        var isValid = true
+        if (balence_enquary_aadhar_number.value?.trim().isNullOrBlank()) {
+            balence_enquary_aadhar_numberError.value = "Aadhar number is required"
+            balence_enquary_aadhar_numberErrorVisible.value = true
+            isValid = false
+        } else {
+            if (balence_enquary_aadhar_number.value?.trim()?.validate("aadhar") == false) {
+                balence_enquary_aadhar_numberError.value = "Aadhar number is not valid"
+                balence_enquary_aadhar_numberErrorVisible.value = true
+                isValid = false
+            } else {
+                balence_enquary_aadhar_numberError.value = ""
+                balence_enquary_aadhar_numberErrorVisible.value = false
+            }
+        }
 
 
-         if (balence_enquary_customer_number.value?.trim().isNullOrBlank()) {
-             balence_enquary_customer_numberError.value = "This field is required"
-             balence_enquary_customer_numberErrorVisible.value = true
-             isValid = false
-         } else {
-             balence_enquary_customer_numberError.value = ""
-             balence_enquary_customer_numberErrorVisible.value = false
-         }
-         return isValid
+        if (balence_enquary_customer_number.value?.trim().isNullOrBlank()) {
+            balence_enquary_customer_numberError.value = "This field is required"
+            balence_enquary_customer_numberErrorVisible.value = true
+            isValid = false
+        } else {
+            balence_enquary_customer_numberError.value = ""
+            balence_enquary_customer_numberErrorVisible.value = false
+        }
+        return isValid
     }
 
     fun loanValidation(): Boolean {
@@ -1366,7 +1364,21 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     }
 
 
+    fun mobileforRetailerValidation(): Boolean {
 
+        invisibleErrorTexts()
+
+        var isValid = true
+        if (ratailerMobile.value?.trim().isNullOrBlank()) {
+            ratailerMobileMobileError.value = "Mobile number is required"
+            ratailerMobileMobileErrorVisible.value = true
+            isValid = false
+        } else {
+            ratailerMobileMobileError.value = ""
+            ratailerMobileMobileErrorVisible.value = false
+        }
+        return isValid
+    }
 
     fun invisibleErrorTexts() {
         mobileErrorVisible.value = false
@@ -1374,12 +1386,12 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
         amtErrorErrorVisible.value = false
 
 
-         subIdErrorVisible.value = false
-         dthErrorErrorVisible.value = false
-         dthAmtErrorVisible.value = false
+        subIdErrorVisible.value = false
+        dthErrorErrorVisible.value = false
+        dthAmtErrorVisible.value = false
 
-         consumerIdErrorVisible.value = false
-         consumerIdPriceErrorVisible.value = false
+        consumerIdErrorVisible.value = false
+        consumerIdPriceErrorVisible.value = false
 
 
         oldPinErrorVisible.value = false
@@ -1400,106 +1412,112 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     }
 
 
-
-
-
-
     val authLogin: LiveData<ResponseState<BaseResponse<LoginResponse>>>
         get() = repository.loginResponseLiveData
 
 
     val profileResponse: LiveData<ResponseState<profileResponse>>
         get() = repository.profileResponseLiveData
+
     fun profile(token: String, data: String) {
         viewModelScope.launch {
-            repository.profile(token,data)
+            repository.profile(token, data)
         }
     }
 
     val otpResponse: LiveData<ResponseState<OtpResponse>>
         get() = repository.otpResponseLiveData
+
     fun sendOtp(token: String, data: String) {
         viewModelScope.launch {
-            repository.otp(token,data)
+            repository.otp(token, data)
         }
     }
 
 
-
     val profile2Response: LiveData<ResponseState<profileResponse>>
         get() = repository.profile2ResponseLiveData
+
     fun profile2(token: String, data: String) {
         viewModelScope.launch {
-            repository.profile2(token,data)
+            repository.profile2(token, data)
         }
     }
 
     //paymentReport
     val paymentReportResponseLiveData: LiveData<ResponseState<PaymentReportResponse>>
         get() = repository.paymentReportResponseLiveData
+
     fun paymentReport(token: String, data: String) {
         viewModelScope.launch {
-            repository.paymentReport(token,data)
+            repository.paymentReport(token, data)
         }
     }
 
     //transcationReport
     val ranscationReportResponseLiveData: LiveData<ResponseState<TransactionReportResponse>>
         get() = repository._ranscationReportResponseLiveData
+
     fun transcationReport(token: String, data: String) {
         viewModelScope.launch {
-            repository.transcationReport(token,data)
+            repository.transcationReport(token, data)
         }
     }
 
     //dmtReport
     val dmtReportResponseLiveData: LiveData<ResponseState<DmtReportReportModel>>
         get() = repository.dmtReportResponseLiveData
+
     fun dmtReport(token: String, data: String) {
         viewModelScope.launch {
-            repository.dmtReport(token,data)
+            repository.dmtReport(token, data)
         }
     }
 
     //loadRequestReport
     val loadRequestReportResponseLiveData: LiveData<ResponseState<loadRequestModel>>
         get() = repository.loadRequestReportResponseLiveData
+
     fun loadRequestReport(token: String, data: String) {
         viewModelScope.launch {
-            repository.loadRequestReport(token,data)
+            repository.loadRequestReport(token, data)
         }
     }
 
     //walletLedgerReport
     val walletLedgerReportResponseLiveData: LiveData<ResponseState<WalletLedgerModel>>
         get() = repository.walletLedgerReportResponseLiveData
+
     fun walletLedgerReport(token: String, data: String) {
         viewModelScope.launch {
-            repository.walletLedgerReport(token,data)
+            repository.walletLedgerReport(token, data)
         }
     }
 
     //aepsReport
     val aepsReportResponseLiveData: LiveData<ResponseState<aepsReportModel>>
         get() = repository.aepsReportResponseLiveData
+
     fun aepsReport(token: String, data: String) {
         viewModelScope.launch {
-            repository.aepsReport(token,data)
+            repository.aepsReport(token, data)
         }
     }
 
     //microatmReport
     val microatmReportResponseLiveData: LiveData<ResponseState<MicroatmReportModel>>
         get() = repository.microatmReportResponseLiveData
+
     fun microatmReport(token: String, data: String) {
         viewModelScope.launch {
-            repository.microatmReport(token,data)
+            repository.microatmReport(token, data)
         }
     }
 
     //commissionReport
     val commissionReportResponseLiveData: LiveData<ResponseState<commissionReportModel>>
         get() = repository.commissionReportResponseLiveData
+
     fun commissionReport(token: String, data: String) {
         viewModelScope.launch {
             viewModelScope.launch {
@@ -1518,22 +1536,23 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     }*/
 
 
-
-
     //complants Report
     val complaints_reportReportResponseLiveData: LiveData<ResponseState<complaints_reportMode>>
         get() = repository.complaints_reportReportResponseLiveData
+
     fun complaints_report(token: String, data: String) {
         viewModelScope.launch {
-            repository.complaints_report(token,data)
+            repository.complaints_report(token, data)
         }
     }
+
     //walletSettleReport
     val walletSettleReportResponseLiveData: LiveData<ResponseState<WalletSettleReportModel>>
         get() = repository.walletSettleReportResponseLiveData
+
     fun walletSettleReport(token: String, data: String) {
         viewModelScope.launch {
-            repository.walletSettleReport(token,data)
+            repository.walletSettleReport(token, data)
         }
     }
 
@@ -1541,9 +1560,10 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     //bank_settle_report
     val bank_settle_reportResponseLiveData: LiveData<ResponseState<Bank_settle_reportModel>>
         get() = repository.bank_settle_reportResponseLiveData
+
     fun bank_settle_report(token: String, data: String) {
         viewModelScope.launch {
-            repository.bank_settle_report(token,data)
+            repository.bank_settle_report(token, data)
         }
     }
 
@@ -1551,88 +1571,91 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     //cashout_ledger_report
     val cashout_ledger_reportResponseLiveData: LiveData<ResponseState<Cashout_ledger_reportModel>>
         get() = repository.cashout_ledger_reportResponseLiveData
+
     fun cashout_ledger_report(token: String, data: String) {
         viewModelScope.launch {
-            repository.cashout_ledger_report(token,data)
+            repository.cashout_ledger_report(token, data)
         }
     }
-
 
 
     //postpaid mobile operator list
     val postpaid_mobile_operator_listResponseLiveData: LiveData<ResponseState<PostPaidMobileOperatorListModel>>
         get() = repository.postpaid_mobile_operator_listResponseLiveData
+
     fun postpaid_mobile_operator_list(token: String, data: String) {
         viewModelScope.launch {
-            repository.postpaid_mobile_operator_list(token,data)
+            repository.postpaid_mobile_operator_list(token, data)
         }
     }
 
     //prepaid mobile operator list
     val prepaid_mobile_operator_listResponseLiveData: LiveData<ResponseState<PrePaidMobileOperatorListModel>>
         get() = repository.prepaid_mobile_operator_listResponseLiveData
+
     fun prepaid_mobile_operator_list(token: String, data: String) {
         viewModelScope.launch {
-            repository.prepaid_mobile_operator_list(token,data)
+            repository.prepaid_mobile_operator_list(token, data)
         }
     }
-
-
-
-
-
 
 
     //prepaid mobile list
     val prePaidMobilePlainListResponseLiveData: LiveData<ResponseState<PrepaidMobolePlainModel>>
         get() = repository.prePaidMobilePlainListResponseLiveData
+
     fun prePaidMobilePlainList(token: String, data: String) {
         viewModelScope.launch {
-            repository.prePaidMobilePlainList(token,data)
+            repository.prePaidMobilePlainList(token, data)
         }
     }
-
 
 
     //credit card send otp
     val creditCardSendOtpResponseLiveData: MutableLiveData<ResponseState<CreditCardSendOtpModel>>
         get() = repository.creditCardSendOtpResponseLiveData
+
     fun creditSendVerifyOtp(token: String, data: String) {
         viewModelScope.launch {
-            repository.creditSendVerifyOtp(token,data)
+            repository.creditSendVerifyOtp(token, data)
         }
     }
 
     //credit card verify otp
     val creditCardVeryfyOTPResponseLiveData: LiveData<ResponseState<CreditCardVerifyOtpModel>>
         get() = repository.creditCardVeryfyOTPResponseLiveData
+
     fun creditCardVeryfyOTP(token: String, data: String) {
         viewModelScope.launch {
-            repository.creditCardVeryfyOTP(token,data)
+            repository.creditCardVeryfyOTP(token, data)
         }
     }
 
     //Epotly transpher
     val epotlyTranspherResponseLiveData: LiveData<ResponseState<EPotlyTranspherModel>>
         get() = repository.epotlyTranspherResponseLiveData
+
     fun epotlyTranspher(token: String, data: String) {
         viewModelScope.launch {
-            repository.epotlyTranspher(token,data)
+            repository.epotlyTranspher(token, data)
         }
     }
+
     val changePinResponseLiveData: MutableLiveData<ResponseState<ChangeUserPasswordModel>>
         get() = repository.changePinResponseLiveData
+
     fun changePin(token: String, data: String) {
         viewModelScope.launch {
-            repository.changePin(token,data)
+            repository.changePin(token, data)
         }
     }
 
     val changeTPinResponseLiveData: MutableLiveData<ResponseState<ChangeUserTPINPasswordModel>>
         get() = repository.changeTPinResponseLiveData
+
     fun changeTPin(token: String, data: String) {
         viewModelScope.launch {
-            repository.changeTPin(token,data)
+            repository.changeTPin(token, data)
         }
     }
 
@@ -1640,9 +1663,10 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     //credit card send otp
     val transcationReportReceiptResponseLiveData: MutableLiveData<ResponseState<TransactionReportModel>>
         get() = repository.transcationReportReceiptResponseLiveData
+
     fun transcationReportReceipt(token: String, data: String) {
         viewModelScope.launch {
-            repository.transcationReportReceipt(token,data)
+            repository.transcationReportReceipt(token, data)
         }
     }
 
@@ -1650,67 +1674,72 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     //dmt ReportReceipt
     val dmtReportReceiptResponseLiveData: MutableLiveData<ResponseState<DMTReportModel>>
         get() = repository.dmtReportReceiptResponseLiveData
+
     fun dmtReportReceipt(token: String, data: String) {
         viewModelScope.launch {
-            repository.dmtReportReceipt(token,data)
+            repository.dmtReportReceipt(token, data)
         }
     }
 
     //aeps ReportReceipt
     val aepsReportReceiptReceiptResponseLiveData: MutableLiveData<ResponseState<AEPSReportModel>>
         get() = repository.aepsReportReceiptReceiptResponseLiveData
+
     fun aepsReportReceiptReceipt(token: String, data: String) {
         viewModelScope.launch {
-            repository.aepsReportReceiptReceipt(token,data)
+            repository.aepsReportReceiptReceipt(token, data)
         }
     }
-/*
+    /*
 
-    //Check service
-    val checkServiceReceiptResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
-        get() = repository.checkServiceResponseLiveData
-    fun checkService(token: String, data: String) {
-        viewModelScope.launch {
-            repository.checkService(token,data)
+        //Check service
+        val checkServiceReceiptResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
+            get() = repository.checkServiceResponseLiveData
+        fun checkService(token: String, data: String) {
+            viewModelScope.launch {
+                repository.checkService(token,data)
+            }
         }
-    }
 
-    //Check service
-    val checkServiceReceiptHomePageResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
-        get() = repository.checkServiceHomeResponseLiveData
-    fun checkHomePageService(token: String, data: String) {
-        viewModelScope.launch {
-            repository.checkServiceHome(token,data)
+        //Check service
+        val checkServiceReceiptHomePageResponseLiveData: MutableLiveData<ResponseState<CheckServiceModel>>
+            get() = repository.checkServiceHomeResponseLiveData
+        fun checkHomePageService(token: String, data: String) {
+            viewModelScope.launch {
+                repository.checkServiceHome(token,data)
+            }
         }
-    }
 
-*/
+    */
 
 
     //matm reports
     val microatm_report_receiptResponseReceptLiveData: MutableLiveData<ResponseState<MatmeportModel>>
         get() = repository.microatm_report_receiptResponseReceptLiveData
+
     fun microatmReportReceipt(token: String, data: String) {
         viewModelScope.launch {
-            repository.microatmReportReceipt(token,data)
+            repository.microatmReportReceipt(token, data)
         }
     }
 
     //reset TPIN
     val resetTPINResponseReceptLiveData: MutableLiveData<ResponseState<ResetTPINModel>>
         get() = repository.resetTPINResponseReceptLiveData
+
     fun resetTPINResponse(token: String, data: String) {
         viewModelScope.launch {
-            repository.resetTPIN(token,data)
+            repository.resetTPIN(token, data)
         }
     }
 
     //pattern Login
     val patternLoginReceptLiveData: MutableLiveData<ResponseState<PatternLoginModel>>
         get() = repository.patternLoginModelReceptLiveData
+
     fun patternLogin(token: String, data: String) {
         viewModelScope.launch {
-            repository.patternLogin(token,data)
+            repository.patternLogin(token, data)
         }
     }
 
@@ -1718,45 +1747,50 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     //move to bank
     val moveToBankReceptLiveData: MutableLiveData<ResponseState<MoveToBankBankListModel>>
         get() = repository.moveToBankReceptLiveData
+
     fun moveToBank(token: String, data: String) {
         viewModelScope.launch {
-            repository.moveToBank(token,data)
+            repository.moveToBank(token, data)
         }
     }
 
     //submit move to bank
     val submit_moveToBankReceptLiveData: MutableLiveData<ResponseState<SubmitMoveToBankBankListModel>>
         get() = repository.submit_moveToBankReceptLiveData
+
     fun submitMovetobank(token: String, data: String) {
         viewModelScope.launch {
-            repository.submitMovetobank(token,data)
+            repository.submitMovetobank(token, data)
         }
     }
 
     //add Bank
     val addToBankReceptLiveData: MutableLiveData<ResponseState<AddBankModel>>
         get() = repository.addToBankReceptLiveData
+
     fun addToBank(token: String, data: String, imagedata: MultipartBody.Part?) {
         viewModelScope.launch {
-            repository.addToBank(token,data,imagedata)
+            repository.addToBank(token, data, imagedata)
         }
     }
 
     // Move To wallet
     val moveToWalletLiveData: MutableLiveData<ResponseState<MoveToWalletModel>>
-    get() = repository.moveToWalletLiveData
+        get() = repository.moveToWalletLiveData
+
     fun moveToWallet(token: String, data: String) {
         viewModelScope.launch {
-            repository.moveToWallet(token,data)
+            repository.moveToWallet(token, data)
         }
     }
 
     // $Move To wallet$
     val submitMoveToWalletLiveData: MutableLiveData<ResponseState<SubmitMoveToBankBankListModel>>
-    get() = repository.submitMoveToWalletLiveData
+        get() = repository.submitMoveToWalletLiveData
+
     fun submitMoveToWallet(token: String, data: String) {
         viewModelScope.launch {
-            repository.submitMoveToWallet(token,data)
+            repository.submitMoveToWallet(token, data)
         }
     }
 
@@ -1768,64 +1802,76 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     //bankList
     val bankListResponseLiveData: LiveData<ResponseState<AllBankListModel>>
         get() = repository.bankListResponseLiveData
+
     fun bankList(token: String, data: String) {
         viewModelScope.launch {
-            repository.bankList(token,data)
+            repository.bankList(token, data)
         }
     }
 
     //PaymentREquistMode
     val PaymentREquistModeResponseLiveData: LiveData<ResponseState<PaymentREquistModeModel>>
         get() = repository.PaymentREquistModeResponseLiveData
+
     fun PaymentREquistMode(token: String, data: String) {
         viewModelScope.launch {
-            repository.PaymentREquistMode(token,data)
+            repository.PaymentREquistMode(token, data)
         }
     }
 
     //PaymentRequist
     val PaymentRequistResponseLiveData: LiveData<ResponseState<PaymentRequistModel>>
         get() = repository.PaymentRequistResponseLiveData
-    fun PaymentRequist(token: String, data: String, paymentSlip: MultipartBody.Part?, denomSlip: MultipartBody.Part?) {
+
+    fun PaymentRequist(
+        token: String,
+        data: String,
+        paymentSlip: MultipartBody.Part?,
+        denomSlip: MultipartBody.Part?
+    ) {
         viewModelScope.launch {
-            repository.PaymentRequist(token,data,paymentSlip,denomSlip)
+            repository.PaymentRequist(token, data, paymentSlip, denomSlip)
         }
     }
+
     //ServiceCheck
     val ServiceCheckResponseLiveData: MutableLiveData<ResponseState<ServiceCheckModel>>
         get() = repository.ServiceCheckResponseLiveData
+
     fun ServiceCheck(token: String, data: String) {
         viewModelScope.launch {
-            repository.ServiceCheck(token,data)
+            repository.ServiceCheck(token, data)
         }
     }
 
     //ServiceCheckViewMore
     val ServiceCheckViewMoreResponseLiveData: MutableLiveData<ResponseState<ServiceCheckModel>>
         get() = repository.ServiceCheckViewMoreResponseLiveData
+
     fun ServiceCheckViewMore(token: String, data: String) {
         viewModelScope.launch {
-            repository.ServiceCheckViewMore(token,data)
+            repository.ServiceCheckViewMore(token, data)
         }
     }
 
     //addBankBankList
     val addBankBankListResponseLiveData: LiveData<ResponseState<AddBankBankListModel>>
         get() = repository.addBankBankListResponseLiveData
+
     fun addBankBankList(token: String, data: String) {
         viewModelScope.launch {
-            repository.addBankBankList(token,data)
+            repository.addBankBankList(token, data)
         }
     }
 
 
-
- //addBankBankList
+    //addBankBankList
     val forgotPasswordResponseLiveData: MutableLiveData<ResponseState<ForgotPasswordModel>>
         get() = repository.forgotPasswordResponseLiveData
+
     fun forgotPassword(token: String, data: String) {
         viewModelScope.launch {
-            repository.forgotPassword(token,data)
+            repository.forgotPassword(token, data)
         }
     }
 
@@ -1833,153 +1879,188 @@ class MyViewModel @Inject constructor(private val repository: AuthRepositoryRepo
     //addBankBankList
     val forgotPasswordVerifyOtpResponseLiveData: MutableLiveData<ResponseState<ForgotPasswordVerifyOtpModel>>
         get() = repository.forgotPasswordVerifyOtpResponseLiveData
+
     fun ForgotPasswordVerifyOtp(token: String, data: String) {
         viewModelScope.launch {
-            repository.ForgotPasswordVerifyOtp(token,data)
+            repository.ForgotPasswordVerifyOtp(token, data)
+        }
+    }
+
+
+    //refreshToken
+    val refreshTokenResponseLiveData: LiveData<ResponseState<refreshTokenModel>>
+        get() = repository.refreshTokenResponseLiveData
+
+    fun refreshToken(token: String, data: String) {
+        viewModelScope.launch {
+            repository.refreshToken(token, data)
+        }
+    }
+
+    //app update
+    val appupdateResponseLiveData: LiveData<ResponseState<appUpdateUrlModel>>
+        get() = repository.appUpdateResponseLiveData
+
+    fun appUpdate(token: String, data: String) {
+        viewModelScope.launch {
+            repository.appUpdate(token, data)
+        }
+    }
+
+
+    //cashCollection
+    val cashCollectionResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
+        get() = repository.cashCollectionResponseLiveData
+
+    fun cashCollection(token: String, data: String, insuranceOrCashCollection: String) {
+        viewModelScope.launch {
+            repository.cashCollection(token, data, insuranceOrCashCollection)
+        }
+    }
+
+
+    //insurance
+    val insuranceResponseLiveData: MutableLiveData<ResponseState<InsuranceModel>>
+        get() = repository.insuranceResponseLiveData
+
+    fun insurance(token: String, data: String, insuranceOrCashCollection: String) {
+        viewModelScope.launch {
+            repository.insurance(token, data, insuranceOrCashCollection)
+        }
+    }
+
+
+    //checkUser
+    val checkUserResponseLiveData: MutableLiveData<ResponseState<checkUserModel>>
+        get() = repository.checkUserResponseLiveData
+
+    fun checkUser(token: String, data: String) {
+        viewModelScope.launch {
+            repository.checkUser(token, data)
+        }
+    }
+
+
+    //beneficiaryList
+    val beneficiaryListResponseLiveData: MutableLiveData<ResponseState<beneficiaryListModel>>
+        get() = repository.beneficiaryListResponseLiveData
+
+    fun beneficiaryList(token: String, data: String) {
+        viewModelScope.launch {
+            repository.beneficiaryList(token, data)
+        }
+    }
+
+
+    //addRemitter
+    val addRemitterResponseLiveData: MutableLiveData<ResponseState<addRemitterModel>>
+        get() = repository.addRemitterResponseLiveData
+
+    fun addRemitter(token: String, data: String) {
+        viewModelScope.launch {
+            repository.addRemitter(token, data)
+        }
+    }
+
+
+    //addBeneficiary
+    val addBeneficiaryResponseLiveData: MutableLiveData<ResponseState<addBeneficiaryModel>>
+        get() = repository.addBeneficiaryResponseLiveData
+
+    fun addBeneficiary(token: String, data: String) {
+        viewModelScope.launch {
+            repository.addBeneficiary(token, data)
+        }
+    }
+
+    //beneficiary Verify
+    val beneficiaryVerifyResponseLiveData: MutableLiveData<ResponseState<verifyBeneficiaryModel>>
+        get() = repository.beneficiaryVerifyResponseLiveData
+
+    fun beneficiaryVerify(token: String, data: String) {
+        viewModelScope.launch {
+            repository.beneficiaryVerify(token, data)
+        }
+    }
+
+    //moneyTransfer
+    val moneyTransferResponseLiveData: MutableLiveData<ResponseState<MoneyTranspherModel>>
+        get() = repository.moneyTransferResponseLiveData
+
+    fun moneyTransfer(token: String, data: String) {
+        viewModelScope.launch {
+            repository.moneyTransfer(token, data)
+        }
+    }
+
+
+    //electricStatelist
+    val electricStatelistResponseLiveData: MutableLiveData<ResponseState<electricStatelistModel>>
+        get() = repository.electricStatelistResponseLiveData
+
+    fun electricStatelist(token: String, data: String) {
+        viewModelScope.launch {
+            repository.electricStatelist(token, data)
+        }
+    }
+
+
+    //electricbillerlist
+    val electricbillerlistResponseLiveData: MutableLiveData<ResponseState<billerlistModel>>
+        get() = repository.electricbillerlistResponseLiveData
+
+    fun electricbillerlist(token: String, data: String) {
+        viewModelScope.launch {
+            repository.electricbillerlist(token, data)
+        }
+    }
+
+
+    //electricBillbillFetch
+    val electricBillbillFetchResponseLiveData: MutableLiveData<ResponseState<electricBillbillFetchModel>>
+        get() = repository.electricBillbillFetchResponseLiveData
+
+    fun electricBillbillFetch(token: String, data: String) {
+        viewModelScope.launch {
+            repository.electricBillbillFetch(token, data)
+        }
+    }
+
+
+    //billpaytransaction
+    val billpaytransactionResponseLiveData: MutableLiveData<ResponseState<billpaytransactionModel>>
+        get() = repository.billpaytransactionResponseLiveData
+
+    fun billpaytransaction(token: String, data: String) {
+        viewModelScope.launch {
+            repository.billpaytransaction(token, data)
+        }
+    }
+
+
+    //add retailer
+    val addRetailerResponseLiveData: MutableLiveData<ResponseState<AddretailerModel>>
+        get() = repository.addRetailerResponseLiveData
+
+    fun addRetailer(token: String, data: String) {
+        viewModelScope.launch {
+            repository.addRetailer(token, data)
+        }
+    }
+
+
+    //add retailer
+    val viewRetailerModelResponseLiveData: MutableLiveData<ResponseState<ViewRetailerModel>>
+        get() = repository.viewRetailerModelResponseLiveData
+
+    fun ViewRetailerModel(token: String, data: String) {
+        viewModelScope.launch {
+            repository.ViewRetailerModel(token, data)
         }
     }
 
 
 
 
-  //refreshToken
-val refreshTokenResponseLiveData: LiveData<ResponseState<refreshTokenModel>>
-    get() = repository.refreshTokenResponseLiveData
-fun refreshToken(token: String, data: String) {
-    viewModelScope.launch {
-        repository.refreshToken(token,data)
-    }
-}
-
-  //app update
-val appupdateResponseLiveData: LiveData<ResponseState<appUpdateUrlModel>>
-    get() = repository.appUpdateResponseLiveData
-fun appUpdate(token: String, data: String) {
-    viewModelScope.launch {
-        repository.appUpdate(token,data)
-    }
-}
-
-
-
-
-
-  //cashCollection
-val cashCollectionResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
-    get() = repository.cashCollectionResponseLiveData
-fun cashCollection(token: String, data: String, insuranceOrCashCollection: String) {
-    viewModelScope.launch {
-        repository.cashCollection(token,data,insuranceOrCashCollection)
-    }
-}
-
-
-    //insurance
-val insuranceResponseLiveData: MutableLiveData<ResponseState<InsuranceModel>>
-    get() = repository.insuranceResponseLiveData
-fun insurance(token: String, data: String, insuranceOrCashCollection: String) {
-    viewModelScope.launch {
-        repository.insurance(token,data,insuranceOrCashCollection)
-    }
-}
-
-
-
-
-
-  //checkUser
-val checkUserResponseLiveData: MutableLiveData<ResponseState<checkUserModel>>
-    get() = repository.checkUserResponseLiveData
-fun checkUser(token: String, data: String) {
-    viewModelScope.launch {
-        repository.checkUser(token,data)
-    }
-}
-
-
-  //beneficiaryList
-val beneficiaryListResponseLiveData: MutableLiveData<ResponseState<beneficiaryListModel>>
-    get() = repository.beneficiaryListResponseLiveData
-fun beneficiaryList(token: String, data: String) {
-    viewModelScope.launch {
-        repository.beneficiaryList(token,data)
-    }
-}
-
-
-  //addRemitter
-val addRemitterResponseLiveData: MutableLiveData<ResponseState<addRemitterModel>>
-    get() = repository.addRemitterResponseLiveData
-fun addRemitter(token: String, data: String) {
-    viewModelScope.launch {
-        repository.addRemitter(token,data)
-    }
-}
-
-
-  //addBeneficiary
-val addBeneficiaryResponseLiveData: MutableLiveData<ResponseState<addBeneficiaryModel>>
-    get() = repository.addBeneficiaryResponseLiveData
-fun addBeneficiary(token: String, data: String) {
-    viewModelScope.launch {
-        repository.addBeneficiary(token,data)
-    }
-}
-  //beneficiary Verify
-val beneficiaryVerifyResponseLiveData: MutableLiveData<ResponseState<verifyBeneficiaryModel>>
-    get() = repository.beneficiaryVerifyResponseLiveData
-fun beneficiaryVerify(token: String, data: String) {
-    viewModelScope.launch {
-        repository.beneficiaryVerify(token,data)
-    }
-}
-  //moneyTransfer
-val moneyTransferResponseLiveData: MutableLiveData<ResponseState<MoneyTranspherModel>>
-    get() = repository.moneyTransferResponseLiveData
-fun moneyTransfer(token: String, data: String) {
-    viewModelScope.launch {
-        repository.moneyTransfer(token,data)
-    }
-}
-
-
-  //electricStatelist
-val electricStatelistResponseLiveData: MutableLiveData<ResponseState<electricStatelistModel>>
-    get() = repository.electricStatelistResponseLiveData
-fun electricStatelist(token: String, data: String) {
-    viewModelScope.launch {
-        repository.electricStatelist(token,data)
-    }
-}
-
-
-  //electricbillerlist
-val electricbillerlistResponseLiveData: MutableLiveData<ResponseState<billerlistModel>>
-    get() = repository.electricbillerlistResponseLiveData
-fun electricbillerlist(token: String, data: String) {
-    viewModelScope.launch {
-        repository.electricbillerlist(token,data)
-    }
-}
-
-
-  //electricBillbillFetch
-val electricBillbillFetchResponseLiveData: MutableLiveData<ResponseState<electricBillbillFetchModel>>
-    get() = repository.electricBillbillFetchResponseLiveData
-fun electricBillbillFetch(token: String, data: String) {
-    viewModelScope.launch {
-        repository.electricBillbillFetch(token,data)
-    }
-}
-
-
-  //billpaytransaction
-val billpaytransactionResponseLiveData: MutableLiveData<ResponseState<billpaytransactionModel>>
-    get() = repository.billpaytransactionResponseLiveData
-fun billpaytransaction(token: String, data: String) {
-    viewModelScope.launch {
-        repository.billpaytransaction(token,data)
-    }
-}
 
 }

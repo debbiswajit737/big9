@@ -1,7 +1,9 @@
 package com.big9.app.repository
 
+import AddretailerModel
 import InsuranceModel
 import MoneyTranspherModel
+import ViewRetailerModel
 import addBeneficiaryModel
 import addRemitterModel
 import android.provider.Settings.Global.getString
@@ -705,6 +707,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
                 )
             )
         } catch (throwable: Throwable) {
+            Log.d("TAG_mob", "PrePaidMobileTranspher: "+throwable.message)
             _prePaidMobileTranspherResponseLiveData.postValue(ResponseState.create(throwable))
         }
 
@@ -2024,5 +2027,53 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
         }
 
     }
+    //billpaytransaction
+    private val _addRetailerResponseLiveData =
+        MutableLiveData<ResponseState<AddretailerModel>>()
+    val addRetailerResponseLiveData: MutableLiveData<ResponseState<AddretailerModel>>
+        get() = _addRetailerResponseLiveData
+
+
+    suspend fun addRetailer(token: String, loginModel: String) {
+        _addRetailerResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.addRetailer(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _addRetailerResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _addRetailerResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //view retailer
+    private val _viewRetailerModelResponseLiveData =
+        MutableLiveData<ResponseState<ViewRetailerModel>>()
+    val viewRetailerModelResponseLiveData: MutableLiveData<ResponseState<ViewRetailerModel>>
+        get() = _viewRetailerModelResponseLiveData
+
+
+    suspend fun ViewRetailerModel(token: String, loginModel: String) {
+        _viewRetailerModelResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.ViewRetailerModel(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _viewRetailerModelResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _viewRetailerModelResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+
 }
 

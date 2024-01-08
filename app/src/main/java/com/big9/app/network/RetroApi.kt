@@ -1,7 +1,9 @@
 package com.big9.app.network
 
+import AddretailerModel
 import InsuranceModel
 import MoneyTranspherModel
+import ViewRetailerModel
 import addBeneficiaryModel
 import addRemitterModel
 import appUpdateUrlModel
@@ -660,4 +662,24 @@ interface RetroApi {
         @Header("Authtoken") token: String,
         @Body data: String
     ): Response<billpaytransactionModel>
+
+    @POST("v1/services/channels/add_retailer")
+    suspend fun addRetailer(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<AddretailerModel>
+
+
+
+    @POST("v1/services/channels/view_partner")
+    suspend fun ViewRetailerModel(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<ViewRetailerModel>
+
+
+
+
+
+
 }

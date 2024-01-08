@@ -2,6 +2,7 @@ package com.big9.app.ui.fragment
 
 
 
+import ViewRetailerData
 import android.Manifest
 import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
@@ -44,9 +45,11 @@ import com.big9.app.adapter.FinancialAdapter
 import com.big9.app.adapter.HorizontalMarginItemDecoration
 import com.big9.app.adapter.MostPopularAdapter
 import com.big9.app.adapter.ReportAdapter
+import com.big9.app.adapter.RetailerAdapter
 import com.big9.app.adapter.TravelAdapter
 import com.big9.app.adapter.UtilityAdapter
 import com.big9.app.adapter.bluetooth.BluetoothDeviceAdapter
+import com.big9.app.data.model.BankListModel
 import com.big9.app.data.model.ListIcon
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.data.viewMovel.TableViewModel
@@ -122,6 +125,7 @@ class HomeFragment : BaseFragment() {
     var iconList10 = ArrayList<ListIcon>()
     var iconList11 = ArrayList<ListIcon>()
     var iconList12 = ArrayList<ListIcon>()
+    var iconList13 = ArrayList<ListIcon>()
     var naviGationValue=""
     var isReport=false
     lateinit var binding: FragmentHomeBinding
@@ -287,6 +291,55 @@ class HomeFragment : BaseFragment() {
             }
         }
 
+        viewModel?.viewRetailerModelResponseLiveData?.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+                    setRecycleView(it?.data?.data)
+
+                    viewModel?.addRetailerResponseLiveData?.value=null
+                }
+
+                is ResponseState.Error -> {
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    //binding.btnSubmit.setBottonLoader(true,binding.llSubmitLoader)
+                    viewModel?.addRetailerResponseLiveData?.value=null
+                }
+            }
+        }
+
+    }
+
+    private fun setRecycleView(data: ArrayList<ViewRetailerData>?) {
+        activity?.let {act->
+
+           /* retailerList.add(BankListModel(R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
+            retailerList.add(BankListModel(R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
+            retailerList.add(BankListModel(R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
+*/
+/*
+@SerializedName("ID"           ) var ID          : String? = null
+    @SerializedName("name"         ) var name        : String? = null
+    @SerializedName("mobileNo"     ) var mobileNo    : String? = null
+    @SerializedName("curr_balance" ) var currBalance : String? = null
+    @SerializedName("bname"        ) var bname       : String? = null
+ */
+            val bankListBottomSheetDialog = RetailerListBottomSheetDialog(object : CallBack {
+                override fun getValue(s: String) {
+                    findNavController().navigate(R.id.action_homeFragment2_to_retailerPaymentFragment)
+                    // Toast.makeText(requireActivity(), "$s", Toast.LENGTH_SHORT).show()
+                }
+            },data)
+            bankListBottomSheetDialog.show(
+                act.supportFragmentManager,
+                bankListBottomSheetDialog.tag
+            )
+        }
     }
 
     private fun getDeviceWIDTHandHeight() {
@@ -1433,6 +1486,49 @@ class HomeFragment : BaseFragment() {
 
                 })
             }
+
+            recycleRetailerViewEpayBanking.apply {
+                iconList13.clear()
+                iconList13.add(ListIcon(getString(R.string.add_retailers) , R.drawable.add_user_icon,""))
+                iconList13.add(ListIcon("View Channel" , R.drawable.add_user_icon,""))
+               /* iconList6.add(ListIcon(getString(R.string.move_to_wallet), R.drawable.balance,getString(R.string.move_to_wallet_slag)))
+                iconList6.add(ListIcon(getString(R.string.ePotly), R.drawable.epotlyinb,getString(R.string.ePotly_slag)))
+                iconList6.add(ListIcon(getString(R.string.payment_request), R.drawable.balance,getString(R.string.payment_request_slag)))*/
+                //circle_shape
+                adapter= RetailerAdapter(iconList13,R.drawable.circle_shape2, object : CallBack2 {
+                    override fun getValue2(s: String,slag: String) {
+                        //checkService(s,slag)
+                        //serviceNavigation(s)
+                        when(s){
+                            getString(R.string.add_retailers) -> {
+                                findNavController().navigate(R.id.action_homeFragment2_to_addRetailerFragment)
+                            }
+
+                            getString(R.string.view_channel) -> {
+                                val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                                loginResponse?.let { loginData ->
+                                    loginData.userid?.let {
+
+                                        val data = mapOf(
+                                            "userid" to loginData.userid
+                                        )
+                                        val gson = Gson()
+                                        var jsonString = gson.toJson(data)
+                                        loginData.AuthToken?.let {
+                                            viewModel?.ViewRetailerModel(it, jsonString.encrypt())
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+
+                })
+            }
+
+
             recycleTravel.apply {
                 iconList7.clear()
                 iconList7.add(ListIcon(getString(R.string.flight), R.drawable.ic_flight,getString(R.string.flight_slag)))
@@ -1602,6 +1698,8 @@ class HomeFragment : BaseFragment() {
             }
         }
 
+
+
         activity?.let {
             loader = MethodClass.custom_loader(it, getString(R.string.please_wait))
 
@@ -1610,6 +1708,13 @@ class HomeFragment : BaseFragment() {
                 loginData.name?.let {
                     binding.tvUser.text=it
                 }
+                if(loginData.UserType=="D" || loginData.UserType=="SD"){
+                    binding.cardRetailer.visibility=View.VISIBLE
+                }
+                else{
+                    binding.cardRetailer.visibility=View.GONE
+                }
+
             }
 
 

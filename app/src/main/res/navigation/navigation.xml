@@ -106,6 +106,12 @@
         <action
             android:id="@+id/action_homeFragment2_to_forgotPasswordOtpFragment"
             app:destination="@id/forgotPasswordOtpFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_addRetailerFragment"
+            app:destination="@id/addRetailerFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_retailerPaymentFragment"
+            app:destination="@id/retailerPaymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/mobileRechargeFragment"
@@ -418,4 +424,12 @@
             android:id="@+id/action_otpNewRmnFragment_to_beneficiaryFragment"
             app:destination="@id/beneficiaryFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/addRetailerFragment"
+        android:name="com.big9.app.ui.fragment.AddRetailerFragment"
+        android:label="AddRetailerFragment" />
+    <fragment
+        android:id="@+id/retailerPaymentFragment"
+        android:name="com.big9.app.ui.fragment.RetailerPaymentFragment"
+        android:label="RetailerPaymentFragment" />
 </navigation>
