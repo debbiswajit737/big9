@@ -1447,7 +1447,7 @@ class HomeFragment : BaseFragment() {
                 adapter= AEPSAdapter(iconList5,R.drawable.circle_shape2,object : CallBack2 {
                     override fun getValue2(s: String,tag: String) {
                         //checkService(s,tag)
-                        serviceNavigation(s,tag)
+                       //-m  serviceNavigation(s,tag)
                        // serviceNavigation(s)
                        /* when(s) {
                             getString(R.string.balance) -> {
