@@ -92,6 +92,6 @@ object Constants {
     var mobileNo: String=""
     var currBalance: String=""
     var bname: String=""
-    var s1:String=""
-    var s2:String=""
+    var epotlyMoboleNo:String=""
+
 }

@@ -22,7 +22,7 @@ android {
         minSdk = 24
         targetSdk = 33
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
         multiDexEnabled =true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -34,7 +34,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-
+            buildConfigField("String", "SERVER_URL",  "\"${properties["MY_URL"]}\"")
+        }
+        debug {
+            buildConfigField("String", "SERVER_URL",  "\"${properties["MY_URL"]}\"")
+           // buildConfigField("String", "SERVER_URL", "\"https://big9.net/restapi/\"")
         }
 
 
@@ -53,6 +57,7 @@ android {
     buildFeatures {
         dataBinding= true
         viewBinding = true
+        buildConfig = true
 
     }
 

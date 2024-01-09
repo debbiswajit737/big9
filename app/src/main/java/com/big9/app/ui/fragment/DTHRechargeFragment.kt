@@ -15,6 +15,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.big9.app.BuildConfig
+
 import com.big9.app.R
 import com.big9.app.data.model.ReceiptModel
 import com.big9.app.data.viewMovel.DTHViewModel
@@ -152,7 +154,7 @@ class DTHRechargeFragment : BaseFragment() {
             val (isLogin, loginResponse) =sharedPreff.getLoginData()
             if (isLogin){
                 loginResponse?.let {loginData->
-                    val data ="{\"userid\":\"${loginData.userid}\",\"operator\":\"${viewModel.operator.value}\",\"opcode\":\"${viewModel.operatorCode.value}\",\"tpin\":\"${tpin}\",\"subscriber_id\":\"${viewModel.mobile.value}\",\"rcamt\":\"${viewModel.amt.value}\",\"IP\":\"${MethodClass.getLocalIPAddress()}\"}"
+                    val data ="{\"userid\":\"${loginData.userid}\",\"operator\":\"${viewModel.operator.value}\",\"opcode\":\"${viewModel.operatorCode.value}\",\"tpin\":\"${tpin}\",\"subscriber_id\":\"${viewModel.subId.value}\",\"rcamt\":\"${viewModel.dthAmt.value}\",\"IP\":\"${MethodClass.getLocalIPAddress()}\"}"
                     /*val data = mapOf(
                         "userid" to loginData.userid,
                         "operator" to viewModel.operator.value,
@@ -179,12 +181,13 @@ class DTHRechargeFragment : BaseFragment() {
             when (it) {
                 is ResponseState.Loading -> {
                     loader?.show()
+
                 }
 
                 is ResponseState.Success -> {
                     binding.btnSubmit.setBottonLoader(true,binding.llSubmitLoader)
                     loader?.dismiss()
-                    viewModel?.popup_message?.value="Success"
+                    /*viewModel?.popup_message?.value="Success"
                     val successPopupFragment = SuccessPopupFragment(object :
                         CallBack4 {
                         override fun getValue4(
@@ -192,7 +195,7 @@ class DTHRechargeFragment : BaseFragment() {
                             s2: String,
                             s3: String,
                             s4: String
-                        ) {
+                        ) {*/
                             /*it.data?.let {
                                 val dialogFragment2 = DthReceptDialogFragment(object: CallBack {
                                     override fun getValue(s: String) {
@@ -259,10 +262,10 @@ class DTHRechargeFragment : BaseFragment() {
                             }
 
 
-                        }
+                   /*     }
                     }
                     )
-                    successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
+                    successPopupFragment.show(childFragmentManager, successPopupFragment.tag)*/
 
 
                     viewModel?.apply {

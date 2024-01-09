@@ -19,6 +19,7 @@ import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.popup.SuccessPopupFragment
 import com.big9.app.ui.receipt.EPotlyReceptDialogFragment
 import com.big9.app.utils.common.MethodClass
+import com.big9.app.utils.helpers.Constants.epotlyMoboleNo
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack4
 import com.google.gson.Gson
@@ -113,6 +114,10 @@ class EpotlyFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
+                    it?.data?.epotlyData?.mobileNo?.let {
+                        epotlyMoboleNo=it
+                    }
+
                     viewModel.popup_message.value="${it?.data?.epotlyData?.status}\nMobile No.:${it?.data?.epotlyData?.mobileNo}\nLast Transaction Amount: ${it?.data?.epotlyData?.LastTransactionAmount}\nBalance : ${it?.data?.epotlyData?.curramt}"
                         val successPopupFragment = SuccessPopupFragment(object :
                             CallBack4 {
@@ -147,13 +152,13 @@ class EpotlyFragment : BaseFragment() {
                         epotly_mobile.value=""
                         epotly_amt.value=""
                     }
-
+                    viewModel?.epotlyTranspherResponseLiveData?.value=null
                 }
 
                 is ResponseState.Error -> {
                     loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
-
+                    viewModel?.epotlyTranspherResponseLiveData?.value=null
                 }
             }
         }

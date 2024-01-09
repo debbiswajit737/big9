@@ -743,7 +743,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     //Credit card verify otp
     private val _creditCardVeryfyOTPResponseLiveData =
         MutableLiveData<ResponseState<CreditCardVerifyOtpModel>>()
-    val creditCardVeryfyOTPResponseLiveData: LiveData<ResponseState<CreditCardVerifyOtpModel>>
+    val creditCardVeryfyOTPResponseLiveData: MutableLiveData<ResponseState<CreditCardVerifyOtpModel>>
         get() = _creditCardVeryfyOTPResponseLiveData
 
     suspend fun creditCardVeryfyOTP(token: String, loginModel: String) {
@@ -769,7 +769,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     //Epotly Transpher
     private val _epotlyTranspherResponseLiveData =
         MutableLiveData<ResponseState<EPotlyTranspherModel>>()
-    val epotlyTranspherResponseLiveData: LiveData<ResponseState<EPotlyTranspherModel>>
+    val epotlyTranspherResponseLiveData: MutableLiveData<ResponseState<EPotlyTranspherModel>>
         get() = _epotlyTranspherResponseLiveData
 
     suspend fun epotlyTranspher(token: String, loginModel: String) {

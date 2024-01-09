@@ -25,6 +25,7 @@ import com.big9.app.network.RetrofitHelper.handleApiError
 
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.popup.SuccessPopupFragment
+import com.big9.app.ui.popup.SuccessPopupFragment2
 import com.big9.app.ui.receipt.newRecept.CreditCardReceptDialogFragment
 import com.big9.app.ui.receipt.newRecept.PostPaidnewMobileReceptDialogFragment
 import com.big9.app.utils.common.MethodClass
@@ -201,44 +202,49 @@ class TransactionOtpFragment : BaseFragment() {
                 is ResponseState.Success -> {
                     loader?.dismiss()
                     viewModel?.apply {
-                        credit_card.value=""
-                        credit_holder_name.value=""
-                        credit_mobile.value=""
-                        credit_mobile.value=""
-                        credit_amt.value=""
-                        credit_remarks.value=""
-                        var message=it?.data?.Description?.toString()
+
+
                         it?.data?.data?.let {data->
                             if (data.size>0){
                                 data?.get(0)?.let {
-                                   // popup_message.value=""
-
-                                    val successPopupFragment = SuccessPopupFragment(object :
+                                    /*viewModel?.popup_message?.value=it?.status.toString().replace("null","")
+                                    val successPopupFragment = SuccessPopupFragment2(object :
                                         CallBack4 {
                                         override fun getValue4(
                                             s1: String,
                                             s2: String,
                                             s3: String,
                                             s4: String
-                                        ) {
+                                        ) {*/
+                                            var cCard:String=credit_card.value?.maskExceptLastFour().toString()
                                             viewModel.popup_message.value="Success"
                                             Constants.recycleViewReceiptList.clear()
                                             // viewModel?.receiveStatus?.value="getString(R.string.mobile_recharged)"
-                                            Constants.recycleViewReceiptList.add(ReceiptModel("Transaction Date",it?.transDate.toString()))
-                                            Constants.recycleViewReceiptList.add(ReceiptModel("Card Type: ",it.network.toString()))
-                                            Constants.recycleViewReceiptList.add(ReceiptModel("Current Balance : ",it?.usercurrbal.toString()))
-                                            Constants.recycleViewReceiptList.add(ReceiptModel("Current Amount",it.amount.toString()))
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("Transaction Id",it?.refId.toString().replace("null","")))
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("Transaction Date",it?.transDate.toString().replace("null","")))
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("Card Number: ",cCard))
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("Card Type: ",it.network.toString().replace("null","")))
+                                            //Constants.recycleViewReceiptList.add(ReceiptModel("Current Balance : ",it?.usercurrbal.toString()))
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("Amount",it.amount.toString().replace("null","")))
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("UTR",it.utr.toString().replace("null","")))
 
-                                            Constants.recycleViewReceiptList.add(ReceiptModel("Status",it.status.toString()))
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("Status",it.status.toString().replace("null","")))
 
                                             val dialogFragment = CreditCardReceptDialogFragment()
                                             dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                                            credit_card.value=""
+                                            credit_holder_name.value=""
+                                            credit_mobile.value=""
+                                            credit_mobile.value=""
+                                            credit_amt.value=""
+                                            credit_remarks.value=""
+                                            otp.value=""
                                             // findNavController().popBackStack(R.id.homeFragment2,false)
                                             //findNavController().popBackStack()
-                                        }
+                                      /*  }
 
                                     })
-                                    successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
+                                    successPopupFragment.show(childFragmentManager, successPopupFragment.tag)*/
 
 
                                 }
@@ -249,19 +255,20 @@ class TransactionOtpFragment : BaseFragment() {
 
                     }
 
-
+                    viewModel?.creditCardVeryfyOTPResponseLiveData?.value=null
                 }
                 is ResponseState.Error -> {
                     loader?.dismiss()
                     viewModel?.apply {
-                        credit_card.value=""
+                       /* credit_card.value=""
                         credit_holder_name.value=""
                         credit_mobile.value=""
                         credit_mobile.value=""
                         credit_amt.value=""
-                        credit_remarks.value=""
+                        credit_remarks.value=""*/
                     }
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    viewModel?.creditCardVeryfyOTPResponseLiveData?.value=null
                 }
             }
         }
@@ -369,5 +376,10 @@ class TransactionOtpFragment : BaseFragment() {
         val remainingSeconds = (milliseconds % 60000) / 1000
 
         return String.format("%02d:%02d:%02d", hours, remainingMinutes, remainingSeconds)
+    }
+
+    fun String.maskExceptLastFour(): String {
+        val visibleLength = this.length - 4
+        return "*".repeat(visibleLength) + this.substring(visibleLength)
     }
 }

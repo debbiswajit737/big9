@@ -642,6 +642,15 @@ class HomeFragment : BaseFragment() {
                 }
 
                 getString(R.string.credit_card) -> {
+                    viewModel?.apply {
+                        credit_card.value=""
+                        credit_holder_name.value=""
+                        credit_mobile.value=""
+                        credit_mobile.value=""
+                        credit_amt.value=""
+                        credit_remarks.value=""
+                        otp.value=""
+                    }
                     findNavController().navigate(R.id.action_homeFragment2_to_creditCardPaymentFragment)
                 }
 

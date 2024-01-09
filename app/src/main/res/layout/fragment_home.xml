@@ -50,6 +50,7 @@
                 android:id="@+id/viewPager2"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
+                android:visibility="gone"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +66,7 @@
                 android:layout_marginVertical="20dp"
                 app:layout_constraintEnd_toStartOf="@+id/card_adhar"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewPager2">
+                app:layout_constraintTop_toBottomOf="@+id/tv_user">
                 <!-- android:background="@color/white"-->
                 <TextView
                     android:id="@+id/tv_message"
@@ -1632,6 +1633,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="9dp"
                 android:elevation="8dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -2756,6 +2758,7 @@
                 android:id="@+id/viewPager3"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
+                android:visibility="gone"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -2767,6 +2770,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/bb1"
+                android:visibility="gone"
                 android:layout_marginTop="20dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"

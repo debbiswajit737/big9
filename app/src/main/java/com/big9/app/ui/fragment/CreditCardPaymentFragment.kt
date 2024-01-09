@@ -68,6 +68,8 @@ class CreditCardPaymentFragment : BaseFragment() {
                                     val gson= Gson()
                                     var jsonString = gson.toJson(data)
                                     loginData.AuthToken?.let {
+                                        viewModel?.otp?.value=""
+
                                        creditSendVerifyOtp(it,jsonString.encrypt())
                                     }
                                 }

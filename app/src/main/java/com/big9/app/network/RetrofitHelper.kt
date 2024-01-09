@@ -8,6 +8,7 @@ import com.big9.app.ui.popup.ErrorPopUp
 import com.big9.app.utils.common.MethodClass.appUpdate
 import com.big9.app.utils.common.MethodClass.userLogout
 import com.google.gson.GsonBuilder
+import com.intuit.sdp.BuildConfig
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

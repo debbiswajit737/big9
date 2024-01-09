@@ -152,7 +152,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:fontFamily="@font/open_sans_medium"
-                        android:text="User Name"
+                        android:text=""
                         android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="@+id/img_operator"
                         app:layout_constraintStart_toEndOf="@+id/img_operator"

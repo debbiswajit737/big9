@@ -17,6 +17,7 @@ import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentEPotlyReceptDialogBinding
 import com.big9.app.ui.activity.DashboardActivity
 import com.big9.app.ui.base.BaseCenterSheetFragment
+import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.`interface`.CallBack
 
 
@@ -82,11 +83,12 @@ class EPotlyReceptDialogFragment(
         }
         epotlyData?.let {
             binding.apply {
-                textView30.text=epotlyData?.curramt.toString()
-                tvTransaction.text= epotlyData?.id.toString()
-                tvPrice.text= epotlyData?.LastTransactionAmount.toString()
-                textView29.text= epotlyData?.LastTransactionAmount.toString()
-                tvBankPrice.text= epotlyData?.LastTransactionAmount.toString()
+                textView26.text= Constants.epotlyMoboleNo.replace("null","")
+                textView30.text=epotlyData?.curramt.toString().replace("null","")
+                tvTransaction.text= epotlyData?.id.toString().replace("null","")
+                tvPrice.text= epotlyData?.LastTransactionAmount.toString().replace("null","")
+                textView29.text= epotlyData?.LastTransactionAmount.toString().replace("null","")
+                tvBankPrice.text= epotlyData?.LastTransactionAmount.toString().replace("null","")
             }
 
 

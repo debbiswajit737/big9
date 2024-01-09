@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -534,8 +535,8 @@ class ReportFragment : BaseFragment()  {
                             for (index in responseData.indices){
                                 val items=responseData[index]
                                 items.apply {
-                                    var desc="Receiver Name:$receiverName\nReferance id - $receiverID\nSender Current Balance : $curBalSender\nSender ID : $senderID\nSender Mobile No.:$senderMobileNo"+
-                                            "\nReceiver ID: $receiverID"+
+                                    var desc="Receiver Name:$receiverName\nSender Current Balance : $curBalSender\nSender Mobile No.:$senderMobileNo"+
+
                                             "\nReceiver Mobile No.: $receiverMobileNo"
 
                                     reportList.add(ReportModel(PaymentBYId,LastTransactionAmount,LastTransactionTime,AmountMode,0,desc,imageInt = R.drawable.send_logo))
@@ -796,7 +797,7 @@ class ReportFragment : BaseFragment()  {
 
                         is ResponseState.Success -> {
                             loader?.dismiss()
-                            binding.tvConfirm.setBottonLoader(true,binding.llLoader)
+                            //binding.tvConfirm.setBottonLoader(true,binding.llLoader)
                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                             /*reportList.add(
                                 ReportModel(
@@ -1823,8 +1824,9 @@ class ReportFragment : BaseFragment()  {
                     //items=reportList
                     lifecycleScope.launch {
                      //   binding.btnHasdata.visibility=View.GONE
+                        Log.d("TAG_size", "showrecycleView: "+reportList.size)
                         reportList?.let {
-                            if(it.size>20) {
+                            if(it.size>21) {
                                 getAllData2()
                             }
                             else{
@@ -1879,6 +1881,7 @@ class ReportFragment : BaseFragment()  {
             }
 
             reportAdapter?.items = newReportList
+            Log.d("TAG_adapterSize", "getAllData2: "+reportAdapter?.items?.size)
             reportAdapter?.notifyDataSetChanged()
            // binding.btnHasdata.visibility=View.VISIBLE
         } /*else {

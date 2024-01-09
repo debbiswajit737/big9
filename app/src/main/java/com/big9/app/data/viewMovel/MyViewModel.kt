@@ -1700,7 +1700,7 @@ class MyViewModel @Inject constructor(
     }
 
     //credit card verify otp
-    val creditCardVeryfyOTPResponseLiveData: LiveData<ResponseState<CreditCardVerifyOtpModel>>
+    val creditCardVeryfyOTPResponseLiveData: MutableLiveData<ResponseState<CreditCardVerifyOtpModel>>
         get() = repository.creditCardVeryfyOTPResponseLiveData
 
     fun creditCardVeryfyOTP(token: String, data: String) {
@@ -1710,7 +1710,7 @@ class MyViewModel @Inject constructor(
     }
 
     //Epotly transpher
-    val epotlyTranspherResponseLiveData: LiveData<ResponseState<EPotlyTranspherModel>>
+    val epotlyTranspherResponseLiveData: MutableLiveData<ResponseState<EPotlyTranspherModel>>
         get() = repository.epotlyTranspherResponseLiveData
 
     fun epotlyTranspher(token: String, data: String) {
