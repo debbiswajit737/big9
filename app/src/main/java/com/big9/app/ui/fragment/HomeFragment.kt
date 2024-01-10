@@ -209,6 +209,7 @@ class HomeFragment : BaseFragment() {
 
            }
             viewModel?.from_page_message?.value=null
+            viewModel?.cashCollectionResponseLiveData?.value=null
 /*
  "https://www.gibl.in/wallet/validate2/",
                    "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
@@ -218,6 +219,7 @@ class HomeFragment : BaseFragment() {
             loader?.dismiss()
             handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
             viewModel?.from_page_message?.value=null
+            viewModel?.cashCollectionResponseLiveData?.value=null
         }
     }
 }

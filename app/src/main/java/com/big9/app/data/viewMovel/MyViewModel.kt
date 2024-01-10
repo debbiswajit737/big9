@@ -913,6 +913,48 @@ class MyViewModel @Inject constructor(
         return isValid
     }
 
+    fun MoneyTranspherValidation2(): Boolean {
+
+        invisibleErrorTexts()
+
+        var isValid = true
+
+
+        if (mobileSendMoney.value?.trim().isNullOrBlank()) {
+            mobileSendMoneyError.value = "Mobile number is required"
+            mobileSendMoneyErrorVisible.value = true
+            isValid = false
+        } else {
+            if (mobileSendMoney.value?.trim()?.validate("mobile") == false) {
+                mobileSendMoneyError.value = "Mobile number is not valid"
+                mobileSendMoneyErrorVisible.value = true
+                isValid = false
+            } else {
+                mobileSendMoneyError.value = ""
+                mobileSendMoneyErrorVisible.value = false
+            }
+        }
+
+            if (nameSendMoney.value?.trim().isNullOrBlank()) {
+                nameSendMoneyError.value = "Name is required"
+                nameSendMoneyErrorVisible.value = true
+                isValid = false
+            } else {
+                if (nameSendMoney.value?.trim()?.validate("name") == false) {
+                    nameSendMoneyError.value = "Name is not valid"
+                    nameSendMoneyErrorVisible.value = true
+                    isValid = false
+                } else {
+                    nameSendMoneyError.value = ""
+                    nameSendMoneyErrorVisible.value = false
+                }
+            }
+
+        return isValid
+    }
+
+
+
 
     fun mobileNumberValidation(): Boolean {
         invisibleErrorTexts()
@@ -1987,7 +2029,7 @@ class MyViewModel @Inject constructor(
 
 
     //cashCollection
-    val cashCollectionResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
+    val cashCollectionResponseLiveData: MutableLiveData<ResponseState<cashCollectionModel>>
         get() = repository.cashCollectionResponseLiveData
 
     fun cashCollection(token: String, data: String, insuranceOrCashCollection: String) {

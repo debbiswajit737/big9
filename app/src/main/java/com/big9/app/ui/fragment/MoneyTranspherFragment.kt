@@ -33,6 +33,8 @@ class MoneyTranspherFragment : BaseFragment() {
     private val viewModel: MyViewModel by activityViewModels()
     private var loader: Dialog? = null
     var isNewUser=false
+    var isNewCall=true
+    var isBankError=false
     var remiterUserData: checkUserModel? =null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,13 +70,13 @@ class MoneyTranspherFragment : BaseFragment() {
             activity?.let {act->
                 btnSubmit.setOnClickListener{
                     if (viewModel?.MoneyTranspherValidation() == true) {
-                        if(viewModel?.sendMoneyVisibility?.value==true){
+                        if(viewModel?.sendMoneyVisibility?.value==true ){
                             if (isNewUser){
 
                                     remiterUserData.apply {
                                         val bundle = Bundle()
 
-                                          bundle.putString("customerid", customerId)
+                                        bundle.putString("customerid", customerId)
                                             bundle.putString("customer_number", viewModel?.mobileSendMoney?.value)
                                             bundle.putString("customer_name", viewModel?.nameSendMoney?.value)
                                             findNavController().navigate(R.id.action_moneyTranspherFragment_to_otpNewRmnFragment,bundle)
@@ -88,8 +90,10 @@ class MoneyTranspherFragment : BaseFragment() {
                             }
                             else {
 
+                                if(!isBankError){
+                                    findNavController().navigate(R.id.action_moneyTranspherFragment_to_beneficiaryFragment)
+                                }
 
-                                findNavController().navigate(R.id.action_moneyTranspherFragment_to_beneficiaryFragment)
                             }
                           //  isNewUser=false
                         }
@@ -221,9 +225,9 @@ class MoneyTranspherFragment : BaseFragment() {
                   isNewUser=false
                   viewModel?.mobileSendMoney?.value=it.data?.response?.mobile.toString()
                   viewModel?.nameSendMoney?.value="${it.data?.response?.fname.toString()} ${it.data?.response?.lname.toString()}".replace("null","")
+                  isBankError=false
 
-
-
+                  isNewCall=false
 
                  /* val bundle2 = Bundle()
                        var  castIdData= remiterUserData?.custID.toString()
@@ -233,12 +237,28 @@ class MoneyTranspherFragment : BaseFragment() {
               }
                else   if (status.lowercase()=="201"){
                   isNewUser=false
+                  //isNewCall=true
                   viewModel?.sendMoneyVisibility?.value = true
                   binding.etMob.isFocusable = false
                   binding.etMob.isFocusableInTouchMode = false
+
+                  callNewUser()
+
+
+                   /*if (remiterUserData?.stateresp==null){
+                       isNewUser=false
+                       isBankError=true
+                       isNewCall=false
+                       Toast.makeText(requireContext(), "Unable to send OTP", Toast.LENGTH_SHORT).show()
+                   }
+                  else {
+
+                   }*/
               }
                else  if (status=="202"){
+                  isBankError=false
                   isNewUser=true
+                  isNewCall=false
                   bankCode= remiterUserData?.stateresp.toString()
                   viewModel?.sendMoneyVisibility?.value = true
                   binding.etMob.isFocusable = false
@@ -261,6 +281,32 @@ class MoneyTranspherFragment : BaseFragment() {
         }
 }
 
+    }
+
+    private fun callNewUser() {
+       /* if (MoneyTranspherValidation2()==true) {
+            val (isLogin, loginResponse) = sharedPreff.getLoginData()
+            if (isLogin) {
+                loginResponse?.let { loginData ->
+                    viewModel?.apply {
+
+                        val data = mapOf(
+                            "customer_number" to viewModel?.mobileSendMoney?.value,
+                            "userid" to loginData.userid,
+
+                            )
+
+                        val gson = Gson()
+                        var jsonString = gson.toJson(data)
+                        loginData.AuthToken?.let {
+                            val data = jsonString.encrypt()
+                            checkUser(it, data)
+                        }
+                    }
+
+                }
+            }
+        }*/
     }
 
     private fun hideSoftKeyboard() {

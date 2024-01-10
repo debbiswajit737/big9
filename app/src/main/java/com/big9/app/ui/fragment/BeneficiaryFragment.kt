@@ -274,7 +274,7 @@ loginResponse?.let { loginData ->
                     bankAccount=bankAccData
                     benName=beneNameData
                     activity?.let {act->
-                        val selectTransactionTypeBottomSheetDialog = SelectTransactionTypeBottomSheetDialog(object :
+                        val selectTransactionTypeBottomSheetDialog = SelectTransactionTypemMoneyTranspherBottomSheetDialog(object :
                             CallBack {
                             override fun getValue(amount: String) {
                                 val tpinBottomSheetDialog = TpinBottomSheetDialog(object :

@@ -1746,7 +1746,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     //cashCollection
     private val _cashCollectionResponseLiveData =
         MutableLiveData<ResponseState<cashCollectionModel>>()
-    val cashCollectionResponseLiveData: LiveData<ResponseState<cashCollectionModel>>
+    val cashCollectionResponseLiveData: MutableLiveData<ResponseState<cashCollectionModel>>
         get() = _cashCollectionResponseLiveData
 
 
