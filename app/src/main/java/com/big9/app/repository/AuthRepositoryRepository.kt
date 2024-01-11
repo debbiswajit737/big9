@@ -1821,6 +1821,31 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
 
     }
 
+    //checkUser2
+    private val _checkUserResponseLiveData2 =
+        MutableLiveData<ResponseState<checkUserModel>>()
+    val checkUserResponseLiveData2: MutableLiveData<ResponseState<checkUserModel>>
+        get() = _checkUserResponseLiveData2
+
+
+    suspend fun checkUser2(token: String, loginModel: String) {
+        _checkUserResponseLiveData2.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.checkUser2(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _checkUserResponseLiveData2.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _checkUserResponseLiveData2.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+
+
     //beneficiaryList
     private val _beneficiaryListResponseLiveData =
         MutableLiveData<ResponseState<beneficiaryListModel>>()

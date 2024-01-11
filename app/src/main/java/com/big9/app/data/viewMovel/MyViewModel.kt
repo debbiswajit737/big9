@@ -2061,6 +2061,19 @@ class MyViewModel @Inject constructor(
     }
 
 
+    val checkUserResponseLiveData2: MutableLiveData<ResponseState<checkUserModel>>
+        get() = repository.checkUserResponseLiveData2
+
+    fun checkUser2(token: String, data: String) {
+        viewModelScope.launch {
+            repository.checkUser2(token, data)
+        }
+    }
+
+
+
+
+
     //beneficiaryList
     val beneficiaryListResponseLiveData: MutableLiveData<ResponseState<beneficiaryListModel>>
         get() = repository.beneficiaryListResponseLiveData
@@ -2070,6 +2083,9 @@ class MyViewModel @Inject constructor(
             repository.beneficiaryList(token, data)
         }
     }
+
+
+
 
 
     //addRemitter

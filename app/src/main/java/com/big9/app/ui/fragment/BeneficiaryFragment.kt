@@ -18,6 +18,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import beneficiaryListData
 import com.big9.app.R
+import com.big9.app.data.model.BeneficiaryListModel
 
 import com.big9.app.data.model.BeneficiaryListModel2
 import com.big9.app.data.model.ReceiptModel
@@ -256,6 +257,7 @@ loginResponse?.let { loginData ->
                 }
 
             }
+           // beneficiaryList.add(BeneficiaryListModel2("Test User1",R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669",""))
            /* beneficiaryList.add(BeneficiaryListModel("Test User1",R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
             beneficiaryList.add(BeneficiaryListModel("Test User2",R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))
             beneficiaryList.add(BeneficiaryListModel("Test User3",R.drawable.axix_bank_logo,"AXIX BANK","A/C:91022112121212","IFSC:UTIB0000669"))

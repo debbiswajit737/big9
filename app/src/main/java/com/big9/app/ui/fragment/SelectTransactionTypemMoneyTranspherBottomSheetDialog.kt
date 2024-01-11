@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -59,8 +60,20 @@ class SelectTransactionTypemMoneyTranspherBottomSheetDialog(val callBack: CallBa
             tvMoveToBankBottomsheetSubmit.setOnClickListener {
                 viewModel?.apply {
                     if (MoveToBankValidation()) {
-                        amtMoveToBank?.value?.let { it1 -> callBack.getValue(it1) }
-                        dismiss()
+                        try {
+                            var amt=viewModel?.amtMoveToBank?.value.toString().toInt()
+                            if(amt>99 && amt<=25000){
+                                amtMoveToBank?.value?.let { it1 -> callBack.getValue(it1) }
+                                dismiss()
+                            }
+                            else{
+                                Toast.makeText(tvMoveToBankBottomsheetSubmit.context, "Please enter amount between 100 to 25000", Toast.LENGTH_SHORT).show()
+                            }
+                        }catch (e:Exception){
+                            Toast.makeText(tvMoveToBankBottomsheetSubmit.context, "Please enter amount between 100 to 25000", Toast.LENGTH_SHORT).show()
+                        }
+
+
                     }
                 }
             }

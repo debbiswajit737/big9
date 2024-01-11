@@ -609,6 +609,14 @@ interface RetroApi {
         @Body data: String
     ): Response<checkUserModel>
 
+    @POST("v1/services/dmt/check_remitter.php")
+    suspend fun checkUser2(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<checkUserModel>
+
+
+
     @POST("v1/services/dmt/beneficiary_list.php")
     suspend fun beneficiaryList(
         @Header("Authtoken") token: String,
