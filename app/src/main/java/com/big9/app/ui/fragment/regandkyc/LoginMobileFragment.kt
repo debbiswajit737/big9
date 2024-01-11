@@ -37,6 +37,7 @@ import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.API_KEY
 import com.big9.app.utils.helpers.Constants.CLIENT_ID
+import com.big9.app.utils.helpers.Constants.appUpdateUrl
 import com.big9.app.utils.helpers.Constants.loginMobileNumber
 import com.big9.app.utils.helpers.Constants.loginMobileReferanceNumber
 import com.big9.app.utils.helpers.PermissionUtils
@@ -189,8 +190,49 @@ class LoginMobileFragment : BaseFragment() {
                 is ResponseState.Error -> {
                  //   loadingPopup?.dismiss()
                     loader?.let { it.dismiss() }
-                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    if (it.errorCode == 103) {
+                            val data = mapOf(
+                                "mobile" to loginMobileNumber,
+                                "app_version" to  MethodClass.appVersion(binding.root.context)
+                            )
+                            /*"referenceid" to loginData.,*/
+                            val gson = Gson()
+                            var jsonString = gson.toJson(data)
+                            authViewModel?.appUpdate("", jsonString.encrypt())
+
+
+                    }
+
+
+
+                    else {
+                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    }
                     authViewModel?.authLogin?.value=null
+                }
+            }
+        }
+        authViewModel?.appupdateResponseLiveData?.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseState.Loading -> {
+                    loader?.show()
+                   // Log.d("TAGupdate", "observer: 1")
+                }
+
+                is ResponseState.Success -> {
+                    loader?.dismiss()
+                   // Log.d("TAGupdate", "observer: 2")
+                    appUpdateUrl=it?.data?.appUpdateUrl
+                    it?.data?.appUpdateUrl?.let {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
+                    }
+
+                }
+
+                is ResponseState.Error -> {
+                    //Log.d("TAGupdate", "observer: 3")
+                    loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }
             }
         }
@@ -212,7 +254,8 @@ class LoginMobileFragment : BaseFragment() {
                             "secretkey" to API_KEY,
                             "mobile" to loginMobileNumber,
                             "refid" to loginMobileReferanceNumber,
-                            "token" to sharedPreff.getFcnToken().toString()
+                            "token" to sharedPreff.getFcnToken().toString(),
+                            "app_version" to  MethodClass.appVersion(binding.root.context)
                         )
                         val gson= Gson()
                         var jsonString = gson.toJson(data)

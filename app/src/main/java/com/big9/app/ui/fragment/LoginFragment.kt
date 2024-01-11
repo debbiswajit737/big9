@@ -1,6 +1,8 @@
 package com.big9.app.ui.fragment
 
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,9 +16,12 @@ import com.big9.app.R
 import com.big9.app.adapter.PhonePadAdapter
 import com.big9.app.data.viewMovel.AuthViewModel
 import com.big9.app.databinding.FragmentLoginBinding
+import com.big9.app.network.ResponseState
+import com.big9.app.network.RetrofitHelper.handleApiError
 
 
 import com.big9.app.ui.base.BaseFragment
+import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.`interface`.KeyPadOnClickListner
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -115,6 +120,31 @@ class LoginFragment : BaseFragment() {
     }
 
     fun setObserver() {
+        authViewModel?.appupdateResponseLiveData?.observe(viewLifecycleOwner) {
+            when (it) {
+                is ResponseState.Loading -> {
+                    //loader?.show()
+                    Log.d("TAGupdate", "observer: 1")
+                }
 
+                is ResponseState.Success -> {
+                   // loader?.dismiss()
+                    Log.d("TAGupdate", "observer: 2")
+                    Constants.appUpdateUrl =it?.data?.appUpdateUrl
+                    it?.data?.appUpdateUrl?.let {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
+                    }
+
+                }
+
+                is ResponseState.Error -> {
+                    Log.d("TAGupdate", "observer: 3")
+                  //  loader?.dismiss()
+                    handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                }
+            }
+        }
     }
+
+
 }

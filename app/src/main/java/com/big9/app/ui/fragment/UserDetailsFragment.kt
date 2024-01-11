@@ -2,26 +2,25 @@ package com.big9.app.ui.fragment
 
 
 import android.app.Dialog
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.camera.core.impl.utils.ContextUtil.getApplicationContext
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.big9.app.R
-
 import com.big9.app.adapter.UserDetailsAdapter
 import com.big9.app.data.model.UserDetails
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentUserDetailsBinding
 import com.big9.app.network.ResponseState
 import com.big9.app.network.RetrofitHelper.handleApiError
-
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.utils.*
-import com.big9.app.utils.common.MethodClass
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
@@ -90,7 +89,19 @@ class UserDetailsFragment : BaseFragment() {
     }
 
     private fun callProfile() {
+        val context = binding.root.context // or activity.getApplicationContext()
 
+        val packageManager = context.packageManager
+        val packageName = context.packageName
+
+        var myVersionName: String? = "0.0.0" // initialize String
+
+
+        try {
+            myVersionName = packageManager.getPackageInfo(packageName, 0).versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
 
         val (isLogin, loginResponse) =sharedPreff.getLoginData()
         loginResponse?.let {loginData->
@@ -99,6 +110,7 @@ class UserDetailsFragment : BaseFragment() {
             val data = mapOf(
 
                 "userid" to loginData.userid,
+                "app_version" to myVersionName
 
             )
             /*"referenceid" to loginData.,*/

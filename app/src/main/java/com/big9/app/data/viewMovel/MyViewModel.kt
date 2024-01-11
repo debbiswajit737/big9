@@ -1107,8 +1107,17 @@ class MyViewModel @Inject constructor(
             beneficiary_nameErrorVisible.value = true
             isValid = false
         } else {
-            beneficiary_nameError.value = ""
-            beneficiary_nameErrorVisible.value = false
+
+            if (beneficiary_name.value?.trim()?.validate("name")==false) {
+                beneficiary_nameError.value = "Name is not valid"
+                beneficiary_nameErrorVisible.value = true
+                isValid = false
+            }
+            else {
+
+                beneficiary_nameError.value = ""
+                beneficiary_nameErrorVisible.value = false
+            }
         }
         return isValid
     }

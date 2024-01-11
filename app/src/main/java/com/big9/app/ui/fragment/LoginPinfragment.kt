@@ -3,6 +3,7 @@ package com.big9.app.ui.fragment
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
@@ -10,6 +11,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -162,6 +164,9 @@ class LoginPinfragment : BaseFragment() {
     }
 
     private fun callProfile() {
+
+
+
         /*val (isLogin, loginResponse) =sharedPreff.getLoginData()
 
 
@@ -198,7 +203,8 @@ class LoginPinfragment : BaseFragment() {
                 "ipaddress" to MethodClass.getLocalIPAddress(),
                 "location" to "123",
                 "referenceid" to loginMobileReferanceNumber,
-                "Timestamp" to MethodClass.getCurrentTimestamp()
+                "Timestamp" to MethodClass.getCurrentTimestamp(),
+                "app_version" to  MethodClass.appVersion(binding.root.context)
             )
             /*"referenceid" to loginData.,*/
             val gson = Gson()
@@ -248,7 +254,8 @@ class LoginPinfragment : BaseFragment() {
 
                                     val data = mapOf(
                                         "userid" to loginData.userid,
-                                        "mpin" to myViewModel.loginPin.value
+                                        "mpin" to myViewModel.loginPin.value,
+                                        "app_version" to  MethodClass.appVersion(binding.root.context)
                                     )
 
                                     val gson = Gson()
@@ -391,6 +398,7 @@ class LoginPinfragment : BaseFragment() {
 
                             val data = mapOf(
                                 "userid" to loginData.userid,
+                                "app_version" to  MethodClass.appVersion(binding.root.context)
                             )
                             /*"referenceid" to loginData.,*/
                             val gson = Gson()
@@ -449,8 +457,31 @@ class LoginPinfragment : BaseFragment() {
                         }
                     }*/
                    // else {
-                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+
                   //  }
+
+                    if (it.errorCode == 103) {
+                        val (isLogin, loginResponse) = sharedPreff.getLoginData()
+                        loginResponse?.let { loginData ->
+
+
+                            val data = mapOf(
+                                "userid" to loginData.userid,
+                                "app_version" to  MethodClass.appVersion(binding.root.context)
+                            )
+                            /*"referenceid" to loginData.,*/
+                            val gson = Gson()
+                            var jsonString = gson.toJson(data)
+
+
+                            loginData.AuthToken?.let {
+                                myViewModel?.appUpdate(it, jsonString.encrypt())
+                            }
+                        }
+                    }
+                    else {
+                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    }
                     myViewModel?.patternLoginReceptLiveData?.value = null
                 }
             }
@@ -492,10 +523,12 @@ class LoginPinfragment : BaseFragment() {
             when (it) {
                 is ResponseState.Loading -> {
                     loader?.show()
+                    Log.d("TAGupdate", "observer: 1")
                 }
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
+                    Log.d("TAGupdate", "observer: 2")
                     appUpdateUrl=it?.data?.appUpdateUrl
                     it?.data?.appUpdateUrl?.let {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
@@ -504,6 +537,7 @@ class LoginPinfragment : BaseFragment() {
                 }
 
                 is ResponseState.Error -> {
+                    Log.d("TAGupdate", "observer: 3")
                     loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                 }

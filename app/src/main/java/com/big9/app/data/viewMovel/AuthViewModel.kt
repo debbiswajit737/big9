@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import appUpdateUrlModel
 import com.big9.app.data.genericmodel.BaseResponse
 import com.big9.app.data.model.FileModel
 import com.big9.app.data.model.ResetTPINModel
@@ -838,6 +839,16 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
             repository.documentUpload(token,data,partnerPanCard,companyPanCard,partnerAadhaarFront,
                 partnerAadhaarBack, gstin,coi,boardResolution,tradeLicense,userSelfi,userScp,videoKyc)
             //repository.onboardingBasicinfo(token,data)
+        }
+    }
+
+    //app update
+    val appupdateResponseLiveData: LiveData<ResponseState<appUpdateUrlModel>>
+        get() = repository.appUpdateResponseLiveData
+
+    fun appUpdate(token: String, data: String) {
+        viewModelScope.launch {
+            repository.appUpdate(token, data)
         }
     }
 }

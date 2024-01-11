@@ -4,6 +4,7 @@ package com.big9.app.ui.fragment
 
 import ViewRetailerData
 import android.Manifest
+import android.app.AlertDialog
 import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -29,6 +30,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -105,7 +107,8 @@ class HomeFragment : BaseFragment() {
     private val  MY_PERMISSIONS_REQUEST_CODE=1
     var bluetoothDeviceList: ArrayList<BluetoothDevice> = ArrayList()
     private var serverSocket: BluetoothServerSocket?=null
-
+    private var backPressedTime: Long = 0
+    private val backPressedInterval: Long = 2000
 
     //val permissionList = arrayOf(android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_ADMIN)
     private var isRotated = true
@@ -1891,7 +1894,44 @@ class HomeFragment : BaseFragment() {
 
 
         autoScrollHandler.startAutoScroll()
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {}
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
+            if (backPressedTime + backPressedInterval > System.currentTimeMillis()) {
+
+                // Create an AlertDialog
+                val builder = AlertDialog.Builder(binding.root.context)
+
+                // Inflate the custom layout for the dialog
+                val inflater = layoutInflater
+                val dialogView = inflater.inflate(R.layout.exit_dialog, null)
+
+                val exitButton = dialogView.findViewById<androidx.appcompat.widget.AppCompatButton>(R.id.btnExit)
+                val cancelButton = dialogView.findViewById<androidx.appcompat.widget.AppCompatButton>(R.id.btnCancel)
+
+
+                // Set the custom layout to the dialog
+                builder.setView(dialogView)
+
+                // Create and show the AlertDialog
+                val dialog = builder.create()
+
+
+                // Set click listeners for the buttons
+                exitButton.setOnClickListener {
+                    // Handle exit button click
+                    activity?.finishAffinity()// Exit the app
+                    dialog.dismiss() // Dismiss the dialog
+                }
+
+                cancelButton.setOnClickListener {
+                    // Handle cancel button click
+                    dialog.dismiss() // Dismiss the dialog
+                }
+
+                dialog.show()
+            }
+            backPressedTime = System.currentTimeMillis()
+
+        }
     }
 
     override fun onPause() {
@@ -1975,5 +2015,7 @@ class HomeFragment : BaseFragment() {
             }
         }
     }
+
+
 
 }

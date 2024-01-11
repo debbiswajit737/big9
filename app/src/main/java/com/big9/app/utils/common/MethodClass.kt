@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
@@ -53,6 +54,22 @@ object MethodClass {
 
 
 
+    }
+    fun appVersion(context:Context): String {
+
+
+        val packageManager = context.packageManager
+        val packageName = context.packageName
+
+        var myVersionName: String = "0.0.0" // initialize String
+
+
+        try {
+            myVersionName = packageManager.getPackageInfo(packageName, 0).versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return myVersionName
     }
  fun get_error_method(err: ResponseBody): String {
          val jsonErr = JSONObject(err.string())
