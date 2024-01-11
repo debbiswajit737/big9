@@ -56,7 +56,6 @@ import com.big9.app.databinding.FragmentHomeBinding
 import com.big9.app.network.ResponseState
 import com.big9.app.network.RetrofitHelper.handleApiError
 import com.big9.app.ui.base.BaseFragment
-import com.big9.app.ui.fragment.fragmentDialog.GasBillerListDialog
 import com.big9.app.ui.popup.CustomPopup.showBalencePopup
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.common.MethodClass.userLogout
@@ -233,12 +232,20 @@ class HomeFragment : BaseFragment() {
             loader?.dismiss()
            it.data?.data?.redirecturl?.let {redirecturl->
                it.data?.data?.retData?.let {retData->
+                   /*val uri = Uri.parse("http://192.168.1.4/api/api_test/intent.php")
+                   //val uri = Uri.parse("https://www.gibl.in/wallet/validate2/")
+                       .buildUpon()
+                       .appendQueryParameter("ret_data", "eyJ1cmMiOiI1ODc0NDIzMjA0IiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTk4MTMxMGVlMWU5IiwiZm5hbWUiOiJnaGpsa2dqIiwibG5hbWUiOiJqcmpnIiwiZW1haWwiOm51bGwsInBobm8iOm51bGwsInBpbiI6bnVsbH0=")
+
+                       .build().toString()
+                   val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                   startActivity(browserIntent)*/
                    //WebView(binding.root.context).set(redirecturl,retData)
-                   var data="ret_data="+retData
+                   /*var data="ret_data="+retData
                    WebView(binding.root.context).set(
                        redirecturl,
                        data
-                   )
+                   )*/
                    /*WebView(binding.root.context).set(
                        "https://www.gibl.in/wallet/validate2/",
                        "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
@@ -554,6 +561,7 @@ class HomeFragment : BaseFragment() {
                         "https://www.gibl.in/wallet/validate2/",
                         "ret_data=eyJ1cmMiOiI5MzkxMTU1OTEwIiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTA0MjA2MWQ4MTRhIiwiZm5hbWUiOiJzb3VteWEiLCJsbmFtZSI6InNvdW15YSIsImVtYWlsIjoiYmlnOWl0QGdtYWlsLmNvbSIsInBobm8iOiI5MjMxMTA5ODI5IiwicGluIjoiODg4ODg4In0="
                     )*/
+                    Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                         loginResponse?.let {loginData->
@@ -568,7 +576,7 @@ class HomeFragment : BaseFragment() {
                                 var jsonString = gson.toJson(data)
 
                                 loginData.AuthToken?.let {
-                                    insurance(it,jsonString.encrypt(),getString(R.string.insurance))
+                                 //   insurance(it,jsonString.encrypt(),getString(R.string.insurance))
                                 }
                             }
 
@@ -1272,7 +1280,13 @@ class HomeFragment : BaseFragment() {
                 iconList3.add(ListIcon("View More", R.drawable.view_more))*/
                 adapter= EssentialAdapter(iconList3,R.drawable.circle_shape2, object : CallBack2 {
                     override fun getValue2(s: String,slag: String) {
-                        checkService(s,slag)
+                        if(s==getString(R.string.insurance) ){
+                            Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            checkService(s,slag)
+                        }
+                        //checkService(s,slag)
                         //serviceNavigation(s)
                         /*when(s){
                             getString(R.string.prepaid)->{
@@ -1310,7 +1324,14 @@ class HomeFragment : BaseFragment() {
                 iconList3.add(ListIcon("View More", R.drawable.view_more))*/
                 adapter= FinancialAdapter(iconList11,R.drawable.circle_shape2, object : CallBack2 {
                     override fun getValue2(s: String,tag: String) {
-                        checkService(s,tag)
+
+                        if(s==getString(R.string.matm) ){
+                            Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            checkService(s,tag)
+                        }
+
 
                         //need comment. now testing perpose
                         //serviceNavigation(s,tag)
@@ -1368,7 +1389,13 @@ class HomeFragment : BaseFragment() {
                             findNavController().navigate(R.id.action_homeFragment2_to_viewMoreFragment)
                         }
                         else{
-                            checkService(s,slag)
+                            if(s==getString(R.string.gas) || s==getString(R.string.fast_tag) || s==getString(R.string.fast_tag)){
+                                Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
+                            }
+                            else{
+                                checkService(s,slag)
+                            }
+                            //checkService(s,slag)
                         }
 
                         //serviceNavigation(s)
@@ -1457,6 +1484,7 @@ class HomeFragment : BaseFragment() {
 
                 adapter= AEPSAdapter(iconList5,R.drawable.circle_shape2,object : CallBack2 {
                     override fun getValue2(s: String,tag: String) {
+                        Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
                         //checkService(s,tag)
                        //-m  serviceNavigation(s,tag)
                        // serviceNavigation(s)
@@ -1500,7 +1528,14 @@ class HomeFragment : BaseFragment() {
                 //circle_shape
                 adapter= BankingAdapter(iconList6,R.drawable.circle_shape2, object : CallBack2 {
                     override fun getValue2(s: String,slag: String) {
-                        checkService(s,slag)
+                        if(s==getString(R.string.move_to_bank) || s==getString(R.string.move_to_wallet)){
+                            Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            checkService(s,slag)
+                        }
+
+
                        // serviceNavigation(s)
                     }
 
@@ -1559,7 +1594,9 @@ class HomeFragment : BaseFragment() {
 
                 adapter= TravelAdapter(iconList7, R.drawable.circle_shape2, object : CallBack2 {
                     override fun getValue2(s: String,slag: String) {
-                        checkService(s,slag)
+                            Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
+
+                        //checkService(s,slag)
                         //serviceNavigation(s)
                     }
 
@@ -1604,7 +1641,10 @@ class HomeFragment : BaseFragment() {
                         }
                         isReport=true
                         viewModel?.reportType?.value = s
-                        checkService(s,tag)
+                        //checkService(s,tag)
+
+                            Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
+
                         /*if (s==getString(R.string.commissions)){
 
                             findNavController().navigate(R.id.action_homeFragment2_to_commissionReportFragment)

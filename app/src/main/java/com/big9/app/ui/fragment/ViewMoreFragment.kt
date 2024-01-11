@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -83,7 +84,8 @@ class ViewMoreFragment : BaseFragment() {
                 override fun getValue2(s: String,slag: String) {
                     utilityValue=s
                     viewModel.from_page_message.value="view_more"
-                    checkService(navParameter = s,slag)
+                    //checkService(navParameter = s,slag)
+                    Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
                    // serviceNavigation(s)
                     //findNavController().popBackStack()
 
