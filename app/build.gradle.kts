@@ -221,6 +221,7 @@ dependencies {
     implementation ("androidx.legacy:legacy-support-v4:1.0.0")
     implementation ("com.karumi:dexter:5.0.0")
     implementation ("com.github.yalantis:ucrop:2.2.6-native")
+
     implementation ("com.google.android.play:app-update-ktx:2.1.0")
 }
 
