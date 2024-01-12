@@ -108,6 +108,7 @@ class MoneyTranspherFragment : BaseFragment() {
                                         val data = mapOf(
                                             "customer_number" to viewModel?.mobileSendMoney?.value,
                                             "userid" to loginData.userid,
+                                            "customer_name" to viewModel?.nameSendMoney?.value,
 
                                             )
 
@@ -431,7 +432,7 @@ class MoneyTranspherFragment : BaseFragment() {
                         val data = mapOf(
                             "customer_number" to viewModel?.mobileSendMoney?.value,
                             "userid" to loginData.userid,
-
+                            "customer_name" to viewModel?.nameSendMoney?.value,
                             )
 
                         val gson = Gson()

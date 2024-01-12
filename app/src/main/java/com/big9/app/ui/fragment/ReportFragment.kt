@@ -55,7 +55,7 @@ class ReportFragment : BaseFragment()  {
     private var loader: Dialog? = null
     var startDate=""
     var endDate=""
-    var startIndex = 21
+    var startIndex = 20
     var endIndex = 30
     var isTopAsink=true
     private lateinit var recyclerView: RecyclerView
@@ -1826,7 +1826,7 @@ class ReportFragment : BaseFragment()  {
                      //   binding.btnHasdata.visibility=View.GONE
                         Log.d("TAG_size", "showrecycleView: "+reportList.size)
                         reportList?.let {
-                            if(it.size>21) {
+                            if(it.size>20 && !(it.size<=30)) {
                                 getAllData2()
                             }
                             else{

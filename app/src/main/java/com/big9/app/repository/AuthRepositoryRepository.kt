@@ -1719,7 +1719,7 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
     //app Update
     private val _appUpdateResponseLiveData =
         MutableLiveData<ResponseState<appUpdateUrlModel>>()
-    val appUpdateResponseLiveData: LiveData<ResponseState<appUpdateUrlModel>>
+    val appUpdateResponseLiveData: MutableLiveData<ResponseState<appUpdateUrlModel>>
         get() = _appUpdateResponseLiveData
 
 

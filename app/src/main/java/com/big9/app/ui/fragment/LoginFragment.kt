@@ -134,13 +134,14 @@ class LoginFragment : BaseFragment() {
                     it?.data?.appUpdateUrl?.let {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
                     }
-
+                    authViewModel?.appupdateResponseLiveData?.value=null
                 }
 
                 is ResponseState.Error -> {
                     Log.d("TAGupdate", "observer: 3")
                   //  loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    authViewModel?.appupdateResponseLiveData?.value=null
                 }
             }
         }

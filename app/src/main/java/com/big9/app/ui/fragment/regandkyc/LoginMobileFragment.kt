@@ -71,6 +71,7 @@ class LoginMobileFragment : BaseFragment() {
         activity?.let { loader = MethodClass.custom_loader(it, getString(R.string.please_wait)) }
 
         checkPermission()
+        init()
         setKeyPad(binding.recyclePhonePad)
         onViewClick()
         setObserver()
@@ -88,6 +89,10 @@ class LoginMobileFragment : BaseFragment() {
 // Decrypt
         /*val decryptedText = AesEncryptionUtil.decrypt(jsondata, key, iv)
         println("Decrypted Text: $decryptedText")*/
+    }
+
+    private fun init() {
+        binding.tvAppVersion.text="App version: \n"+MethodClass.appVersion(binding.root.context)
     }
 
     private fun setObserver() {
@@ -226,13 +231,14 @@ class LoginMobileFragment : BaseFragment() {
                     it?.data?.appUpdateUrl?.let {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
                     }
-
+                    authViewModel?.appupdateResponseLiveData?.value=null
                 }
 
                 is ResponseState.Error -> {
                     //Log.d("TAGupdate", "observer: 3")
                     loader?.dismiss()
                     handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                    authViewModel?.appupdateResponseLiveData?.value=null
                 }
             }
         }

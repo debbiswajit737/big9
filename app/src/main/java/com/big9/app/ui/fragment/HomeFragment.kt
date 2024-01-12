@@ -235,14 +235,7 @@ class HomeFragment : BaseFragment() {
             loader?.dismiss()
            it.data?.data?.redirecturl?.let {redirecturl->
                it.data?.data?.retData?.let {retData->
-                   /*val uri = Uri.parse("http://192.168.1.4/api/api_test/intent.php")
-                   //val uri = Uri.parse("https://www.gibl.in/wallet/validate2/")
-                       .buildUpon()
-                       .appendQueryParameter("ret_data", "eyJ1cmMiOiI1ODc0NDIzMjA0IiwidW1jIjoiNTE1ODM5IiwiYWsiOiI2NTk4MTMxMGVlMWU5IiwiZm5hbWUiOiJnaGpsa2dqIiwibG5hbWUiOiJqcmpnIiwiZW1haWwiOm51bGwsInBobm8iOm51bGwsInBpbiI6bnVsbH0=")
 
-                       .build().toString()
-                   val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                   startActivity(browserIntent)*/
                    //WebView(binding.root.context).set(redirecturl,retData)
                    /*var data="ret_data="+retData
                    WebView(binding.root.context).set(
@@ -651,6 +644,7 @@ class HomeFragment : BaseFragment() {
                 }
 
                 getString(R.string.money_transfer) -> {
+                    viewModel?.nameSendMoneyErrorVisible?.value=false
                     findNavController().navigate(R.id.action_homeFragment2_to_moneyTranspherFragment)
                 }
 
@@ -1644,9 +1638,10 @@ class HomeFragment : BaseFragment() {
                         }
                         isReport=true
                         viewModel?.reportType?.value = s
-                        //checkService(s,tag)
+                       // checkService(s,tag)
+                        serviceNavigation(s,tag)
 
-                            Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
 
                         /*if (s==getString(R.string.commissions)){
 
@@ -1825,12 +1820,6 @@ class HomeFragment : BaseFragment() {
             })
 
         }
-
-
-
-
-
-
         iconList2.add(ListIcon("Card", R.drawable.sa1,""))
         iconList2.add(ListIcon("Card", R.drawable.sa2,""))
         iconList2.add(ListIcon("Card", R.drawable.sa3,""))
@@ -1843,7 +1832,7 @@ class HomeFragment : BaseFragment() {
         }
         binding.tvMessage.isSelected = true
 
-
+        binding.tvAppVersion.text="App version " +MethodClass.appVersion(binding.root.context)
 
     }
 

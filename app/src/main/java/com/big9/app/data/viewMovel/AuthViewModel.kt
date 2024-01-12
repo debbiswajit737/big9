@@ -843,7 +843,7 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepositoryRe
     }
 
     //app update
-    val appupdateResponseLiveData: LiveData<ResponseState<appUpdateUrlModel>>
+    val appupdateResponseLiveData: MutableLiveData<ResponseState<appUpdateUrlModel>>
         get() = repository.appUpdateResponseLiveData
 
     fun appUpdate(token: String, data: String) {

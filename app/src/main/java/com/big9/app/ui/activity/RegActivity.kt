@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +16,11 @@ import com.big9.app.R
 
 import com.big9.app.data.viewMovel.AuthViewModel
 import com.big9.app.databinding.ActivityRegBinding
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -26,6 +32,14 @@ class RegActivity : AppCompatActivity() {
     private lateinit var authViewModel: AuthViewModel
     private var navController: NavController? = null
     val  bundle=Bundle()
+    private lateinit var appUpdateManager: AppUpdateManager
+
+    private val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            if (result.resultCode != RESULT_OK) {
+                // Handle update failure or user cancellation here
+            }
+        }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_reg)
@@ -53,6 +67,10 @@ class RegActivity : AppCompatActivity() {
         init()
 
     }
+    override fun onResume() {
+        super.onResume()
+        checkForAppUpdate()
+    }
     fun init(){
         bundle.putBoolean("isForgotPin",false)
         val navHostFragment: NavHostFragment =
@@ -74,6 +92,26 @@ class RegActivity : AppCompatActivity() {
         else {
             binding.navHostFragment.visibility = View.GONE
             setdata()
+        }
+    }
+    private fun checkForAppUpdate() {
+        appUpdateManager = AppUpdateManagerFactory.create(this)
+
+        // Returns an intent object that you use to check for an update.
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    activityResultLauncher,
+                    AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                )
+            }
         }
     }
     private fun setdata() {

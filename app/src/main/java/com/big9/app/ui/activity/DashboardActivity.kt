@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,11 @@ import com.big9.app.utils.helpers.Constants.isRecept
 import com.big9.app.utils.helpers.RequestBodyHelper
 import com.big9.app.utils.helpers.ScreenshotUtils.Companion.takeScreenshot
 import com.big9.app.utils.helpers.SharedPreff
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +37,15 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class DashboardActivity : BaseActivity() {
+
+    private lateinit var appUpdateManager: AppUpdateManager
+
+    private val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            if (result.resultCode != RESULT_OK) {
+                // Handle update failure or user cancellation here
+            }
+        }
     lateinit var binding: ActivityDashboardBinding
     private lateinit var myViewModel: MyViewModel
 
@@ -110,7 +125,31 @@ class DashboardActivity : BaseActivity() {
         }
 
     }
+    private fun checkForAppUpdate() {
+        appUpdateManager = AppUpdateManagerFactory.create(this)
 
+        // Returns an intent object that you use to check for an update.
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    activityResultLauncher,
+                    AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                )
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkForAppUpdate()
+    }
     fun observer() {
 
         /* myViewModel.loginResponseLiveData.observe(this) {
