@@ -102,7 +102,7 @@
                             app:requestFocus="@{viewModel.vehicleRegIdErrorVisible}"
                             android:inputType="textCapCharacters"
                             android:longClickable="false"
-
+                            android:drawableTint="@color/logo_color"
                             android:padding="@dimen/_5sdp"
                             android:drawablePadding="@dimen/_5sdp"
                             android:drawableStart="@drawable/sub_id_icon"
@@ -215,7 +215,7 @@
                             app:requestFocus="@{viewModel.fastTagAmtErrorVisible}"
                             android:inputType="numberDecimal"
                             android:longClickable="false"
-                            android:maxLength="10"
+                            android:drawableTint="@color/logo_color"
                             android:padding="@dimen/_5sdp"
                             android:drawablePadding="@dimen/_5sdp"
                             android:drawableStart="@drawable/sub_id_icon"

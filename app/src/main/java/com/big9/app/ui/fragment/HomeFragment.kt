@@ -1482,6 +1482,7 @@ class HomeFragment : BaseFragment() {
                 adapter= AEPSAdapter(iconList5,R.drawable.circle_shape2,object : CallBack2 {
                     override fun getValue2(s: String,tag: String) {
                         Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
+                        serviceNavigation(s,tag)
                         //checkService(s,tag)
                        //-m  serviceNavigation(s,tag)
                        // serviceNavigation(s)
