@@ -281,6 +281,7 @@
                 android:background="@drawable/btn_bg"
                 android:padding="@dimen/_5sdp"
                 android:text="@string/proceed"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/cardView2"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2" />
@@ -297,6 +298,8 @@
                 android:background="@drawable/btn_bg"
                 android:padding="@dimen/_5sdp"
                 android:text="@string/proceed"
+
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/cardView2"
                 app:layout_constraintTop_toBottomOf="@+id/btn_submit" />

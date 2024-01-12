@@ -286,6 +286,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_gravity="end"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="@dimen/_5sdp"
                             android:background="@drawable/btn_bg"
                             android:paddingHorizontal="@dimen/_5sdp"
@@ -323,6 +324,7 @@
                 android:background="@drawable/btn_bg"
                 android:padding="@dimen/_5sdp"
                 android:text="@string/proceed"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/cardView2"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2" />

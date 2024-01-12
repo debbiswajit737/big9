@@ -626,7 +626,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="end"
-
+                android:textColor="@color/white"
                 android:layout_marginVertical="@dimen/_10sdp"
                 android:background="@drawable/btn_bg"
                 android:padding="@dimen/_5sdp"

@@ -225,6 +225,7 @@
                         android:background="@drawable/field_bg"
                         android:drawableStart="@drawable/indian_rupee_symbol"
                         android:drawablePadding="@dimen/_5sdp"
+                        app:drawableTint="@color/logo_color"
                         android:hint="@string/enter_mobile_no_reg"
                         android:inputType="numberDecimal"
                         android:longClickable="false"
@@ -268,6 +269,7 @@
                 android:background="@drawable/btn_bg"
                 android:padding="@dimen/_5sdp"
                 android:text="@string/proceed"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/cardView2"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2" />

@@ -821,7 +821,7 @@
                     android:background="@drawable/btn_bg"
                     android:padding="@dimen/_5sdp"
                     android:text="@string/submit"
-
+                    android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="@+id/cardView3"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/cardView3"

@@ -161,6 +161,7 @@
                 <Button
                     android:id="@+id/btn_submit"
                     android:layout_width="0dp"
+                    android:textColor="@color/white"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
