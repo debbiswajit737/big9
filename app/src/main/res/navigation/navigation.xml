@@ -112,6 +112,9 @@
         <action
             android:id="@+id/action_homeFragment2_to_retailerPaymentFragment"
             app:destination="@id/retailerPaymentFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_aadharRegistrationFragment"
+            app:destination="@id/aadharRegistrationFragment" />
     </fragment>
     <fragment
         android:id="@+id/mobileRechargeFragment"
@@ -432,4 +435,8 @@
         android:id="@+id/retailerPaymentFragment"
         android:name="com.big9.app.ui.fragment.RetailerPaymentFragment"
         android:label="RetailerPaymentFragment" />
+    <fragment
+        android:id="@+id/aadharRegistrationFragment"
+        android:name="com.big9.app.ui.fragment.AadharRegistrationFragment"
+        android:label="AadharRegistrationFragment" />
 </navigation>

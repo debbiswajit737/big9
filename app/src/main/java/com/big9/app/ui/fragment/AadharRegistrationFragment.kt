@@ -23,6 +23,7 @@ import com.big9.app.R
 import com.big9.app.adapter.AdminBankListAdapter
 import com.big9.app.adapter.UserDetailsAdapter
 import com.big9.app.data.model.AdminBankListModel
+import com.big9.app.data.model.CheckMerchantData
 import com.big9.app.data.model.UserDetails
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentCashWithdrawBinding
@@ -38,13 +39,14 @@ import com.paysprint.onboardinglib.activities.HostActivity
 import java.io.IOException
 import java.util.Objects
 
-class CashWithdrawFragment : BaseFragment() {
+class AadharRegistrationFragment : BaseFragment() {
     lateinit var binding: FragmentCashWithdrawBinding
     private val viewModel: MyViewModel by activityViewModels()
     var userDetailsList = ArrayList<UserDetails>()
     var bankList = ArrayList<AdminBankListModel>()
     var adminBankListAdapter: AdminBankListAdapter?=null
     var selectBank=""
+    var checkMerchantData:CheckMerchantData?=null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,7 +68,7 @@ class CashWithdrawFragment : BaseFragment() {
         binding.apply {
 
             imgBack.back()
-            //etProvidedAmount.setupAmount()
+           // etProvidedAmount.setupAmount()
 
 
 
@@ -175,24 +177,42 @@ class CashWithdrawFragment : BaseFragment() {
     }
 
     fun initView() {
-        aepsCall()
+        //aepsCall()
         binding.apply {
             etAmt.setupAmount()
-
+            val receivedBundle = requireArguments()
+            checkMerchantData= receivedBundle.getParcelable("checkMerchantData") as? CheckMerchantData
             group1.isVisible= isCashWithdraw
             //group2.isVisible=!group1.isVisible
             binding.recycleViewUserdetails.apply {
                 userDetailsList.clear()
-                userDetailsList.add(UserDetails("Name","Test User"))
-                userDetailsList.add(UserDetails("Outlet Name","Test Outlet Name"))
-                userDetailsList.add(UserDetails("Mobile Number","9999999999"))
-                userDetailsList.add(UserDetails("Email Id","test@test.com"))
-                userDetailsList.add(UserDetails("Address","123, Park Street,Kolkata - 700001,West Bengal, India"))
+                checkMerchantData?.apply {
+                    /*
+                    @SerializedName("userid") var userid: Int? = null,
+    @SerializedName("pincode") var pincode: String? = null,
+    @SerializedName("pan_no") var panNo: String? = null,
+    @SerializedName("mcode") var mcode: String? = null,
+    @SerializedName("name") var name: String? = null,
+    @SerializedName("mobile") var mobile: String? = null,
+    @SerializedName("email") var email: String? = null,
+    @SerializedName("partnerID") var partnerID: String? = null,
+    @SerializedName("partnerKey") var partnerKey: String? = null
+                     */
+                    userDetailsList.add(UserDetails("Name",name.toString()))
+                    //userDetailsList.add(UserDetails("Outlet Name","Test Outlet Name"))
+                    //userDetailsList.add(UserDetails("Mobile Number","9999999999"))
+                    userDetailsList.add(UserDetails("Email Id",email.toString()))
+                    userDetailsList.add(UserDetails("Pincode",pincode.toString()))
+                    //userDetailsList.add(UserDetails("Address","123, Park Street,Kolkata - 700001,West Bengal, India"))
+                    viewModel?.cash_withdraw_pan?.value=panNo
+                    viewModel?.cash_withdraw_pin_code?.value=pincode
+                }
+
 
                 adapter= UserDetailsAdapter(userDetailsList)
             }
 
-            /*binding.recycleViewBankList.apply {
+          /*  binding.recycleViewBankList.apply {
                 bankList.add(AdminBankListModel(R.drawable.axix_bank_logo,"AXIX Bank",false))
                 bankList.add(AdminBankListModel(R.drawable.icici,"ICICI Bank",false))
 
@@ -210,10 +230,13 @@ class CashWithdrawFragment : BaseFragment() {
 
 
         }
+
+
+
     }
 
     fun setObserver() {
-       /* binding.etSearch.addTextChangedListener(object : TextWatcher {
+        /*binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 adminBankListAdapter?.filter?.filter(s)
             }

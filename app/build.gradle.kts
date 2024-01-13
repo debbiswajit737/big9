@@ -22,7 +22,7 @@ android {
         minSdk = 24
         targetSdk = 33
         versionCode = 6
-        versionName = "1.0.6"
+        versionName = "1.0.5"
         multiDexEnabled =true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -211,7 +211,8 @@ dependencies {
     implementation ("org.jetbrains:annotations:16.0.2")
 
 
-    implementation(files("libs/onboardinglib_V.1.1.13.aar"))
+    implementation(files("libs/onboardinglib-release.aar"))
+    //implementation(files("libs/onboardinglib_V.1.1.13.aar"))
     //implementation (files("libs/onboard_uat_v2.0.aar"))
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:adapter-rxjava2:2.3.0")

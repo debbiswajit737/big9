@@ -727,9 +727,9 @@ open class BaseFragment: Fragment(){
 data class TempData(val pathName:String,val methodName:String,val modelName:String,)
 data class TempRepository(var fileName:String?)
 fun main() {
-    val filen="UtilityBillPaymentFragment"
+    val filen="HomeFragment"
     val f= TempRepository("AuthRepositoryRepository.kt")
-    var a=  TempData("billpaytransaction","billpaytransaction","billpaytransactionModel")
+    var a=  TempData("v1/services/aeps/check_merchant","checkMerchant","checkMerchantModel")
     temp(a,f,filen)
 }
 fun temp(tempData: TempData,tempRepository:TempRepository?=null,fragmentFileName:String) {

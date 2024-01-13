@@ -23,6 +23,7 @@ import com.big9.app.data.model.AddBankModel
 import com.big9.app.data.model.AllBankListModel
 import com.big9.app.data.model.ChangeUserPasswordModel
 import com.big9.app.data.model.ChangeUserTPINPasswordModel
+import com.big9.app.data.model.CheckMerchant
 import com.big9.app.data.model.CreditCardSendOtpModel
 import com.big9.app.data.model.CreditCardVerifyOtpModel
 import com.big9.app.data.model.DMTReportModel
@@ -702,8 +703,10 @@ interface RetroApi {
     ): Response<PayPartnerModel>
 
 
-
-
-
+    @POST("v1/services/aeps/check_merchant")
+    suspend fun checkMerchant(
+        @Header("Authtoken") token: String,
+        @Body data: String
+    ): Response<CheckMerchant>
 
 }

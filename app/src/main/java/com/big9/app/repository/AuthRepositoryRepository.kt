@@ -26,6 +26,7 @@ import com.big9.app.data.model.AddBankModel
 import com.big9.app.data.model.AllBankListModel
 import com.big9.app.data.model.ChangeUserPasswordModel
 import com.big9.app.data.model.ChangeUserTPINPasswordModel
+import com.big9.app.data.model.CheckMerchant
 import com.big9.app.data.model.CreditCardSendOtpModel
 import com.big9.app.data.model.CreditCardVerifyOtpModel
 import com.big9.app.data.model.DMTReportModel
@@ -2141,6 +2142,29 @@ class AuthRepositoryRepository @Inject constructor(private val api: RetroApi) {
             _pay_partnerResponseLiveData.postValue(ResponseState.create(response, "aa"))
         } catch (throwable: Throwable) {
             _pay_partnerResponseLiveData.postValue(ResponseState.create(throwable))
+        }
+
+    }
+
+    //check merchant
+    private val _checkmerchantResponseLiveData =
+        MutableLiveData<ResponseState<CheckMerchant>>()
+    val checkmerchantResponseLiveData: MutableLiveData<ResponseState<CheckMerchant>>
+        get() = _checkmerchantResponseLiveData
+
+
+    suspend fun checkmerchant(token: String, loginModel: String) {
+        _checkmerchantResponseLiveData.postValue(ResponseState.Loading())
+        try {
+            val response =
+                api.checkMerchant(
+                    token,
+                    loginModel.replace("\\n", "").replace("\\r", "").replace("\n", " ")
+                        .replace("\\s".toRegex(), "".trim())
+                )
+            _checkmerchantResponseLiveData.postValue(ResponseState.create(response, "aa"))
+        } catch (throwable: Throwable) {
+            _checkmerchantResponseLiveData.postValue(ResponseState.create(throwable))
         }
 
     }

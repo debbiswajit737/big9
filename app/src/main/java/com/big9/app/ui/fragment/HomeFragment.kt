@@ -99,6 +99,7 @@ class HomeFragment : BaseFragment() {
     private lateinit var outputStream: OutputStream
     private lateinit var inputStream: InputStream
     val REQUEST_BLUETOOTH_PERMISSION=3
+    var aepsType=""
     lateinit var bluetoothManager: BluetoothManager
     lateinit var bluetoothAdapter: BluetoothAdapter
     var   bluetoothDeviceAdapter: BluetoothDeviceAdapter?=null
@@ -186,6 +187,74 @@ class HomeFragment : BaseFragment() {
                         //serviceNavigation(naviGationValue,"slug")
                         handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
                         viewModel?.ServiceCheckResponseLiveData?.value=null
+                    }
+                }
+            }
+
+            viewModel?.checkmerchantResponseLiveData?.observe(viewLifecycleOwner){
+                when (it) {
+                    is ResponseState.Loading -> {
+                        loader?.show()
+                    }
+
+                    is ResponseState.Success -> {
+                        loader?.dismiss()
+                        isCashWithdraw = true
+                        it?.data?.responseCode?.let {responseCode->
+
+                            if (responseCode==209 || responseCode==210 ){
+                                handleApiError(it.isNetworkError, 209, it?.data?.Description.toString())
+                            }
+                            else if (responseCode==211){
+                                //AEPS Pay Sprint Onboarding Required
+                                isCashWithdraw = false
+                                it.data.data?.let {
+                                    val bundle = Bundle().apply {
+                                        putParcelable("checkMerchantData", it)
+                                    }
+                                    findNavController().navigate(R.id.action_homeFragment2_to_aadharRegistrationFragment,bundle)
+                                }
+
+                                /*when(aepsType){
+                                    "balance"->{
+                                        findNavController().navigate(R.id.action_homeFragment2_to_balenceAEPSFragment)
+                                    }
+                                    "withdraw"->{
+                                        findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+                                    }
+                                    "statement"->{
+                                        findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFormFragment)
+                                    }
+                                    "aadhar_pay"->{
+                                        findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+                                    }
+                                }*/
+
+                            }
+                            else if (responseCode==212){
+                                //One Time Registration Required
+                                isCashWithdraw = false
+
+                            }
+                            else if (responseCode==213){
+                                //Two factor verification required
+                                isCashWithdraw = false
+
+                            } else {
+
+                            }
+
+
+                        }
+
+                        viewModel?.checkmerchantResponseLiveData?.value=null
+                    }
+
+                    is ResponseState.Error -> {
+                        loader?.dismiss()
+                        //serviceNavigation(naviGationValue,"slug")
+                        handleApiError(it.isNetworkError, it.errorCode, it.errorMessage)
+                        viewModel?.checkmerchantResponseLiveData?.value=null
                     }
                 }
             }
@@ -319,6 +388,8 @@ class HomeFragment : BaseFragment() {
                 }
             }
         }
+        //****
+        //temp2
 
     }
 
@@ -450,8 +521,10 @@ class HomeFragment : BaseFragment() {
                 //recycleViewEpayBanking
 
                 getString(R.string.balance) -> {
+                    aepsType="balance"
+                    callCheckService()
                     //  showBalencePopup(binding.root.context)
-                    activity?.let { act ->
+                   /* activity?.let { act ->
                         val aadharAuthBottomSheetDialog =
                             AadharAuthBottomSheetDialog(object : CallBack {
                                 override fun getValue(s: String) {
@@ -462,14 +535,16 @@ class HomeFragment : BaseFragment() {
                             act.supportFragmentManager,
                             aadharAuthBottomSheetDialog.tag
                         )
-                    }
+                    }*/
 
 
                 }
 
                 getString(R.string.cash_withdraw) -> {
-                    isCashWithdraw = false
-                    findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+                    //isCashWithdraw = false
+                    aepsType="withdraw"
+                    callCheckService()
+                    //findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
                     /*activity?.let { act ->
                         val aadharAuthBottomSheetDialog =
                             AadharAuthBottomSheetDialog(object : CallBack {
@@ -489,7 +564,9 @@ class HomeFragment : BaseFragment() {
                 getString(R.string.mini_statement) -> {
                     viewModel.reportType.value = getString(R.string.dmt)
                     activity?.let { act ->
-                        findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFormFragment)
+                        aepsType="statement"
+                        callCheckService()
+                        //findNavController().navigate(R.id.action_homeFragment2_to_miniStatementFormFragment)
                         /*val aadharAuthBottomSheetDialog =
                             AadharAuthBottomSheetDialog(object : CallBack {
                                 override fun getValue(s: String) {
@@ -507,8 +584,13 @@ class HomeFragment : BaseFragment() {
                 }
 
                 getString(R.string.aadhar_pay) -> {
-                    isCashWithdraw = false
-                    findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
+                    aepsType="aadhar_pay"
+                    callCheckService()
+
+
+
+                    //isCashWithdraw = true
+                    //findNavController().navigate(R.id.action_homeFragment2_to_cashWithdrawFragment)
                     /*activity?.let { act ->
                         val aadharAuthBottomSheetDialog =
                             AadharAuthBottomSheetDialog(object : CallBack {
@@ -807,6 +889,29 @@ class HomeFragment : BaseFragment() {
 
             }
 
+        }
+    }
+
+    private fun callCheckService() {
+        val (isLogin2, loginResponse2) =sharedPreff.getLoginData()
+        if (isLogin2){
+            loginResponse2?.let {loginData->
+                viewModel?.apply {
+
+                    val  data = mapOf(
+                        "userid" to loginData.userid,
+                        "servicename" to aepsType
+                    )
+
+                    val gson= Gson()
+                    var jsonString = gson.toJson(data)
+
+                    loginData.AuthToken?.let {
+                        checkmerchant(it,jsonString.encrypt())
+                    }
+                }
+
+            }
         }
     }
 
@@ -1481,7 +1586,10 @@ class HomeFragment : BaseFragment() {
 
                 adapter= AEPSAdapter(iconList5,R.drawable.circle_shape2,object : CallBack2 {
                     override fun getValue2(s: String,tag: String) {
-                        Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
+
+                        //******
+
                         serviceNavigation(s,tag)
                         //checkService(s,tag)
                        //-m  serviceNavigation(s,tag)

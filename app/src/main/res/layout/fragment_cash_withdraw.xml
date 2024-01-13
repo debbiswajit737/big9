@@ -197,193 +197,15 @@
 
 
                 </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView3"
 
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:cardCornerRadius="@dimen/_12sdp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/white"
-                        android:orientation="vertical"
-                        android:padding="@dimen/_10sdp">
-
-                        <TextView
-                            android:id="@+id/cash_withdraw"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_bold"
-                            android:gravity="center"
-                            android:text="@string/cash_withdrawal"
-                            android:textColor="@color/logo_color"
-                            android:textSize="@dimen/_14ssp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/edit_text_title_margin_top"
-                            android:fontFamily="@font/montserrat_medium_500"
-                            android:text="@string/provided_amount"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size" />
-
-                        <EditText
-                            android:id="@+id/et_provided_amount"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/edit_text_height"
-                            android:layout_marginTop="@dimen/edit_text_margin_top"
-                            android:background="@drawable/field_bg"
-                            android:drawableStart="@drawable/pan_card_logo_ioc"
-                            android:drawablePadding="@dimen/_10sdp"
-                            android:hint="@string/provided_amount"
-                            android:inputType="numberDecimal"
-                            android:longClickable="false"
-                            android:padding="@dimen/_5sdp"
-                            android:text="@={viewModel.provided_amt}"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/gray"
-                            android:textSize="@dimen/edit_text_size"
-                            app:requestFocus="@{viewModel.provided_amt_ErrorVisible}" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat_regular_400"
-                            android:text="@{viewModel.provided_amt_Error}"
-                            android:textColor="@color/pink2"
-                            android:textSize="@dimen/_9ssp"
-                            app:hideErrorTextView="@{viewModel.provided_amt_ErrorVisible}" />
-                        <!--mobile End-->
-
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat_regular_400"
-                            android:text="@{viewModel.operatorError}"
-                            android:textColor="@color/pink2"
-                            android:textSize="@dimen/_9ssp"
-                            app:hideErrorTextView="@{viewModel.operatorErrorVisible}"
-
-                            />
-                        <!--mobile End-->
-
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/edit_text_title_margin_top"
-                            android:fontFamily="@font/montserrat_medium_500"
-                            android:text="@string/provide_aadhar_number"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size" />
-
-                        <EditText
-                            android:id="@+id/et_provided_aadhar_number"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/edit_text_height"
-                            android:layout_marginTop="@dimen/edit_text_margin_top"
-                            android:background="@drawable/field_bg"
-                            android:drawableStart="@drawable/pin_code_ioc"
-                            android:drawablePadding="@dimen/_5sdp"
-                            android:hint="@string/provide_aadhar_number"
-                            android:inputType="number"
-                            android:longClickable="false"
-                            android:maxLength="12"
-                            android:padding="@dimen/_5sdp"
-                            android:text="@={viewModel.provided_aadhar_number}"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/gray"
-                            android:textSize="@dimen/edit_text_size"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@+id/cardView2"
-                            app:layout_constraintTop_toBottomOf="@+id/cardView2"
-                            app:requestFocus="@{viewModel.provided_aadhar_numberErrorVisible}" />
-
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat_regular_400"
-                            android:text="@{viewModel.provided_aadhar_numberError}"
-                            android:textColor="@color/pink2"
-                            android:textSize="@dimen/_9ssp"
-                            app:hideErrorTextView="@{viewModel.provided_aadhar_numberErrorVisible}"
-
-                            />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/edit_text_title_margin_top"
-                            android:fontFamily="@font/montserrat_medium_500"
-                            android:text="@string/provided_customer_number"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size" />
-
-                        <EditText
-                            android:id="@+id/et_provided_customer_number"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/edit_text_height"
-                            android:layout_marginTop="@dimen/edit_text_margin_top"
-                            android:background="@drawable/field_bg"
-                            android:drawableStart="@drawable/pin_code_ioc"
-                            android:drawablePadding="@dimen/_5sdp"
-                            android:hint="@string/provided_customer_number"
-                            android:inputType="number"
-                            android:longClickable="false"
-
-                            android:padding="@dimen/_5sdp"
-                            android:text="@={viewModel.provided_customer_number}"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/gray"
-                            android:textSize="@dimen/edit_text_size"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@+id/cardView2"
-                            app:layout_constraintTop_toBottomOf="@+id/cardView2"
-                            app:requestFocus="@{viewModel.provided_customer_numberErrorVisible}" />
-
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat_regular_400"
-                            android:text="@{viewModel.provided_customer_numberError}"
-                            android:textColor="@color/pink2"
-                            android:textSize="@dimen/_9ssp"
-                            app:hideErrorTextView="@{viewModel.provided_customer_numberErrorVisible}"
-
-                            />
-                        <TextView
-                            android:id="@+id/btn_cash_withdraw"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:background="@drawable/teal_button_bg"
-                            android:fontFamily="@font/montserrat_medium_500"
-                            android:gravity="center"
-                            android:padding="10dp"
-                            android:layout_marginTop="@dimen/_20sdp"
-                            android:text="@string/cash_withdrawal"
-                            android:layout_gravity="center_horizontal"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_12ssp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/td_resend_otp" />
-                    </LinearLayout>
-
-
-                </androidx.cardview.widget.CardView>
-                <TextView
+                <CheckBox
                     android:id="@+id/tv_auth_message"
                     android:layout_marginVertical="@dimen/_10sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_8ssp"
+                    app:buttonTint="@color/black"
                     android:paddingHorizontal="@dimen/_8sdp"
                     android:fontFamily="@font/open_sans_medium"
                     android:text="@string/i_hereby_authorize_the_company_to_use_my_kyc_data_for_onboarding_on_aeps"
@@ -401,6 +223,7 @@
                     android:background="@drawable/btn_bg"
                     android:padding="@dimen/_5sdp"
                     android:text="@string/i_confirm"
+                    android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/cardView2"
                     app:layout_constraintTop_toBottomOf="@+id/tv_auth_message" />
@@ -409,109 +232,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/group1"
-                    android:visibility="gone"
+
                     app:constraint_referenced_ids="cardView2,tv_auth_message,btn_submit"/>
-                <androidx.constraintlayout.widget.Group
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/group2"
-                    android:visibility="gone"
-                    app:constraint_referenced_ids="cardView3,card_banl_list"/>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/card_banl_list"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="@dimen/_10sdp"
-                    app:cardBackgroundColor="@color/white"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView3">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:orientation="vertical"
-                    >
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginHorizontal="@dimen/_10sdp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
 
 
-                            android:fontFamily="@font/open_sans_medium"
-                            android:text="@string/statistics"
-                            android:textColor="@color/yellow"
-                            android:textSize="@dimen/_10ssp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                             />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/open_sans_medium"
-                            android:text="@string/most_used_bank"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_10ssp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                             />
 
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/edit_text_height"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginHorizontal="@dimen/_10sdp"
-                        android:background="@drawable/field_bg_search_bg">
-
-                        <EditText
-                            android:id="@+id/et_search"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@null"
-
-                            android:fontFamily="@font/montserrat_regular_400"
-
-                            android:hint="Search by bank name"
-                            android:paddingHorizontal="@dimen/_10sdp"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/gray"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:src="@drawable/baseline_search_24" />
-                    </RelativeLayout>
-                <androidx.core.widget.NestedScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycleViewBankList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/bank_list_layout" />
-
-                </androidx.core.widget.NestedScrollView>
-                </LinearLayout>
-                </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

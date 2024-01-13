@@ -29,6 +29,7 @@ import com.big9.app.data.model.AddBankModel
 import com.big9.app.data.model.AllBankListModel
 import com.big9.app.data.model.ChangeUserPasswordModel
 import com.big9.app.data.model.ChangeUserTPINPasswordModel
+import com.big9.app.data.model.CheckMerchant
 import com.big9.app.data.model.CreditCardSendOtpModel
 import com.big9.app.data.model.CreditCardVerifyOtpModel
 import com.big9.app.data.model.DMTReportModel
@@ -2243,5 +2244,16 @@ class MyViewModel @Inject constructor(
             repository.CityList(token,data)
         }
     }
+
+    //Check merchant
+    val checkmerchantResponseLiveData: MutableLiveData<ResponseState<CheckMerchant>>
+        get() = repository.checkmerchantResponseLiveData
+    fun checkmerchant(token: String, data: String) {
+        viewModelScope.launch {
+            repository.checkmerchant(token,data)
+        }
+    }
+
+
 
 }

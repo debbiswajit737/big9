@@ -207,7 +207,7 @@
     <string name="confirm_login_pin">Confirm Login PIN</string>
     <string name="pancard_no_without_star">Pan Card Number</string>
     <string name="i_confirm">I CONFIRM</string>
-    <string name="i_hereby_authorize_the_company_to_use_my_kyc_data_for_onboarding_on_aeps">\u25CF I hereby authorize the company to use my KYC data for onboarding on AEPS</string>
+    <string name="i_hereby_authorize_the_company_to_use_my_kyc_data_for_onboarding_on_aeps"> I hereby authorize the company to use my KYC data for onboarding on AEPS</string>
     <string name="selected_bank">Selected Bank</string>
     <string name="particulars">Particulars<font color='#FF0000'>*</font></string>
     <string name="particulars_hint">Particulars</string>
