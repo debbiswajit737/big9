@@ -139,6 +139,7 @@ class TransactionOtpFragment : BaseFragment() {
 
 
             cownDown()
+            keyPad.clear()
             keyPad.add(1)
             keyPad.add(2)
             keyPad.add(3)
@@ -227,6 +228,7 @@ class TransactionOtpFragment : BaseFragment() {
                                             //Constants.recycleViewReceiptList.add(ReceiptModel("Current Balance : ",it?.usercurrbal.toString()))
                                             Constants.recycleViewReceiptList.add(ReceiptModel("Amount",it.amount.toString().replace("null","")))
                                             Constants.recycleViewReceiptList.add(ReceiptModel("UTR",it.utr.toString().replace("null","")))
+                                            Constants.recycleViewReceiptList.add(ReceiptModel("Date and Time",MethodClass.getCurrentDateTime()))
 
                                             Constants.recycleViewReceiptList.add(ReceiptModel("Status",it.status.toString().replace("null","")))
 

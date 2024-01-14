@@ -9,6 +9,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.text.method.DigitsKeyListener
+import android.text.method.KeyListener
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -96,6 +98,14 @@ class LoginMobileFragment : BaseFragment() {
     }
 
     private fun setObserver() {
+        binding?.apply {
+            consLogin.setOnClickListener{
+                activity?.let {act-> consLogin.hideSoftKeyBoard(act) }
+            }
+
+            val keyListener: KeyListener = DigitsKeyListener.getInstance("1234567890")
+            edtPhNo.keyListener = keyListener
+        }
         authViewModel?.authLogin?.observe(viewLifecycleOwner){
             when (it) {
                 is ResponseState.Loading -> {
@@ -299,7 +309,7 @@ class LoginMobileFragment : BaseFragment() {
             //authViewModel.keyPadValue.value=getString(R.string.mobile_no_hint)
             adapter= PhonePadAdapter(keyPad,object : KeyPadOnClickListner {
                 override fun onClick(item: Int) {
-                    authViewModel.mobError.value = ""
+                   /* authViewModel.mobError.value = ""
                     authViewModel.keyPadValue.value?.apply {
                         if (item <= 9) {
                             if (this.length != 10) {
@@ -316,7 +326,7 @@ class LoginMobileFragment : BaseFragment() {
                     }
 
 
-                }
+                */}
 
             })
             isNestedScrollingEnabled=false

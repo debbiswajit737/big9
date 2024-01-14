@@ -3,6 +3,7 @@ package com.big9.app.ui.popup
 import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import com.big9.app.databinding.PopupBalenceBinding
 import com.big9.app.databinding.PopupDebitAlertBinding
 import com.big9.app.databinding.PopupDthUserDetailsBinding
@@ -70,6 +71,13 @@ object CustomPopup {
         alertDialogBuilder.setView(binding.root)
         binding.tvMainbalance.text=currBalance
         binding.cashoutBalance.text=payoutBalance
+        if ((lienbal?.trim().equals("0.00")==true) || (lienbal?.trim().equals("0")==true)){
+            binding.tvLeanbalence.visibility= View.INVISIBLE
+        }
+        if ((lienbalPayout?.trim().equals("0.00")==true) || (lienbal?.trim().equals("0")==true)){
+            binding.lienbalPayout.visibility= View.INVISIBLE
+        }
+
         binding.tvLeanbalence.text="(Line Amount: $lienbal)"
         binding.lienbalPayout.text="(Line Amount: $lienbalPayout)"
         //binding.model=userInfoModel

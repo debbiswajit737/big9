@@ -189,6 +189,7 @@ loginResponse?.let { loginData ->
                             Constants.recycleViewReceiptList.add(ReceiptModel(type = 1, property = "BANK NAME", reportValue =bankName ))
                             Constants.recycleViewReceiptList.add(ReceiptModel(type = 1, property = "BENEFICIARY NAME", reportValue =benName ))
                             Constants.recycleViewReceiptList.add(ReceiptModel(type = 1, property = "RECEIPT ID", reportValue =it?.data?.receipteid.toString() ))
+                            Constants.recycleViewReceiptList.add(ReceiptModel(type = 1, property = "Date and Time", reportValue =MethodClass.getCurrentDateTime() ))
                             //Constants.recycleViewReceiptList.add(ReceiptModel(type = 1, property = "SENDER NUMBER", reportValue ="9234268887" ))
                             //Constants.recycleViewReceiptList.add(ReceiptModel(type = 2, title = "TRANSACTION DATE: 2023-09-09 14:44:26" ))
                             it?.data?.transactionDetails?.let {

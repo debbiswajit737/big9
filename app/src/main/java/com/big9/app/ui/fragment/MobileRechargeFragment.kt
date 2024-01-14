@@ -208,7 +208,9 @@ class MobileRechargeFragment : BaseFragment() {
                     binding.btnSubmit.setBottonLoader(true,binding.llSubmitLoader)
                     loader?.dismiss()
 
-                    val data= PostPaidMobileTranspherModel()
+                    //val data= PostPaidMobileTranspherModel()
+                    var dateTime=it?.data?.timestamp
+
                     it?.data?.data?.let {
                         if (it?.size!! > 0 ?: 0) {
                            it?.get(0)?.let {
@@ -226,11 +228,13 @@ class MobileRechargeFragment : BaseFragment() {
 
                                 Constants.recycleViewReceiptList.clear()
                                 viewModel?.receiveStatus?.value=getString(R.string.mobile_recharged)
-                               Constants.recycleViewReceiptList.add(ReceiptModel("Refill Id",it.refillid.toString().replace("null","")))
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Refill Id",it.refillid.toString().replace("null","")))
                                 Constants.recycleViewReceiptList.add(ReceiptModel("Operator",it.operator.toString().replace("null","")))
                                 Constants.recycleViewReceiptList.add(ReceiptModel("Operator Id",it.operatorid.toString().replace("null","")))
                                 Constants.recycleViewReceiptList.add(ReceiptModel("Mobile No",it.mobileno.toString().replace("null","")))
                                 Constants.recycleViewReceiptList.add(ReceiptModel("Amount",it.amount.toString().replace("null","")))
+
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Date and Time",dateTime.toString().replace("null","")))
 
 
                                 Constants.recycleViewReceiptList.add(ReceiptModel("Status",it.status.toString().replace("null","")))
@@ -270,7 +274,8 @@ class MobileRechargeFragment : BaseFragment() {
                     binding.btnSubmit.setBottonLoader(true,binding.llSubmitLoader)
                     loader?.dismiss()
 
-                        val data= PrepaidMoboleTranspherModel()
+                    //    val data= PrepaidMoboleTranspherModel()
+                    var dateTime=it?.data?.timestamp
                     it?.data?.data?.let {
                         if (it?.size!! > 0 ?: 0) {
                             it?.get(0)?.let {
@@ -294,7 +299,7 @@ class MobileRechargeFragment : BaseFragment() {
                                 Constants.recycleViewReceiptList.add(ReceiptModel("Operator Id",it.operatorid.toString().replace("null","")))
                                 Constants.recycleViewReceiptList.add(ReceiptModel("Mobile No",it.mobileno.toString().replace("null","")))
                                 Constants.recycleViewReceiptList.add(ReceiptModel("Amount",it.amount.toString().replace("null","")))
-
+                                Constants.recycleViewReceiptList.add(ReceiptModel("Date and Time",dateTime.toString().replace("null","")))
                                 //Constants.recycleViewReceiptList.add(ReceiptModel("Refill Id",it.refillid.toString()))
                                 Constants.recycleViewReceiptList.add(ReceiptModel("Status",it.status.toString().replace("null","")))
                                 val dialogFragment = PrePaidMobileReceptDialogFragment()

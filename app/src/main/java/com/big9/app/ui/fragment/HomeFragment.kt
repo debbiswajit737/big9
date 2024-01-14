@@ -1586,11 +1586,11 @@ class HomeFragment : BaseFragment() {
 
                 adapter= AEPSAdapter(iconList5,R.drawable.circle_shape2,object : CallBack2 {
                     override fun getValue2(s: String,tag: String) {
-                        //Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
 
                         //******
 
-                        serviceNavigation(s,tag)
+                       // serviceNavigation(s,tag)
                         //checkService(s,tag)
                        //-m  serviceNavigation(s,tag)
                        // serviceNavigation(s)
@@ -1634,6 +1634,7 @@ class HomeFragment : BaseFragment() {
                 //circle_shape
                 adapter= BankingAdapter(iconList6,R.drawable.circle_shape2, object : CallBack2 {
                     override fun getValue2(s: String,slag: String) {
+                        serviceNavigation(s,slag)
                         if(s==getString(R.string.move_to_bank) || s==getString(R.string.move_to_wallet)){
                             Toast.makeText(requireContext(), "Service unavailable. Coming soon.", Toast.LENGTH_SHORT).show()
                         }
@@ -1650,8 +1651,8 @@ class HomeFragment : BaseFragment() {
 
             recycleRetailerViewEpayBanking.apply {
                 iconList13.clear()
-                iconList13.add(ListIcon(getString(R.string.add_retailers) , R.drawable.add_user_icon,""))
-                iconList13.add(ListIcon("View Channel" , R.drawable.add_user_icon,""))
+                iconList13.add(ListIcon(getString(R.string.add_retailers) , R.drawable.add_retailer,""))
+                iconList13.add(ListIcon("View Channel" , R.drawable.view_retailer,""))
                /* iconList6.add(ListIcon(getString(R.string.move_to_wallet), R.drawable.balance,getString(R.string.move_to_wallet_slag)))
                 iconList6.add(ListIcon(getString(R.string.ePotly), R.drawable.epotlyinb,getString(R.string.ePotly_slag)))
                 iconList6.add(ListIcon(getString(R.string.payment_request), R.drawable.balance,getString(R.string.payment_request_slag)))*/

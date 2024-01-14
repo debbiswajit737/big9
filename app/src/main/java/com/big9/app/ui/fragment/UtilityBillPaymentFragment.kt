@@ -13,6 +13,7 @@ import billpaytransactionData
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.big9.app.R
+import com.big9.app.data.model.ReceiptModel
 
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentUtilityBillPaymentBinding
@@ -22,6 +23,8 @@ import com.big9.app.network.RetrofitHelper.handleApiError
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.popup.SuccessPopupFragment
 import com.big9.app.ui.receipt.ElectricReceptDialogFragment
+import com.big9.app.ui.receipt.newRecept.ElectricReceptDialogNewFragment
+import com.big9.app.ui.receipt.newRecept.PrePaidMobileReceptDialogFragment
 import com.big9.app.utils.common.MethodClass
 import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.`interface`.CallBack
@@ -175,7 +178,7 @@ class UtilityBillPaymentFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
-                    viewModel.consumerIdPrice.value = "10"
+                    //viewModel.consumerIdPrice.value = "10"
                     it?.data?.amt?.let {amt->
                         viewModel.consumerIdPrice.value = amt
                     }
@@ -213,8 +216,25 @@ class UtilityBillPaymentFragment : BaseFragment() {
 
                 is ResponseState.Success -> {
                     loader?.dismiss()
-                    var eTransDAta=it.data?.data
-                    viewModel.popup_message.value = "${it?.data?.message}"
+                   // var eTransDAta=it.data?.data
+                    it.data?.data?.let {
+                        Constants.recycleViewReceiptList.clear()
+                        viewModel?.receiveStatus?.value=getString(R.string.payment_receipt)
+                        Constants.recycleViewReceiptList.add(ReceiptModel("Transaction Id",it.txnID.toString().replace("null","")))
+                        Constants.recycleViewReceiptList.add(ReceiptModel("Customer Id",it.customerId.toString().replace("null","")))
+                        Constants.recycleViewReceiptList.add(ReceiptModel("Amount",it.txnAmount.toString().replace("null","")))
+                        Constants.recycleViewReceiptList.add(ReceiptModel("Date",it.txnDate.toString().replace("null","")))
+                        Constants.recycleViewReceiptList.add(ReceiptModel("Status",it.txnstatue.toString().replace("null","")))
+                        Constants.recycleViewReceiptList.add(ReceiptModel("Operator Id",it.operatorid.toString().replace("null","")))
+                        //Constants.recycleViewReceiptList.add(ReceiptModel("Refill Id",it.refillid.toString()))
+                        //Constants.recycleViewReceiptList.add(ReceiptModel("Status",it.status.toString().replace("null","")))
+                        val dialogFragment = ElectricReceptDialogNewFragment()
+                        dialogFragment.show(childFragmentManager, dialogFragment.tag)
+
+                    }
+
+
+                    /*viewModel.popup_message.value = "${it?.data?.message}"
                     val successPopupFragment = SuccessPopupFragment(object :
                         CallBack4 {
                         override fun getValue4(
@@ -236,6 +256,7 @@ class UtilityBillPaymentFragment : BaseFragment() {
 
                     })
                     successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
+                    */
                     binding.btnSubmit.setBottonLoader(true,binding.llSubmitLoader)
                     viewModel?.billpaytransactionResponseLiveData?.value=null
                 }

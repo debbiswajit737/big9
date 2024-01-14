@@ -2,16 +2,21 @@ package com.big9.app.ui.fragment
 
 
 import android.app.Dialog
+import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.drawable.BitmapDrawable
+import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -33,6 +38,8 @@ import com.itextpdf.layout.element.Paragraph
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 
 
 class CertificateFragment : BaseFragment() {
@@ -81,7 +88,11 @@ class CertificateFragment : BaseFragment() {
 
             imgDownlode.setOnClickListener{
                 loader?.show()
-                bitmap?.let {generatePdfWithBackground("big9_certificate.pdf","",it)  }
+                bitmap?.let {
+
+                    saveBitmapToDownloads(imgDownlode.context,it)
+                    //generatePdfWithBackground("big9_certificate.pdf","",it)
+                }
             }
           }
         }
@@ -98,6 +109,7 @@ class CertificateFragment : BaseFragment() {
 
     fun generatePdfWithBackground(fileName: String, content: String, bitmap: Bitmap) {
         val filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+
         val file = File(filePath, fileName)
 
         try {
@@ -191,4 +203,64 @@ class CertificateFragment : BaseFragment() {
         return bitmap
     }
 
+    private fun saveBitmapToDownloads(context: Context, bitmap: Bitmap) {
+        val fileName = "certificate_${System.currentTimeMillis()}.jpg" // Create a unique file name
+        val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val file = File(downloadsDir, fileName)
+
+        try {
+            val outputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream.flush()
+            outputStream.close()
+
+            // Notify the system that a new file has been created
+            MediaScannerConnection.scanFile(
+                context,
+                arrayOf(file.absolutePath),
+                arrayOf("image/jpeg"),
+                null
+            )
+            loader?.dismiss()
+            Toast.makeText(context, "Certificate saved to Downloads folder", Toast.LENGTH_SHORT).show()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            loader?.dismiss()
+            Toast.makeText(context, "Failed to save certificate", Toast.LENGTH_SHORT).show()
+        }
+    }
+   /* private fun saveBitmapToDownloads(context: Context, bitmap: Bitmap) {
+        val fileName = "image_${System.currentTimeMillis()}.jpg" // Create a unique file name
+        val resolver: ContentResolver = context.contentResolver
+
+        // Create content values for the image file
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+        }
+
+        // Insert the image file into the MediaStore
+        val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        Toast.makeText(requireContext(), ""+imageUri, Toast.LENGTH_SHORT).show()
+        imageUri?.let { uri ->
+            try {
+                // Open an OutputStream to the image file
+                val outputStream: OutputStream? = resolver.openOutputStream(uri)
+
+                // Compress and write the bitmap to the OutputStream
+                outputStream?.use { bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it) }
+
+                // Notify the MediaStore about the new image
+                resolver.notifyChange(uri, null)
+
+                // Close the OutputStream
+                outputStream?.close()
+                loader?.dismiss()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                loader?.dismiss()
+            }
+        }
+    }*/
 }

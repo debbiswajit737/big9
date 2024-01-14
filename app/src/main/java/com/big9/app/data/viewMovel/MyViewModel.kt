@@ -979,7 +979,7 @@ class MyViewModel @Inject constructor(
             credit_cardErrorVisible.value = true
             isValid = false
         } else {
-            if (credit_card.value?.trim()?.length != 16) {
+            if (credit_card.value?.trim()?.length != 19) {
                 credit_cardError.value = "Credit card number is not valid."
                 credit_cardErrorVisible.value = true
             } else {

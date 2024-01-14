@@ -206,6 +206,7 @@ class DTHRechargeFragment : BaseFragment() {
                                 },it)
                                 dialogFragment2.show(childFragmentManager, dialogFragment2.tag)
                             }*/
+                            var dateTime=it?.data?.timestamp
                             it?.data?.data?.let {
                                 if (it?.size!! > 0?:0) {
 
@@ -246,7 +247,7 @@ class DTHRechargeFragment : BaseFragment() {
                                                 it?.amount.toString()
                                             )
                                         )
-
+                                        Constants.recycleViewReceiptList.add(ReceiptModel("Date and Time",dateTime.toString().replace("null","")))
                                         Constants.recycleViewReceiptList.add(
                                             ReceiptModel(
                                                 "Status",

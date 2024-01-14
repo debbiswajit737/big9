@@ -2,8 +2,18 @@ package com.big9.app.ui.fragment
 
 
 import android.app.Dialog
+import android.app.DownloadManager
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
@@ -11,6 +21,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -43,6 +54,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 
 class ReportFragment : BaseFragment()  {
     lateinit var binding: FragmentReportBinding
@@ -50,7 +65,9 @@ class ReportFragment : BaseFragment()  {
     private var lastClickTime1: Long = 0
     private var lastClickTime2: Long = 0
     private var lastClickTime3: Long = 0
+    private val batchCount = 600
     var isAsintask=true
+    var printList = ArrayList<String>()
     private val myViewModel: MyViewModel by activityViewModels()
     private var loader: Dialog? = null
     var startDate=""
@@ -102,11 +119,100 @@ class ReportFragment : BaseFragment()  {
             it.notifyDataSetChanged()
         }
     }
+
+
+
+
+    private fun generateAndSaveImagesInBatches(printList: String) {
+      /*  val totalImages = printList.size
+        var startIndex = 0*/
+
+        // Create a directory to save the images in the Downloads directory
+       /* val imagesDir = File(binding.root.context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "big9")
+        imagesDir.mkdirs()*/
+
+
+        val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val file = File(downloadsDir, "big9")
+        file.mkdirs()
+
+        generateAndSaveImages(printList, file)
+
+      /*  while (startIndex < totalImages) {
+            val endIndex = (startIndex + batchCount).coerceAtMost(totalImages)
+            val batchList = printList.subList(startIndex, endIndex)
+
+            // Generate and save images for the current batch
+            generateAndSaveImages(batchList, file)
+
+            startIndex += batchCount
+        }*/
+
+        Toast.makeText(binding.root.context, "Report save to download folder", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun generateAndSaveImages(data: String, outputDir: File) {
+        val fileName = "report_${System.currentTimeMillis()}.docx" // Create a unique file name
+        val file = File(outputDir, fileName)
+        saveBitmapToFile(data, file)
+
+       /* for ((index, item) in data.withIndex()) {
+            // Generate a bitmap image for each item in the list
+            val bitmap = generateBitmapFromText(data)
+
+            // Save the bitmap to a file
+            val fileName = "report_$index.jpg"
+            val file = File(outputDir, fileName)
+            saveBitmapToFile(data, file)
+        }*/
+    }
+
+    private fun generateBitmapFromText(text: String): Bitmap {
+        // Create a bitmap with a white background
+        val bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(Color.WHITE)
+
+        // Draw the text on the bitmap
+        val paint = Paint().apply {
+            color = Color.BLACK
+            textSize = 20f
+        }
+        canvas.drawText(text, 10f, 100f, paint)
+
+        return bitmap
+    }
+
+    private fun saveBitmapToFile(data: String, file: File) {
+        val outputStream: OutputStream = FileOutputStream(file)
+       // bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        outputStream.write(data.toByteArray())
+        outputStream.close()
+        loader?.dismiss()
+    }
+
     private fun onViewClick() {
 
         binding.apply {
+            tvDownload.setOnClickListener {
+                loader?.show()
+                if(printList!=null){
+                    var data=""
+                    printList.forEach{
+                        data="\n"+data+"\n"+  it+"\n\n"
+                    }
+
+                    generateAndSaveImagesInBatches(data)
+                    //writeArrayToFile(tvDownload.context,"report.ixt",printList)
+                }
+
+            }
+
+
+
           imgBack.setOnClickListener{
               reportList?.clear()
+              printList.clear()
               reportAdapter?.let {
                  // binding.bottomLoader.visibility=View.GONE
                   reportList.clear()
@@ -160,6 +266,61 @@ class ReportFragment : BaseFragment()  {
         }
     }
 
+  /*  private fun generateAndSaveImagesInBatches(printList: List<String>) {
+        val totalImages = printList.size
+        var startIndex = 0
+
+        // Create a directory to save the images
+        val imagesDir = File(binding.root.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "big9")
+        imagesDir.mkdirs()
+
+        while (startIndex < totalImages) {
+            val endIndex = (startIndex + batchCount).coerceAtMost(totalImages)
+            val batchList = printList.subList(startIndex, endIndex)
+
+            // Generate and save images for the current batch
+            generateAndSaveImages(batchList, imagesDir)
+
+            startIndex += batchCount
+        }
+
+        Toast.makeText(binding.root.context, "Images generated and saved successfully", Toast.LENGTH_SHORT).show()
+    }
+
+
+    private fun generateAndSaveImages(data: List<String>, outputDir: File) {
+        for ((index, item) in data.withIndex()) {
+            // Generate a bitmap image for each item in the list
+            val bitmap = generateBitmapFromText(item)
+
+            // Save the bitmap to a file
+            val fileName = "image_$index.jpg"
+            val file = File(outputDir, fileName)
+            saveBitmapToFile(bitmap, file)
+        }
+    }
+
+    private fun generateBitmapFromText(text: String): Bitmap {
+        // Create a bitmap with a white background
+        val bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(Color.WHITE)
+
+        // Draw the text on the bitmap
+        val paint = Paint().apply {
+            color = Color.BLACK
+            textSize = 20f
+        }
+        canvas.drawText(text, 10f, 100f, paint)
+
+        return bitmap
+    }
+
+     fun saveBitmapToFile(bitmap: Bitmap, file: File) {
+        val outputStream: OutputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        outputStream.close()
+    }*/
     fun initView() {
 
         reportDetailsPropertyList = ArrayList()
@@ -213,6 +374,7 @@ class ReportFragment : BaseFragment()  {
     private fun getAllData() {
 
         reportList.clear()
+        printList.clear()
         reportAdapter?.let {
             reportList.clear()
             newReportList.clear()
@@ -226,6 +388,7 @@ class ReportFragment : BaseFragment()  {
 
                 getString(R.string.payment) -> {
                     reportList?.clear()
+                    printList?.clear()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                     loginResponse?.let {loginData->
@@ -258,6 +421,7 @@ class ReportFragment : BaseFragment()  {
 
                 getString(R.string.transactions) -> {
                     reportList?.clear()
+                    printList?.clear()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                         loginResponse?.let {loginData->
@@ -279,6 +443,7 @@ class ReportFragment : BaseFragment()  {
 
                 getString(R.string.dmt) -> {
                     reportList?.clear()
+                    printList?.clear()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                         loginResponse?.let {loginData->
@@ -300,6 +465,7 @@ class ReportFragment : BaseFragment()  {
 
                 getString(R.string.load_Requests) -> {
                     reportList?.clear()
+                    printList?.clear()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                         loginResponse?.let {loginData->
@@ -320,6 +486,7 @@ class ReportFragment : BaseFragment()  {
 
                 getString(R.string.wallet_ledger) -> {
                     reportList?.clear()
+                    printList?.clear()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                         loginResponse?.let {loginData->
@@ -340,6 +507,7 @@ class ReportFragment : BaseFragment()  {
 
                 getString(R.string.cashout_ledger) -> {
                     reportList?.clear()
+                    printList?.clear()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                         loginResponse?.let {loginData->
@@ -360,6 +528,7 @@ class ReportFragment : BaseFragment()  {
 
                 getString(R.string.aeps) -> {
                     reportList?.clear()
+                    printList?.clear()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                         loginResponse?.let {loginData->
@@ -380,6 +549,7 @@ class ReportFragment : BaseFragment()  {
 
                 getString(R.string.micro_atm) -> {
                     reportList?.clear()
+                    printList?.clear()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                         loginResponse?.let {loginData->
@@ -400,6 +570,7 @@ class ReportFragment : BaseFragment()  {
 
                 getString(R.string.commissions) -> {
                     reportList?.clear()
+                    printList?.clear()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                         loginResponse?.let {loginData->
@@ -420,6 +591,7 @@ class ReportFragment : BaseFragment()  {
 
                 getString(R.string.bank_settle) -> {
                     reportList?.clear()
+                    printList?.clear()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                         loginResponse?.let {loginData->
@@ -440,6 +612,7 @@ class ReportFragment : BaseFragment()  {
 
                 getString(R.string.wallet_settle) -> {
                     reportList?.clear()
+                    printList?.clear()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                         loginResponse?.let {loginData->
@@ -460,6 +633,7 @@ class ReportFragment : BaseFragment()  {
 
                 getString(R.string.complaints) -> {
                     reportList?.clear()
+                    printList?.clear()
                     val (isLogin, loginResponse) =sharedPreff.getLoginData()
                     if (isLogin){
                         loginResponse?.let {loginData->
@@ -540,7 +714,14 @@ class ReportFragment : BaseFragment()  {
                                             "\nReceiver Mobile No.: $receiverMobileNo"
 
                                     reportList.add(ReportModel(PaymentBYId,LastTransactionAmount,LastTransactionTime,AmountMode,0,desc,imageInt = R.drawable.send_logo))
+                                    val print="Payment Id : $PaymentBYId"+
+                                            "Last Transaction Amount : $LastTransactionAmount"+
+                                            "Last Transaction Time : $LastTransactionTime"+
+                                            "Amount Mode : $AmountMode"+
+                                            "Amount Mode : $AmountMode"+
+                                            ""+desc
 
+                                    printList.add(print)
 
                                 }
 
@@ -617,6 +798,15 @@ class ReportFragment : BaseFragment()  {
                                             }
                                             var desc="Operator :$Operator \nReferance id - $referenceID\nCustomer Mobile No.:$CustNo"
                                             reportList.add(ReportModel(TransactionID,Amount,tDate,status,statusCode,desc,imageInt,isClickAble=true, IDP = ID))
+
+                                            val print="Transaction ID : $TransactionID"+
+                                                    "Amount : $Amount"+
+                                                    "Date : $tDate"+
+                                                    "Status: $status"+
+
+                                                    ""+desc
+
+                                            printList.add(print)
                                         }
 
                                     }
@@ -696,6 +886,15 @@ class ReportFragment : BaseFragment()  {
 
                                             reportList.add(ReportModel(tranId,tranAmt,transDt,status,statusCode,desc,imageInt,image1 = 2,isClickAble=true, IDP = receiptid))
 
+
+                                            val print="Transaction ID : $tranId"+
+                                                    "Amount : $tranAmt"+
+                                                    "Date : $transDt"+
+                                                    "Status: $status"+
+
+                                                    ""+desc
+
+                                            printList.add(print)
                                         }
 
                                     }
@@ -768,6 +967,13 @@ class ReportFragment : BaseFragment()  {
                                             }
                                             var desc="Bankname $bankname\n$donedate Completed: $isdone"
                                             reportList.add(ReportModel(purchaseid,Amount,insdate,"Credit/Sales Supports",2,desc,imageInt = image))
+
+                                            val print="Purchase ID : $purchaseid"+
+                                                    "Amount : $Amount"+
+                                                    "Date : $insdate"+
+                                                     ""+desc
+
+                                            printList.add(print)
                                         }
 
                                     }
@@ -848,6 +1054,15 @@ class ReportFragment : BaseFragment()  {
                                         items.apply {
 
                                             reportList.add(ReportModel(refillid,amount,insdate,type,3,desc = "Status: $status",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
+
+                                            val print="Transaction ID : $refillid"+
+                                                    "Amount : $amount"+
+                                                    "Date : $insdate"+
+                                                    "Type : $type"+
+                                                    "Closing ₹$curramt"
+
+
+                                            printList.add(print)
                                         }
 
                                     }
@@ -906,6 +1121,15 @@ class ReportFragment : BaseFragment()  {
                                                     "\nBank Reference Number  : $BankReferenceNumber"+
                                                     "\nAvailable Balance  : $avbalance"
                                             reportList.add(ReportModel(tranId,tranAmt,transDt,desc,imageInt = R.drawable.close_icon,isMiniStatement = true,miniStatementValue = "${type?.replace("_"," ")}",isClickAble = true, IDP = tranId))
+
+                                            val print="Transaction ID : $tranId"+
+                                                    "Amount : $tranAmt"+
+                                                    "Date : $transDt"+
+                                                    "Type : $type"+
+                                                    desc
+
+
+                                            printList.add(print)
                                         }
 
                                     }
@@ -947,6 +1171,14 @@ class ReportFragment : BaseFragment()  {
                                                     "\nTransaction Status: $tranStatus"+
                                                     "\nPancard: $maskedPan"
                                             reportList.add(ReportModel(tranId,tranAmt,transDt,desc,imageInt = R.drawable.rounded_i, IDP = tranId, isClickAble = true))
+
+                                            val print="Transaction ID : $tranId"+
+                                                    "Amount : $tranAmt"+
+                                                    "Date : $transDt"+
+                                                    desc
+
+
+                                            printList.add(print)
                                         }
 
                                     }
@@ -995,6 +1227,13 @@ class ReportFragment : BaseFragment()  {
                                                 comm.toString()
                                             }
                                             reportList.add(ReportModel(comm_data, reporyStatus = opname,imageInt = R.drawable.rounded_i))
+
+                                            val print=""+
+                                                    "Status : $opname"
+                                                    comm_data
+
+
+                                            printList.add(print)
                                         }
 
                                     }
@@ -1152,6 +1391,14 @@ class ReportFragment : BaseFragment()  {
                                             "\nTicket ID :$ticketID"+
                                             "\nComplaint Category Name :$complaintCategoryName"
                                     reportList.add(ReportModel(txtTransactionId,"","Complaint Date $ticketDate",desc=desc))
+
+                                    val print="Transaction ID : $txtTransactionId"+
+
+                                            "Complaint Date $ticketDate"+
+                                            desc
+
+
+                                    printList.add(print)
                                 }
 
                             }
@@ -1193,6 +1440,12 @@ class ReportFragment : BaseFragment()  {
                                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                                             var desc="$transDt \nUTR :$utr"
                                             reportList.add(ReportModel(tranId,tranAmt,"",reporyStatus=desc))
+                                            val print="Transaction ID : $tranId"+
+                                            "Amount : $tranAmt"+
+                                            desc
+
+
+                                            printList.add(print)
                                         }
 
                                     }
@@ -1235,6 +1488,12 @@ class ReportFragment : BaseFragment()  {
                                             //Toast.makeText(requireContext(), ""+it.data?.Description, Toast.LENGTH_SHORT).show()
                                             var desc="$transDt \nUTR :$utr"
                                             reportList.add(ReportModel(tranId,tranAmt,"",desc=desc))
+                                            val print="Transaction ID : $tranId"+
+                                                    "Amount : $tranAmt"+
+                                                    desc
+
+
+                                            printList.add(print)
                                         }
 
                                     }
@@ -1290,6 +1549,14 @@ class ReportFragment : BaseFragment()  {
                                         items.apply {
 
                                            reportList.add(ReportModel(refillid,amount,insdate,"",3,desc = "Type: $type\n Status: $status",image1 = 2,imageInt=R.drawable.rupee_rounded,price2 = "Closing ₹$curramt",proce1TextColor = 2,isMiniStatement = false))
+
+                                            val print="Transaction ID : $refillid"+
+                                                    "Amount : $amount"+
+                                                    "Date : $insdate"+
+                                                    "Type: $type\n Status: $status"
+
+
+                                            printList.add(print)
                                         }
 
                                     }
@@ -2526,6 +2793,43 @@ class ReportFragment : BaseFragment()  {
         }
 
     }
+    fun writeArrayToFile(context: Context, fileName: String, lines: List<String>) {
+        val file = File(context.filesDir, fileName)
+        file.bufferedWriter().use { writer ->
+            lines.forEach { line ->
+                writer.write(line)
+                writer.newLine()
+            }
+        }
+    }
 
+
+    fun downloadImage(context: Context, imageName: String, imageData: ByteArray) {
+        // Create a Bitmap from the byte array
+        val bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.size)
+
+        // Save the Bitmap to a file
+        val imagesDir = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "DownloadedImages")
+        imagesDir.mkdirs() // Create the directory if it doesn't exist
+        val imageFile = File(imagesDir, "$imageName.jpg")
+       // saveBitmapToFile(bitmap, imageFile)
+
+        // Use DownloadManager to download the file
+        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val downloadUri = Uri.fromFile(imageFile)
+        val request = DownloadManager.Request(downloadUri)
+            .setTitle("Image Download")
+            .setDescription("Downloading")
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, imageName + ".jpg")
+
+        downloadManager.enqueue(request)
+    }
+
+    /*private fun saveBitmapToFile(bitmap: Bitmap, file: File) {
+        val outputStream: OutputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        outputStream.close()
+    }*/
 }
 

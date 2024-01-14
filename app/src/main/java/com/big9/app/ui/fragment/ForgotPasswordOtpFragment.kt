@@ -217,7 +217,7 @@ class ForgotPasswordOtpFragment : BaseFragment() {
             authViewModel.otp.value=""
             apiCall()
         }
-
+        keyPad.clear()
         keyPad.add(1)
         keyPad.add(2)
         keyPad.add(3)

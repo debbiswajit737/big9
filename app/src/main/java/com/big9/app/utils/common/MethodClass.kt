@@ -29,6 +29,7 @@ import java.net.InetAddress
 import java.net.NetworkInterface
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Enumeration
 import java.util.Locale
 
@@ -202,6 +203,12 @@ object MethodClass {
         println("Formatted Date and Time: $formattedDateTime")
 
         return formattedDateTime
+    }
+
+    fun getCurrentDateTime(): String {
+        val dateFormat = "yyyy-MM-dd HH:mm:ss"
+        val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
+        return formatter.format(Date())
     }
 }
 

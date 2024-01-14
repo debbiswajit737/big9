@@ -59,6 +59,7 @@ object Constants {
     const val Prepaid =  "Prepaid"
 
     var reportList = ArrayList<ReportModel>()
+
     var newReportList = ArrayList<ReportModel>()
     var reportList2 = ArrayList<ReportModel>()
 

@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.big9.app.R
+import com.big9.app.data.model.ReceiptModel
 
 import com.big9.app.data.viewMovel.MyViewModel
 import com.big9.app.databinding.FragmentEpotlyBinding
@@ -18,7 +19,10 @@ import com.big9.app.network.RetrofitHelper.handleApiError
 import com.big9.app.ui.base.BaseFragment
 import com.big9.app.ui.popup.SuccessPopupFragment
 import com.big9.app.ui.receipt.EPotlyReceptDialogFragment
+import com.big9.app.ui.receipt.newRecept.EpotlyReceptDialogFragment
+import com.big9.app.ui.receipt.newRecept.PrePaidMobileReceptDialogFragment
 import com.big9.app.utils.common.MethodClass
+import com.big9.app.utils.helpers.Constants
 import com.big9.app.utils.helpers.Constants.epotlyMoboleNo
 import com.big9.app.utils.`interface`.CallBack
 import com.big9.app.utils.`interface`.CallBack4
@@ -117,8 +121,25 @@ class EpotlyFragment : BaseFragment() {
                     it?.data?.epotlyData?.mobileNo?.let {
                         epotlyMoboleNo=it
                     }
+                    it?.data?.epotlyData?.let {
+                        sharedPreff.getUserData()?.let { userData ->
+                            viewModel?.receiveStatus?.value=getString(R.string.ePotly)
+                            Constants.recycleViewReceiptList.clear()
+                            viewModel?.receiveStatus?.value=getString(R.string.mobile_recharged)
+                            Constants.recycleViewReceiptList.add(ReceiptModel("Transaction",it.id.toString().replace("null","")))
+                            Constants.recycleViewReceiptList.add(ReceiptModel("MobileNo",it.mobileNo.toString().replace("null","")))
+                            Constants.recycleViewReceiptList.add(ReceiptModel("Last Transaction Amount",it.LastTransactionAmount.toString().replace("null","")))
+                            Constants.recycleViewReceiptList.add(ReceiptModel("Status",it.status.toString().replace("null","")))
+                            Constants.recycleViewReceiptList.add(ReceiptModel("Date and Time",MethodClass.getCurrentDateTime()))
 
-                    viewModel.popup_message.value="${it?.data?.epotlyData?.status}\nMobile No.:${it?.data?.epotlyData?.mobileNo}\nLast Transaction Amount: ${it?.data?.epotlyData?.LastTransactionAmount}\nBalance : ${it?.data?.epotlyData?.curramt}"
+                            val dialogFragment = EpotlyReceptDialogFragment()
+                            dialogFragment.show(childFragmentManager, dialogFragment.tag)
+                        }
+
+
+                    }
+
+                   /* viewModel.popup_message.value="${it?.data?.epotlyData?.status}\nMobile No.:${it?.data?.epotlyData?.mobileNo}\nLast Transaction Amount: ${it?.data?.epotlyData?.LastTransactionAmount}\nBalance : ${it?.data?.epotlyData?.curramt}"
                         val successPopupFragment = SuccessPopupFragment(object :
                             CallBack4 {
                             override fun getValue4(
@@ -147,7 +168,7 @@ class EpotlyFragment : BaseFragment() {
                             }
 
                         })
-                        successPopupFragment.show(childFragmentManager, successPopupFragment.tag)
+                        successPopupFragment.show(childFragmentManager, successPopupFragment.tag)*/
                     viewModel?.apply {
                         epotly_mobile.value=""
                         epotly_amt.value=""
